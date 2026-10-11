@@ -275,6 +275,17 @@
 
   function tile() {
     var ids = Object.keys(wins);
+    if (ids.length < 2) {
+      /* اگر پنجره‌ای باز نیست، ویجت‌های قابل‌جدا‌شدن همین صفحه را باز می‌کنیم
+         تا دکمه «چیدمان کاشی» همیشه نتیجه بدهد. */
+      var detach = $$('[data-win-detach]').filter(function (el) {
+        return !wins[el.getAttribute('data-win')];
+      });
+      if (detach.length) {
+        detach.slice(0, 4).forEach(function (el) { open(el.getAttribute('data-win')); });
+        ids = Object.keys(wins);
+      }
+    }
     if (ids.length < 2) { CRM.toast({ type: 'info', title: 'برای چیدمان حداقل دو پنجره لازم است' }); return; }
     var ws = workspace();
     var cols = Math.ceil(Math.sqrt(ids.length)), rows = Math.ceil(ids.length / cols);

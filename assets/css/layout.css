@@ -215,29 +215,85 @@ body.has-taskbar .content { padding-bottom: calc(var(--taskbar-h) + 24px); }
 body.has-taskbar .page-wrap { padding-bottom: 6px; }
 
 .topbar-mobile-btn { display: none; }
-body.sidebar-open::after {
-  content: ""; position: fixed; inset: 0; background: var(--modal-bg);
-  z-index: 35; animation: fade-in var(--t) both;
+/* پرده‌ی پشت کشوی موبایل — فقط در همان بازه‌ی عرض که کشو وجود دارد */
+@media (max-width: 1024px) {
+  body.sidebar-open::after {
+    content: ""; position: fixed; inset: 0; background: var(--modal-bg);
+    z-index: 315; animation: fade-in var(--t) both;
+  }
 }
 
 @media (max-width: 1024px) {
+  /* سایدبار به کشوی تمام‌قد تبدیل می‌شود.
+     نکته: لنگر باید با inset-inline-start باشد تا در RTL روی لبه‌ی راست
+     (جای طبیعی سایدبار) بنشیند؛ پیش‌تر inset-inline-end باعث می‌شد
+     پنل در RTL سمت چپ باز شود و روی محتوا بیفتد. */
   .sidebar {
-    position: fixed; inset-inline-end: 0; top: 0;
+    position: fixed; inset-inline-start: 0; top: 0;
+    width: var(--sidebar-w); flex-basis: auto;
+    height: 100dvh; max-width: 88vw;
     transform: translateX(105%);
     background: var(--bg);
     box-shadow: var(--shadow-lg);
+    z-index: 320;
+    transition: transform var(--t-slow);
   }
-  .sidebar-brand, .sidebar-scroll { margin-inline-start: 10px; }
-  html[dir="rtl"] .sidebar { transform: translateX(105%); }
+  html[dir="ltr"] .sidebar { transform: translateX(-105%); }
   body.sidebar-open .sidebar { transform: none; }
+  .sidebar-brand, .sidebar-scroll { margin-inline-start: 10px; }
+  /* در موبایل حالت «جمع‌شده» معنا ندارد: کشو همیشه با برچسب‌ها نمایش داده می‌شود */
+  .app-shell.sidebar-collapsed .sidebar { width: var(--sidebar-w); }
+  .app-shell.sidebar-collapsed .sidebar-brand {
+    flex-direction: row; justify-content: flex-start; height: 56px;
+    padding: 0 16px; margin-inline-start: 10px;
+  }
+  .app-shell.sidebar-collapsed .sidebar-brand .brand-mark { width: 38px; height: 38px; }
+  .app-shell.sidebar-collapsed .brand-text,
+  .app-shell.sidebar-collapsed .nav-label,
+  .app-shell.sidebar-collapsed .nav-group-title,
+  .app-shell.sidebar-collapsed .nav-caret,
+  .app-shell.sidebar-collapsed .nav-item .nav-badge,
+  .app-shell.sidebar-collapsed .sidebar-foot { display: revert; }
+  .app-shell.sidebar-collapsed .nav-item {
+    justify-content: flex-start; padding: 9px 11px; width: auto; height: auto;
+    margin: 0 0 2px; background: transparent; border-color: transparent; box-shadow: none;
+  }
+  .app-shell.sidebar-collapsed .nav-item.is-active { background: var(--sidebar-item-active); color: var(--sidebar-text-active); }
+  .app-shell.sidebar-collapsed .nav-sub { display: block; }
+  .app-shell.sidebar-collapsed .sidebar-scroll { padding: 14px 12px 18px; }
+  /* دکمه جمع‌کردن فقط برای دسکتاپ است */
+  .sidebar-collapse-btn { display: none; }
   .topbar-mobile-btn { display: grid; }
   :root { --page-pad: 16px; }
+  body.sidebar-open { overflow: hidden; }
 }
 @media (max-width: 640px) {
-  .topbar { padding: 0 12px; gap: 8px; }
+  .topbar { padding: 0 10px; gap: 6px; }
   .tb-user .u-meta { display: none; }
   .topbar .tb-search { display: none; }
+  /* جای کم: فقط دکمه‌های ضروری تاپ‌بار می‌مانند */
+  .topbar .tb-actions .tb-icon[data-palette-open],
+  .topbar .tb-actions .tb-icon[onclick*="settings"] { display: none; }
+  .topbar .btn-primary { padding: 0 10px; }
   .page-head .head-actions { width: 100%; }
+  .page-title { font-size: var(--fs-xl); }
+  .card-head { flex-wrap: wrap; }
+  .card-head .card-actions { width: 100%; justify-content: flex-start; }
+  .content { padding-inline: 12px; }
+  .desktop-area { padding: 12px; gap: 12px; }
+  .win-hint { display: none; }
+  .modal, .overlay > .modal { width: calc(100vw - 20px); max-width: none; }
+  .toast { width: calc(100vw - 20px); }
+  .dropdown-menu { min-width: 210px; }
+  .task-item { max-width: 108px; }
+  /* شبکه‌های کارتی و جدول‌ها در صفحه‌های باریک بهتر جا می‌شوند */
+  .grid-cards { grid-template-columns: 1fr; }
+  .table { min-width: 620px; }              /* اسکرول افقی داخل .table-wrap */
+  .window { min-width: 260px; }
+  .kanban-col { width: 254px; }
+  .page-head { gap: 12px; }
+  .pagination { flex-wrap: wrap; }
+  .card-foot { flex-wrap: wrap; gap: 8px; }
 }
 
 /* ==========================================================================

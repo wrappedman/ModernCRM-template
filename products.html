@@ -30,9 +30,9 @@
             <p class="page-desc">۳ دسته‌بندی — ۶ کالا و خدمت فعال — ۳ قلم در آستانه اتمام موجودی</p>
           </div>
           <div class="head-actions">
-            <div class="btn-group">
-              <button class="btn is-active"><span data-icon="grid" data-icon-size="15"></span> کارتی</button>
-              <button class="btn"><span data-icon="table" data-icon-size="15"></span> جدولی</button>
+            <div class="btn-group" data-view-group>
+              <button class="btn is-active" data-view-btn="cards" data-view-name="products" aria-pressed="true"><span data-icon="grid" data-icon-size="15"></span> کارتی</button>
+              <button class="btn" data-view-btn="table" data-view-name="products" aria-pressed="false"><span data-icon="table" data-icon-size="15"></span> جدولی</button>
             </div>
             <button class="btn btn-primary" data-modal-open="#modalProduct"><span data-icon="plus" data-icon-size="16"></span> کالا/خدمت جدید</button>
           </div>
@@ -56,7 +56,7 @@
         </div>
 
         <!-- ============================== کارت‌ها ============================== -->
-        <div class="grid-cards mb-5">
+        <div class="grid-cards mb-5" data-view-panel="cards">
           <div class="card card-hover widget" data-win="prd-101" data-win-title="لایسنس سالانه CRM" data-win-icon="package" data-win-size="760x560">
             <div class="card-body">
               <div class="d-flex items-start gap-3 mb-3">
@@ -182,7 +182,7 @@
         </div>
 
         <!-- ============================== جدول ============================== -->
-        <div class="card">
+        <div class="card d-none" data-view-panel="table">
           <div class="card-head">
             <div class="card-title" data-icon="table" data-icon-size="18"> نمای جدولی کالاها</div>
             <div class="card-actions">

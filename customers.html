@@ -96,9 +96,9 @@
                 <option>نقره‌ای</option>
                 <option>برنزی</option>
               </select>
-              <div class="segmented" data-segmented>
-                <button class="seg is-active" data-tip="نمای جدولی" data-icon="rows" data-icon-size="15"></button>
-                <button class="seg" data-tip="نمای کارتی" data-icon="grid" data-icon-size="15"></button>
+              <div class="segmented" data-segmented data-view-group>
+                <button class="seg is-active" data-view-btn="table" data-view-name="customers" aria-pressed="true" data-tip="نمای جدولی" data-icon="rows" data-icon-size="15"></button>
+                <button class="seg" data-view-btn="cards" data-view-name="customers" aria-pressed="false" data-tip="نمای کارتی" data-icon="grid" data-icon-size="15"></button>
               </div>
             </div>
           </div>
@@ -114,7 +114,7 @@
             </div>
           </div>
 
-          <div class="card-body flush">
+          <div class="card-body flush" data-view-panel="table">
             <div class="table-wrap">
               <table class="table" id="tblCustomers">
                 <thead>
@@ -144,6 +144,11 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <!-- نمای کارتی: با اولین نمایش از داده‌های CRM ساخته می‌شود -->
+          <div class="card-body d-none" data-view-panel="cards" hidden>
+            <div class="grid-3" id="customersCards"></div>
           </div>
 
           <div class="table-foot">
@@ -247,6 +252,45 @@
     blocked: { label: 'مسدود',          cls: 'badge-danger' }
   };
   var owners = ['مهدی ک.', 'نیما ع.', 'سمیرا ر.', 'رضا پ.'];
+
+  /* ---------------- نمای کارتی مشتریان ---------------- */
+  function fillCards() {
+    var wrap = CRM.$('#customersCards');
+    if (!wrap || wrap.__filled) return;
+    wrap.__filled = true;
+    wrap.innerHTML = CRM.data.customers.map(function (c, i) {
+      var st = STATUS[c.status];
+      var lvl = c.level === 'طلایی' ? 'badge-warning' : c.level === 'نقره‌ای' ? 'badge-outline' : '';
+      return '<article class="card card-hover p-4">' +
+        '<div class="d-flex items-center gap-3 mb-3">' + CRM.avatar(c.name, 44) +
+          '<div style="min-width:0"><div class="fw-700 text-strong text-truncate">' + CRM.esc(c.name) + '</div>' +
+          '<div class="fs-xs text-muted text-truncate">' + CRM.esc(c.company) + '</div></div>' +
+          '<span class="ms-auto badge ' + (st.cls || '') + ' badge-dot">' + st.label + '</span>' +
+        '</div>' +
+        '<div class="d-flex flex-col gap-2 fs-sm text-muted mb-3">' +
+          '<span class="d-flex items-center gap-2"><span data-icon="phone" data-icon-size="14"></span>' + CRM.esc(c.phone) + '</span>' +
+          '<span class="d-flex items-center gap-2"><span data-icon="mail" data-icon-size="14"></span>' + CRM.esc(c.email) + '</span>' +
+          '<span class="d-flex items-center gap-2"><span data-icon="building" data-icon-size="14"></span>' + CRM.esc(c.city) + '</span>' +
+        '</div>' +
+        '<div class="d-flex items-center gap-2 mb-3">' +
+          '<span class="badge ' + lvl + '">' + CRM.esc(c.level) + '</span>' +
+          '<span class="badge gray">' + CRM.esc(c.id) + '</span>' +
+        '</div>' +
+        '<div class="d-flex items-center justify-between card-foot" style="border-top:1px solid var(--border-muted);padding-top:12px">' +
+          '<span class="fs-2xs text-muted">ارزش خرید</span>' +
+          '<span class="fw-700 num">' + CRM.num(c.value) + ' تومان</span>' +
+        '</div>' +
+        '<div class="d-flex gap-2 mt-3">' +
+          '<a class="btn btn-sm btn-soft flex-1" href="customer-profile.html"><span data-icon="eye" data-icon-size="14"></span> پرونده</a>' +
+          '<a class="btn btn-sm flex-1" href="customer-new.html"><span data-icon="pencil" data-icon-size="14"></span> ویرایش</a>' +
+        '</div>' +
+      '</article>';
+    }).join('');
+    CRM.init(wrap);
+  }
+  document.addEventListener('crm:view', function (e) {
+    if (e.detail && e.detail.key === 'cards') fillCards();
+  });
 
   CRM.$('#tblCustomersBody').innerHTML = CRM.data.customers.map(function (c, i) {
     var st = STATUS[c.status];

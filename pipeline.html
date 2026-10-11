@@ -76,14 +76,34 @@
                 <span class="icon lead" data-icon="search" data-icon-size="16"></span>
                 <input class="input input-sm" placeholder="جستجوی معامله…">
               </div>
-              <div class="segmented" data-segmented>
-                <button class="seg is-active" data-icon="columns" data-icon-size="15" data-tip="نمای تخته"></button>
-                <button class="seg" data-icon="table" data-icon-size="15" data-tip="نمای جدول"></button>
+              <div class="segmented" data-segmented data-view-group>
+                <button class="seg is-active" data-view-btn="board" data-view-name="pipeline" aria-pressed="true" data-icon="columns" data-icon-size="15" data-tip="نمای تخته"></button>
+                <button class="seg" data-view-btn="table" data-view-name="pipeline" aria-pressed="false" data-icon="table" data-icon-size="15" data-tip="نمای جدول"></button>
               </div>
             </div>
           </div>
-          <div class="card-body">
+          <div class="card-body" data-view-panel="board">
             <div class="kanban" data-kanban id="kanbanBoard"></div>
+          </div>
+          <div class="card-body flush d-none" data-view-panel="table" hidden>
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="sortable"><span class="th-in">معامله</span></th>
+                    <th class="sortable"><span class="th-in">مشتری</span></th>
+                    <th class="sortable"><span class="th-in">مرحله</span></th>
+                    <th class="sortable num"><span class="th-in">ارزش</span></th>
+                    <th class="sortable"><span class="th-in">احتمال</span></th>
+                    <th class="sortable"><span class="th-in">اولویت</span></th>
+                    <th class="sortable"><span class="th-in">سررسید</span></th>
+                    <th class="sortable"><span class="th-in">کارشناس</span></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="pipelineTableBody"></tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -141,8 +161,9 @@
           </div>
           <div class="form-group">
             <label class="form-label">مرحله</label>
-            <select class="select">
-              <option>سرنخ جدید</option><option>تماس برقرار شد</option><option>ارسال پیش‌فاکتور</option><option>مذاکره</option>
+            <select class="select" data-stage-select>
+              <option value="lead">سرنخ جدید</option><option value="contact">تماس برقرار شد</option>
+              <option value="proposal">ارسال پیش‌فاکتور</option><option value="negotiation">مذاکره</option>
             </select>
           </div>
           <div class="form-group">
@@ -212,7 +233,9 @@
         '<span class="kc-dot" style="background:' + s.color + '"></span>' +
         '<span class="kanban-col-title">' + CRM.esc(s.title) + '</span>' +
         '<span class="badge gray" data-col-count>' + CRM.fa(items.length) + '</span>' +
-        '<button class="tb-icon ms-auto" style="width:26px;height:26px" data-icon="plus" data-icon-size="15"></button>' +
+        '<button class="tb-icon ms-auto" style="width:26px;height:26px" data-icon="plus" data-icon-size="15"' +
+          ' data-tip="افزودن معامله به ستون «' + CRM.esc(s.title) + '»"' +
+          ' data-modal-open="#modalNewDeal" data-stage="' + s.id + '"></button>' +
       '</header>' +
       '<div class="kanban-col-body">' + items.map(cardHTML).join('') + '</div>' +
       '<footer class="card-foot" style="padding:9px 12px">' +
@@ -221,6 +244,49 @@
       '</footer>' +
     '</section>';
   }).join('');
+
+  /* ---------------- نمای جدولی: از همان داده‌های تخته ---------------- */
+  var STAGE = {};
+  CRM.data.dealStages.forEach(function (s) { STAGE[s.id] = s; });
+  var PRIO = { urgent: 'فوری', high: 'بالا', normal: 'عادی', low: 'پایین' };
+
+  function fillTable() {
+    var body = CRM.$('#pipelineTableBody');
+    if (!body || body.__filled) return;
+    body.__filled = true;
+    body.innerHTML = CRM.data.deals.map(function (d) {
+      var st = STAGE[d.stage] || { title: '—' };
+      return '<tr>' +
+        '<td><span class="cell-main d-block">' + CRM.esc(d.title) + '</span>' +
+          '<span class="cell-sub">' + CRM.esc(d.id) + '</span></td>' +
+        '<td>' + CRM.esc(d.customer) + '</td>' +
+        '<td><span class="badge badge-dot" style="--d:' + (st.color || 'var(--brand)') + '">' + CRM.esc(st.title) + '</span></td>' +
+        '<td class="num fw-600">' + CRM.num(d.value) + '</td>' +
+        '<td><div class="d-flex items-center gap-2"><div class="progress sm" style="width:70px"><i style="width:' + d.progress + '%"></i></div>' +
+          '<span class="fs-xs num">' + CRM.fa(d.progress) + '٪</span></div></td>' +
+        '<td><span class="priority ' + d.priority + '">' + PRIO[d.priority] + '</span></td>' +
+        '<td class="num fs-sm">' + CRM.esc(d.due) + '</td>' +
+        '<td class="fs-sm">' + CRM.esc(d.owner) + '</td>' +
+        '<td><span class="table-actions">' +
+          '<button class="tb-icon" style="width:30px;height:30px" data-tip="ویرایش" data-modal-open="#modalNewDeal" data-icon="pencil" data-icon-size="16"></button>' +
+          '<button class="tb-icon" style="width:30px;height:30px" data-tip="حذف" data-confirm="معامله «' + CRM.esc(d.title) + '» حذف شود؟" data-icon="trash" data-icon-size="16"></button>' +
+        '</span></td>' +
+      '</tr>';
+    }).join('');
+    CRM.init(body);
+  }
+  fillTable();
+  document.addEventListener('crm:view', function (e) {
+    if (e.detail && e.detail.key === 'table') fillTable();
+  });
+
+  /* دکمه + هر ستون، مرحله‌ی مودال را روی همان ستون می‌گذارد */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-stage]');
+    if (!b) return;
+    var sel = document.querySelector('#modalNewDeal select[data-stage-select]');
+    if (sel) sel.value = b.getAttribute('data-stage');
+  });
 })();
 </script>
 </body>

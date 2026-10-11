@@ -801,6 +801,62 @@ window.CRM = (function (w, d) {
   /* ==========================================================================
    *  8) کانبان با کشیدن و رها کردن
    * ========================================================================== */
+  /* ==========================================================================
+   *  سوییچ نما: جدولی / کارتی / تخته
+   *  دکمه‌ها: [data-view-btn="cards|table|board"]
+   *  پنل‌ها: [data-view-panel="cards|table|board"]
+   *  پیش از نمایش یک پنل، رویداد crm:view روی آن ارسال می‌شود تا صفحه‌های
+   *  دارای محتوای تنبل (lazy) خودشان را بسازند.
+   * ========================================================================== */
+  function initViews(scope) {
+    var s = scope || d;
+
+    var allBtns0 = $$('[data-view-btn]', d);
+    var viewName = allBtns0.length ? (allBtns0[0].getAttribute('data-view-name') || '') : '';
+
+    function apply(key) {
+      var panels = $$('[data-view-panel]', d);
+      if (!panels.length) return;
+      panels.forEach(function (p) {
+        var on = p.getAttribute('data-view-panel') === key;
+        p.classList.toggle('d-none', !on);
+        p.hidden = !on;
+        if (on) {
+          /* محتوای تنبل: صفحه خودش را می‌سازد (رویداد crm:view) */
+          if (!p.__filled) {
+            p.__filled = true;
+            p.dispatchEvent(new CustomEvent('crm:view', { bubbles: true, detail: { key: key } }));
+          }
+          /* آیکون‌ها و نمودارهای پنل تازه‌نمایش‌داده‌شده دوباره ساخته می‌شوند */
+          renderIcons(p);
+          charts.render(p);
+        }
+      });
+      $$('[data-view-btn]', d).forEach(function (b) {
+        var isOn = b.getAttribute('data-view-btn') === key;
+        b.classList.toggle('is-active', isOn);
+        b.setAttribute('aria-pressed', isOn ? 'true' : 'false');
+      });
+      try { localStorage.setItem('moderncrm-view:' + (viewName || 'page'), key); } catch (e) { }
+    }
+
+    $$('[data-view-btn]', s).forEach(function (b) {
+      if (b.__bound) return; b.__bound = true;
+      b.addEventListener('click', function (e) {
+        e.preventDefault();
+        apply(b.getAttribute('data-view-btn'));
+      });
+    });
+
+    /* اگر همه‌ی دکمه‌های نما در صفحه هستند، نما را از حافظه بازیابی کن */
+    var btns = allBtns0;
+    if (btns.length && btns[0].getAttribute('data-view-name')) {
+      var saved = null;
+      try { saved = localStorage.getItem('moderncrm-view:' + (viewName || 'page')); } catch (e) { }
+      if (saved && btns.some(function (b) { return b.getAttribute('data-view-btn') === saved; })) apply(saved);
+    }
+  }
+
   function initKanban(scope) {
     $$('[data-kanban]', scope).forEach(function (board) {
       if (board.__bound) return; board.__bound = true;
@@ -1146,6 +1202,21 @@ window.CRM = (function (w, d) {
         b.addEventListener('click', function () { d.body.classList.toggle('sidebar-open'); });
       });
       var shellEl = $('#appShell');
+
+      /* بستن کشوی موبایل: کلیک بیرون از کشو، کلید Escape، و بازگشت به دسکتاپ */
+      d.addEventListener('click', function (e) {
+        if (!d.body.classList.contains('sidebar-open')) return;
+        if (e.target.closest && e.target.closest('.sidebar')) return;
+        if (e.target.closest && e.target.closest('[data-sidebar-toggle]')) return;
+        d.body.classList.remove('sidebar-open');
+      });
+      d.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') d.body.classList.remove('sidebar-open');
+      });
+      w.addEventListener('resize', debounce(function () {
+        if (w.innerWidth > 1024) d.body.classList.remove('sidebar-open');
+      }, 150));
+
       function paintCollapseBtn() {
         var collapsed = shellEl && shellEl.classList.contains('sidebar-collapsed');
         var b = $('[data-sidebar-collapse]');
@@ -1255,6 +1326,7 @@ window.CRM = (function (w, d) {
     initForms(s);
     initTables(s);
     initKanban(s);
+    initViews(s);
     initCounters(s);
     charts.render(s);
 
@@ -1334,6 +1406,62 @@ window.CRM = (function (w, d) {
       if (inp.__bound) return; inp.__bound = true;
       inp.addEventListener('input', function () { inp.value = fa(inp.value); });
     });
+
+    /* ------------------------------------------------------------------
+     * واسطه‌ی سراسری برای محتوای پویا
+     * هر دکمه‌ای که بعد از راه‌اندازی (رندر جدول/کانبان/کارت‌ها) اضافه شود،
+     * با همین شنونده‌ی سطح سند کار می‌کند و «کار نکردن دکمه» پیش نمی‌آید.
+     * عناصری که مستقیم بایند شده‌اند (__bound) دوباره اجرا نمی‌شوند.
+     * ------------------------------------------------------------------ */
+    if (!d.__crmDelegated) {
+      d.__crmDelegated = true;
+      d.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        var hook = function (sel) { var el = t.closest(sel); return el && !el.__bound ? el : null; };
+        var el;
+        if ((el = hook('[data-modal-open]'))) { e.preventDefault(); modal.open(el.getAttribute('data-modal-open')); return; }
+        if ((el = hook('[data-modal-close]'))) { e.preventDefault(); modal.close(el.getAttribute('data-modal-close') || undefined); return; }
+        if ((el = hook('[data-drawer-open]'))) { e.preventDefault(); drawer.open(el.getAttribute('data-drawer-open')); return; }
+        if ((el = hook('[data-drawer-close]'))) { e.preventDefault(); drawer.close(el.getAttribute('data-drawer-close') || undefined); return; }
+        if ((el = hook('[data-copy]'))) {
+          e.preventDefault();
+          var txt = el.getAttribute('data-copy') || '';
+          if (w.navigator && navigator.clipboard) navigator.clipboard.writeText(txt);
+          toast({ type: 'success', title: 'کپی شد', msg: txt, duration: 2200 });
+          return;
+        }
+        if ((el = hook('[data-print]'))) { e.preventDefault(); w.print(); return; }
+        if ((el = hook('[data-password-toggle]'))) {
+          e.preventDefault();
+          var inp = $(el.getAttribute('data-password-toggle'));
+          if (inp) { var show = inp.type === 'password'; inp.type = show ? 'text' : 'password'; el.innerHTML = icon(show ? 'eye-off' : 'eye', 17); }
+          return;
+        }
+        if ((el = hook('[data-confirm]'))) {
+          e.preventDefault();
+          modal.confirm({
+            title: el.getAttribute('data-confirm-title') || 'حذف آیتم',
+            msg: el.getAttribute('data-confirm') || 'این عملیات قابل بازگشت نیست. آیا مطمئن هستید؟',
+            danger: true, okText: el.getAttribute('data-confirm-ok') || 'بله، حذف کن', icon: 'trash'
+          }).then(function (ok) {
+            if (ok) toast({ type: 'success', title: 'انجام شد', msg: 'آیتم مورد نظر با موفقیت حذف شد.' });
+          });
+          return;
+        }
+        /* منوهای بازشو (تیک‌شو) هم برای محتوای پویا */
+        if ((el = hook('[data-dropdown-toggle]'))) {
+          e.preventDefault(); e.stopPropagation();
+          var menu = el.parentElement ? el.parentElement.querySelector('.dropdown-menu') : null;
+          if (!menu) return;
+          var willOpen = !menu.classList.contains('is-open');
+          $$('.dropdown-menu.is-open').forEach(function (m) { m.classList.remove('is-open'); });
+          menu.classList.toggle('is-open', willOpen);
+          el.classList.toggle('is-open', willOpen);
+          return;
+        }
+      });
+    }
   }
 
   /* ==========================================================================
