@@ -1,82 +1,99 @@
 /*!
  * ============================================================================
  *  ModernCRM · tokens.css
- *  تمام رنگ‌ها، اندازه‌ها و سایه‌های قالب در همین فایل تعریف شده‌اند.
- *  برای تغییر هویت بصری برنامه فقط کافی است مقادیر این فایل را تغییر دهید.
+ *  تمام رنگ‌ها، شعاع‌ها، سایه‌ها و اندازه‌های قالب در همین فایل تعریف شده‌اند.
+ *  هویت بصری برگرفته از تم مرجع (theme.jpg):
+ *    بوم خاکستری-آبی روشن، کارت‌های سفید با گوشه‌های بسیار گرد،
+ *    لهجه اصلی آبی ملایم، لهجه دوم مرجانی و «مشکی» برای حالت‌های فعال.
  *  تم روشن: پیش‌فرض | تم تیره: html[data-theme="dark"]
  * ============================================================================
  */
 
 :root {
   /* ---------------------------------------------------------------- brand */
-  --brand-50: #ecfdf5;
-  --brand-100: #d1fae5;
-  --brand-200: #a7f3d0;
-  --brand-300: #6ee7b7;
-  --brand-400: #34d399;
-  --brand-500: #10b981;
-  --brand-600: #059669;
-  --brand-700: #047857;
-  --brand-800: #065f46;
-  --brand-900: #064e3b;
-  --brand-950: #022c22;
+  /* آبی ملایم (رنگ اصلی) */
+  --brand-50: #eff5fe;
+  --brand-100: #dfeafc;
+  --brand-200: #c6d9f9;
+  --brand-300: #9fbdf3;
+  --brand-400: #759deb;
+  --brand-500: #5583e0;
+  --brand-600: #3f6bc9;
+  --brand-700: #34559f;
+  --brand-800: #2d4780;
+  --brand-900: #283c66;
+  --brand-950: #1b2844;
 
-  --accent-400: #2dd4bf;
-  --accent-500: #14b8a6;
-  --accent-600: #0d9488;
+  /* ----------------------------------------------------------------- accent */
+  /* مرجانی (رنگ دوم تم؛ در نمودار، بج‌ها و هشدارها) */
+  --accent-50: #fdecea;
+  --accent-100: #fbdad6;
+  --accent-300: #f6a89e;
+  --accent-400: #f08b7f;
+  --accent-500: #e8695f;
+  --accent-600: #d2544a;
+  --accent-700: #b0443c;
+
+  /* ---------------------------------------------------- مشکی/جوهری تم */
+  --ink: #101114;
+  --ink-soft: #1c1e23;
+  --ink-hover: #26282e;
+  --on-ink: #ffffff;
+  --on-ink-muted: #b9bcc4;
 
   /* ----------------------------------------------------------- neutrals */
   --n-0: #ffffff;
-  --n-25: #fcfdfd;
-  --n-50: #f7faf9;
-  --n-100: #eff4f3;
-  --n-200: #e2eae8;
-  --n-300: #cbd8d5;
-  --n-400: #93a5a2;
-  --n-500: #667876;
-  --n-600: #4a5a58;
-  --n-700: #35403f;
-  --n-800: #212a29;
-  --n-900: #131a19;
-  --n-950: #0a0f0f;
+  --n-25: #fbfcfe;
+  --n-50: #f6f8fc;
+  --n-100: #eef1f8;
+  --n-200: #e3e8f2;
+  --n-300: #cfd6e4;
+  --n-400: #a6aebf;
+  --n-500: #7b8395;
+  --n-600: #5e6675;
+  --n-700: #454c59;
+  --n-800: #2c313b;
+  --n-900: #16191f;
+  --n-950: #0c0e12;
 
   /* ---------------------------------------------------------- semantics */
-  --success-50: #f0fdf4;
-  --success-100: #dcfce7;
-  --success-500: #16a34a;
-  --success-600: #15803d;
+  --success-50: #e8f5ef;
+  --success-100: #d2ebe0;
+  --success-500: #35a06e;
+  --success-600: #2b8a5d;
 
-  --warning-50: #fffbeb;
-  --warning-100: #fef3c7;
-  --warning-500: #f59e0b;
-  --warning-600: #d97706;
+  --warning-50: #fdf4e4;
+  --warning-100: #fae9c8;
+  --warning-500: #dfa43f;
+  --warning-600: #a26a17;
 
-  --danger-50: #fef2f2;
-  --danger-100: #fee2e2;
-  --danger-500: #ef4444;
-  --danger-600: #dc2626;
+  --danger-50: #fdecea;
+  --danger-100: #fbdad6;
+  --danger-500: #e8695f;
+  --danger-600: #d2544a;
 
-  --info-50: #eff6ff;
-  --info-100: #dbeafe;
-  --info-500: #3b82f6;
-  --info-600: #2563eb;
+  --info-50: var(--brand-50);
+  --info-100: var(--brand-100);
+  --info-500: var(--brand-500);
+  --info-600: var(--brand-600);
 
-  --violet-500: #8b5cf6;
-  --rose-500: #f43f5e;
-  --sky-500: #0ea5e9;
-  --amber-500: #f59e0b;
+  --violet-500: #8a7ee8;
+  --rose-500: #e8695f;
+  --sky-500: #5aa9e8;
+  --amber-500: #dfa43f;
 
   /* ------------------------------------------------------------ layout */
-  --sidebar-w: 264px;
-  --sidebar-w-collapsed: 78px;
-  --topbar-h: 66px;
-  --taskbar-h: 46px;
+  --sidebar-w: 256px;
+  --sidebar-w-collapsed: 84px;
+  --topbar-h: 68px;
+  --taskbar-h: 58px;
   --page-pad: 26px;
-  --radius-xs: 6px;
-  --radius-sm: 9px;
-  --radius: 13px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
+  --radius-xs: 9px;
+  --radius-sm: 12px;
+  --radius: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-2xl: 34px;
   --radius-full: 999px;
 
   /* ------------------------------------------------------------ motion */
@@ -95,9 +112,9 @@
   --fs-base: 14px;
   --fs-lg: 16px;
   --fs-xl: 19px;
-  --fs-2xl: 23px;
-  --fs-3xl: 29px;
-  --fs-4xl: 36px;
+  --fs-2xl: 24px;
+  --fs-3xl: 30px;
+  --fs-4xl: 38px;
 
   /* ------------------------------------------------------------ z-index */
   --z-snap: 55;
@@ -113,7 +130,7 @@
   --z-toast: 1200;
 
   /* ----------------------------------------------------------- effects */
-  --blur: saturate(180%) blur(14px);
+  --blur: saturate(180%) blur(16px);
 }
 
 /* ==========================================================================
@@ -123,65 +140,80 @@
 html[data-theme="light"] {
   color-scheme: light;
 
-  --bg: #f4f7f6;
-  --bg-soft: #eef3f2;
+  /* بوم خاکستری-آبی و لایه‌های روی آن */
+  --bg: #e9edf4;
+  --bg-soft: #f1f4f9;
+  --bg-grad: linear-gradient(180deg, #eff2f8 0%, #e6eaf3 100%);
+  --bg-sheen: radial-gradient(1100px 560px at 80% -12%, rgba(255, 255, 255, 0.62), transparent 62%);
   --surface: #ffffff;
-  --surface-2: #f8fbfa;
-  --surface-3: #f1f6f4;
-  --surface-hover: #f3f8f6;
-  --surface-inset: #edf3f1;
+  --surface-2: #f4f6fb;
+  --surface-3: #eceff7;
+  --surface-hover: #f2f5fa;
+  --surface-inset: #e9edf5;
 
-  --text: #10201d;
-  --text-strong: #07120f;
-  --text-muted: #5c6f6c;
-  --text-soft: #869895;
+  --text: #16181d;
+  --text-strong: #0b0c10;
+  --text-muted: #6b7483;
+  --text-soft: #8b93a4;
   --text-invert: #ffffff;
   --text-on-brand: #ffffff;
 
-  --border: #e3ebe9;
-  --border-strong: #cfdcd9;
-  --border-muted: #edf3f1;
+  --border: #e6eaf2;
+  --border-strong: #d5dbe7;
+  --border-muted: #eef1f8;
 
-  --brand: var(--brand-600);
-  --brand-hover: var(--brand-700);
+  --brand: var(--brand-500);
+  --brand-hover: var(--brand-600);
   --brand-soft: var(--brand-50);
   --brand-soft-2: var(--brand-100);
-  --brand-ring: rgba(5, 150, 105, 0.22);
+  --brand-ring: rgba(85, 131, 224, 0.22);
   --brand-contrast: #ffffff;
+  --brand-ink: var(--brand-600);   /* متن/آیکون روی پس‌زمینه روشن */
+  --brand-btn: var(--brand-600);   /* پس‌زمینه دکمه اصلی (کنتراست بهتر با متن سفید) */
+  --brand-btn-hover: var(--brand-700);
 
   --success: var(--success-600);
   --success-soft: var(--success-50);
-  --success-ring: rgba(22, 163, 74, 0.2);
-  --warning: #b45309;
+  --success-ring: rgba(53, 160, 110, 0.2);
+  --warning: var(--warning-600);
   --warning-soft: var(--warning-50);
-  --warning-ring: rgba(245, 158, 11, 0.24);
+  --warning-ring: rgba(223, 164, 63, 0.24);
   --danger: var(--danger-600);
   --danger-soft: var(--danger-50);
-  --danger-ring: rgba(239, 68, 68, 0.2);
-  --info: var(--info-600);
-  --info-soft: var(--info-50);
-  --info-ring: rgba(59, 130, 246, 0.2);
+  --danger-ring: rgba(232, 105, 95, 0.2);
+  --info: var(--brand-600);
+  --info-soft: var(--brand-50);
+  --info-ring: rgba(85, 131, 224, 0.2);
+
+  --accent: var(--accent-500);
+  --accent-soft: var(--accent-50);
+  --accent-ring: rgba(232, 105, 95, 0.2);
 
   --ring: var(--brand-ring);
 
-  --sidebar-bg: #ffffff;
-  --sidebar-text: #5c6f6c;
-  --sidebar-text-active: var(--brand-700);
-  --sidebar-item-hover: #f3f8f6;
-  --sidebar-item-active: var(--brand-50);
-  --sidebar-border: #e8efed;
+  /* سایدبار مثل تم مرجع: روی بوم، با آیتم‌های سفید و آیتم فعال مشکی */
+  --sidebar-bg: transparent;
+  --sidebar-text: #6b7483;
+  --sidebar-text-active: var(--on-ink);
+  --sidebar-item-hover: #f2f5fa;
+  --sidebar-item-active: var(--ink);
+  --sidebar-border: transparent;
 
-  --topbar-bg: rgba(255, 255, 255, 0.82);
-  --modal-bg: rgba(16, 32, 29, 0.45);
+  --topbar-bg: rgba(236, 240, 246, 0.72);
+  --modal-bg: rgba(18, 24, 38, 0.42);
+  --dock-bg: rgba(255, 255, 255, 0.78);
 
-  --shadow-xs: 0 1px 2px rgba(16, 32, 29, 0.05);
-  --shadow-sm: 0 1px 3px rgba(16, 32, 29, 0.07), 0 1px 2px rgba(16, 32, 29, 0.04);
-  --shadow: 0 4px 14px -4px rgba(16, 32, 29, 0.12), 0 2px 6px -2px rgba(16, 32, 29, 0.06);
-  --shadow-md: 0 10px 28px -10px rgba(16, 32, 29, 0.18), 0 4px 10px -4px rgba(16, 32, 29, 0.08);
-  --shadow-lg: 0 26px 60px -22px rgba(16, 32, 29, 0.28), 0 8px 20px -12px rgba(16, 32, 29, 0.14);
-  --shadow-brand: 0 8px 22px -8px rgba(5, 150, 105, 0.45);
+  --shadow-xs: 0 1px 2px rgba(19, 32, 64, 0.06);
+  --shadow-sm: 0 2px 10px -4px rgba(19, 32, 64, 0.12);
+  --shadow: 0 10px 26px -16px rgba(19, 32, 64, 0.2);
+  --shadow-md: 0 18px 42px -24px rgba(19, 32, 64, 0.26);
+  --shadow-lg: 0 34px 70px -30px rgba(19, 32, 64, 0.32);
+  --shadow-card: 0 18px 40px -30px rgba(19, 32, 64, 0.38), 0 2px 6px -3px rgba(19, 32, 64, 0.06);
+  --shadow-brand: 0 10px 24px -12px rgba(63, 107, 201, 0.5);
+  --shadow-ink: 0 12px 26px -12px rgba(16, 17, 20, 0.45);
 
-  --grad-brand: linear-gradient(135deg, var(--brand-500) 0%, var(--accent-600) 100%);
+  --grad-brand: linear-gradient(135deg, #6f9ceb 0%, #3f6bc9 100%);
+  --grad-coral: linear-gradient(135deg, #f0907f 0%, #d2544a 100%);
   --grad-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 100%);
   --glass: rgba(255, 255, 255, 0.72);
 }
@@ -192,77 +224,99 @@ html[data-theme="light"] {
 html[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #070d0c;
-  --bg-soft: #0b1413;
-  --surface: #101a19;
-  --surface-2: #14201f;
-  --surface-3: #192726;
-  --surface-hover: #172423;
-  --surface-inset: #0c1615;
+  --bg: #0d1017;
+  --bg-soft: #12161f;
+  --bg-grad: linear-gradient(180deg, #121620 0%, #0b0e14 100%);
+  --bg-sheen: radial-gradient(1100px 560px at 80% -12%, rgba(85, 131, 224, 0.12), transparent 62%);
+  --surface: #171b24;
+  --surface-2: #1c212b;
+  --surface-3: #232936;
+  --surface-hover: #1f2531;
+  --surface-inset: #12161e;
 
-  --text: #e6f0ee;
-  --text-strong: #f4faf9;
-  --text-muted: #93a7a4;
-  --text-soft: #6f8380;
-  --text-invert: #07120f;
-  --text-on-brand: #04120e;
+  --text: #e9edf5;
+  --text-strong: #f6f8fc;
+  --text-muted: #9aa3b4;
+  --text-soft: #6f7789;
+  --text-invert: #0b0e14;
+  --text-on-brand: #0b1220;
 
-  --border: #1f2f2d;
-  --border-strong: #2b3d3a;
-  --border-muted: #172524;
+  --border: #242a37;
+  --border-strong: #303849;
+  --border-muted: #1e232e;
 
   --brand: var(--brand-400);
   --brand-hover: var(--brand-300);
-  --brand-soft: rgba(16, 185, 129, 0.13);
-  --brand-soft-2: rgba(16, 185, 129, 0.22);
-  --brand-ring: rgba(52, 211, 153, 0.3);
-  --brand-contrast: #05201a;
+  --brand-soft: rgba(85, 131, 224, 0.16);
+  --brand-soft-2: rgba(85, 131, 224, 0.26);
+  --brand-ring: rgba(117, 157, 235, 0.32);
+  --brand-contrast: #0c1220;
+  --brand-ink: var(--brand-300);
+  --brand-btn: var(--brand-400);
+  --brand-btn-hover: var(--brand-300);
 
-  --success: #4ade80;
-  --success-soft: rgba(34, 197, 94, 0.14);
-  --success-ring: rgba(74, 222, 128, 0.28);
-  --warning: #fbbf24;
-  --warning-soft: rgba(245, 158, 11, 0.15);
-  --warning-ring: rgba(251, 191, 36, 0.28);
-  --danger: #f87171;
-  --danger-soft: rgba(239, 68, 68, 0.15);
-  --danger-ring: rgba(248, 113, 113, 0.28);
-  --info: #60a5fa;
-  --info-soft: rgba(59, 130, 246, 0.15);
-  --info-ring: rgba(96, 165, 250, 0.28);
+  --success: #5cc796;
+  --success-soft: rgba(53, 160, 110, 0.16);
+  --success-ring: rgba(92, 199, 150, 0.28);
+  --warning: #e8b662;
+  --warning-soft: rgba(223, 164, 63, 0.16);
+  --warning-ring: rgba(232, 182, 98, 0.28);
+  --danger: #f0827a;
+  --danger-soft: rgba(232, 105, 95, 0.16);
+  --danger-ring: rgba(240, 130, 122, 0.28);
+  --info: #7ba6f0;
+  --info-soft: rgba(85, 131, 224, 0.16);
+  --info-ring: rgba(123, 166, 240, 0.28);
 
-  --sidebar-bg: #0b1413;
-  --sidebar-text: #93a7a4;
-  --sidebar-text-active: var(--brand-300);
-  --sidebar-item-hover: #16211f;
-  --sidebar-item-active: rgba(16, 185, 129, 0.13);
-  --sidebar-border: #1a2726;
+  --accent: var(--accent-400);
+  --accent-soft: rgba(232, 105, 95, 0.16);
+  --accent-ring: rgba(240, 139, 127, 0.28);
 
-  --topbar-bg: rgba(11, 20, 19, 0.8);
-  --modal-bg: rgba(3, 8, 7, 0.68);
+  /* در تم تیره حالت فعال روشن است (آینه‌ی حالت مشکی تم روشن)
+     بنابراین --ink در تم تیره به «سفید» تغییر می‌کند و --on-ink تیره می‌شود */
+  --ink: #f4f6fb;
+  --ink-soft: #e4e8f1;
+  --ink-hover: #ffffff;
+  --on-ink: #0d1017;
+  --on-ink-muted: #4e5766;
+
+  --sidebar-bg: transparent;
+  --sidebar-text: #9aa3b4;
+  --sidebar-text-active: #0d1017;
+  --sidebar-item-hover: rgba(255, 255, 255, 0.06);
+  --sidebar-item-active: #ffffff;
+  --sidebar-border: transparent;
+
+  --topbar-bg: rgba(13, 16, 23, 0.72);
+  --modal-bg: rgba(4, 6, 10, 0.66);
+  --dock-bg: rgba(23, 27, 36, 0.82);
 
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
-  --shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.6);
-  --shadow-md: 0 14px 34px -12px rgba(0, 0, 0, 0.7);
-  --shadow-lg: 0 30px 70px -24px rgba(0, 0, 0, 0.85);
-  --shadow-brand: 0 10px 26px -10px rgba(16, 185, 129, 0.5);
+  --shadow-sm: 0 2px 10px -4px rgba(0, 0, 0, 0.55);
+  --shadow: 0 10px 28px -16px rgba(0, 0, 0, 0.7);
+  --shadow-md: 0 20px 46px -24px rgba(0, 0, 0, 0.8);
+  --shadow-lg: 0 36px 76px -30px rgba(0, 0, 0, 0.9);
+  --shadow-card: 0 20px 44px -30px rgba(0, 0, 0, 0.85), 0 2px 6px -3px rgba(0, 0, 0, 0.4);
+  --shadow-brand: 0 12px 26px -12px rgba(63, 107, 201, 0.55);
+  --shadow-ink: 0 12px 26px -14px rgba(0, 0, 0, 0.75);
 
-  --grad-brand: linear-gradient(135deg, var(--brand-500) 0%, var(--accent-500) 100%);
+  --grad-brand: linear-gradient(135deg, var(--brand-500) 0%, var(--brand-700) 100%);
+  --grad-coral: linear-gradient(135deg, var(--accent-500) 0%, var(--accent-700) 100%);
   --grad-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 100%);
-  --glass: rgba(16, 26, 25, 0.7);
+  --glass: rgba(23, 27, 36, 0.74);
 }
 
 /* ==========================================================================
  *  رنگ‌بندی نمودارها (در هر دو تم یکسان است)
+ *  آبی ملایم و مرجانی، مطابق تم مرجع
  * ========================================================================== */
 :root {
-  --c1: #10b981;
-  --c2: #14b8a6;
-  --c3: #0ea5e9;
-  --c4: #8b5cf6;
-  --c5: #f59e0b;
-  --c6: #f43f5e;
-  --c7: #6366f1;
-  --c8: #84cc16;
+  --c1: #6f9ceb;
+  --c2: #e8695f;
+  --c3: #8a7ee8;
+  --c4: #5fbfa5;
+  --c5: #e8b45f;
+  --c6: #5aa9e8;
+  --c7: #d98fb0;
+  --c8: #9aa4b5;
 }

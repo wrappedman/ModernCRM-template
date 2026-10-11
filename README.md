@@ -49,14 +49,14 @@ ModernCRM-template/
 │   │   ├── components.css    کتابخانه اجزا (دکمه، فرم، جدول، مودال، نمودار، …)
 │   │   └── layout.css        پوسته برنامه، سایدبار، تاپ‌بار، نوار وظیفه، پنجره‌ها
 │   ├── js/
-│   │   ├── icons.js          ۱۶۹ آیکون SVG (بر پایه Lucide — مجوز ISC)
+│   │   ├── icons.js          ۱۷۱ آیکون SVG (بر پایه Lucide — مجوز ISC)
 │   │   ├── data.js           ★ داده‌های نمایشی و مدل منوی سایدبار
 │   │   ├── app.js            هسته: تم، توست، مودال، دراور، نمودار، جدول، پالت فرمان
 │   │   └── windows.js        مدیر پنجره‌ها (درگ، تغییر اندازه، ماکسیمایز، اسنپ)
 │   ├── fonts/                وزیرمتن (Variable + وزن‌های اصلی) + مجوز OFL
 │   └── img/                  لوگو و فاوآیکون SVG
 │
-└── صفحه‌ها (۳۶ فایل HTML در ریشه پروژه)
+└── صفحه‌ها (۳۷ فایل HTML در ریشه پروژه)
 ```
 
 ---
@@ -66,7 +66,7 @@ ModernCRM-template/
 | گروه | صفحه‌ها |
 | --- | --- |
 | ورود به قالب | `index.html` (فهرست کامل صفحه‌ها و پیش‌نمایش زنده) |
-| عمومی | `dashboard.html` `desktop.html` `activity.html` `calendar.html` `notifications.html` `search.html` |
+| عمومی | `dashboard.html` `desktop.html` `journey.html` `activity.html` `calendar.html` `notifications.html` `search.html` |
 | مشتریان و فروش | `customers.html` `customer-new.html` `customer-profile.html` `pipeline.html` `deals.html` `products.html` |
 | مالی و گزارش | `invoices.html` `print-invoice.html` `reports.html` |
 | پشتیبانی | `tickets.html` `ticket-new.html` `messages.html` `kb.html` `help.html` |
@@ -201,17 +201,36 @@ ModernCRM-template/
 
 ```css
 :root {
-  --brand-600: #059669;   /* رنگ اصلی برند */
-  --brand-500: #10b981;
-  --radius: 13px;         /* گردی گوشه‌ها */
-  --sidebar-w: 264px;     /* عرض سایدبار */
+  --brand-500: #5583e0;   /* آبی ملایم — رنگ اصلی (از تم مرجع) */
+  --brand-600: #3f6bc9;
+  --accent-500: #e8695f;  /* مرجانی — رنگ دوم */
+  --ink: #101114;         /* مشکی جوهری برای حالت‌های فعال */
+  --radius: 16px;         /* گردی گوشه‌ها (تا --radius-2xl: 34px) */
+  --sidebar-w: 256px;     /* عرض سایدبار */
   --font: "Vazirmatn", …;
 }
-html[data-theme="dark"] { --brand: var(--brand-400); … }
+html[data-theme="dark"] { --brand: var(--brand-400); --ink: #f4f6fb; … }
 ```
 
 برای تغییر رنگ برند کافی است مقادیر `--brand-*` را عوض کنید؛ دکمه‌ها، نمودارها،
 سایدبار و حالت تیره همه به‌صورت خودکار هماهنگ می‌شوند.
+
+#### زبان بصری قالب (برگرفته از `theme.jpg`)
+
+| مفهوم | متغیر/کلاس | توضیح |
+| --- | --- | --- |
+| بوم صفحه | `--bg`, `--bg-grad`, `--bg-sheen` | خاکستری-آبی روشن با لایه‌ی گرادیان ملایم |
+| کارت‌های سفید گرد | `.card` + `--radius-lg` | گوشه‌های بزرگ ۲۲ پیکسلی و سایه‌ی نرم |
+| رنگ اصلی | `--brand-*` | آبی ملایم (دکمه‌ی اصلی از `--brand-btn` برای کنتراست بهتر استفاده می‌کند) |
+| رنگ دوم | `--accent-*` | مرجانی؛ در بج‌ها، هشدارها و نمودارها |
+| حالت فعال/کلید | `--ink` + `.btn-ink` و `.card-ink` | مشکی جوهری؛ در تم تیره به‌صورت خودکار روشن می‌شود |
+| آیکون‌های آماری | `.stat-icon` (+ `.coral/.ink/.success/.sky/.violet/.amber`) | دایره‌های نرم با پس‌زمینه‌ی رنگی |
+| سایدبار شناور | `--sidebar-bg: transparent` | کارت‌های سفید روی بوم + آیتم فعال مشکی |
+| نوار وظیفه | `--dock-bg` | داک شناور و گرد در پایین صفحه |
+| تب/چیپ/سگمنت | `.tab.is-active`, `.chip.is-active`, `.segmented` | قرص‌های مشکی (در تم تیره: سفید) |
+
+نمونه‌ی کامل همه‌ی این اجزا در `design-system.html` و نمونه‌ی چیدمان جریان مراحل
+(شبیه تم مرجع) در `journey.html` قابل مشاهده است.
 
 ### ۵) اتصال به بک‌اند
 

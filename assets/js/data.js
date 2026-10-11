@@ -15,7 +15,8 @@ window.CRM_DATA = (function () {
         { id: 'dashboard', label: 'داشبورد', icon: 'dashboard', href: 'dashboard.html' },
         { id: 'desktop', label: 'میزکار پنجره‌ها', icon: 'window', href: 'desktop.html', badge: 'پنجره‌ای', badgeStyle: 'solid' },
         { id: 'activity', label: 'فعالیت‌ها', icon: 'activity', href: 'activity.html' },
-        { id: 'calendar', label: 'تقویم', icon: 'calendar', href: 'calendar.html' }
+        { id: 'calendar', label: 'تقویم', icon: 'calendar', href: 'calendar.html' },
+        { id: 'journey', label: 'سفر مشتری', icon: 'pipeline', href: 'journey.html', badge: 'جدید', badgeStyle: 'soft' }
       ]
     },
     {

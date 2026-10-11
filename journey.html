@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سفر مشتری | مدرن‌CRM</title>
+<meta name="description" content="تابلوی سفر مشتری: مراحل مدیریت پرونده، شناسایی مشکل، حل فنی و وظایف پیگیری">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<style>
+  /* ---------- تابلوی سفر مشتری (اختصاصی همین صفحه) ---------- */
+  .jrail {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 14px 18px; margin-bottom: 22px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+  }
+  .av-chip { position: relative; display: inline-flex; flex: 0 0 auto; cursor: pointer; transition: transform var(--t-fast); }
+  .av-chip:hover { transform: translateY(-3px); }
+  .av-chip .avatar { border: 2.5px solid var(--surface); box-shadow: var(--shadow-xs); }
+  .av-chip .cnt {
+    position: absolute; bottom: -4px; inset-inline-start: -4px;
+    min-width: 20px; height: 20px; padding: 0 5px;
+    display: grid; place-items: center;
+    font-size: var(--fs-2xs); font-weight: 700; color: #fff;
+    border-radius: var(--radius-full); border: 2px solid var(--surface);
+    background: var(--brand);
+  }
+  .av-chip .cnt.coral { background: var(--accent); }
+  .av-chip .cnt.ink { background: var(--ink); color: var(--on-ink); }
+  .av-chip .cnt.muted { background: var(--text-soft); }
+  .av-chip.add .avatar { background: var(--surface); color: var(--text-soft); border-style: dashed; border-color: var(--border-strong); }
+
+  .jflow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 38px; }
+  .jcol { display: flex; flex-direction: column; gap: 12px; position: relative; }
+  .jcol::before {
+    content: ""; position: absolute; top: 46%; inset-inline-end: -30px;
+    width: 22px; border-top: 2px dashed var(--brand-300);
+  }
+  .jcol::after {
+    content: ""; position: absolute; top: calc(46% - 3px); inset-inline-end: -12px;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent-400);
+    box-shadow: 0 0 0 3px var(--surface);
+  }
+  /* آخرین ستون خط اتصال ندارد (جریان از راست به چپ است) */
+  .jcol:last-child::before, .jcol:last-child::after { display: none; }
+  .jcol-title {
+    text-align: center; font-size: var(--fs-sm); font-weight: 600; color: var(--text-muted);
+    padding-top: 8px;
+  }
+
+  .jstep {
+    display: flex; align-items: center; gap: 11px;
+    padding: 11px 13px; min-height: 66px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+    transition: box-shadow var(--t), transform var(--t), border-color var(--t);
+  }
+  .jstep:hover { box-shadow: var(--shadow-sm); transform: translateY(-2px); border-color: transparent; }
+  .jstep .jtext { flex: 1; font-size: var(--fs-md); font-weight: 500; color: var(--text-strong); line-height: 1.8; }
+  .jstep .jtext small { display: block; font-size: var(--fs-2xs); font-weight: 400; color: var(--text-soft); }
+  .jstep .jacts { display: flex; align-items: center; gap: 4px; }
+  .jstep .jbtn {
+    width: 32px; height: 32px; border-radius: var(--radius-full);
+    display: grid; place-items: center; color: var(--text-muted);
+    border: 1px solid var(--border); background: var(--surface);
+    transition: all var(--t-fast);
+  }
+  .jstep .jbtn:hover { color: var(--ink); border-color: transparent; box-shadow: var(--shadow-sm); }
+  .jstep .jbtn.ok { color: var(--success); }
+  .jstep.is-done .jtext { text-decoration: line-through; color: var(--text-muted); font-weight: 400; }
+  .jstep.is-ink { background: var(--ink); border-color: transparent; box-shadow: var(--shadow-ink); }
+  .jstep.is-ink .jtext { color: var(--on-ink); }
+  .jstep.is-ink .jtext small { color: var(--on-ink-muted); }
+  .jstep.is-ink .jbtn { background: rgba(128,128,128,.2); border-color: transparent; color: inherit; }
+  .jstep.is-ghost { border-style: dashed; box-shadow: none; justify-content: center; color: var(--text-soft); }
+  .jstep.is-ghost .jtext { flex: 0 0 auto; color: var(--text-soft); font-weight: 400; }
+  .jstep .plus {
+    width: 30px; height: 30px; border-radius: var(--radius-full);
+    display: grid; place-items: center; background: var(--surface-2); color: var(--text-muted);
+  }
+  @media (max-width: 1100px) {
+    .jflow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .jcol::before, .jcol::after { display: none; }
+  }
+  @media (max-width: 640px) { .jflow { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body class="app" data-page="journey">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=(typeof window.matchMedia==='function'&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span>پشتیبانی</span>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span>سفر مشتری</span>
+            </div>
+            <h1 class="page-title">سفر مشتری</h1>
+            <p class="page-desc">جریان کامل یک پرونده از تخصیص کارشناس تا رضایت مشتری — همه‌ی مراحل در یک نگاه</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn btn-ink" href="ticket-new.html"><span data-icon="plus" data-icon-size="16"></span> پرونده جدید</a>
+            <button class="tb-icon" data-tip="خروجی از تابلوی سفر" data-confirm="خروجی گرفتن از تابلوی سفر مشتری؟"><span data-icon="download" data-icon-size="18"></span></button>
+            <button class="tb-icon" data-tip="اشتراک‌گذاری لینک" data-copy="https://moderncrm.ir/journey"><span data-icon="share" data-icon-size="18"></span></button>
+            <button class="tb-icon" data-tip="افزودن به تقویم" data-copy="journey@moderncrm.ir"><span data-icon="calendar" data-icon-size="18"></span></button>
+          </div>
+        </div>
+
+        <!-- ============ تابلوی اصلی ============ -->
+        <div class="card card-hover mb-5" data-win="journey-board" data-win-title="سفر مشتری — تابلوی پرونده‌ها" data-win-sub="Customer Journeys" data-win-icon="pipeline" data-win-size="1240x740">
+          <div class="card-head">
+            <span class="card-title" data-icon="pipeline" data-icon-size="18"> مدیریت پرونده جدید</span>
+            <div class="card-actions">
+              <span class="win-hint" data-icon="maximize" data-icon-size="12"> برای پنجره‌شدن ⛶ را بزنید</span>
+              <span class="badge badge-primary badge-dot">۴ مرحله فعال</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="jrail" id="jrail"></div>
+            <div class="jflow" id="jflow"></div>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <!-- پیشنهادهای پایگاه دانش -->
+          <div class="card card-hover" data-win="journey-kb" data-win-title="پیشنهادهای پایگاه دانش" data-win-sub="مرتبط با پرونده‌های باز" data-win-icon="book" data-win-size="980x620">
+            <div class="card-head">
+              <span class="card-title" data-icon="book" data-icon-size="18"> پیشنهادهای پایگاه دانش</span>
+              <div class="card-actions">
+                <span class="badge">۳ پیشنهاد</span>
+              </div>
+            </div>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table" id="kbSuggest">
+                  <thead>
+                    <tr>
+                      <th style="width:38px"></th>
+                      <th>موضوع</th>
+                      <th>وضعیت</th>
+                      <th class="d-none d-md-table-cell">تاریخ شروع</th>
+                      <th>تاریخ پایان</th>
+                      <th>کارشناس مسئول</th>
+                    </tr>
+                  </thead>
+                  <tbody id="kbSuggestBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-foot">
+              <span class="fs-xs text-muted">بر پایه ۱۲ پرونده مشابه در ۹۰ روز گذشته</span>
+              <a class="btn btn-sm ms-auto" href="kb.html"><span data-icon="arrow-up-right" data-icon-size="14"></span> پایگاه دانش</a>
+            </div>
+          </div>
+
+          <!-- سفر تیکت پشتیبانی -->
+          <div class="card card-hover" data-win="journey-tickets" data-win-title="سفر تیکت پشتیبانی" data-win-sub="وضعیت تیکت‌های باز" data-win-icon="tickets" data-win-size="760x620">
+            <div class="card-head">
+              <span class="card-title" data-icon="headset" data-icon-size="18"> سفر تیکت پشتیبانی</span>
+              <div class="card-actions">
+                <a class="dropdown-item p-0 fs-xs text-muted" href="tickets.html">همه تیکت‌ها</a>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="grid-2">
+                <div class="text-center">
+                  <div class="stat-value" style="font-size:var(--fs-3xl)">۵</div>
+                  <div data-chart="donut" data-values="5,3" data-colors="#6f9ceb,#dfe7f7" data-center="۵" data-center-sub="انجام‌شده" style="width:100%;height:168px;margin-top:6px"></div>
+                </div>
+                <div class="text-center">
+                  <div class="stat-value" style="font-size:var(--fs-3xl)">۷</div>
+                  <div data-chart="donut" data-values="7,2" data-colors="#e8695f,#f8ded9" data-center="۷" data-center-sub="فعال" style="width:100%;height:168px;margin-top:6px"></div>
+                </div>
+              </div>
+              <div class="border-top mt-4 pt-4 d-flex flex-col gap-3">
+                <div class="stat-inline">
+                  <span class="fs-md">میانگین زمان پاسخ</span>
+                  <span class="fw-700">۲۲ دقیقه</span>
+                </div>
+                <div class="stat-inline">
+                  <span class="fs-md">نرخ حل در تماس اول</span>
+                  <span class="fw-700">۷۸٪</span>
+                </div>
+                <div class="stat-inline">
+                  <span class="fs-md">رضایت مشتریان</span>
+                  <span class="fw-700 text-success">۴٫۶ از ۵</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+
+  /* -------------------------------------------------- ریل کارشناسان */
+  var people = [
+    { name: 'مریم رضایی', n: 2, tone: '' },
+    { name: 'علی محمدی', n: 3, tone: 'muted' },
+    { name: 'زهرا کریمی', n: 2, tone: 'coral' },
+    { name: 'حسین نوری', n: 1, tone: 'coral' },
+    { name: 'سارا احمدی', n: 0, tone: 'ink' },
+    { name: 'محمد صادقی', n: 1, tone: 'coral' },
+    { name: 'نگار جعفری', n: 0, tone: 'muted' }
+  ];
+  CRM.$('#jrail').innerHTML = people.map(function (p) {
+    return '<span class="av-chip" data-tip="' + CRM.esc(p.name) + ' — ' + CRM.fa(p.n) + ' پرونده باز">' +
+      CRM.avatar(p.name, 46) +
+      (p.n ? '<span class="cnt ' + p.tone + '">' + CRM.fa(p.n) + '</span>' : '') +
+      '</span>';
+  }).join('') +
+    '<span class="av-chip add" data-tip="افزودن کارشناس"><span class="avatar" style="--size:46px">' + CRM.icon('plus', 18) + '</span></span>' +
+    '<span class="ms-auto fs-xs text-muted d-none d-md-block">' + CRM.fa(7) + ' کارشناس فعال · ' + CRM.fa(9) + ' پرونده باز</span>';
+
+  /* -------------------------------------------------- مراحل سفر */
+  var stages = [
+    {
+      title: 'تخصیص پرونده',
+      items: [
+        { t: 'تخصیص پرونده به کارشناس', p: 'مریم رضایی', done: true },
+        { t: 'تأیید دریافت پرونده توسط مشتری', p: 'علی محمدی', done: true }
+      ]
+    },
+    {
+      title: 'شناسایی مشکل',
+      items: [
+        { t: 'تعیین دسته‌بندی مشکل', p: 'زهرا کریمی', done: true },
+        { t: 'تعیین شدت مشکل', p: 'زهرا کریمی', done: true },
+        { t: 'بررسی اثر مشکل بر کسب‌وکار', p: 'زهرا کریمی', done: true },
+        { t: 'ارجاع به تیم حل فنی', p: 'حسین نوری' },
+        { t: 'اعلام برآورد زمان حل به مشتری', p: 'سارا احمدی' }
+      ]
+    },
+    {
+      title: 'حل فنی',
+      items: [
+        { ghost: true },
+        { t: 'بررسی وابستگی‌های مشکل', p: 'محمد صادقی', ghost: true },
+        { t: 'برآورد زمان حل', p: 'محمد صادقی', ink: true, sub: 'در حال پردازش' },
+        { t: 'اعلام برآورد زمان حل به مشتری', p: 'نگار جعفری' },
+        { t: 'اطلاع‌رسانی حل مشکل', p: 'نگار جعفری' }
+      ]
+    },
+    {
+      title: 'وظایف جدید',
+      items: [
+        { t: 'درخواست پردازش', p: 'حسین نوری', ink: true },
+        { t: 'حل مشکل', p: 'تیم فنی' },
+        { t: 'ارتباط با مشتری', p: 'مریم رضایی' },
+        { t: 'تست و راستی‌آزمایی', p: 'تیم کیفیت' },
+        { t: 'اطلاع‌رسانی به مشتری', p: 'مریم رضایی' },
+        { t: 'سنجش رضایت مشتری', p: 'علی محمدی' }
+      ]
+    }
+  ];
+
+  CRM.$('#jflow').innerHTML = stages.map(function (st, i) {
+    return '<div class="jcol" style="--i:' + i + '">' +
+      st.items.map(function (it) {
+        if (it.ghost && !it.t) {
+          return '<div class="jstep is-ghost"><span class="plus">' + CRM.icon('plus', 16) + '</span><span class="jtext">افزودن مرحله</span></div>';
+        }
+        var cls = 'jstep' + (it.done ? ' is-done' : '') + (it.ink ? ' is-ink' : '') + (it.ghost ? ' is-ghost' : '');
+        return '<div class="' + cls + '" data-tip="' + CRM.esc(it.p) + '">' +
+          (it.ghost ? '' : CRM.avatar(it.p, 38)) +
+          '<span class="jtext">' + CRM.esc(it.t) + (it.sub ? '<small>' + CRM.esc(it.sub) + '</small>' : '') + '</span>' +
+          '<span class="jacts">' +
+            (it.ghost ? '<span class="plus">' + CRM.icon('plus', 15) + '</span>'
+                      : '<button class="jbtn ' + (it.done ? 'ok' : '') + '" data-tip="' + (it.done ? 'انجام شد' : 'تأیید مرحله') + '">' + CRM.icon(it.done ? 'check-check' : 'check', 15) + '</button>' +
+                        '<button class="jbtn" data-tip="افزودن به تقویم">' + CRM.icon('calendar', 15) + '</button>') +
+          '</span>' +
+        '</div>';
+      }).join('') +
+      '<div class="jcol-title">' + CRM.esc(st.title) + '</div>' +
+    '</div>';
+  }).join('');
+
+  /* -------------------------------------------------- جدول پیشنهادها */
+  var rows = [
+    { s: 'نوشتن راهنمای تخصیص پرونده به کارشناس', st: 'اجراشده', tone: 'badge-primary', start: '۱۴۰۴/۰۷/۱۰ ۰۱:۱۲', end: '۱۴۰۴/۰۷/۱۱ ۰۱:۱۱', u: 'مریم رضایی' },
+    { s: 'چک‌لیست شناسایی شدت مشکل', st: 'در حال اجرا', tone: 'badge-warning', start: '۱۴۰۴/۰۷/۱۲ ۰۹:۴۰', end: '۱۴۰۴/۰۷/۱۵ ۱۲:۰۰', u: 'زهرا کریمی' },
+    { s: 'قالب پاسخ آماده برای اعلام برآورد زمان', st: 'پیش‌نویس', tone: 'badge-outline', start: '۱۴۰۴/۰۷/۱۴ ۱۱:۰۵', end: '—', u: 'سارا احمدی' }
+  ];
+  CRM.$('#kbSuggestBody').innerHTML = rows.map(function (r) {
+    return '<tr>' +
+      '<td><button class="jbtn" data-tip="افزودن به علاقه‌مندی‌ها" style="width:28px;height:28px;border-radius:var(--radius-full);color:var(--text-soft)">' + CRM.icon('star', 15) + '</button></td>' +
+      '<td><span class="cell-main">' + CRM.esc(r.s) + '</span></td>' +
+      '<td><span class="badge ' + r.tone + '">' + CRM.esc(r.st) + '</span></td>' +
+      '<td class="num d-none d-md-table-cell">' + CRM.esc(r.start) + '</td>' +
+      '<td class="num">' + CRM.esc(r.end) + '</td>' +
+      '<td><span class="d-flex items-center gap-3">' + CRM.avatar(r.u, 30) + CRM.esc(r.u) + '</span></td>' +
+    '</tr>';
+  }).join('');
+
+  /* -------------------------------------------------- تعامل‌های نمایشی */
+  document.addEventListener('click', function (e) {
+    var step = e.target.closest('.jstep');
+    if (!step || step.classList.contains('is-ghost')) return;
+    if (e.target.closest('.jbtn')) {
+      var card = step;
+      card.classList.toggle('is-done');
+      CRM.toast({
+        type: card.classList.contains('is-done') ? 'success' : 'info',
+        title: card.classList.contains('is-done') ? 'مرحله تأیید شد' : 'تأیید مرحله لغو شد',
+        msg: (card.querySelector('.jtext') || {}).textContent || ''
+      });
+      return;
+    }
+    CRM.toast({ type: 'info', title: 'جزئیات مرحله', msg: step.getAttribute('data-tip') || '' });
+  });
+})();
+</script>
+</body>
+</html>

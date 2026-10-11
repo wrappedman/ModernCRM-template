@@ -45,6 +45,18 @@
           </div>
         </div>
 
+        <div class="alert alert-success mb-5">
+          <span data-icon="sparkles" data-icon-size="18"></span>
+          <div>
+            <div class="alert-title">هویت بصری برگرفته از تم مرجع</div>
+            <div class="alert-desc">
+              بوم خاکستری-آبی روشن، کارت‌های سفید با گوشه‌های بسیار گرد (تا ۳۴ پیکسل)، لهجه‌ی اصلی <b>آبی ملایم</b>،
+              لهجه‌ی دوم <b>مرجانی</b> و <b>مشکی جوهری</b> برای حالت‌های فعال. دکمه‌ها، تب‌ها، چیپ‌ها، نوار وظیفه و آیتم فعال سایدبار
+              همه از همین زبان بصری استفاده می‌کنند و در تم تیره به‌صورت آینه‌ای روشن می‌شوند.
+            </div>
+          </div>
+        </div>
+
         <!-- ============================== رنگ‌ها ============================== -->
         <div class="section-title"><span data-icon="palette" data-icon-size="18"></span> پالت رنگ برند</div>
         <div class="card mb-5">
@@ -68,7 +80,11 @@
               <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--info-500)"></div><div class="fs-2xs text-muted mt-1">اطلاع</div></div>
               <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--violet-500)"></div><div class="fs-2xs text-muted mt-1">بنفش</div></div>
               <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--rose-500)"></div><div class="fs-2xs text-muted mt-1">سرخ</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--accent-500)"></div><div class="fs-2xs text-muted mt-1">مرجانی</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--ink)"></div><div class="fs-2xs text-muted mt-1">مشکی جوهری</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--bg)"></div><div class="fs-2xs text-muted mt-1">بوم صفحه</div></div>
               <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--grad-brand)"></div><div class="fs-2xs text-muted mt-1">گرادیان برند</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--grad-coral)"></div><div class="fs-2xs text-muted mt-1">گرادیان مرجانی</div></div>
             </div>
           </div>
         </div>
@@ -87,12 +103,66 @@
             <button class="btn btn-danger-soft">حذف نرم</button>
             <button class="btn btn-success">تایید</button>
             <button class="btn btn-dark">تیره</button>
+            <button class="btn btn-ink">مشکی (فعال)</button>
             <button class="btn btn-primary" disabled>غیرفعال</button>
             <button class="btn btn-primary is-loading">در حال ذخیره</button>
             <button class="btn btn-sm btn-soft"><span data-icon="plus" data-icon-size="15"></span> کوچک</button>
             <button class="btn btn-icon" data-tip="دکمه آیکونی"><span data-icon="settings" data-icon-size="18"></span></button>
             <div class="btn-group">
               <button class="btn is-active">روز</button><button class="btn">هفته</button><button class="btn">ماه</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================== کارت‌ها ============================== -->
+        <div class="section-title"><span data-icon="layout-grid" data-icon-size="18"></span> کارت‌ها</div>
+        <div class="grid-3 mb-5">
+          <div class="card">
+            <div class="card-head tight"><span class="card-title">کارت پیش‌فرض</span>
+              <div class="card-actions"><span class="badge badge-primary">ویژه</span></div>
+            </div>
+            <div class="card-body tight">
+              <div class="stat">
+                <div class="stat-top">
+                  <div class="stat-icon"><span data-icon="users" data-icon-size="22"></span></div>
+                  <div class="flex-1">
+                    <div class="stat-label">مشتریان فعال</div>
+                    <div class="stat-value">۱٫۲۴۸</div>
+                  </div>
+                </div>
+                <div class="stat-foot"><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۱۲٪</span><span>رشد ماهانه</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-ink">
+            <div class="card-head tight"><span class="card-title">کارت مشکی (فعال)</span>
+              <div class="card-actions"><span class="badge badge-primary">در حال پردازش</span></div>
+            </div>
+            <div class="card-body tight">
+              <div class="stat">
+                <div class="stat-top">
+                  <div class="stat-icon"><span data-icon="loader" data-icon-size="22"></span></div>
+                  <div class="flex-1">
+                    <div class="stat-label">برآورد زمان حل</div>
+                    <div class="stat-value">۴۲ دقیقه</div>
+                  </div>
+                </div>
+                <div class="stat-foot"><span>در انتظار تأیید کارشناس فنی</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head tight"><span class="card-title">آیکون‌های آماری</span></div>
+            <div class="card-body tight d-flex flex-wrap gap-3 items-center">
+              <span class="stat-icon"><span data-icon="dashboard" data-icon-size="22"></span></span>
+              <span class="stat-icon coral"><span data-icon="alert" data-icon-size="22"></span></span>
+              <span class="stat-icon success"><span data-icon="check-circle" data-icon-size="22"></span></span>
+              <span class="stat-icon sky"><span data-icon="activity" data-icon-size="22"></span></span>
+              <span class="stat-icon violet"><span data-icon="sparkles" data-icon-size="22"></span></span>
+              <span class="stat-icon amber"><span data-icon="star" data-icon-size="22"></span></span>
+              <span class="stat-icon ink"><span data-icon="zap" data-icon-size="22"></span></span>
             </div>
           </div>
         </div>

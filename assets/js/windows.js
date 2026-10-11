@@ -14,7 +14,15 @@
   var $ = CRM.$, $$ = CRM.$$;
   var layer, zTop = 60, seq = 0, wins = {};
   var snapEl = null, snapBadge = null, pickerTimer = null;
-  var TASKBAR_H = 46, TITLE_H = 44, MIN_W = 320, MIN_H = 200;
+  /* ارتفاع‌ها از توکن‌های CSS خوانده می‌شوند تا با تغییر تم/اندازه هماهنگ بمانند */
+  function cssLen(name, fallback) {
+    try {
+      var v = w.getComputedStyle(d.documentElement).getPropertyValue(name);
+      var n = parseFloat(v);
+      return isNaN(n) ? fallback : n;
+    } catch (e) { return fallback; }
+  }
+  var TASKBAR_H = cssLen('--taskbar-h', 58), TITLE_H = 44, MIN_W = 320, MIN_H = 200;
 
   /* ------------------------------------------------------------------ ابزار */
   function workspace() {

@@ -295,7 +295,7 @@ window.CRM = (function (w, d) {
       if (!input) return;
       var label = bar.parentElement.querySelector('[data-strength-label]');
       var texts = ['خیلی ضعیف', 'ضعیف', 'متوسط', 'خوب', 'بسیار قوی'];
-      var colors = ['var(--danger)', 'var(--danger)', 'var(--warning)', '#84cc16', 'var(--success)'];
+      var colors = ['var(--danger)', 'var(--danger)', 'var(--warning)', 'var(--c5)', 'var(--success)'];
       input.addEventListener('input', function () {
         var s = passwordStrength(input.value);
         bar.className = 'strength s' + s;

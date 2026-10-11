@@ -58,13 +58,17 @@ body {
   line-height: 1.75;
   font-weight: 400;
   color: var(--text);
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: var(--bg-sheen), var(--bg-grad);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   direction: rtl;
   text-align: right;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   transition: background-color var(--t), color var(--t);
+  background-size: cover;
 }
 
 img, svg, video, canvas { display: block; max-width: 100%; }
@@ -276,8 +280,8 @@ small { font-size: var(--fs-xs); }
 }
 .progress.sm { height: 5px; }
 .progress.lg { height: 10px; }
-.progress.warn > i { background: linear-gradient(135deg, #f59e0b, #f97316); }
-.progress.danger > i { background: linear-gradient(135deg, #f43f5e, #ef4444); }
+.progress.warn > i { background: linear-gradient(135deg, var(--warning-500), var(--warning-600)); }
+.progress.danger > i { background: linear-gradient(135deg, var(--accent-400), var(--accent-600)); }
 
 .grid-cards {
   display: grid;
@@ -326,6 +330,8 @@ small { font-size: var(--fs-xs); }
 .py-3 { padding-block: 12px; }
 .py-4 { padding-block: 16px; }
 .pt-3 { padding-top: 12px; }
+.pt-4 { padding-top: 16px; }
+.pb-4 { padding-bottom: 16px; }
 .mx-2 { margin-inline: 8px; }
 .my-2 { margin-block: 8px; }
 .mt-2px { margin-top: 2px; }
@@ -355,3 +361,6 @@ small { font-size: var(--fs-xs); }
 .badge-gray { background: var(--surface-3); color: var(--text-muted); }
 .cmdk-item .ci-lbl { flex: 1; min-width: 0; }
 .win-content { min-height: 100%; }
+
+/* نمایش واکنش‌گرا (نمایش در دسکتاپ) */
+@media (min-width: 900px) { .d-md-table-cell { display: table-cell; } .d-md-block { display: block; } }
