@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ورود به حساب | مدرن‌CRM</title>
+<meta name="description" content="ورود به سامانه مدیریت ارتباط با مشتری مدرن‌CRM">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body data-shell="none" data-page="login" style="background:var(--bg)" data-win-auto="off">
+
+<div class="auth-split">
+
+  <!-- ============================ ستون تصویری ============================ -->
+  <aside class="auth-aside" style="position:relative;overflow:hidden;background:linear-gradient(150deg,#064e3b 0%,#047857 45%,#0d9488 100%);color:#fff;padding:46px;display:flex;flex-direction:column">
+    <div style="position:absolute;inset-inline-end:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+    <div style="position:absolute;inset-inline-start:-80px;bottom:-140px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.06)"></div>
+
+    <div class="d-flex items-center gap-3" style="position:relative">
+      <span style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.16);display:grid;place-items:center" data-icon="sparkles" data-icon-size="24"></span>
+      <div>
+        <div style="font-size:19px;font-weight:700">مدرن‌CRM</div>
+        <div style="font-size:11.5px;opacity:.8">سامانه مدیریت ارتباط با مشتری</div>
+      </div>
+    </div>
+
+    <div style="position:relative;margin-top:auto">
+      <h2 style="color:#fff;font-size:26px;line-height:1.6">همه مشتریان، معاملات و پشتیبانی<br>در یک میزکار هوشمند</h2>
+      <p style="opacity:.85;font-size:13.5px;margin-top:10px;line-height:2">
+        داشبورد تحلیلی، قیف فروش کانبانی، فاکتور و مالیات، تیکتینگ و گفتگوی آنلاین —
+        همراه با تم روشن و تیره و پنجره‌های شناور شبیه‌سازماندهی ویندوز.
+      </p>
+
+      <div class="d-flex flex-col gap-3" style="margin-top:26px">
+        <div class="d-flex items-center gap-3" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px 14px">
+          <span data-icon="chart-line" data-icon-size="20"></span>
+          <div style="font-size:13px">گزارش‌های زنده فروش و تحلیل رفتار مشتری</div>
+        </div>
+        <div class="d-flex items-center gap-3" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px 14px">
+          <span data-icon="window" data-icon-size="20"></span>
+          <div style="font-size:13px">هر کارت را به پنجره شناور تبدیل کنید</div>
+        </div>
+        <div class="d-flex items-center gap-3" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px 14px">
+          <span data-icon="moon" data-icon-size="20"></span>
+          <div style="font-size:13px">تم تیره چشم‌نواز برای کارهای شبانه</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:relative;margin-top:34px;opacity:.75;font-size:11.5px">
+      © ۱۴۰۴ مدرن‌CRM — تمامی حقوق محفوظ است.
+    </div>
+  </aside>
+
+  <!-- ============================ ستون فرم ============================ -->
+  <main style="display:flex;align-items:center;justify-content:center;padding:36px 22px;background:var(--surface)">
+    <div style="width:100%;max-width:400px">
+
+      <div class="d-flex items-center justify-between mb-6">
+        <div>
+          <div class="brand-name" style="font-size:var(--fs-xl)">ورود به حساب کاربری</div>
+          <div class="fs-md text-muted mt-1">برای ادامه، اطلاعات حساب خود را وارد کنید.</div>
+        </div>
+        <button class="tb-icon" data-theme-toggle aria-label="تغییر تم" data-icon-size="19"></button>
+      </div>
+
+      <form data-demo-form="در نسخه واقعی، اطلاعات ورود به سرور ارسال می‌شود." id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="email">ایمیل یا نام کاربری <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="icon lead" data-icon="mail" data-icon-size="17"></span>
+            <input class="input input-lg ltr" id="email" type="text" required autocomplete="username" placeholder="m.karimi@moderncrm.ir">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="d-flex items-center justify-between">
+            <label class="form-label" for="pw">رمز عبور <span class="req">*</span></label>
+            <a class="fs-sm" href="forgot-password.html">فراموشی رمز؟</a>
+          </div>
+          <div class="input-wrap">
+            <span class="icon lead" data-icon="lock" data-icon-size="17"></span>
+            <input class="input input-lg ltr" id="pw" type="password" required autocomplete="current-password" placeholder="••••••••••••">
+            <button type="button" class="icon trail" data-password-toggle data-icon="eye" data-icon-size="18" aria-label="نمایش رمز"></button>
+          </div>
+        </div>
+
+        <div class="d-flex items-center justify-between mb-5">
+          <label class="check">
+            <input type="checkbox" checked>
+            <span class="box"><span data-icon="check" data-icon-size="12"></span></span>
+            <span class="lbl fs-sm">مرا به خاطر بسپار</span>
+          </label>
+          <label class="switch"><span class="lbl fs-sm">ورود با کد یکبار مصرف</span><input type="checkbox"><span class="track"></span></label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block">
+          <span data-icon="logout" data-icon-size="18"></span> ورود به پنل
+        </button>
+
+        <div class="d-flex items-center gap-3 my-4" style="color:var(--text-soft);font-size:12px">
+          <span style="flex:1;height:1px;background:var(--border)"></span> یا ورود با
+          <span style="flex:1;height:1px;background:var(--border)"></span>
+        </div>
+
+        <div class="d-flex gap-3">
+          <button type="button" class="btn btn-lg flex-1"><span data-icon="globe" data-icon-size="17"></span> گوگل</button>
+          <button type="button" class="btn btn-lg flex-1"><span data-icon="qr" data-icon-size="17"></span> کد QR</button>
+        </div>
+      </form>
+
+      <div class="text-center mt-5 fs-md text-muted">
+        حساب کاربری ندارید؟ <a href="register.html">ایجاد حساب سازمانی</a>
+      </div>
+
+      <div class="alert alert-info mt-5">
+        <span data-icon="info" data-icon-size="18"></span>
+        <div>
+          <div class="alert-title">نسخه نمایشی قالب</div>
+          <div class="alert-desc">این صفحه فقط برای نمایش طراحی است؛ با هر مقداری می‌توانید دکمه ورود را آزمایش کنید. <a href="dashboard.html">ورود مستقیم به داشبورد</a></div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-center gap-4 mt-5 fs-xs text-soft">
+        <a href="help.html">راهنما</a>
+        <a href="404.html">صفحه ۴۰۴</a>
+        <a href="design-system.html">راهنمای طراحی</a>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  /* هدایت به داشبورد پس از نمایش موفقیت‌آمیز ورود */
+  CRM.$('#loginForm').addEventListener('submit', function () {
+    setTimeout(function () { window.location.href = 'dashboard.html'; }, 900);
+  });
+})();
+</script>
+</body>
+</html>

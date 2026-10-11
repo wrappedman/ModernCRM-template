@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ایجاد حساب سازمانی | مدرن‌CRM</title>
+<meta name="description" content="ثبت‌نام و ایجاد حساب سازمانی در مدرن‌CRM">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body data-shell="none" data-page="register" style="background:radial-gradient(circle at 12% 8%, var(--brand-soft), transparent 38%), radial-gradient(circle at 88% 92%, var(--info-soft), transparent 42%), var(--bg)" data-win-auto="off">
+
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 18px">
+
+  <div class="d-flex items-center gap-3 mb-5">
+    <span class="brand-mark" data-icon="sparkles" data-icon-size="22"></span>
+    <div>
+      <div class="brand-name">مدرن‌CRM</div>
+      <div class="fs-xs text-muted">سامانه مدیریت ارتباط با مشتری</div>
+    </div>
+    <button class="tb-icon ms-3" data-theme-toggle aria-label="تغییر تم" data-icon-size="19"></button>
+  </div>
+
+  <div class="card" style="width:100%;max-width:720px">
+    <div class="card-head">
+      <div>
+        <div class="card-title" data-icon="building" data-icon-size="18"> ایجاد حساب سازمانی</div>
+        <div class="card-sub">۱۴ روز آزمایش رایگان — بدون نیاز به کارت بانکی</div>
+      </div>
+      <div class="card-actions"><span class="badge badge-success"><span data-icon="gift" data-icon-size="13"></span> ۱۴ روز رایگان</span></div>
+    </div>
+
+    <form data-demo-form="حساب سازمانی ایجاد شد؛ ایمیل تایید ارسال گردید.">
+      <div class="card-body">
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">نام سازمان <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="icon lead" data-icon="building" data-icon-size="17"></span>
+              <input class="input" required placeholder="مثلاً شرکت پارس‌نیکان">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">حوزه کاری</label>
+            <select class="select">
+              <option>فناوری اطلاعات و نرم‌افزار</option>
+              <option>تولید و صنعت</option>
+              <option>خدمات و مشاوره</option>
+              <option>خرده‌فروشی و فروشگاه</option>
+              <option>پزشکی و سلامت</option>
+              <option>سایر</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">نام و نام خانوادگی مدیر <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="icon lead" data-icon="user-round" data-icon-size="17"></span>
+              <input class="input" required placeholder="مثلاً مهدی کریمی">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">عنوان شغلی</label>
+            <input class="input" placeholder="مدیرعامل / مدیر فروش">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">ایمیل سازمانی <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="icon lead" data-icon="mail" data-icon-size="17"></span>
+              <input class="input ltr" type="email" required placeholder="name@company.ir">
+            </div>
+            <div class="form-hint"><span data-icon="info" data-icon-size="13"></span> لینک فعال‌سازی به این ایمیل ارسال می‌شود.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">تلفن همراه <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="icon lead" data-icon="phone" data-icon-size="17"></span>
+              <input class="input ltr" required placeholder="09123456789" data-fa-mask>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">شماره کاربران مورد نیاز</label>
+          <div class="d-flex gap-2 flex-wrap" data-chip-group>
+            <button type="button" class="chip">۱ تا ۵ نفر</button>
+            <button type="button" class="chip is-active">۶ تا ۲۰ نفر</button>
+            <button type="button" class="chip">۲۱ تا ۵۰ نفر</button>
+            <button type="button" class="chip">بیش از ۵۰ نفر</button>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">رمز عبور <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="icon lead" data-icon="lock" data-icon-size="17"></span>
+              <input class="input ltr" id="pw" type="password" required placeholder="حداقل ۱۲ کاراکتر">
+              <button type="button" class="icon trail" data-password-toggle data-icon="eye" data-icon-size="18" aria-label="نمایش رمز"></button>
+            </div>
+            <div class="strength mt-2" data-strength-for="#pw"><i></i><i></i><i></i><i></i></div>
+            <div class="form-hint d-flex items-center gap-2">
+              <span>قدرت رمز:</span><span class="fw-600" data-strength-label>—</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">تکرار رمز عبور <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="icon lead" data-icon="lock" data-icon-size="17"></span>
+              <input class="input ltr" type="password" required placeholder="تکرار رمز عبور">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="check">
+            <input type="checkbox" required>
+            <span class="box"><span data-icon="check" data-icon-size="12"></span></span>
+            <span class="lbl">قوانین و شرایط استفاده و سیاست حفظ حریم خصوصی را مطالعه کرده و می‌پذیرم.</span>
+          </label>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="check">
+            <input type="checkbox" checked>
+            <span class="box"><span data-icon="check" data-icon-size="12"></span></span>
+            <span class="lbl">مایل به دریافت نکات آموزشی و اخبار محصول هستم.</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="card-foot">
+        <button type="submit" class="btn btn-primary btn-lg"><span data-icon="check" data-icon-size="18"></span> ایجاد حساب</button>
+        <span class="ms-auto fs-sm text-muted">حساب دارید؟ <a href="login.html">ورود</a></span>
+      </div>
+    </form>
+  </div>
+
+  <div class="d-flex gap-4 mt-5 fs-sm text-muted flex-wrap justify-center">
+    <span class="d-flex items-center gap-2"><span data-icon="shield-check" data-icon-size="15"></span> رمزنگاری AES-256</span>
+    <span class="d-flex items-center gap-2"><span data-icon="database" data-icon-size="15"></span> پشتیبان‌گیری روزانه</span>
+    <span class="d-flex items-center gap-2"><span data-icon="headset" data-icon-size="15"></span> پشتیبانی فارسی</span>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+</body>
+</html>

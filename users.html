@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کاربران و نقش‌ها | مدرن‌CRM</title>
+<meta name="description" content="مدیریت کاربران، نقش‌ها و سطوح دسترسی">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="app" data-page="users">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">کاربران و نقش‌ها</span>
+            </div>
+            <h1 class="page-title">کاربران و سطوح دسترسی</h1>
+            <p class="page-desc">۵ کاربر — ۴ نقش تعریف‌شده — ۳ کاربر با ورود دومرحله‌ای فعال</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn"><span data-icon="download" data-icon-size="16"></span> خروجی کاربران</button>
+            <button class="btn btn-primary" data-modal-open="#modalInvite"><span data-icon="user-plus" data-icon-size="16"></span> دعوت کاربر جدید</button>
+          </div>
+        </div>
+
+        <div class="grid-4 mb-5">
+          <div class="card card-hover" data-win="u-all" data-win-title="کل کاربران" data-win-icon="users" data-win-size="720x500">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon"><span data-icon="users" data-icon-size="22"></span></span>
+              <div><div class="stat-label">کل کاربران</div><div class="stat-value num">۵</div></div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="u-online" data-win-title="کاربران آنلاین" data-win-icon="activity" data-win-size="720x500">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon sky"><span data-icon="activity" data-icon-size="22"></span></span>
+              <div><div class="stat-label">آنلاین در حال حاضر</div><div class="stat-value num">۳</div></div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="u-2fa" data-win-title="ورود دومرحله‌ای" data-win-icon="shield-check" data-win-size="720x500">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon violet"><span data-icon="shield-check" data-icon-size="22"></span></span>
+              <div><div class="stat-label">کاربران با 2FA</div><div class="stat-value num">۳ <small class="fs-sm">از ۵</small></div></div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="u-roles" data-win-title="نقش‌ها" data-win-icon="key" data-win-size="720x500">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon amber"><span data-icon="key" data-icon-size="22"></span></span>
+              <div><div class="stat-label">نقش‌های تعریف‌شده</div><div class="stat-value num">۴</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div data-tabs-root>
+          <div class="card">
+            <div class="tabs" data-tabs style="padding:0 8px">
+              <button class="tab is-active" data-tab="list"><span data-icon="users" data-icon-size="16"></span> فهرست کاربران</button>
+              <button class="tab" data-tab="roles"><span data-icon="key" data-icon-size="16"></span> نقش‌ها و دسترسی‌ها</button>
+              <button class="tab" data-tab="log"><span data-icon="history" data-icon-size="16"></span> گزارش ورود و فعالیت</button>
+            </div>
+
+            <!-- ------------------------- فهرست کاربران ------------------------- -->
+            <div class="card-body flush" data-tab-panel="list">
+              <div class="d-flex flex-wrap items-center gap-3 p-3" style="padding:14px 16px">
+                <div class="input-wrap" style="width:240px">
+                  <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                  <input class="input input-sm" placeholder="جستجوی نام یا ایمیل…" data-table-search="#tblUsers">
+                </div>
+                <select class="select select-sm" style="width:auto"><option>همه نقش‌ها</option><option>مدیر سیستم</option><option>کارشناس فروش</option><option>پشتیبانی</option><option>حسابدار</option></select>
+                <select class="select select-sm" style="width:auto"><option>همه وضعیت‌ها</option><option>فعال</option><option>در انتظار تایید</option><option>معلق</option></select>
+                <label class="switch ms-auto"><span class="lbl fs-sm">فقط کاربران آنلاین</span><input type="checkbox"><span class="track"></span></label>
+              </div>
+              <div class="table-wrap">
+                <table class="table" id="tblUsers">
+                  <thead>
+                    <tr>
+                      <th class="sortable"><span class="th-in">کاربر</span></th>
+                      <th class="sortable"><span class="th-in">نقش</span></th>
+                      <th class="sortable"><span class="th-in">وضعیت</span></th>
+                      <th class="sortable"><span class="th-in">آخرین ورود</span></th>
+                      <th>ورود دومرحله‌ای</th>
+                      <th class="sortable"><span class="th-in">دسترسی‌ها</span></th>
+                      <th class="table-row-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="usersBody"></tbody>
+                </table>
+              </div>
+              <div class="table-foot">
+                <span>نمایش ۵ کاربر از ۵ نفر</span>
+                <div class="pagination ms-auto"><button disabled data-icon="chevron-right" data-icon-size="15"></button><button class="is-active">۱</button><button data-icon="chevron-left" data-icon-size="15"></button></div>
+              </div>
+            </div>
+
+            <!-- ------------------------- نقش‌ها ------------------------- -->
+            <div class="card-body d-none" data-tab-panel="roles">
+              <div class="grid-4 mb-4">
+                <div class="panel">
+                  <div class="d-flex items-center gap-2 mb-2"><span class="stat-icon" style="width:36px;height:36px"><span data-icon="shield" data-icon-size="17"></span></span><span class="fw-700">مدیر سیستم</span></div>
+                  <div class="fs-sm text-muted mb-2">دسترسی کامل به تمام بخش‌ها و تنظیمات</div>
+                  <span class="badge badge-primary">۱ کاربر</span>
+                </div>
+                <div class="panel">
+                  <div class="d-flex items-center gap-2 mb-2"><span class="stat-icon sky" style="width:36px;height:36px"><span data-icon="deals" data-icon-size="17"></span></span><span class="fw-700">کارشناس فروش</span></div>
+                  <div class="fs-sm text-muted mb-2">مشتریان، معاملات، فاکتورها</div>
+                  <span class="badge badge-info">۲ کاربر</span>
+                </div>
+                <div class="panel">
+                  <div class="d-flex items-center gap-2 mb-2"><span class="stat-icon violet" style="width:36px;height:36px"><span data-icon="headset" data-icon-size="17"></span></span><span class="fw-700">پشتیبانی</span></div>
+                  <div class="fs-sm text-muted mb-2">تیکت‌ها، گفتگوها، پایگاه دانش</div>
+                  <span class="badge badge-violet">۱ کاربر</span>
+                </div>
+                <div class="panel">
+                  <div class="d-flex items-center gap-2 mb-2"><span class="stat-icon amber" style="width:36px;height:36px"><span data-icon="receipt" data-icon-size="17"></span></span><span class="fw-700">حسابدار</span></div>
+                  <div class="fs-sm text-muted mb-2">فاکتورها، گزارش‌های مالی</div>
+                  <span class="badge badge-warning">۱ کاربر</span>
+                </div>
+              </div>
+
+              <div class="section-title"><span data-icon="key" data-icon-size="18"></span> ماتریس دسترسی نقش «کارشناس فروش»</div>
+              <div class="table-wrap" style="border:1px solid var(--border);border-radius:var(--radius)">
+                <table class="table">
+                  <thead><tr><th>بخش</th><th>مشاهده</th><th>ایجاد</th><th>ویرایش</th><th>حذف</th><th>خروجی</th></tr></thead>
+                  <tbody>
+                    <tr><td class="cell-main">داشبورد</td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-soft">—</td><td class="text-soft">—</td><td class="text-soft">—</td><td><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td></tr>
+                    <tr><td class="cell-main">مشتریان</td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td></tr>
+                    <tr><td class="cell-main">معاملات و قیف فروش</td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td></tr>
+                    <tr><td class="cell-main">فاکتورها</td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td></tr>
+                    <tr><td class="cell-main">تنظیمات سیستم</td><td><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-soft">—</td><td class="text-soft">—</td><td class="text-soft">—</td><td class="text-soft">—</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="d-flex gap-2 mt-4">
+                <button class="btn btn-primary" data-demo-save><span data-icon="check" data-icon-size="16"></span> ذخیره دسترسی‌ها</button>
+                <button class="btn" data-icon="refresh"> بازنشانی به پیش‌فرض</button>
+              </div>
+            </div>
+
+            <!-- ------------------------- گزارش فعالیت ------------------------- -->
+            <div class="card-body d-none" data-tab-panel="log">
+              <div class="timeline">
+                <div class="tl-item"><div class="d-flex items-center gap-2"><span class="fw-600 text-strong">ورود موفق — مهدی کریمی</span><span class="tl-time ms-auto">امروز ۰۸:۱۲ — IP 192.168.1.24</span></div><div class="tl-body">مرورگر Chrome روی Windows 10</div></div>
+                <div class="tl-item"><div class="d-flex items-center gap-2"><span class="fw-600 text-strong">تغییر سطح دسترسی — نیما عباسی</span><span class="tl-time ms-auto">دیروز ۱۷:۴۰</span></div><div class="tl-body">نقش کاربر از «کارشناس فروش» به «کارشناس ارشد فروش» تغییر کرد.</div></div>
+                <div class="tl-item muted"><div class="d-flex items-center gap-2"><span class="fw-600 text-strong">ورود ناموفق (۳ بار) — رضا پورمند</span><span class="tl-time ms-auto">دیروز ۰۹:۰۲</span></div><div class="tl-body">رمز عبور اشتباه وارد شده است؛ حساب موقتاً قفل نشد.</div></div>
+                <div class="tl-item muted"><div class="d-flex items-center gap-2"><span class="fw-600 text-strong">فعال‌سازی ورود دومرحله‌ای — سمیرا رحیمی</span><span class="tl-time ms-auto">۱۴۰۴/۰۷/۱۶</span></div><div class="tl-body">روش: اپلیکیشن احراز هویت (TOTP)</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ========================== مودال دعوت کاربر ========================== -->
+<div class="overlay" id="modalInvite" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">دعوت کاربر جدید</div><div class="modal-sub">لینک دعوت به ایمیل کاربر ارسال می‌شود.</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#modalInvite" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="دعوت‌نامه برای کاربر ارسال شد." data-close-modal="#modalInvite" data-reset-on-submit>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">نام و نام خانوادگی <span class="req">*</span></label>
+          <input class="input" required placeholder="مثلاً لیلا مستوفی">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ایمیل سازمانی <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="icon lead" data-icon="mail" data-icon-size="17"></span>
+            <input class="input ltr" type="email" required placeholder="name@moderncrm.ir">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">نقش</label>
+            <select class="select"><option>کارشناس فروش</option><option>پشتیبانی</option><option>حسابدار</option><option>مدیر سیستم</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">تیم</label>
+            <select class="select"><option>فروش</option><option>پشتیبانی</option><option>مالی</option><option>فنی</option></select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="13"></span></span><span class="lbl">الزام فعال‌سازی ورود دومرحله‌ای در اولین ورود</span></label>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary"><span data-icon="send" data-icon-size="16"></span> ارسال دعوت‌نامه</button>
+        <button type="button" class="btn" data-modal-close="#modalInvite">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var ST = { active: ['فعال', 'badge-success'], pending: ['در انتظار تایید', 'badge-warning'], suspended: ['معلق', 'badge-danger'] };
+
+  CRM.$('#usersBody').innerHTML = CRM.data.users.map(function (u) {
+    var st = ST[u.status];
+    return '<tr>' +
+      '<td><div class="d-flex items-center gap-3">' + CRM.avatar(u.name, 38) +
+        '<span><span class="cell-main d-block">' + CRM.esc(u.name) + '</span><span class="cell-sub ltr">' + CRM.esc(u.email) + '</span></span></div></td>' +
+      '<td><span class="badge badge-' + u.roleTone + '">' + CRM.esc(u.role) + '</span></td>' +
+      '<td><span class="badge ' + st[1] + ' badge-dot">' + st[0] + '</span></td>' +
+      '<td class="fs-sm text-muted">' + CRM.esc(u.last) + '</td>' +
+      '<td>' + (u.twoFA ? '<span class="badge badge-success"><span data-icon="shield-check" data-icon-size="13"></span> فعال</span>' : '<span class="badge badge-outline">غیرفعال</span>') + '</td>' +
+      '<td><div class="d-flex gap-1">' + CRM.icon('check-circle', 15) + CRM.icon('check-circle', 15) + CRM.icon('check-circle', 15) +
+        '<span class="fs-xs text-soft">۲۴ مجوز</span></div></td>' +
+      '<td><span class="table-actions">' +
+        '<button class="tb-icon" style="width:30px;height:30px" data-tip="ویرایش دسترسی" data-icon="pencil" data-icon-size="16"></button>' +
+        '<div class="dropdown">' +
+          '<button class="tb-icon" style="width:30px;height:30px" data-dropdown-toggle data-icon="more" data-icon-size="16"></button>' +
+          '<div class="dropdown-menu">' +
+            '<button class="dropdown-item"><span data-icon="key" data-icon-size="16"></span> بازنشانی رمز عبور</button>' +
+            '<button class="dropdown-item"><span data-icon="shield-check" data-icon-size="16"></span> الزام ورود دومرحله‌ای</button>' +
+            '<button class="dropdown-item"><span data-icon="lock" data-icon-size="16"></span> تعلیق حساب</button>' +
+            '<div class="dropdown-sep"></div>' +
+            '<button class="dropdown-item danger" data-confirm="کاربر «' + CRM.esc(u.name) + '» حذف شود؟"><span data-icon="trash" data-icon-size="16"></span> حذف کاربر</button>' +
+          '</div>' +
+        '</div>' +
+      '</span></td>' +
+    '</tr>';
+  }).join('');
+
+  /* ذخیره ماتریس دسترسی (نمایشی) */
+  var save = document.querySelector('[data-demo-save]');
+  if (save) save.addEventListener('click', function () {
+    CRM.toast({ type: 'success', title: 'دسترسی‌ها ذخیره شد', msg: 'تغییرات برای نقش «کارشناس فروش» اعمال شد.' });
+  });
+})();
+</script>
+</body>
+</html>

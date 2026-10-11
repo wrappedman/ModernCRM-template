@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ثبت مشتری جدید | مدرن‌CRM</title>
+<meta name="description" content="فرم چند مرحله‌ای ثبت مشتری جدید در مدرن‌CRM">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="app" data-page="customer-new">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="customers.html">مشتریان</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">ثبت مشتری جدید</span>
+            </div>
+            <h1 class="page-title">ثبت مشتری جدید</h1>
+            <p class="page-desc">اطلاعات مشتری را در چهار گام تکمیل کنید. فیلدهای دارای <span class="text-danger">*</span> الزامی هستند.</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" data-confirm="اطلاعات واردشده ذخیره نشده است. فرم پاک شود؟" data-confirm-title="لغو ثبت مشتری" data-confirm-ok="بله، پاک کن"><span data-icon="trash" data-icon-size="16"></span> لغو و پاک کردن</button>
+          </div>
+        </div>
+
+        <!-- ============================ گام‌ها ============================ -->
+        <div class="card mb-5">
+          <div class="card-body">
+            <div class="steps" id="stepsBar">
+              <div class="step is-active" data-step-dot="1">
+                <span class="bullet">۱</span><span class="step-title">اطلاعات پایه</span>
+              </div>
+              <div class="step" data-step-dot="2">
+                <span class="bullet">۲</span><span class="step-title">راه‌های ارتباطی</span>
+              </div>
+              <div class="step" data-step-dot="3">
+                <span class="bullet">۳</span><span class="step-title">دسته‌بندی و برچسب</span>
+              </div>
+              <div class="step" data-step-dot="4">
+                <span class="bullet">۴</span><span class="step-title">یادداشت و پیوست</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <!-- ============================ فرم ============================ -->
+          <form data-demo-form="مشتری جدید با موفقیت ثبت شد." id="customerForm" data-tabs-root>
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title" data-icon="user-plus" data-icon-size="18"> <span id="stepTitle">گام ۱ — اطلاعات پایه</span></div>
+                <div class="card-actions"><span class="badge badge-info" id="stepCounter">گام ۱ از ۴</span></div>
+              </div>
+
+              <!-- گام ۱ -->
+              <div class="card-body" data-step-panel="1">
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="fname">نام <span class="req">*</span></label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="user-round" data-icon-size="17"></span>
+                      <input class="input" id="fname" required placeholder="مثلاً مریم">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="lname">نام خانوادگی <span class="req">*</span></label>
+                    <input class="input" id="lname" required placeholder="مثلاً رضایی">
+                  </div>
+                </div>
+
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="company">نام شرکت / سازمان</label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="building" data-icon-size="17"></span>
+                      <input class="input" id="company" placeholder="برای مشتریان حقیقی خالی بگذارید">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="national">کد ملی / شناسه ملی</label>
+                    <input class="input ltr" id="national" placeholder="۱۰ رقم" data-fa-mask maxlength="10">
+                    <div class="form-hint"><span data-icon="info" data-icon-size="13"></span> برای صدور فاکتور رسمی مورد نیاز است.</div>
+                  </div>
+                </div>
+
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label">نوع مشتری</label>
+                    <select class="select">
+                      <option>حقیقی</option>
+                      <option>حقوقی</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">شهر</label>
+                    <select class="select">
+                      <option>تهران</option><option>اصفهان</option><option>مشهد</option><option>شیراز</option><option>تبریز</option><option>کرج</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">منبع آشنایی</label>
+                    <select class="select">
+                      <option>معرفی مشتریان</option>
+                      <option>تبلیغات آنلاین</option>
+                      <option>نمایشگاه و رویداد</option>
+                      <option>تماس سرد</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom:0">
+                  <label class="form-label">آدرس</label>
+                  <textarea class="textarea" placeholder="نشانی کامل پستی…"></textarea>
+                </div>
+              </div>
+
+              <!-- گام ۲ -->
+              <div class="card-body d-none" data-step-panel="2">
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="mobile">تلفن همراه <span class="req">*</span></label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="phone" data-icon-size="17"></span>
+                      <input class="input ltr" id="mobile" required placeholder="09123456789" data-fa-mask>
+                    </div>
+                    <div class="form-hint"><span data-icon="check-circle" data-icon-size="13"></span> جهت ارسال پیامک اطلاع‌رسانی استفاده می‌شود.</div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="phone2">تلفن ثابت</label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="phone" data-icon-size="17"></span>
+                      <input class="input ltr" id="phone2" placeholder="02188889999" data-fa-mask>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="email">ایمیل</label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="mail" data-icon-size="17"></span>
+                      <input class="input ltr" id="email" type="email" placeholder="name@company.ir">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="site">وب‌سایت</label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="globe" data-icon-size="17"></span>
+                      <input class="input ltr" id="site" placeholder="https://example.ir">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">شبکه اجتماعی</label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="share" data-icon-size="17"></span>
+                      <input class="input ltr" placeholder="@username">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">ترجیح روش تماس</label>
+                    <select class="select">
+                      <option>تماس تلفنی</option>
+                      <option>پیامک</option>
+                      <option>ایمیل</option>
+                      <option>واتس‌اپ</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="panel">
+                  <div class="panel-title">تنظیمات ارتباطی</div>
+                  <label class="check mb-2">
+                    <input type="checkbox" checked>
+                    <span class="box"><span data-icon="check" data-icon-size="13"></span></span>
+                    <span class="lbl">ارسال پیامک خوش‌آمدگویی<small>بلافاصله پس از ثبت مشتری ارسال می‌شود</small></span>
+                  </label>
+                  <label class="check mb-2">
+                    <input type="checkbox" checked>
+                    <span class="box"><span data-icon="check" data-icon-size="13"></span></span>
+                    <span class="lbl">افزودن به خبرنامه ایمیلی</span>
+                  </label>
+                  <label class="check">
+                    <input type="checkbox">
+                    <span class="box"><span data-icon="check" data-icon-size="13"></span></span>
+                    <span class="lbl">مشتری VIP<small>دسترسی به پشتیبانی اختصاصی</small></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- گام ۳ -->
+              <div class="card-body d-none" data-step-panel="3">
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">گروه مشتری</label>
+                    <select class="select">
+                      <option>بدون گروه</option>
+                      <option>مشتریان کلیدی</option>
+                      <option>مشتریان سازمانی</option>
+                      <option>مشتریان خرد</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">سطح باشگاه مشتریان</label>
+                    <div class="d-flex gap-2 flex-wrap" data-chip-group>
+                      <button type="button" class="chip">برنزی</button>
+                      <button type="button" class="chip is-active">نقره‌ای</button>
+                      <button type="button" class="chip">طلایی</button>
+                      <button type="button" class="chip">الماسی</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">کارشناس مسئول <span class="req">*</span></label>
+                  <select class="select" required>
+                    <option>مهدی کریمی — مدیر فروش</option>
+                    <option>نیما عباسی — کارشناس فروش</option>
+                    <option>سمیرا رحیمی — پشتیبانی</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">برچسب‌ها</label>
+                  <div class="d-flex gap-2 flex-wrap mb-2" data-chip-group>
+                    <button type="button" class="chip is-active">کلیدی</button>
+                    <button type="button" class="chip">حقوقی</button>
+                    <button type="button" class="chip">حقیقی</button>
+                    <button type="button" class="chip">پیگیری فوری</button>
+                    <button type="button" class="chip">بدهکار</button>
+                    <button type="button" class="chip">تخفیف‌دار</button>
+                  </div>
+                  <div class="input-group">
+                    <input class="input" placeholder="افزودن برچسب جدید…">
+                    <button type="button" class="btn"><span data-icon="plus" data-icon-size="16"></span> افزودن</button>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom:0">
+                  <label class="form-label">یادداشت داخلی</label>
+                  <textarea class="textarea" placeholder="این یادداشت فقط برای تیم شما قابل مشاهده است…"></textarea>
+                </div>
+              </div>
+
+              <!-- گام ۴ -->
+              <div class="card-body d-none" data-step-panel="4">
+                <div class="form-group">
+                  <label class="form-label">بارگذاری مدارک</label>
+                  <div class="dropzone">
+                    <div class="dz-icon" data-icon="upload" data-icon-size="24"></div>
+                    <div class="fw-600 text-strong">فایل‌ها را اینجا رها کنید یا کلیک کنید</div>
+                    <div class="fs-sm text-muted mt-1">پسوندهای مجاز: PDF، JPG، PNG، XLSX — حداکثر ۱۰ مگابایت</div>
+                    <button type="button" class="btn btn-soft btn-sm mt-3"><span data-icon="paperclip" data-icon-size="15"></span> انتخاب فایل</button>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-col gap-2 mb-4">
+                  <div class="file-item">
+                    <span class="file-ic pdf" data-icon="file" data-icon-size="18"></span>
+                    <span class="flex-1"><span class="d-block fw-600 fs-sm">کارت-ملی.pdf</span><span class="fs-xs text-muted">۲۴۰ کیلوبایت</span></span>
+                    <button type="button" class="tb-icon" data-confirm="این فایل حذف شود؟" style="width:30px;height:30px" data-icon="trash" data-icon-size="16"></button>
+                  </div>
+                  <div class="file-item">
+                    <span class="file-ic img" data-icon="image" data-icon-size="18"></span>
+                    <span class="flex-1"><span class="d-block fw-600 fs-sm">لوگو-شرکت.png</span><span class="fs-xs text-muted">۱۱۰ کیلوبایت</span></span>
+                    <button type="button" class="tb-icon" data-confirm="این فایل حذف شود؟" style="width:30px;height:30px" data-icon="trash" data-icon-size="16"></button>
+                  </div>
+                </div>
+
+                <div class="alert alert-warning">
+                  <span data-icon="alert" data-icon-size="18"></span>
+                  <div>
+                    <div class="alert-title">قبل از ثبت نهایی بررسی کنید</div>
+                    <div class="alert-desc">پس از ثبت، پیامک خوش‌آمدگویی برای مشتری ارسال خواهد شد.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-foot">
+                <button type="button" class="btn" id="prevBtn" disabled><span data-icon="chevron-right" data-icon-size="15"></span> گام قبل</button>
+                <div class="end d-flex gap-2">
+                  <button type="button" class="btn btn-soft" id="nextBtn">گام بعد <span data-icon="chevron-left" data-icon-size="15"></span></button>
+                  <button type="submit" class="btn btn-primary d-none" id="submitBtn"><span data-icon="check" data-icon-size="16"></span> ثبت نهایی مشتری</button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- ============================ ستون راهنما ============================ -->
+          <div class="d-flex flex-col gap-4">
+            <div class="card">
+              <div class="card-head tight"><div class="card-title" data-icon="circle-help" data-icon-size="17"> پیش‌نمایش پرونده</div></div>
+              <div class="card-body">
+                <div class="d-flex items-center gap-3 mb-4">
+                  <span class="avatar avatar-lg" id="previewAvatar">مش</span>
+                  <div>
+                    <div class="fw-700 text-strong" id="previewName">مشتری جدید</div>
+                    <div class="fs-xs text-muted">شناسه موقت: C-10۴۳</div>
+                  </div>
+                </div>
+                <dl class="kv">
+                  <dt>وضعیت</dt><dd><span class="badge badge-warning badge-dot">در انتظار تکمیل</span></dd>
+                  <dt>گام فعلی</dt><dd id="previewStep">۱ از ۴</dd>
+                  <dt>تاریخ ثبت</dt><dd class="num" id="previewDate">—</dd>
+                  <dt>کارشناس</dt><dd>مهدی کریمی</dd>
+                </dl>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head tight"><div class="card-title" data-icon="sparkles" data-icon-size="17"> نکات تکمیل فرم</div></div>
+              <div class="card-body">
+                <div class="accordion" data-accordion>
+                  <div class="acc-item is-open">
+                    <button type="button" class="acc-head">چرا کد ملی لازم است؟<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button>
+                    <div class="acc-body">برای صدور فاکتور رسمی و ثبت در سامانه مودیان، کد ملی (حقیقی) یا شناسه ملی (حقوقی) الزامی است.</div>
+                  </div>
+                  <div class="acc-item">
+                    <button type="button" class="acc-head">منبع آشنایی چه کاربردی دارد؟<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button>
+                    <div class="acc-body">با ثبت منبع، در گزارش‌های جذب مشتری مشخص می‌شود کدام کانال بازدهی بیشتری داشته است.</div>
+                  </div>
+                  <div class="acc-item">
+                    <button type="button" class="acc-head">آیا می‌توانم بعداً اطلاعات را ویرایش کنم؟<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button>
+                    <div class="acc-body">بله. از صفحه پرونده مشتری، دکمه «ویرایش» در دسترس است و تاریخچه تغییرات ثبت می‌شود.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-body tight">
+                <label class="switch w-100 justify-between">
+                  <span class="lbl">ذخیره پیش‌نویس خودکار</span>
+                  <input type="checkbox" checked><span class="track"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var step = 1, total = 4;
+  var titles = ['اطلاعات پایه', 'راه‌های ارتباطی', 'دسته‌بندی و برچسب', 'یادداشت و پیوست'];
+
+  CRM.$('#previewDate').textContent = CRM.jDate(new Date());
+
+  function paint() {
+    CRM.$$('[data-step-panel]').forEach(function (p) {
+      p.classList.toggle('d-none', +p.getAttribute('data-step-panel') !== step);
+    });
+    CRM.$$('[data-step-dot]').forEach(function (d) {
+      var n = +d.getAttribute('data-step-dot');
+      d.classList.toggle('is-active', n === step);
+      d.classList.toggle('is-done', n < step);
+      d.querySelector('.bullet').innerHTML = n < step ? CRM.icon('check', 16) : CRM.fa(n);
+    });
+    CRM.$('#stepTitle').textContent = 'گام ' + CRM.fa(step) + ' — ' + titles[step - 1];
+    CRM.$('#stepCounter').textContent = 'گام ' + CRM.fa(step) + ' از ' + CRM.fa(total);
+    CRM.$('#previewStep').textContent = CRM.fa(step) + ' از ' + CRM.fa(total);
+    CRM.$('#prevBtn').disabled = step === 1;
+    CRM.$('#nextBtn').classList.toggle('d-none', step === total);
+    CRM.$('#submitBtn').classList.toggle('d-none', step !== total);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  CRM.$('#nextBtn').addEventListener('click', function () {
+    if (step === 1) {
+      var f = CRM.$('#fname'), l = CRM.$('#lname');
+      if (!f.value.trim() || !l.value.trim()) {
+        [f, l].forEach(function (i) { if (!i.value.trim()) i.closest('.form-group').classList.add('anim-shake'); });
+        setTimeout(function () { CRM.$$('.form-group').forEach(function (g) { g.classList.remove('anim-shake'); }); }, 500);
+        CRM.toast({ type: 'danger', title: 'تکمیل فیلدهای الزامی', msg: 'نام و نام خانوادگی را وارد کنید.' });
+        f.focus();
+        return;
+      }
+    }
+    if (step < total) { step++; paint(); }
+  });
+  CRM.$('#prevBtn').addEventListener('click', function () { if (step > 1) { step--; paint(); } });
+
+  /* پیش‌نمایش زنده */
+  ['fname', 'lname'].forEach(function (id) {
+    CRM.$('#' + id).addEventListener('input', function () {
+      var n = (CRM.$('#fname').value + ' ' + CRM.$('#lname').value).trim();
+      CRM.$('#previewName').textContent = n || 'مشتری جدید';
+      CRM.$('#previewAvatar').textContent = n ? n.split(' ').slice(0, 2).map(function (x) { return x.charAt(0); }).join('') : 'مش';
+    });
+  });
+
+  paint();
+})();
+</script>
+</body>
+</html>

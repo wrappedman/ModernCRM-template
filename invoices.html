@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فاکتورها | مدرن‌CRM</title>
+<meta name="description" content="مدیریت فاکتورهای فروش، وضعیت پرداخت و مالیات">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="app" data-page="invoices">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">فاکتورها</span>
+            </div>
+            <h1 class="page-title">فاکتورهای فروش</h1>
+            <p class="page-desc">۵ فاکتور در این دوره — ۲ فاکتور معوق نیازمند پیگیری</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" data-print><span data-icon="printer" data-icon-size="16"></span> چاپ فهرست</button>
+            <button class="btn btn-primary" data-modal-open="#modalNewInvoice"><span data-icon="plus" data-icon-size="16"></span> صدور فاکتور</button>
+          </div>
+        </div>
+
+        <!-- ========================== شاخص‌های مالی ========================== -->
+        <div class="grid-4 mb-5">
+          <div class="card card-hover" data-win="i-total" data-win-title="مجموع فروش دوره" data-win-icon="wallet" data-win-size="740x520">
+            <div class="card-body tight">
+              <div class="stat-label">مجموع فروش دوره</div>
+              <div class="stat-value num">۷۸۸ <small>میلیون تومان</small></div>
+              <div class="stat-foot mt-2"><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۹٪</span> نسبت به دوره قبل</div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="i-paid" data-win-title="وصول‌شده" data-win-icon="check-circle" data-win-size="740x520">
+            <div class="card-body tight">
+              <div class="stat-label">وصول‌شده</div>
+              <div class="stat-value num text-success">۵۴۸ <small>میلیون</small></div>
+              <div class="progress sm mt-3"><i style="width:70%"></i></div>
+              <div class="fs-xs text-muted mt-2">۷۰٪ از کل مطالبات</div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="i-unpaid" data-win-title="در انتظار پرداخت" data-win-icon="clock" data-win-size="740x520">
+            <div class="card-body tight">
+              <div class="stat-label">در انتظار پرداخت</div>
+              <div class="stat-value num text-warning">۲۴۰ <small>میلیون</small></div>
+              <div class="fs-xs text-muted mt-2">۳ فاکتور باز</div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="i-overdue" data-win-title="معوق" data-win-icon="triangle-alert" data-win-size="740x520">
+            <div class="card-body tight">
+              <div class="stat-label">معوق (بیش از سررسید)</div>
+              <div class="stat-value num text-danger">۵۸ <small>میلیون</small></div>
+              <div class="stat-foot mt-2"><span class="badge badge-danger">۱ فاکتور</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2-1 mb-5">
+          <div class="card" data-win="i-table" data-win-title="فهرست فاکتورها" data-win-sub="۵ فاکتور" data-win-icon="invoice" data-win-size="1240x680">
+            <div class="card-head flex-wrap" style="gap:10px">
+              <div class="card-title" data-icon="invoice" data-icon-size="18"> فهرست فاکتورها</div>
+              <div class="card-actions flex-wrap" style="gap:8px">
+                <div class="input-wrap" style="width:220px">
+                  <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                  <input class="input input-sm" placeholder="جستجوی شماره یا مشتری…" data-table-search="#tblInvoices">
+                </div>
+                <select class="select select-sm" style="width:auto">
+                  <option>همه وضعیت‌ها</option><option>پرداخت شده</option><option>پرداخت جزئی</option><option>پرداخت نشده</option><option>معوق</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table" id="tblInvoices">
+                  <thead>
+                    <tr>
+                      <th class="sortable"><span class="th-in">شماره فاکتور</span></th>
+                      <th class="sortable"><span class="th-in">مشتری</span></th>
+                      <th class="sortable"><span class="th-in">تاریخ صدور</span></th>
+                      <th class="sortable"><span class="th-in">سررسید</span></th>
+                      <th class="sortable num"><span class="th-in">مبلغ کل</span></th>
+                      <th class="sortable num"><span class="th-in">مالیات</span></th>
+                      <th class="sortable"><span class="th-in">وضعیت</span></th>
+                      <th class="table-row-actions">عملیات</th>
+                    </tr>
+                  </thead>
+                  <tbody id="invoicesBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="table-foot">
+              <span>نمایش ۵ فاکتور از ۵ مورد</span>
+              <div class="pagination ms-auto"><button disabled data-icon="chevron-right" data-icon-size="15"></button><button class="is-active">۱</button><button data-icon="chevron-left" data-icon-size="15"></button></div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-col gap-4">
+            <div class="card" data-win="i-donut" data-win-title="ترکیب وضعیت پرداخت" data-win-icon="chart-pie" data-win-size="720x600">
+              <div class="card-head tight"><div class="card-title" data-icon="chart-pie" data-icon-size="17"> ترکیب وضعیت پرداخت</div></div>
+              <div class="card-body tight">
+                <div class="donut-wrap">
+                  <div data-chart="donut" data-values="3,1,1" data-center="۵" data-center-sub="فاکتور"
+                       data-colors="var(--c1),var(--c5),var(--c6)"
+                       data-labels="پرداخت‌شده,جزئی,معوق"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" data-win="i-chart" data-win-title="روند وصول مطالبات" data-win-icon="chart-line" data-win-size="820x560">
+              <div class="card-head tight"><div class="card-title" data-icon="chart-line" data-icon-size="17"> روند وصول مطالبات (۶ ماه)</div></div>
+              <div class="card-body tight">
+                <div class="chart h-160" data-chart="line"
+                     data-values="58,64,72,68,84,92,88,96"
+                     data-labels="فروردین,اردیبهشت,خرداد,تیر,مرداد,شهریور,مهر,آبان"></div>
+              </div>
+            </div>
+
+            <div class="card" data-win="i-reminder" data-win-title="یادآوری پرداخت" data-win-icon="bell" data-win-size="720x520">
+              <div class="card-head tight"><div class="card-title" data-icon="bell" data-icon-size="17"> یادآوری‌های ارسال‌شده</div></div>
+              <div class="card-body tight">
+                <div class="list">
+                  <div class="list-item" style="padding:10px 0"><span class="avatar avatar-sm avatar-sq"><span data-icon="mail" data-icon-size="15"></span></span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">فاکتور ۱۴۰۴-۰۵۱۹</span><span class="li-sub">ایمیل — دیروز ۰۹:۳۰</span></span>
+                    <span class="badge badge-danger">بی‌پاسخ</span></div>
+                  <div class="list-item" style="padding:10px 0"><span class="avatar avatar-sm avatar-sq"><span data-icon="message" data-icon-size="15"></span></span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">فاکتور ۱۴۰۴-۰۵۲۰</span><span class="li-sub">پیامک — ۲ روز پیش</span></span>
+                    <span class="badge badge-warning">پرداخت جزئی</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ========================= مودال صدور فاکتور ========================= -->
+<div class="overlay" id="modalNewInvoice" style="display:none">
+  <div class="modal modal-xl" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">صدور فاکتور جدید</div><div class="modal-sub">پیش‌نمایش فاکتور در لحظه به‌روزرسانی می‌شود</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#modalNewInvoice" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="فاکتور با موفقیت صادر شد." data-close-modal="#modalNewInvoice">
+      <div class="modal-body">
+        <div class="grid-2 mb-4">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">مشتری <span class="req">*</span></label>
+            <select class="select" required>
+              <option>گروه صنعتی البرز — حسین نوری</option>
+              <option>پارس‌نیکان — مریم رضایی</option>
+              <option>داده‌پرداز — امیر شریفی</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">تاریخ سررسید</label>
+            <input class="input num" placeholder="۱۴۰۴/۰۸/۱۰">
+          </div>
+        </div>
+
+        <div class="section-title" style="font-size:var(--fs-md)"><span data-icon="package" data-icon-size="16"></span> اقلام فاکتور</div>
+        <div class="table-wrap mb-3" style="border:1px solid var(--border);border-radius:var(--radius)">
+          <table class="table table-compact" id="invoiceItems">
+            <thead>
+              <tr><th style="min-width:220px">کالا / خدمت</th><th style="width:110px">تعداد</th><th style="width:150px" class="num">قیمت واحد</th><th style="width:150px" class="num">جمع</th><th style="width:50px"></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><select class="select select-sm"><option>لایسنس سالانه CRM — سازمانی</option><option>ماژول مدیریت انبار</option><option>بسته آموزش حضوری</option></select></td>
+                <td><div class="qty"><button type="button">−</button><input value="۱" readonly><button type="button">+</button></div></td>
+                <td class="num">۱۸۰٫۰۰۰٫۰۰۰</td>
+                <td class="num fw-600">۱۸۰٫۰۰۰٫۰۰۰</td>
+                <td><button type="button" class="tb-icon" style="width:28px;height:28px" data-icon="x" data-icon-size="15"></button></td>
+              </tr>
+              <tr>
+                <td><select class="select select-sm"><option>ماژول مدیریت انبار</option><option>لایسنس سالانه CRM — سازمانی</option></select></td>
+                <td><div class="qty"><button type="button">−</button><input value="۲" readonly><button type="button">+</button></div></td>
+                <td class="num">۹۶٫۰۰۰٫۰۰۰</td>
+                <td class="num fw-600">۱۹۲٫۰۰۰٫۰۰۰</td>
+                <td><button type="button" class="tb-icon" style="width:28px;height:28px" data-icon="x" data-icon-size="15"></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="btn btn-soft btn-sm mb-4"><span data-icon="plus" data-icon-size="15"></span> افزودن ردیف</button>
+
+        <div class="grid-2">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">توضیحات فاکتور</label>
+            <textarea class="textarea" placeholder="شرایط پرداخت، شماره قرارداد…"></textarea>
+          </div>
+          <div class="panel">
+            <div class="stat-inline"><span class="text-muted">جمع اقلام</span><span class="fw-600 num">۳۷۲٫۰۰۰٫۰۰۰</span></div>
+            <div class="stat-inline"><span class="text-muted">تخفیف (۷٪)</span><span class="fw-600 num text-danger">− ۲۶٫۰۴۰٫۰۰۰</span></div>
+            <div class="stat-inline"><span class="text-muted">مالیات بر ارزش افزوده (۹٪)</span><span class="fw-600 num">۳۱٫۱۳۶٫۴۰۰</span></div>
+            <div class="stat-inline" style="border-top:1px solid var(--border)">
+              <span class="fw-700">مبلغ قابل پرداخت</span><span class="fw-700 num text-brand">۳۷۷٫۰۹۶٫۴۰۰ تومان</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> صدور و ثبت فاکتور</button>
+        <button type="button" class="btn">ذخیره پیش‌نویس</button>
+        <a class="btn btn-ghost" href="print-invoice.html" target="_blank"><span data-icon="printer" data-icon-size="16"></span> پیش‌نمایش چاپ</a>
+        <button type="button" class="btn ms-auto" data-modal-close="#modalNewInvoice">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var ST = {
+    paid:    { l: 'پرداخت شده',   c: 'badge-success' },
+    partial: { l: 'پرداخت جزئی',  c: 'badge-warning' },
+    unpaid:  { l: 'پرداخت نشده',  c: 'badge' },
+    overdue: { l: 'معوق',         c: 'badge-danger' }
+  };
+  CRM.$('#invoicesBody').innerHTML = CRM.data.invoices.map(function (v) {
+    var st = ST[v.status];
+    return '<tr>' +
+      '<td><div class="d-flex items-center gap-2">' + CRM.icon('invoice', 16) +
+        '<span class="fw-600 num">' + CRM.esc(v.no) + '</span></div></td>' +
+      '<td>' + CRM.esc(v.customer) + '</td>' +
+      '<td class="num fs-sm">' + CRM.esc(v.date) + '</td>' +
+      '<td class="num fs-sm ' + (v.status === 'overdue' ? 'text-danger fw-600' : '') + '">' + CRM.esc(v.due) + '</td>' +
+      '<td class="num fw-600">' + CRM.num(v.amount) + '</td>' +
+      '<td class="num text-muted">' + CRM.num(v.tax) + '</td>' +
+      '<td><span class="badge ' + st.c + ' badge-dot">' + st.l + '</span></td>' +
+      '<td><span class="table-actions">' +
+        '<a class="tb-icon" style="width:30px;height:30px" data-tip="مشاهده و چاپ" href="print-invoice.html" target="_blank" data-icon="eye" data-icon-size="16"></a>' +
+        '<button class="tb-icon" style="width:30px;height:30px" data-tip="ارسال یادآوری" data-icon="send" data-icon-size="16"></button>' +
+        '<div class="dropdown">' +
+          '<button class="tb-icon" style="width:30px;height:30px" data-dropdown-toggle data-icon="more" data-icon-size="16"></button>' +
+          '<div class="dropdown-menu">' +
+            '<button class="dropdown-item"><span data-icon="download" data-icon-size="16"></span> دانلود PDF</button>' +
+            '<button class="dropdown-item"><span data-icon="copy" data-icon-size="16"></span> ایجاد فاکتور مشابه</button>' +
+            '<button class="dropdown-item"><span data-icon="check-circle" data-icon-size="16"></span> ثبت پرداخت</button>' +
+            '<div class="dropdown-sep"></div>' +
+            '<button class="dropdown-item danger" data-confirm="فاکتور ' + CRM.esc(v.no) + ' حذف شود؟"><span data-icon="trash" data-icon-size="16"></span> حذف فاکتور</button>' +
+          '</div>' +
+        '</div>' +
+      '</span></td>' +
+    '</tr>';
+  }).join('');
+
+  /* دکمه‌های تعداد در مودال */
+  document.addEventListener('click', function (e) {
+    var q = e.target.closest('.qty button');
+    if (!q) return;
+    var input = q.parentElement.querySelector('input');
+    var v = Number(CRM.en(input.value)) || 1;
+    v = q.textContent.trim() === '+' ? v + 1 : Math.max(1, v - 1);
+    input.value = CRM.fa(v);
+  });
+})();
+</script>
+</body>
+</html>

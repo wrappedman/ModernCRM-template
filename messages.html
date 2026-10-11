@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گفتگو با مشتریان | مدرن‌CRM</title>
+<meta name="description" content="صندوق گفتگو و پیام‌رسانی با مشتریان">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="app" data-page="messages">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">گفتگوها</span>
+            </div>
+            <h1 class="page-title">صندوق گفتگو با مشتریان</h1>
+            <p class="page-desc">۳ گفتگوی خوانده‌نشده — میانگین زمان پاسخ شما ۶ دقیقه است</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" data-tip="بایگانی گفتگوها"><span data-icon="archive" data-icon-size="16"></span> بایگانی</button>
+            <button class="btn btn-primary"><span data-icon="plus" data-icon-size="16"></span> گفتگوی جدید</button>
+          </div>
+        </div>
+
+        <div class="card" data-win="chat-panel" data-win-title="صندوق گفتگو" data-win-sub="۵ گفتگوی فعال" data-win-icon="message" data-win-size="1280x720" style="overflow:hidden">
+          <div class="d-flex" style="min-height:620px">
+
+            <!-- ============ ستون فهرست گفتگوها ============ -->
+            <aside style="width:320px;border-inline-end:1px solid var(--border);flex:0 0 auto;display:flex;flex-direction:column">
+              <div class="card-head tight" style="min-height:64px">
+                <div class="input-wrap flex-1">
+                  <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                  <input class="input input-sm" placeholder="جستجوی نام مشتری…">
+                </div>
+                <div class="dropdown">
+                  <button class="tb-icon" data-dropdown-toggle data-icon="list-filter" data-icon-size="18"></button>
+                  <div class="dropdown-menu align-start">
+                    <div class="dropdown-label">فیلتر گفتگوها</div>
+                    <button class="dropdown-item is-active"><span data-icon="mail-open" data-icon-size="16"></span> خوانده‌نشده‌ها</button>
+                    <button class="dropdown-item"><span data-icon="star" data-icon-size="16"></span> نشان‌شده‌ها</button>
+                    <button class="dropdown-item"><span data-icon="clock" data-icon-size="16"></span> امروز</button>
+                    <button class="dropdown-item"><span data-icon="archive" data-icon-size="16"></span> بایگانی‌شده</button>
+                  </div>
+                </div>
+              </div>
+              <div class="list flex-1" style="overflow:auto" id="threadList"></div>
+              <div class="card-foot" style="border-radius:0">
+                <span class="fs-xs text-muted">۵ گفتگو · ۳ خوانده‌نشده</span>
+                <button class="btn btn-ghost btn-sm ms-auto" data-tip="همه را خوانده‌شده کن"><span data-icon="check-check" data-icon-size="15"></span> علامت‌گذاری همه</button>
+              </div>
+            </aside>
+
+            <!-- ============ ستون گفتگو ============ -->
+            <section class="flex-1 d-flex flex-col" style="min-width:0">
+              <header class="card-head" style="min-height:64px">
+                <span class="avatar">مر</span>
+                <div class="flex-1" style="min-width:0">
+                  <div class="fw-600 text-strong">مریم رضایی <span class="badge badge-warning">طلایی</span></div>
+                  <div class="fs-xs text-muted d-flex items-center gap-2">
+                    <span class="dot-status online"></span> پارس‌نیکان — آنلاین
+                  </div>
+                </div>
+                <div class="card-actions">
+                  <button class="tb-icon" data-tip="تماس تلفنی" data-icon="phone" data-icon-size="18"></button>
+                  <button class="tb-icon" data-tip="تماس تصویری" data-icon="presentation" data-icon-size="18"></button>
+                  <a class="tb-icon" data-tip="پرونده مشتری" href="customer-profile.html" data-icon="external" data-icon-size="18"></a>
+                  <div class="dropdown">
+                    <button class="tb-icon" data-dropdown-toggle data-icon="more" data-icon-size="18"></button>
+                    <div class="dropdown-menu">
+                      <button class="dropdown-item"><span data-icon="star" data-icon-size="16"></span> نشان‌گذاری گفتگو</button>
+                      <button class="dropdown-item"><span data-icon="user-check" data-icon-size="16"></span> تغییر مسئول گفتگو</button>
+                      <button class="dropdown-item"><span data-icon="ticket" data-icon-size="16"></span> تبدیل به تیکت</button>
+                      <div class="dropdown-sep"></div>
+                      <button class="dropdown-item danger" data-confirm="این گفتگو بایگانی شود؟"><span data-icon="archive" data-icon-size="16"></span> بایگانی گفتگو</button>
+                    </div>
+                  </div>
+                </div>
+              </header>
+
+              <div class="chat flex-1" id="chatBox" style="max-height:430px"></div>
+
+              <div class="composer">
+                <button class="tb-icon" data-tip="پیوست فایل" data-icon="paperclip" data-icon-size="18"></button>
+                <button class="tb-icon" data-tip="افزودن قالب پاسخ" data-icon="zap" data-icon-size="18"></button>
+                <textarea class="textarea" placeholder="پاسخ خود را بنویسید… (Shift + Enter برای خط جدید)"></textarea>
+                <button class="btn btn-primary" id="sendMsg"><span data-icon="send" data-icon-size="16"></span> ارسال</button>
+              </div>
+            </section>
+
+            <!-- ============ ستون اطلاعات مشتری ============ -->
+            <aside style="width:280px;border-inline-start:1px solid var(--border);flex:0 0 auto;padding:18px" class="d-flex flex-col gap-4">
+              <div class="text-center">
+                <span class="avatar avatar-xl" style="margin:0 auto 12px">مر</span>
+                <div class="fw-700 text-strong">مریم رضایی</div>
+                <div class="fs-xs text-muted">مدیرعامل — پارس‌نیکان</div>
+                <div class="d-flex gap-2 justify-center mt-3">
+                  <span class="badge badge-warning">طلایی</span>
+                  <span class="badge badge-success badge-dot">فعال</span>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="panel-title">اطلاعات سریع</div>
+                <div class="fs-sm d-flex flex-col gap-2">
+                  <span class="d-flex items-center gap-2"><span data-icon="phone" data-icon-size="15" class="text-soft"></span> <span class="num">۰۹۱۲۳۴۵۶۷۸۹</span></span>
+                  <span class="d-flex items-center gap-2"><span data-icon="mail" data-icon-size="15" class="text-soft"></span> <span class="ltr fs-xs">m.rezaei@parsnikan.ir</span></span>
+                  <span class="d-flex items-center gap-2"><span data-icon="building" data-icon-size="15" class="text-soft"></span> پارس‌نیکان</span>
+                  <span class="d-flex items-center gap-2"><span data-icon="wallet" data-icon-size="15" class="text-soft"></span> ارزش کل: ۱۲۸٫۴ میلیون</span>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="panel-title">قالب‌های پاسخ سریع</div>
+                <div class="d-flex flex-col gap-1">
+                  <button class="dropdown-item fs-sm"><span data-icon="zap" data-icon-size="15"></span> با تشکر از پیام شما…</button>
+                  <button class="dropdown-item fs-sm"><span data-icon="zap" data-icon-size="15"></span> در حال بررسی موضوع هستیم…</button>
+                  <button class="dropdown-item fs-sm"><span data-icon="zap" data-icon-size="15"></span> پیگیری تا پایان امروز</button>
+                </div>
+              </div>
+              <div class="alert alert-info" style="margin-top:auto">
+                <span data-icon="sparkles" data-icon-size="18"></span>
+                <div><div class="alert-title">پیشنهاد هوشمند</div>
+                <div class="alert-desc fs-xs">به مشتری بسته ترکیبی «لایسنس + آموزش» با ۷٪ تخفیف پیشنهاد دهید.</div></div>
+              </div>
+            </aside>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var active = 'TH-1';
+
+  function paintThreads() {
+    CRM.$('#threadList').innerHTML = CRM.data.threads.map(function (t) {
+      return '<button class="list-item' + (t.id === active ? ' is-selected' : '') + (t.unread ? ' is-unread' : '') + '" data-thread="' + t.id + '" style="text-align:right;width:100%">' +
+        '<span style="position:relative">' + CRM.avatar(t.name, 40) +
+          '<span class="dot-status ' + (t.online ? 'online' : 'offline') + '" style="position:absolute;bottom:0;inset-inline-start:0;width:11px;height:11px"></span></span>' +
+        '<span class="flex-1" style="min-width:0">' +
+          '<span class="d-flex items-center gap-2"><span class="li-title">' + CRM.esc(t.name) + '</span>' +
+          '<span class="fs-2xs text-soft ms-auto">' + CRM.esc(t.time) + '</span></span>' +
+          '<span class="li-sub d-block text-truncate">' + CRM.esc(t.last) + '</span>' +
+          '<span class="fs-2xs text-soft d-block">' + CRM.esc(t.company) + '</span>' +
+        '</span>' +
+        (t.unread ? '<span class="tag-counter">' + CRM.fa(t.unread) + '</span>' : '') +
+      '</button>';
+    }).join('');
+  }
+
+  function paintChat() {
+    var box = CRM.$('#chatBox');
+    box.innerHTML = CRM.data.messages.map(function (m) {
+      return '<div class="msg' + (m.me ? ' me' : '') + '">' + CRM.avatar(m.author, 36) +
+        '<div><div class="msg-bubble">' + CRM.esc(m.text) +
+        (m.attach ? '<span class="msg-attach">' + CRM.icon('file', 15) + ' ' + CRM.esc(m.attach.name) +
+          '<span class="ms-auto fs-xs" style="opacity:.8">' + CRM.esc(m.attach.size) + '</span></span>' : '') +
+        '</div><div class="msg-time">' + CRM.esc(m.time) + ' — ' + CRM.esc(m.author) + '</div></div></div>';
+    }).join('') + '<div class="msg">' + CRM.avatar('مریم رضایی', 36) +
+      '<div class="msg-bubble"><span class="typing"><i></i><i></i><i></i></span></div></div>';
+    box.scrollTop = box.scrollHeight;
+  }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-thread]');
+    if (!t) return;
+    active = t.getAttribute('data-thread');
+    CRM.data.threads.forEach(function (x) { if (x.id === active) x.unread = 0; });
+    paintThreads(); paintChat();
+  });
+
+  CRM.$('#sendMsg').addEventListener('click', function () {
+    var ta = CRM.$('.composer .textarea');
+    var val = ta.value.trim();
+    if (!val) { CRM.toast({ type: 'warning', title: 'متن پیام خالی است' }); return; }
+    var now = new Date();
+    CRM.data.messages.push({
+      me: true, text: val, author: 'مهدی کریمی',
+      time: CRM.fa(('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2))
+    });
+    ta.value = '';
+    paintChat();
+    CRM.toast({ type: 'success', title: 'پیام ارسال شد' });
+  });
+
+  paintThreads(); paintChat();
+})();
+</script>
+</body>
+</html>

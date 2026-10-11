@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فهرست مشتریان | مدرن‌CRM</title>
+<meta name="description" content="مدیریت فهرست مشتریان — جستجو، فیلتر، مرتب‌سازی، عملیات گروهی و خروجی گرفتن">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="app" data-page="customers">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">مشتریان</span>
+            </div>
+            <h1 class="page-title">مدیریت مشتریان</h1>
+            <p class="page-desc">۱۲۴ مشتری ثبت‌شده — آخرین به‌روزرسانی: امروز ۱۰:۲۴</p>
+          </div>
+          <div class="head-actions">
+            <div class="dropdown">
+              <button class="btn" data-dropdown-toggle><span data-icon="download" data-icon-size="16"></span> خروجی <span data-icon="chevron-down" data-icon-size="14"></span></button>
+              <div class="dropdown-menu">
+                <button class="dropdown-item"><span data-icon="table" data-icon-size="17"></span> خروجی Excel (xlsx)</button>
+                <button class="dropdown-item"><span data-icon="file" data-icon-size="17"></span> خروجی CSV</button>
+                <button class="dropdown-item" data-print><span data-icon="printer" data-icon-size="17"></span> چاپ فهرست</button>
+              </div>
+            </div>
+            <button class="btn" data-drawer-open="#drawerFilter"><span data-icon="filter" data-icon-size="16"></span> فیلتر پیشرفته</button>
+            <a class="btn btn-primary" href="customer-new.html"><span data-icon="user-plus" data-icon-size="16"></span> مشتری جدید</a>
+          </div>
+        </div>
+
+        <!-- ========================= شاخص‌های مشتریان ========================= -->
+        <div class="grid-4 mb-5">
+          <div class="card card-hover" data-win="c-total" data-win-title="کل مشتریان" data-win-icon="users" data-win-size="700x460">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon"><span data-icon="users" data-icon-size="22"></span></span>
+              <div><div class="stat-label">کل مشتریان</div><div class="stat-value">۱٫۲۴۸</div></div>
+              <span class="badge badge-success ms-auto">+۱۲٪</span>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="c-active" data-win-title="مشتریان فعال" data-win-icon="badge-check" data-win-size="700x460">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon sky"><span data-icon="badge-check" data-icon-size="22"></span></span>
+              <div><div class="stat-label">فعال</div><div class="stat-value">۹۸۶</div></div>
+              <span class="badge badge-info ms-auto">۷۹٪</span>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="c-new" data-win-title="مشتریان جدید ماه" data-win-icon="user-plus" data-win-size="700x460">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon violet"><span data-icon="user-plus" data-icon-size="22"></span></span>
+              <div><div class="stat-label">جدید در مهر</div><div class="stat-value">۶۲</div></div>
+              <span class="badge badge-violet ms-auto">+۸ نفر</span>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="c-value" data-win-title="میانگین ارزش مشتری" data-win-icon="trending-up" data-win-size="700x460">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon amber"><span data-icon="trending-up" data-icon-size="22"></span></span>
+              <div><div class="stat-label">میانگین ارزش چرخه عمر</div><div class="stat-value">۴۸٫۲ <small class="fs-sm">میلیون</small></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================ جدول اصلی ============================ -->
+        <div class="card" data-table-root data-win="customers-table" data-win-title="فهرست مشتریان" data-win-sub="۱۲۴ رکورد" data-win-icon="table" data-win-size="1240x680">
+          <div class="card-head flex-wrap" style="gap:10px">
+            <div class="card-title" data-icon="table" data-icon-size="18"> فهرست مشتریان</div>
+            <div class="card-actions flex-wrap" style="gap:8px">
+              <div class="input-wrap" style="width:250px">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" placeholder="جستجو در نام، شرکت، شماره…" data-table-search="#tblCustomers" aria-label="جستجو">
+              </div>
+              <select class="select select-sm" style="width:auto">
+                <option>همه وضعیت‌ها</option>
+                <option>فعال</option>
+                <option>در انتظار تایید</option>
+                <option>غیرفعال</option>
+                <option>مسدود</option>
+              </select>
+              <select class="select select-sm" style="width:auto">
+                <option>همه سطوح</option>
+                <option>طلایی</option>
+                <option>نقره‌ای</option>
+                <option>برنزی</option>
+              </select>
+              <div class="segmented" data-segmented>
+                <button class="seg is-active" data-tip="نمای جدولی" data-icon="rows" data-icon-size="15"></button>
+                <button class="seg" data-tip="نمای کارتی" data-icon="grid" data-icon-size="15"></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- نوار عملیات گروهی -->
+          <div class="alert alert-info d-none" data-bulk-bar style="border-radius:0;border-inline:0">
+            <span data-icon="check-check" data-icon-size="18"></span>
+            <div class="alert-title"><span data-bulk-count>۰</span> مشتری انتخاب شده است</div>
+            <div class="d-flex gap-2 ms-auto">
+              <button class="btn btn-sm btn-soft"><span data-icon="mail" data-icon-size="14"></span> ارسال پیام گروهی</button>
+              <button class="btn btn-sm btn-soft"><span data-icon="tag" data-icon-size="14"></span> افزودن برچسب</button>
+              <button class="btn btn-sm btn-danger-soft" data-confirm="آیا از حذف مشتریان انتخاب‌شده مطمئن هستید؟ این عملیات قابل بازگشت نیست."><span data-icon="trash" data-icon-size="14"></span> حذف</button>
+            </div>
+          </div>
+
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table" id="tblCustomers">
+                <thead>
+                  <tr>
+                    <th style="width:40px">
+                      <label class="check"><input type="checkbox" data-select-all><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label>
+                    </th>
+                    <th class="sortable"><span class="th-in">مشتری / شرکت</span></th>
+                    <th class="sortable"><span class="th-in">شماره تماس</span></th>
+                    <th class="sortable"><span class="th-in">شهر</span></th>
+                    <th class="sortable"><span class="th-in">سطح</span></th>
+                    <th class="sortable num"><span class="th-in">ارزش خرید</span></th>
+                    <th class="sortable"><span class="th-in">وضعیت</span></th>
+                    <th class="sortable"><span class="th-in">آخرین تعامل</span></th>
+                    <th class="sortable"><span class="th-in">مسئول</span></th>
+                    <th class="table-row-actions">عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="tblCustomersBody"></tbody>
+              </table>
+              <div class="d-none" data-table-empty>
+                <div class="empty">
+                  <div class="empty-ic" data-icon="search" data-icon-size="30"></div>
+                  <div class="empty-title">مشتری‌ای یافت نشد</div>
+                  <div class="empty-desc">عبارت جستجو را تغییر دهید یا فیلترها را بازنشانی کنید.</div>
+                  <button class="btn btn-soft mt-3" data-drawer-open="#drawerFilter">بازنشانی فیلترها</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-foot">
+            <span>نمایش <span class="fw-600 text-strong">۱ تا ۸</span> از <span class="fw-600 text-strong">۱۲۴</span> مشتری</span>
+            <div class="pagination ms-auto">
+              <button disabled data-icon="chevron-right" data-icon-size="15"></button>
+              <button class="is-active">۱</button>
+              <button>۲</button>
+              <button>۳</button>
+              <span class="text-soft" style="padding:0 6px">…</span>
+              <button>۱۶</button>
+              <button data-icon="chevron-left" data-icon-size="15"></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============================ دراور فیلتر ============================ -->
+<div class="drawer-overlay" id="drawerOverlay" style="display:none" data-drawer-close="#drawerFilter"></div>
+<aside class="drawer" id="drawerFilter" style="display:none" role="dialog" aria-modal="true">
+  <div class="drawer-head">
+    <div>
+      <div class="modal-title">فیلتر پیشرفته مشتریان</div>
+      <div class="modal-sub">ترکیب فیلترها برای یافتن سریع مشتریان</div>
+    </div>
+    <button class="tb-icon modal-x" data-drawer-close="#drawerFilter" data-icon="x" data-icon-size="18"></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">وضعیت</label>
+      <div class="d-flex gap-2 flex-wrap" data-chip-group>
+        <button class="chip is-active">فعال</button>
+        <button class="chip">در انتظار تایید</button>
+        <button class="chip">غیرفعال</button>
+        <button class="chip">مسدود</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">سطح مشتری</label>
+      <select class="select"><option>همه سطوح</option><option>طلایی</option><option>نقره‌ای</option><option>برنزی</option></select>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">حداقل ارزش خرید (تومان)</label>
+        <input class="input num" value="۱۰٫۰۰۰٫۰۰۰">
+      </div>
+      <div class="form-group">
+        <label class="form-label">حداکثر ارزش خرید</label>
+        <input class="input num" value="۵۰۰٫۰۰۰٫۰۰۰">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">شهر</label>
+      <select class="select"><option>همه شهرها</option><option>تهران</option><option>اصفهان</option><option>شیراز</option><option>مشهد</option><option>تبریز</option><option>کرج</option></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">برچسب‌ها</label>
+      <div class="d-flex gap-2 flex-wrap" data-chip-group>
+        <button class="chip is-active">کلیدی</button>
+        <button class="chip">حقوقی</button>
+        <button class="chip">حقیقی</button>
+        <button class="chip">بدهکار</button>
+        <button class="chip">VIP</button>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:0">
+      <label class="check">
+        <input type="checkbox" checked>
+        <span class="box"><span data-icon="check" data-icon-size="13"></span></span>
+        <span class="lbl">فقط مشتریان دارای تعامل در ۳۰ روز اخیر</span>
+      </label>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-primary flex-1" data-drawer-close="#drawerFilter"><span data-icon="filter" data-icon-size="16"></span> اعمال فیلتر</button>
+    <button class="btn" data-drawer-close="#drawerFilter">بازنشانی</button>
+  </div>
+</aside>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var STATUS = {
+    active:  { label: 'فعال',           cls: 'badge-success' },
+    pending: { label: 'در انتظار تایید', cls: 'badge-warning' },
+    inactive:{ label: 'غیرفعال',        cls: '' },
+    blocked: { label: 'مسدود',          cls: 'badge-danger' }
+  };
+  var owners = ['مهدی ک.', 'نیما ع.', 'سمیرا ر.', 'رضا پ.'];
+
+  CRM.$('#tblCustomersBody').innerHTML = CRM.data.customers.map(function (c, i) {
+    var st = STATUS[c.status];
+    return '<tr>' +
+      '<td><label class="check"><input type="checkbox" data-row-check><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td>' +
+      '<td><div class="d-flex items-center gap-3">' + CRM.avatar(c.name, 38) +
+        '<span style="min-width:0"><span class="cell-main d-block">' + CRM.esc(c.name) + '</span>' +
+        '<span class="cell-sub">' + CRM.esc(c.company) + ' — ' + CRM.esc(c.id) + '</span></span></div></td>' +
+      '<td class="num">' + CRM.esc(c.phone) + '</td>' +
+      '<td>' + CRM.esc(c.city) + '</td>' +
+      '<td><span class="badge ' + (c.level === 'طلایی' ? 'badge-warning' : c.level === 'نقره‌ای' ? 'badge-outline' : '') + '">' + CRM.esc(c.level) + '</span></td>' +
+      '<td class="num fw-600">' + CRM.num(c.value) + '</td>' +
+      '<td><span class="badge ' + st.cls + ' badge-dot">' + st.label + '</span></td>' +
+      '<td class="fs-sm text-muted">' + CRM.esc(c.last) + '</td>' +
+      '<td><div class="d-flex items-center gap-2">' + CRM.avatar(owners[i % owners.length], 28, 'avatar-sm') +
+        '<span class="fs-sm">' + CRM.esc(owners[i % owners.length]) + '</span></div></td>' +
+      '<td><span class="table-actions">' +
+        '<a class="tb-icon" style="width:30px;height:30px" data-tip="پرونده مشتری" href="customer-profile.html" data-icon="eye" data-icon-size="16"></a>' +
+        '<a class="tb-icon" style="width:30px;height:30px" data-tip="ویرایش" href="customer-new.html" data-icon="pencil" data-icon-size="16"></a>' +
+        '<div class="dropdown">' +
+          '<button class="tb-icon" style="width:30px;height:30px" data-dropdown-toggle data-icon="more" data-icon-size="16"></button>' +
+          '<div class="dropdown-menu">' +
+            '<a class="dropdown-item" href="ticket-new.html"><span data-icon="ticket" data-icon-size="16"></span> ثبت تیکت</a>' +
+            '<a class="dropdown-item" href="invoices.html"><span data-icon="invoice" data-icon-size="16"></span> صدور فاکتور</a>' +
+            '<a class="dropdown-item" href="messages.html"><span data-icon="message" data-icon-size="16"></span> شروع گفتگو</a>' +
+            '<div class="dropdown-sep"></div>' +
+            '<button class="dropdown-item danger" data-confirm="مشتری «' + CRM.esc(c.name) + '» حذف شود؟"><span data-icon="trash" data-icon-size="16"></span> حذف مشتری</button>' +
+          '</div>' +
+        '</div>' +
+      '</span></td>' +
+    '</tr>';
+  }).join('');
+})();
+</script>
+</body>
+</html>

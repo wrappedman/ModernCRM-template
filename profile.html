@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پروفایل من | مدرن‌CRM</title>
+<meta name="description" content="ویرایش پروفایل کاربری، امنیت حساب و فعالیت‌های من">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="app" data-page="profile">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">پروفایل من</span>
+            </div>
+            <h1 class="page-title">پروفایل کاربری</h1>
+            <p class="page-desc">اطلاعات شخصی، امنیت حساب و فعالیت‌های اخیر شما</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="change-password.html"><span data-icon="key" data-icon-size="16"></span> تغییر رمز عبور</a>
+            <button class="btn btn-primary" data-demo-save><span data-icon="check" data-icon-size="16"></span> ذخیره تغییرات</button>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <div class="d-flex flex-col gap-4" data-tabs-root>
+            <!-- ============================ کارت پروفایل ============================ -->
+            <div class="card" data-win="me-card" data-win-title="اطلاعات پروفایل" data-win-icon="user-round" data-win-size="900x680">
+              <div class="profile-cover" style="height:120px"></div>
+              <div class="card-body">
+                <div class="d-flex gap-4 items-end flex-wrap" style="margin-top:-12px">
+                  <span class="profile-avatar" style="width:92px;height:92px;font-size:30px;margin-top:-46px">مه</span>
+                  <div class="flex-1">
+                    <div class="d-flex items-center gap-3 flex-wrap">
+                      <h2 style="font-size:var(--fs-xl)">مهدی کریمی</h2>
+                      <span class="badge badge-primary">مدیر فروش</span>
+                      <span class="badge badge-success badge-dot">فعال</span>
+                    </div>
+                    <div class="fs-sm text-muted mt-1">عضو تیم از <span class="num">۱۴۰۲/۰۳/۱۵</span> — آخرین ورود: امروز ۰۸:۱۲</div>
+                  </div>
+                  <button class="btn btn-soft btn-sm"><span data-icon="image" data-icon-size="15"></span> تغییر تصویر</button>
+                </div>
+              </div>
+
+              <div class="tabs" data-tabs style="padding:0 8px">
+                <button class="tab is-active" data-tab="personal"><span data-icon="user-round" data-icon-size="16"></span> اطلاعات شخصی</button>
+                <button class="tab" data-tab="security"><span data-icon="shield" data-icon-size="16"></span> امنیت</button>
+                <button class="tab" data-tab="activity"><span data-icon="activity" data-icon-size="16"></span> فعالیت‌های من</button>
+              </div>
+
+              <div class="card-body" data-tab-panel="personal">
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">نام <span class="req">*</span></label>
+                    <input class="input" value="مهدی">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">نام خانوادگی <span class="req">*</span></label>
+                    <input class="input" value="کریمی">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">ایمیل سازمانی</label>
+                    <input class="input ltr" value="m.karimi@moderncrm.ir">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">تلفن همراه</label>
+                    <input class="input ltr" value="09121112233" data-fa-mask>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">عنوان شغلی</label>
+                    <input class="input" value="مدیر فروش">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">واحد سازمانی</label>
+                    <select class="select"><option>فروش و بازاریابی</option><option>پشتیبانی</option><option>مالی</option><option>فنی</option></select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">درباره من</label>
+                  <textarea class="textarea">مدیر فروش مدرن‌CRM — تمرکز روی توسعه بازار سازمانی و بهبود فرآیند قیف فروش.</textarea>
+                </div>
+                <div class="grid-2" style="margin-bottom:0">
+                  <label class="switch w-100 justify-between"><span class="lbl">نمایش ایمیل من برای اعضای تیم</span><input type="checkbox" checked><span class="track"></span></label>
+                  <label class="switch w-100 justify-between"><span class="lbl">نمایش وضعیت آنلاین بودن من</span><input type="checkbox" checked><span class="track"></span></label>
+                </div>
+              </div>
+
+              <div class="card-body d-none" data-tab-panel="security">
+                <div class="grid-2 mb-4">
+                  <div class="form-group" style="margin-bottom:0">
+                    <label class="form-label">رمز عبور</label>
+                    <input class="input" type="password" value="123456789012" readonly>
+                    <div class="form-hint"><span data-icon="clock" data-icon-size="13"></span> آخرین تغییر: ۴۲ روز پیش</div>
+                  </div>
+                  <div class="form-group" style="margin-bottom:0">
+                    <label class="form-label">ورود دومرحله‌ای (2FA)</label>
+                    <div class="panel d-flex items-center gap-3">
+                      <span class="stat-icon" style="width:40px;height:40px;background:var(--success-soft);color:var(--success)"><span data-icon="shield-check" data-icon-size="19"></span></span>
+                      <div class="flex-1"><div class="fw-600 fs-sm">فعال است</div><div class="fs-xs text-muted">اپلیکیشن احراز هویت (TOTP)</div></div>
+                      <button class="btn btn-sm">مدیریت</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="section-title" style="font-size:var(--fs-md)"><span data-icon="monitor" data-icon-size="16"></span> نشست‌های فعال</div>
+                <div class="table-wrap" style="border:1px solid var(--border);border-radius:var(--radius)">
+                  <table class="table table-compact">
+                    <thead><tr><th>دستگاه</th><th>مکان</th><th>آخرین فعالیت</th><th>وضعیت</th><th></th></tr></thead>
+                    <tbody>
+                      <tr><td class="cell-main">Chrome — Windows 10</td><td>تهران، ایران</td><td class="fs-sm text-muted">هم‌اکنون</td><td><span class="badge badge-success badge-dot">نشست فعلی</span></td><td></td></tr>
+                      <tr><td class="cell-main">Safari — iPhone 15</td><td>تهران، ایران</td><td class="fs-sm text-muted">۲ ساعت پیش</td><td><span class="badge badge-outline">فعال</span></td><td><button class="btn btn-ghost btn-sm" data-confirm="این نشست بسته شود؟">خروج</button></td></tr>
+                      <tr><td class="cell-main">Firefox — Ubuntu</td><td>کرج، ایران</td><td class="fs-sm text-muted">۴ روز پیش</td><td><span class="badge badge-outline">فعال</span></td><td><button class="btn btn-ghost btn-sm" data-confirm="این نشست بسته شود؟">خروج</button></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="card-body d-none" data-tab-panel="activity">
+                <div class="timeline">
+                  <div class="tl-item"><div class="d-flex items-center gap-2"><span class="fw-600 text-strong">ثبت یادداشت روی پرونده پارس‌نیکان</span><span class="tl-time ms-auto">امروز ۱۱:۰۵</span></div><div class="tl-body">پیشنهاد بسته ترکیبی لایسنس + آموزش</div></div>
+                  <div class="tl-item"><div class="d-flex items-center gap-2"><span class="fw-600 text-strong">برنده شدن معامله D-2209</span><span class="tl-time ms-auto">امروز ۰۹:۳۰</span></div><div class="tl-body">ارزش ۴۲۰ میلیون تومان — گروه صنعتی البرز</div></div>
+                  <div class="tl-item"><div class="d-flex items-center gap-2"><span class="fw-600 text-strong">تماس با مریم رضایی</span><span class="tl-time ms-auto">امروز ۱۰:۲۴</span></div><div class="tl-body">مدت مکالمه ۶ دقیقه</div></div>
+                  <div class="tl-item muted"><div class="d-flex items-center gap-2"><span class="fw-600 text-strong">ورود به سیستم</span><span class="tl-time ms-auto">امروز ۰۸:۱۲</span></div><div class="tl-body">Chrome — Windows 10 — IP 192.168.1.24</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================ ستون کنار ============================ -->
+          <div class="d-flex flex-col gap-4">
+            <div class="card" data-win="me-kpi" data-win-title="عملکرد من این ماه" data-win-icon="gauge" data-win-size="760x680">
+              <div class="card-head tight"><div class="card-title" data-icon="gauge" data-icon-size="17"> عملکرد من در مهر</div></div>
+              <div class="card-body tight">
+                <div class="d-flex justify-center mb-3">
+                  <div class="donut-svg" style="width:140px;height:140px" data-chart="radial" data-values="104" data-label="تحقق هدف فروش"></div>
+                </div>
+                <div class="stat-inline"><span class="text-muted fs-sm">فروش این ماه</span><span class="fw-700">۱٫۲ میلیارد</span></div>
+                <div class="stat-inline"><span class="text-muted fs-sm">معاملات بسته‌شده</span><span class="fw-700">۱۸ مورد</span></div>
+                <div class="stat-inline"><span class="text-muted fs-sm">تماس‌های انجام‌شده</span><span class="fw-700">۲۱۰ مورد</span></div>
+                <div class="stat-inline"><span class="text-muted fs-sm">میانگین امتیاز رضایت</span><span class="fw-700">۴٫۸ از ۵</span></div>
+              </div>
+            </div>
+
+            <div class="card" data-win="me-goals" data-win-title="اهداف من" data-win-icon="target" data-win-size="760x620">
+              <div class="card-head tight"><div class="card-title" data-icon="target" data-icon-size="17"> اهداف سه‌ماهه</div></div>
+              <div class="card-body tight">
+                <div class="mb-3">
+                  <div class="d-flex items-center justify-between mb-1"><span class="fs-sm">فروش کل</span><span class="fs-xs fw-600 num">۱۰۴٪</span></div>
+                  <div class="progress sm"><i style="width:100%"></i></div>
+                </div>
+                <div class="mb-3">
+                  <div class="d-flex items-center justify-between mb-1"><span class="fs-sm">مشتریان جدید</span><span class="fs-xs fw-600 num">۷۸٪</span></div>
+                  <div class="progress sm warn"><i style="width:78%"></i></div>
+                </div>
+                <div>
+                  <div class="d-flex items-center justify-between mb-1"><span class="fs-sm">رضایت مشتریان</span><span class="fs-xs fw-600 num">۹۶٪</span></div>
+                  <div class="progress sm"><i style="width:96%"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" data-win="me-badges" data-win-title="نشان‌ها" data-win-icon="award" data-win-size="760x560">
+              <div class="card-head tight"><div class="card-title" data-icon="award" data-icon-size="17"> نشان‌های من</div></div>
+              <div class="card-body tight d-flex gap-2 flex-wrap">
+                <span class="badge badge-warning badge-lg"><span data-icon="award" data-icon-size="14"></span> فروشنده برتر مهر</span>
+                <span class="badge badge-primary badge-lg"><span data-icon="zap" data-icon-size="14"></span> پاسخ‌دهی سریع</span>
+                <span class="badge badge-info badge-lg"><span data-icon="users" data-icon-size="14"></span> ۱۰۰ مشتری وفادار</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  CRM.$$('[data-demo-save]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      CRM.toast({ type: 'success', title: 'پروفایل ذخیره شد', msg: 'تغییرات شما با موفقیت اعمال شد.' });
+    });
+  });
+})();
+</script>
+</body>
+</html>

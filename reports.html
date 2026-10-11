@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گزارش‌ها و تحلیل | مدرن‌CRM</title>
+<meta name="description" content="گزارش‌های تحلیلی فروش، مشتریان، پشتیبانی و عملکرد تیم">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="app" data-page="reports">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">گزارش‌ها</span>
+            </div>
+            <h1 class="page-title">گزارش‌ها و تحلیل داده‌ها</h1>
+            <p class="page-desc">بازه گزارش: ۱ فروردین تا ۳۰ مهر ۱۴۰۴ — ۲۱۰ روز</p>
+          </div>
+          <div class="head-actions">
+            <div class="input-wrap" style="width:230px">
+              <span class="icon lead" data-icon="calendar" data-icon-size="16"></span>
+              <input class="input input-sm num" value="۱۴۰۴/۰۱/۰۱ تا ۱۴۰۴/۰۷/۳۰" readonly>
+            </div>
+            <div class="dropdown">
+              <button class="btn" data-dropdown-toggle><span data-icon="download" data-icon-size="16"></span> خروجی گزارش <span data-icon="chevron-down" data-icon-size="14"></span></button>
+              <div class="dropdown-menu">
+                <button class="dropdown-item"><span data-icon="table" data-icon-size="16"></span> Excel</button>
+                <button class="dropdown-item"><span data-icon="file" data-icon-size="16"></span> CSV</button>
+                <button class="dropdown-item" data-print><span data-icon="printer" data-icon-size="16"></span> چاپ / PDF</button>
+              </div>
+            </div>
+            <button class="btn btn-primary"><span data-icon="refresh" data-icon-size="16"></span> به‌روزرسانی</button>
+          </div>
+        </div>
+
+        <!-- ============================= شاخص‌ها ============================= -->
+        <div class="grid-4 mb-5">
+          <div class="card card-accent" data-win="r-rev" data-win-title="درآمد کل دوره" data-win-icon="wallet" data-win-size="760x540">
+            <div class="card-body tight">
+              <div class="d-flex items-center justify-between">
+                <span class="stat-label">درآمد کل دوره</span><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۱۴٪</span>
+              </div>
+              <div class="stat-value num mt-2">۳٫۸۴ <small>میلیارد تومان</small></div>
+              <div class="chart spark mt-2" data-chart="spark" data-values="30,34,29,41,38,45,44,50,48" style="width:100%;height:34px"></div>
+            </div>
+          </div>
+          <div class="card card-accent" data-win="r-cust" data-win-title="مشتریان جدید" data-win-icon="user-plus" data-win-size="760x540">
+            <div class="card-body tight">
+              <div class="d-flex items-center justify-between">
+                <span class="stat-label">مشتریان جدید</span><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۹٪</span>
+              </div>
+              <div class="stat-value num mt-2">۳۳۸ <small>نفر</small></div>
+              <div class="chart spark mt-2" data-chart="spark" data-values="12,18,22,26,24,31,38,42,36" data-color="var(--c3)" style="width:100%;height:34px"></div>
+            </div>
+          </div>
+          <div class="card card-accent" data-win="r-ticket" data-win-title="تیکت‌های بسته‌شده" data-win-icon="tickets" data-win-size="760x540">
+            <div class="card-body tight">
+              <div class="d-flex items-center justify-between">
+                <span class="stat-label">تیکت‌های بسته‌شده</span><span class="trend down"><span data-icon="arrow-down-right" data-icon-size="14"></span> ۴٪</span>
+              </div>
+              <div class="stat-value num mt-2">۴۱۲ <small>تیکت</small></div>
+              <div class="chart spark mt-2" data-chart="spark" data-values="40,44,38,42,36,39,34,32,30" data-color="var(--c5)" style="width:100%;height:34px"></div>
+            </div>
+          </div>
+          <div class="card card-accent" data-win="r-csat" data-win-title="رضایت مشتریان" data-win-icon="star" data-win-size="760x540">
+            <div class="card-body tight">
+              <div class="d-flex items-center justify-between">
+                <span class="stat-label">رضایت مشتریان (CSAT)</span><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۲٪</span>
+              </div>
+              <div class="stat-value num mt-2">۴٫۶ <small>از ۵</small></div>
+              <div class="chart spark mt-2" data-chart="spark" data-values="41,43,44,42,45,46,44,47,46" data-color="var(--c4)" style="width:100%;height:34px"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================= نمودارها ============================= -->
+        <div class="grid-2-1 mb-5">
+          <div class="card" data-win="r-main-chart" data-win-title="تحلیل درآمد و سود" data-win-sub="۹ ماه اخیر" data-win-icon="chart-line" data-win-size="1140x620">
+            <div class="card-head">
+              <div>
+                <div class="card-title" data-icon="chart-line" data-icon-size="18"> تحلیل درآمد و سود</div>
+                <div class="card-sub">درآمد (خط سبز) در مقابل هزینه جذب مشتری (خط‌چین آبی)</div>
+              </div>
+              <div class="card-actions">
+                <div class="segmented" data-segmented>
+                  <button class="seg is-active">ماهانه</button><button class="seg">فصلی</button><button class="seg">سالانه</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart h-280" data-chart="line"
+                   data-values="310,342,298,415,388,452,441,506,486"
+                   data-values2="120,131,118,150,142,160,155,178,168"
+                   data-labels="فروردین,اردیبهشت,خرداد,تیر,مرداد,شهریور,مهر,آبان,آذر"></div>
+            </div>
+            <div class="card-foot">
+              <span class="fs-sm text-muted">حاشیه سود میانگین:</span>
+              <span class="badge badge-success">۵۴٪</span>
+              <span class="fs-sm text-muted ms-auto">هزینه جذب هر مشتری (CAC):</span>
+              <span class="fw-700 num">۴٫۲ میلیون تومان</span>
+            </div>
+          </div>
+
+          <div class="card" data-win="r-source" data-win-title="منابع جذب" data-win-icon="chart-pie" data-win-size="760x620">
+            <div class="card-head tight"><div class="card-title" data-icon="chart-pie" data-icon-size="17"> منابع جذب مشتریان</div></div>
+            <div class="card-body tight">
+              <div class="donut-wrap">
+                <div data-chart="donut" data-values="142,88,61,47" data-center="۳۳۸" data-center-sub="مشتری"
+                     data-labels="معرفی مشتریان,تبلیغات آنلاین,نمایشگاه و رویداد,تماس سرد"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-3 mb-5">
+          <div class="card" data-win="r-products" data-win-title="پرفروش‌ترین کالاها" data-win-icon="chart-column" data-win-size="860x600">
+            <div class="card-head tight"><div class="card-title" data-icon="chart-column" data-icon-size="17"> پرفروش‌ترین کالاها</div></div>
+            <div class="card-body tight">
+              <div class="chart h-200" data-chart="bar"
+                   data-values="128,96,74,63,41"
+                   data-labels="لایسنس,هندزفری,انبار,پشتیبانی,آموزش"></div>
+            </div>
+          </div>
+          <div class="card" data-win="r-agents" data-win-title="عملکرد کارشناسان فروش" data-win-icon="users" data-win-size="900x640">
+            <div class="card-head tight"><div class="card-title" data-icon="users" data-icon-size="17"> عملکرد کارشناسان فروش</div></div>
+            <div class="card-body tight flush">
+              <div class="table-wrap">
+                <table class="table table-compact">
+                  <thead><tr><th>کارشناس</th><th class="num">فروش</th><th>تحقق هدف</th></tr></thead>
+                  <tbody>
+                    <tr><td class="cell-main">مهدی کریمی</td><td class="num">۱٫۲ میلیارد</td><td><div class="d-flex items-center gap-2"><div class="progress sm" style="width:70px"><i style="width:104%"></i></div><span class="fs-xs num">۱۰۴٪</span></div></td></tr>
+                    <tr><td class="cell-main">نیما عباسی</td><td class="num">۹۸۰ میلیون</td><td><div class="d-flex items-center gap-2"><div class="progress sm" style="width:70px"><i style="width:92%"></i></div><span class="fs-xs num">۹۲٪</span></div></td></tr>
+                    <tr><td class="cell-main">سمیرا رحیمی</td><td class="num">۷۴۰ میلیون</td><td><div class="d-flex items-center gap-2"><div class="progress sm warn" style="width:70px"><i style="width:78%"></i></div><span class="fs-xs num">۷۸٪</span></div></td></tr>
+                    <tr><td class="cell-main">رضا پورمند</td><td class="num">۵۱۰ میلیون</td><td><div class="d-flex items-center gap-2"><div class="progress sm danger" style="width:70px"><i style="width:56%"></i></div><span class="fs-xs num">۵۶٪</span></div></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="card" data-win="r-target" data-win-title="تحقق اهداف" data-win-icon="target" data-win-size="760x600">
+            <div class="card-head tight"><div class="card-title" data-icon="target" data-icon-size="17"> تحقق اهداف سالانه</div></div>
+            <div class="card-body tight">
+              <div class="d-flex gap-4 items-center flex-wrap justify-center">
+                <div class="donut-svg" style="width:140px;height:140px" data-chart="radial" data-values="86" data-label="درآمد"></div>
+                <div class="donut-svg" style="width:140px;height:140px" data-chart="radial" data-values="72" data-color="var(--c3)" data-label="مشتریان"></div>
+              </div>
+              <div class="alert alert-info mt-4">
+                <span data-icon="sparkles" data-icon-size="18"></span>
+                <div><div class="alert-title">پیش‌بینی هوشمند</div>
+                <div class="alert-desc">با روند فعلی، تا پایان سال به ۹۴٪ هدف درآمدی خواهید رسید.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title" data-icon="table" data-icon-size="18"> جدول تفصیلی گزارش ماهانه</div>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-soft"><span data-icon="download" data-icon-size="15"></span> خروجی CSV</button>
+            </div>
+          </div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table" id="tblReport">
+                <thead>
+                  <tr>
+                    <th class="sortable"><span class="th-in">ماه</span></th>
+                    <th class="sortable num"><span class="th-in">درآمد (میلیون)</span></th>
+                    <th class="sortable num"><span class="th-in">مشتری جدید</span></th>
+                    <th class="sortable num"><span class="th-in">معاملات</span></th>
+                    <th class="sortable num"><span class="th-in">نرخ تبدیل</span></th>
+                    <th class="sortable num"><span class="th-in">تیکت‌ها</span></th>
+                    <th>روند</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="cell-main">فروردین</td><td class="num">۳۱۰</td><td class="num">۲۸</td><td class="num">۳۴</td><td class="num">۳۱٪</td><td class="num">۵۲</td><td><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="15"></span></span></td></tr>
+                  <tr><td class="cell-main">اردیبهشت</td><td class="num">۳۴۲</td><td class="num">۳۱</td><td class="num">۳۸</td><td class="num">۳۳٪</td><td class="num">۴۸</td><td><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="15"></span></span></td></tr>
+                  <tr><td class="cell-main">خرداد</td><td class="num">۲۹۸</td><td class="num">۲۶</td><td class="num">۲۹</td><td class="num">۲۹٪</td><td class="num">۴۴</td><td><span class="trend down"><span data-icon="arrow-down-right" data-icon-size="15"></span></span></td></tr>
+                  <tr><td class="cell-main">تیر</td><td class="num">۴۱۵</td><td class="num">۳۹</td><td class="num">۴۷</td><td class="num">۳۵٪</td><td class="num">۵۹</td><td><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="15"></span></span></td></tr>
+                  <tr><td class="cell-main">مرداد</td><td class="num">۳۸۸</td><td class="num">۳۴</td><td class="num">۴۱</td><td class="num">۳۲٪</td><td class="num">۵۱</td><td><span class="trend down"><span data-icon="arrow-down-right" data-icon-size="15"></span></span></td></tr>
+                  <tr><td class="cell-main">شهریور</td><td class="num">۴۵۲</td><td class="num">۴۲</td><td class="num">۵۳</td><td class="num">۳۶٪</td><td class="num">۶۰</td><td><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="15"></span></span></td></tr>
+                  <tr><td class="cell-main">مهر</td><td class="num">۴۸۶</td><td class="num">۴۶</td><td class="num">۵۸</td><td class="num">۳۸٪</td><td class="num">۵۷</td><td><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="15"></span></span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+</body>
+</html>

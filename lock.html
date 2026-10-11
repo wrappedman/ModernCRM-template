@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قفل صفحه | مدرن‌CRM</title>
+<meta name="description" content="صفحه قفل — برای ادامه رمز عبور خود را وارد کنید">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body data-shell="none" data-page="lock" style="background:linear-gradient(150deg,#04241c 0%,#064e3b 45%,#0f766e 100%);overflow:hidden" data-win-auto="off">
+
+<!-- پس‌زمینه تزئینی -->
+<div style="position:fixed;inset:0;pointer-events:none">
+  <div style="position:absolute;inset-inline-end:-140px;top:-160px;width:460px;height:460px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
+  <div style="position:absolute;inset-inline-start:-120px;bottom:-180px;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.05)"></div>
+</div>
+
+<div style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 18px">
+
+  <div class="d-flex items-center gap-3 mb-6" style="color:#fff">
+    <span style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.16);display:grid;place-items:center" data-icon="sparkles" data-icon-size="22"></span>
+    <div>
+      <div style="font-size:18px;font-weight:700">مدرن‌CRM</div>
+      <div style="font-size:11px;opacity:.8">سامانه مدیریت ارتباط با مشتری</div>
+    </div>
+    <button class="tb-icon" style="color:rgba(255,255,255,.85)" data-theme-toggle aria-label="تغییر تم" data-icon-size="19"></button>
+  </div>
+
+  <div class="card" style="width:100%;max-width:420px;background:var(--glass);backdrop-filter:var(--blur)">
+    <div class="card-body text-center" style="padding:28px">
+      <div style="position:relative;width:104px;margin:0 auto 14px">
+        <span class="avatar" style="--size:96px;font-size:34px;background:var(--brand-soft);color:var(--brand)">مه</span>
+        <span style="position:absolute;bottom:4px;inset-inline-end:4px;width:26px;height:26px;border-radius:50%;background:var(--surface);display:grid;place-items:center;box-shadow:var(--shadow-sm)">
+          <span data-icon="lock" data-icon-size="14"></span>
+        </span>
+      </div>
+      <div class="fw-700" style="font-size:var(--fs-lg)">مهدی کریمی</div>
+      <div class="fs-sm text-muted">مدیر فروش — m.karimi@moderncrm.ir</div>
+
+      <form data-demo-form="ورود مجدد انجام شد." id="lockForm" class="mt-5">
+        <div class="input-wrap mb-3">
+          <span class="icon lead" data-icon="key" data-icon-size="17"></span>
+          <input class="input input-lg ltr" id="lp" type="password" required placeholder="رمز عبور خود را وارد کنید" autofocus>
+          <button type="button" class="icon trail" data-password-toggle data-icon="eye" data-icon-size="18" aria-label="نمایش رمز"></button>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg btn-block"><span data-icon="unlock" data-icon-size="18"></span> باز کردن قفل</button>
+      </form>
+
+      <div class="d-flex items-center justify-between mt-4 fs-sm">
+        <a href="forgot-password.html">رمز را فراموش کرده‌ام</a>
+        <a href="login.html" class="text-muted">تغییر کاربر</a>
+      </div>
+    </div>
+
+    <div class="card-foot" style="justify-content:center;gap:18px">
+      <span class="fs-xs text-soft d-flex items-center gap-2"><span data-icon="clock" data-icon-size="14"></span> قفل‌شده از <span class="num" id="lockTime">—</span></span>
+      <span class="fs-xs text-soft d-flex items-center gap-2"><span data-icon="shield-check" data-icon-size="14"></span> نشست امن</span>
+    </div>
+  </div>
+
+  <div class="d-flex gap-4 mt-5" style="color:rgba(255,255,255,.75);font-size:12.5px">
+    <a href="dashboard.html" style="color:#fff">بازگشت بدون رمز (نسخه نمایشی)</a>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var now = new Date();
+  CRM.$('#lockTime').textContent = CRM.fa(('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2));
+
+  CRM.$('#lockForm').addEventListener('submit', function () {
+    setTimeout(function () { window.location.href = 'dashboard.html'; }, 800);
+  });
+
+  /* قفل صفحه در حالت واقعی: تشخیص بی‌کاری */
+  var idle;
+  function reset() { clearTimeout(idle); idle = setTimeout(function () { CRM.toast({ type: 'info', title: 'به دلیل بی‌کاری' , msg: 'در نسخه واقعی صفحه قفل می‌شود.' }); }, 120000); }
+  ['click', 'keydown', 'mousemove'].forEach(function (e) { document.addEventListener(e, reset); });
+  reset();
+})();
+</script>
+</body>
+</html>

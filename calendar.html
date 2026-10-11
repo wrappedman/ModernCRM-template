@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تقویم | مدرن‌CRM</title>
+<meta name="description" content="تقویم شمسی رویدادها، جلسات و پیگیری‌های فروش">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="app" data-page="calendar">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">تقویم</span>
+            </div>
+            <h1 class="page-title">تقویم شمسی رویدادها</h1>
+            <p class="page-desc">جلسات، پیگیری‌ها و سررسیدهای تیم فروش و پشتیبانی</p>
+          </div>
+          <div class="head-actions">
+            <div class="segmented" data-segmented>
+              <button class="seg is-active">ماه</button><button class="seg">هفته</button><button class="seg">روز</button>
+            </div>
+            <button class="btn" id="todayBtn"><span data-icon="target" data-icon-size="16"></span> امروز</button>
+            <button class="btn btn-primary" data-modal-open="#modalEvent"><span data-icon="plus" data-icon-size="16"></span> رویداد جدید</button>
+          </div>
+        </div>
+
+        <div class="grid-1-2 gap-5" style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
+
+          <!-- ============================ تقویم ============================ -->
+          <div class="card flex-1" style="min-width:320px;flex:2 1 620px" data-win="cal-main" data-win-title="تقویم ماه" data-win-icon="calendar" data-win-size="1180x760">
+            <div class="card-head">
+              <div class="d-flex items-center gap-3">
+                <button class="tb-icon" id="prevMonth" data-tip="ماه قبل" data-icon="chevron-right" data-icon-size="18"></button>
+                <div class="card-title" style="min-width:170px;text-align:center" id="calTitle">—</div>
+                <button class="tb-icon" id="nextMonth" data-tip="ماه بعد" data-icon="chevron-left" data-icon-size="18"></button>
+              </div>
+              <div class="card-actions">
+                <span class="badge badge-primary"><span data-icon="calendar" data-icon-size="13"></span> تقویم جلالی</span>
+              </div>
+            </div>
+            <div class="card-body" style="padding:14px">
+              <div class="cal-head" id="calHead"></div>
+              <div class="cal" id="calGrid"></div>
+            </div>
+            <div class="card-foot flex-wrap" style="gap:14px">
+              <span class="d-flex items-center gap-2 fs-sm text-muted"><i style="width:12px;height:12px;border-radius:3px;background:var(--brand);display:block"></i> جلسه فروش</span>
+              <span class="d-flex items-center gap-2 fs-sm text-muted"><i style="width:12px;height:12px;border-radius:3px;background:var(--c3);display:block"></i> پشتیبانی</span>
+              <span class="d-flex items-center gap-2 fs-sm text-muted"><i style="width:12px;height:12px;border-radius:3px;background:var(--c5);display:block"></i> یادآوری پرداخت</span>
+              <span class="d-flex items-center gap-2 fs-sm text-muted"><i style="width:12px;height:12px;border-radius:3px;background:var(--c6);display:block"></i> فوری</span>
+            </div>
+          </div>
+
+          <!-- ============================ ستون کنار ============================ -->
+          <div class="d-flex flex-col gap-4" style="flex:1 1 330px;min-width:300px">
+            <div class="card" data-win="cal-day" data-win-title="رویدادهای امروز" data-win-icon="calendar" data-win-size="720x620">
+              <div class="card-head tight">
+                <div class="card-title" data-icon="clock" data-icon-size="17"> <span id="sideDayTitle">رویدادهای امروز</span></div>
+                <div class="card-actions"><span class="badge gray" id="sideDayCount">۰</span></div>
+              </div>
+              <div class="card-body tight" id="dayEvents"></div>
+            </div>
+
+            <div class="card" data-win="cal-agenda" data-win-title="دستور جلسات" data-win-icon="list-checks" data-win-size="760x700">
+              <div class="card-head tight"><div class="card-title" data-icon="list-checks" data-icon-size="17"> دستور جلسات همین هفته</div></div>
+              <div class="card-body flush">
+                <div class="list">
+                  <div class="list-item">
+                    <span class="avatar avatar-sm avatar-sq" style="background:var(--brand-soft);color:var(--brand)"><span data-icon="users" data-icon-size="15"></span></span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">جلسه ارائه محصول — گروه البرز</span><span class="li-sub">فردا ۱۰:۰۰ — آنلاین</span></span>
+                    <span class="dot-status online"></span>
+                  </div>
+                  <div class="list-item">
+                    <span class="avatar avatar-sm avatar-sq" style="background:var(--info-soft);color:var(--info)"><span data-icon="phone" data-icon-size="15"></span></span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">تماس پیگیری پیش‌فاکتور — پارس‌نیکان</span><span class="li-sub">پنج‌شنبه ۱۱:۳۰</span></span>
+                    <span class="badge badge-warning">مهم</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="avatar avatar-sm avatar-sq" style="background:var(--warning-soft);color:var(--warning)"><span data-icon="invoice" data-icon-size="15"></span></span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">سررسید فاکتور ۱۴۰۴-۰۵۲۰</span><span class="li-sub">۱۴۰۴/۰۷/۳۰</span></span>
+                    <span class="badge badge-danger">پرداخت</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" data-win="cal-team" data-win-title="تقویم تیم" data-win-icon="users" data-win-size="760x620">
+              <div class="card-head tight"><div class="card-title" data-icon="users" data-icon-size="17"> وضعیت امروز تیم</div></div>
+              <div class="card-body tight">
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status online"></span> مهدی کریمی</span><span class="fs-xs text-success">در دسترس</span></div>
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status busy"></span> سمیرا رحیمی</span><span class="fs-xs text-warning">در جلسه</span></div>
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status online"></span> رضا پورمند</span><span class="fs-xs text-success">در دسترس</span></div>
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status offline"></span> نیما عباسی</span><span class="fs-xs text-muted">مرخصی</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="modalEvent" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">رویداد جدید</div><div class="modal-sub">جلسه، تماس یا یادآوری را ثبت کنید</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#modalEvent" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="رویداد در تقویم ثبت شد." data-close-modal="#modalEvent" data-reset-on-submit>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">عنوان رویداد <span class="req">*</span></label>
+          <input class="input" required placeholder="مثلاً جلسه ارائه دمو">
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">تاریخ</label>
+            <input class="input num" placeholder="۱۴۰۴/۰۸/۰۲">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ساعت</label>
+            <input class="input num" placeholder="۱۰:۳۰">
+          </div>
+          <div class="form-group">
+            <label class="form-label">نوع</label>
+            <select class="select"><option>جلسه فروش</option><option>پشتیبانی</option><option>یادآوری پرداخت</option><option>فوری</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">مشتری مرتبط</label>
+            <select class="select"><option>گروه صنعتی البرز</option><option>پارس‌نیکان</option><option>داده‌پرداز</option><option>بدون مشتری</option></select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">توضیحات</label>
+          <textarea class="textarea" placeholder="موضوع جلسه، لینک، شرکت‌کنندگان…"></textarea>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary">ثبت رویداد</button>
+        <button type="button" class="btn" data-modal-close="#modalEvent">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var today = CRM.todayJalali();
+  var view = { y: today.year, m: today.month };
+
+  /* رویدادهای نمونه بر اساس روز ماه جاری */
+  var EVENTS = [
+    { day: today.day,     title: 'جلسه تیم فروش', kind: '' },
+    { day: today.day + 1, title: 'تماس با گروه البرز', kind: 'info' },
+    { day: today.day + 3, title: 'سررسید فاکتور ۱۴۰۴-۰۵۲۰', kind: 'warn' },
+    { day: today.day + 6, title: 'دمو محصول — داده‌پرداز', kind: '' },
+    { day: today.day + 9, title: 'پشتیبانی فوری — پارس‌نیکان', kind: 'danger' },
+    { day: today.day - 2, title: 'ارسال پیش‌فاکتور', kind: 'info' },
+    { day: today.day - 5, title: 'بازبینی ماهانه', kind: 'warn' }
+  ];
+  function eventsOf(day) { return EVENTS.filter(function (e) { return e.day === day; }); }
+
+  function paintHead() {
+    CRM.$('#calHead').innerHTML = '<span>شنبه</span><span>یک‌شنبه</span><span>دوشنبه</span><span>سه‌شنبه</span><span>چهارشنبه</span><span>پنج‌شنبه</span><span>جمعه</span>';
+  }
+
+  function paintSide(day) {
+    var list = eventsOf(day);
+    CRM.$('#sideDayCount').textContent = CRM.fa(list.length);
+    CRM.$('#sideDayTitle').textContent = 'رویدادهای ' + (day === today.day && view.m === today.month ? 'امروز' : CRM.fa(day) + ' ' + CRM.JMonthNames[view.m - 1]);
+    CRM.$('#dayEvents').innerHTML = list.length
+      ? '<div class="list">' + list.map(function (e) {
+          return '<div class="list-item"><span class="avatar avatar-sm avatar-sq"><span data-icon="calendar" data-icon-size="15"></span></span>' +
+            '<span class="flex-1"><span class="li-title d-block fs-sm">' + CRM.esc(e.title) + '</span>' +
+            '<span class="li-sub">ساعت ۱۰:۰۰ — ۱ ساعت</span></span></div>';
+        }).join('') + '</div>'
+      : '<div class="empty"><div class="empty-ic" data-icon="calendar" data-icon-size="28"></div>' +
+        '<div class="empty-title fs-md">رویدادی ثبت نشده است</div>' +
+        '<div class="empty-desc fs-sm">برای این روز رویدادی وجود ندارد. یک رویداد جدید اضافه کنید.</div>' +
+        '<button class="btn btn-soft btn-sm mt-3" data-modal-open="#modalEvent">افزودن رویداد</button></div>';
+    CRM.renderIcons(CRM.$('#dayEvents'));
+  }
+
+  function paint() {
+    var grid = CRM.jalaliMonthGrid(view.y, view.m);
+    CRM.$('#calTitle').textContent = CRM.JMonthNames[view.m - 1] + ' ' + CRM.fa(view.y);
+    if (!grid.length) {
+      CRM.$('#calGrid').innerHTML = '<div class="empty" style="grid-column:span 7">' +
+        '<div class="empty-ic" data-icon="calendar" data-icon-size="28"></div>' +
+        '<div class="empty-title">این ماه در نسخه نمایشی بارگذاری نمی‌شود</div>' +
+        '<div class="empty-desc">برای مشاهده ماه‌های دیگر از دکمه «امروز» استفاده کنید.</div></div>';
+      CRM.renderIcons(CRM.$('#calGrid'));
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < grid[0].weekday; i++) html += '<div class="cal-cell muted"></div>';
+    grid.forEach(function (d) {
+      var evs = eventsOf(d.day).map(function (e) {
+        return '<span class="cal-ev ' + e.kind + '">' + CRM.esc(e.title) + '</span>';
+      }).join('');
+      html += '<div class="cal-cell' + (d.isToday ? ' today' : '') + '" data-day="' + d.day + '" role="button" tabindex="0">' +
+        '<span class="cal-daynum">' + CRM.fa(d.day) + '</span>' + evs + '</div>';
+    });
+    CRM.$('#calGrid').innerHTML = html;
+    paintSide(today.day);
+  }
+
+  CRM.$('#calGrid').addEventListener('click', function (e) {
+    var cell = e.target.closest('[data-day]');
+    if (!cell) return;
+    CRM.$$('.cal-cell').forEach(function (c) { c.style.outline = ''; });
+    cell.style.outline = '2px solid var(--brand)';
+    cell.style.outlineOffset = '-2px';
+    paintSide(+cell.getAttribute('data-day'));
+  });
+
+  CRM.$('#prevMonth').addEventListener('click', function () {
+    view.m--; if (view.m < 1) { view.m = 12; view.y--; } paint();
+  });
+  CRM.$('#nextMonth').addEventListener('click', function () {
+    view.m++; if (view.m > 12) { view.m = 1; view.y++; } paint();
+  });
+  CRM.$('#todayBtn').addEventListener('click', function () {
+    view = { y: today.year, m: today.month }; paint();
+    CRM.toast({ type: 'info', title: 'بازگشت به امروز', msg: CRM.jLong(new Date()), duration: 2600 });
+  });
+
+  paintHead();
+  paint();
+})();
+</script>
+</body>
+</html>

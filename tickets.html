@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تیکت‌های پشتیبانی | مدرن‌CRM</title>
+<meta name="description" content="مدیریت تیکت‌های پشتیبانی مشتریان">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="app" data-page="tickets">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">تیکت‌های پشتیبانی</span>
+            </div>
+            <h1 class="page-title">تیکت‌های پشتیبانی</h1>
+            <p class="page-desc">۵ تیکت — ۱ تیکت با اولویت فوری نیازمند پاسخ فوری است</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="kb.html"><span data-icon="book" data-icon-size="16"></span> پایگاه دانش</a>
+            <a class="btn btn-primary" href="ticket-new.html"><span data-icon="plus" data-icon-size="16"></span> ثبت تیکت جدید</a>
+          </div>
+        </div>
+
+        <div class="grid-4 mb-5">
+          <div class="card card-hover" data-win="t-open" data-win-title="تیکت‌های باز" data-win-icon="tickets" data-win-size="740x520">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon"><span data-icon="tickets" data-icon-size="22"></span></span>
+              <div><div class="stat-label">تیکت باز</div><div class="stat-value num">۵</div></div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="t-urgent" data-win-title="اولویت فوری" data-win-icon="shield-alert" data-win-size="740x520">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon rose"><span data-icon="shield-alert" data-icon-size="22"></span></span>
+              <div><div class="stat-label">اولویت فوری</div><div class="stat-value num text-danger">۱</div></div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="t-time" data-win-title="میانگین زمان پاسخ" data-win-icon="timer" data-win-size="740x520">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon sky"><span data-icon="timer" data-icon-size="22"></span></span>
+              <div><div class="stat-label">میانگین زمان پاسخ</div><div class="stat-value num">۲۲ <small class="fs-sm">دقیقه</small></div></div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="t-rate" data-win-title="نرخ حل در تماس اول" data-win-icon="badge-check" data-win-size="740x520">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon amber"><span data-icon="badge-check" data-icon-size="22"></span></span>
+              <div><div class="stat-label">حل در تماس اول</div><div class="stat-value num">۷۸٪</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <div class="card" data-win="t-list" data-win-title="فهرست تیکت‌ها" data-win-icon="tickets" data-win-size="1200x700">
+            <div class="card-head flex-wrap" style="gap:10px">
+              <div class="card-title" data-icon="tickets" data-icon-size="18"> فهرست تیکت‌ها</div>
+              <div class="card-actions flex-wrap" style="gap:8px">
+                <div class="input-wrap" style="width:210px">
+                  <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                  <input class="input input-sm" placeholder="جستجوی تیکت…" data-table-search="#tblTickets">
+                </div>
+                <select class="select select-sm" style="width:auto"><option>همه وضعیت‌ها</option><option>باز</option><option>در حال بررسی</option><option>پاسخ داده شد</option><option>بسته</option></select>
+              </div>
+            </div>
+            <div class="tabs px-3" data-tabs style="padding-inline:12px">
+              <button class="tab is-active" data-tab="all">همه <span class="badge gray">۵</span></button>
+              <button class="tab" data-tab="open">باز <span class="badge gray">۲</span></button>
+              <button class="tab" data-tab="progress">در حال بررسی <span class="badge gray">۱</span></button>
+              <button class="tab" data-tab="answered">پاسخ داده‌شده <span class="badge gray">۱</span></button>
+              <button class="tab" data-tab="closed">بسته‌شده <span class="badge gray">۱</span></button>
+            </div>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table" id="tblTickets">
+                  <thead>
+                    <tr>
+                      <th class="sortable"><span class="th-in">شماره / موضوع</span></th>
+                      <th class="sortable"><span class="th-in">مشتری</span></th>
+                      <th class="sortable"><span class="th-in">اولویت</span></th>
+                      <th class="sortable"><span class="th-in">وضعیت</span></th>
+                      <th class="sortable"><span class="th-in">کانال</span></th>
+                      <th class="sortable"><span class="th-in">مسئول</span></th>
+                      <th class="sortable"><span class="th-in">آخرین به‌روزرسانی</span></th>
+                      <th class="table-row-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="ticketsBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-col gap-4">
+            <div class="card" data-win="t-chart" data-win-title="تیکت‌ها بر اساس اولویت" data-win-icon="chart-column" data-win-size="760x560">
+              <div class="card-head tight"><div class="card-title" data-icon="chart-column" data-icon-size="17"> تیکت‌ها بر اساس اولویت</div></div>
+              <div class="card-body tight">
+                <div class="chart h-160" data-chart="bar" data-values="1,2,1,1" data-colors="var(--c6),var(--c5),var(--c3),var(--c4)" data-labels="فوری,بالا,عادی,پایین"></div>
+              </div>
+            </div>
+
+            <div class="card" data-win="t-sla" data-win-title="وضعیت SLA" data-win-icon="gauge" data-win-size="760x560">
+              <div class="card-head tight"><div class="card-title" data-icon="gauge" data-icon-size="17"> وضعیت SLA پاسخ‌دهی</div></div>
+              <div class="card-body tight">
+                <div class="donut-wrap">
+                  <div data-chart="radial" data-values="94" data-label="در محدوده SLA" style="width:150px;height:150px"></div>
+                  <div class="flex-1">
+                    <div class="stat-inline"><span class="text-muted">پاسخ به‌موقع</span><span class="fw-600 text-success">۹۴٪</span></div>
+                    <div class="stat-inline"><span class="text-muted">نقض SLA</span><span class="fw-600 text-danger">۶٪</span></div>
+                    <div class="stat-inline"><span class="text-muted">هدف ماه آینده</span><span class="fw-600">۹۸٪</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var PR = { urgent: 'فوری', high: 'بالا', normal: 'عادی', low: 'پایین' };
+  var ST = {
+    open:        { l: 'باز',            c: 'badge-info' },
+    in_progress: { l: 'در حال بررسی',   c: 'badge-violet' },
+    pending:     { l: 'در انتظار مشتری',c: 'badge-warning' },
+    answered:    { l: 'پاسخ داده شد',   c: 'badge-success' },
+    closed:      { l: 'بسته‌شده',       c: '' }
+  };
+  CRM.$('#ticketsBody').innerHTML = CRM.data.tickets.map(function (t) {
+    var st = ST[t.status];
+    return '<tr data-ticket-status="' + t.status + '">' +
+      '<td><div class="d-flex items-center gap-3"><span class="avatar avatar-sm avatar-sq">' + CRM.icon('ticket', 15) + '</span>' +
+        '<span style="min-width:0"><span class="cell-main d-block text-truncate">' + CRM.esc(t.subject) + '</span>' +
+        '<span class="cell-sub">' + CRM.esc(t.id) + '</span></span></div></td>' +
+      '<td>' + CRM.esc(t.customer) + '</td>' +
+      '<td><span class="priority ' + t.priority + '">' + PR[t.priority] + '</span></td>' +
+      '<td><span class="badge ' + st.c + ' badge-dot">' + st.l + '</span></td>' +
+      '<td><span class="badge badge-outline">' + CRM.esc(t.channel) + '</span></td>' +
+      '<td class="fs-sm">' + CRM.esc(t.agent) + '</td>' +
+      '<td class="fs-sm text-muted">' + CRM.esc(t.updated) + '</td>' +
+      '<td><span class="table-actions">' +
+        '<button class="tb-icon" style="width:30px;height:30px" data-tip="مشاهده و پاسخ" data-icon="eye" data-icon-size="16"></button>' +
+        '<button class="tb-icon" style="width:30px;height:30px" data-tip="بستن تیکت" data-icon="check-circle" data-icon-size="16"></button>' +
+      '</span></td>' +
+    '</tr>';
+  }).join('');
+
+  /* فیلتر زنده بر اساس تب‌های وضعیت */
+  var MAP = { all: null, open: ['open', 'pending'], progress: ['in_progress'], answered: ['answered'], closed: ['closed'] };
+  CRM.$$('[data-tabs] .tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var key = tab.getAttribute('data-tab');
+      var allow = MAP[key];
+      CRM.$$('#ticketsBody tr').forEach(function (tr) {
+        var ok = !allow || allow.indexOf(tr.getAttribute('data-ticket-status')) > -1;
+        tr.classList.toggle('d-none', !ok);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

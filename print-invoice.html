@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فاکتور فروش ۱۴۰۴-۰۵۲۱ | مدرن‌CRM</title>
+<meta name="description" content="پیش‌نمایش چاپ فاکتور فروش">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+  .sheet {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 34px 38px;
+  }
+  .sheet-head { display: flex; align-items: flex-start; gap: 18px; border-bottom: 2px solid var(--brand); padding-bottom: 16px; margin-bottom: 22px; }
+  .sheet-table th { background: var(--surface-2); }
+  .sheet-table td, .sheet-table th { padding: 10px 12px; border-bottom: 1px solid var(--border-muted); font-size: 13px; }
+  .stamp {
+    position: absolute; inset-inline-start: 40px; bottom: 30px;
+    width: 132px; height: 132px; border-radius: 50%;
+    border: 3px solid var(--brand); color: var(--brand);
+    display: grid; place-items: center; text-align: center;
+    font-weight: 700; transform: rotate(-12deg); opacity: .5;
+    font-size: 12.5px; line-height: 1.7;
+  }
+  @media print {
+    .no-print { display: none !important; }
+    .sheet { box-shadow: none; border: 0; padding: 0; max-width: 100%; }
+  }
+</style>
+</head>
+<body data-shell="none" data-page="print-invoice" style="background:var(--bg-soft);padding:26px 16px 60px" data-win-auto="off">
+
+<!-- نوار ابزار (در چاپ نمایش داده نمی‌شود) -->
+<div class="no-print" style="max-width:900px;margin:0 auto 18px">
+  <div class="card">
+    <div class="card-body tight d-flex flex-wrap items-center gap-3">
+      <a class="btn" href="invoices.html"><span data-icon="arrow-right" data-icon-size="16"></span> بازگشت به فاکتورها</a>
+      <div class="d-flex gap-2 flex-wrap ms-auto">
+        <button class="btn" data-tip="دانلود PDF"><span data-icon="download" data-icon-size="16"></span> دانلود PDF</button>
+        <button class="btn" data-tip="ارسال به مشتری"><span data-icon="send" data-icon-size="16"></span> ارسال</button>
+        <button class="btn btn-primary" data-print><span data-icon="printer" data-icon-size="16"></span> چاپ فاکتور</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== برگه فاکتور ============================== -->
+<div class="sheet" style="position:relative">
+
+  <div class="sheet-head">
+    <span class="brand-mark" data-icon="sparkles" data-icon-size="24"></span>
+    <div class="flex-1">
+      <div style="font-size:19px;font-weight:700">مدرن‌CRM</div>
+      <div class="fs-sm text-muted">شرکت نمونه فناوری اطلاعات پارس</div>
+      <div class="fs-xs text-muted mt-1">
+        شناسه ملی: <span class="num">۱۴۰۰۹۸۷۶۵۴۳</span> · تلفن: <span class="num">۰۲۱-۹۱۰۰۱۱۰۰</span> ·
+        نشانی: تهران، خیابان ولیعصر، برج نگین، طبقه ۱۲
+      </div>
+    </div>
+    <div class="text-left">
+      <div class="badge badge-primary badge-lg">فاکتور فروش کالا و خدمات</div>
+      <div class="fs-sm fw-700 mt-2 num">شماره: ۱۴۰۴-۰۵۲۱</div>
+      <div class="fs-xs text-muted num">تاریخ صدور: ۱۴۰۴/۰۷/۱۸</div>
+      <div class="fs-xs text-muted num">تاریخ سررسید: ۱۴۰۴/۰۸/۰۲</div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-4">
+    <div class="panel">
+      <div class="panel-title">خریدار</div>
+      <dl class="kv" style="grid-template-columns:110px 1fr;font-size:13px">
+        <dt>نام / شرکت</dt><dd class="fw-600">گروه صنعتی البرز</dd>
+        <dt>شناسه ملی</dt><dd class="num">۱۴۰۰۳۳۲۲۱۱۰</dd>
+        <dt>تلفن</dt><dd class="num">۰۹۱۲۴۴۴۵۵۶۶</dd>
+        <dt>نشانی</dt><dd>کرج، شهرک صنعتی بهارستان، خیابان ۱۲، واحد ۴</dd>
+      </dl>
+    </div>
+    <div class="panel">
+      <div class="panel-title">اطلاعات پرداخت</div>
+      <dl class="kv" style="grid-template-columns:110px 1fr;font-size:13px">
+        <dt>وضعیت فاکتور</dt><dd><span class="badge badge-success badge-dot">پرداخت شده</span></dd>
+        <dt>روش پرداخت</dt><dd>حواله بانکی</dd>
+        <dt>شماره پیگیری</dt><dd class="ltr">TRX-8842190</dd>
+        <dt>مهلت پرداخت</dt><dd class="num">۱۴ روز از تاریخ صدور</dd>
+      </dl>
+    </div>
+  </div>
+
+  <table class="sheet-table" style="width:100%;margin-bottom:18px">
+    <thead>
+      <tr>
+        <th style="width:44px">#</th>
+        <th>شرح کالا / خدمات</th>
+        <th style="width:90px">کد</th>
+        <th style="width:80px">تعداد</th>
+        <th style="width:130px">قیمت واحد (تومان)</th>
+        <th style="width:140px">مبلغ کل (تومان)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">۱</td><td>لایسنس سالانه CRM — نسخه سازمانی</td><td class="num">PRD-101</td><td class="num">۱</td><td class="num">۱۸۰٫۰۰۰٫۰۰۰</td><td class="num">۱۸۰٫۰۰۰٫۰۰۰</td></tr>
+      <tr><td class="num">۲</td><td>ماژول مدیریت انبار</td><td class="num">PRD-102</td><td class="num">۲</td><td class="num">۹۶٫۰۰۰٫۰۰۰</td><td class="num">۱۹۲٫۰۰۰٫۰۰۰</td></tr>
+      <tr><td class="num">۳</td><td>بسته آموزش حضوری تیم انبار (۲ روز)</td><td class="num">PRD-103</td><td class="num">۱</td><td class="num">۳۴٫۰۰۰٫۰۰۰</td><td class="num">۳۴٫۰۰۰٫۰۰۰</td></tr>
+      <tr><td class="num">۴</td><td>پشتیبانی طلایی — ۳ ماه</td><td class="num">PRD-104</td><td class="num">۱</td><td class="num">۲۴٫۰۰۰٫۰۰۰</td><td class="num">۲۴٫۰۰۰٫۰۰۰</td></tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-end">
+    <div style="min-width:340px">
+      <div class="stat-inline" style="padding:9px 4px"><span class="text-muted">جمع اقلام</span><span class="fw-600 num">۴۳۰٫۰۰۰٫۰۰۰</span></div>
+      <div class="stat-inline" style="padding:9px 4px"><span class="text-muted">تخفیف (۵٪)</span><span class="fw-600 num text-danger">− ۲۱٫۵۰۰٫۰۰۰</span></div>
+      <div class="stat-inline" style="padding:9px 4px"><span class="text-muted">مبلغ پس از تخفیف</span><span class="fw-600 num">۴۰۸٫۵۰۰٫۰۰۰</span></div>
+      <div class="stat-inline" style="padding:9px 4px"><span class="text-muted">مالیات بر ارزش افزوده (۹٪)</span><span class="fw-600 num">۳۶٫۷۶۵٫۰۰۰</span></div>
+      <div class="stat-inline" style="padding:12px 4px;border-top:2px solid var(--brand)">
+        <span class="fw-700">مبلغ قابل پرداخت</span>
+        <span class="fw-700 num text-brand" style="font-size:16px">۴۴۵٫۲۶۵٫۰۰۰ تومان</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-info mt-4" style="font-size:12.5px">
+    <span data-icon="info" data-icon-size="16"></span>
+    <div>
+      <div class="alert-title">به حروف</div>
+      <div class="alert-desc">چهارصد و چهل و پنج میلیون و دویست و شصت و پنج هزار تومان</div>
+    </div>
+  </div>
+
+  <div class="grid-2 mt-4" style="gap:24px">
+    <div class="panel" style="font-size:12.5px">
+      <div class="panel-title">اطلاعات بانکی فروشنده</div>
+      <div class="d-flex flex-col gap-1 text-muted">
+        <span>بانک ملت — شعبه ولیعصر</span>
+        <span class="ltr">IR120570028780010000000000</span>
+        <span>به نام شرکت نمونه فناوری اطلاعات پارس</span>
+      </div>
+    </div>
+    <div class="panel" style="font-size:12.5px">
+      <div class="panel-title">توضیحات</div>
+      <div class="text-muted" style="line-height:2">
+        این فاکتور به منزله سند رسمی معامله است. کالاها و خدمات ارائه‌شده شامل ۱۲ ماه پشتیبانی استاندارد می‌باشند.
+        در صورت نیاز به تغییر، حداکثر تا ۷ روز پس از صدور با واحد فروش تماس بگیرید.
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-6" style="gap:40px;font-size:12.5px;color:var(--text-muted)">
+    <div style="flex:1">
+      <div style="border-top:1px dashed var(--border-strong);padding-top:8px;text-align:center">مهر و امضای فروشنده</div>
+    </div>
+    <div style="flex:1">
+      <div style="border-top:1px dashed var(--border-strong);padding-top:8px;text-align:center">امضای خریدار</div>
+    </div>
+  </div>
+
+  <div class="stamp">
+    پرداخت شده<br>
+    <span class="num">۱۴۰۴/۰۷/۲۱</span><br>
+    مدرن‌CRM
+  </div>
+
+  <div class="text-center fs-2xs text-soft mt-5">
+    این فاکتور با سامانه مدرن‌CRM صادر شده است · شناسه یکتای فاکتور: <span class="ltr">INV-2025-000521</span> · مدرن‌crm.ir
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+</body>
+</html>

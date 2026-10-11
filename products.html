@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کالا و خدمات | مدرن‌CRM</title>
+<meta name="description" content="مدیریت کالا و خدمات با نمای کارتی و جدولی">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body class="app" data-page="products">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">کالا و خدمات</span>
+            </div>
+            <h1 class="page-title">فهرست کالا و خدمات</h1>
+            <p class="page-desc">۳ دسته‌بندی — ۶ کالا و خدمت فعال — ۳ قلم در آستانه اتمام موجودی</p>
+          </div>
+          <div class="head-actions">
+            <div class="btn-group">
+              <button class="btn is-active"><span data-icon="grid" data-icon-size="15"></span> کارتی</button>
+              <button class="btn"><span data-icon="table" data-icon-size="15"></span> جدولی</button>
+            </div>
+            <button class="btn btn-primary" data-modal-open="#modalProduct"><span data-icon="plus" data-icon-size="16"></span> کالا/خدمت جدید</button>
+          </div>
+        </div>
+
+        <!-- ============================ نوار جستجو ============================ -->
+        <div class="card mb-5">
+          <div class="card-body tight d-flex flex-wrap items-center gap-3">
+            <div class="input-wrap" style="min-width:260px;flex:1">
+              <span class="icon lead" data-icon="search" data-icon-size="17"></span>
+              <input class="input" placeholder="جستجو در نام کالا، کد یا دسته‌بندی…">
+            </div>
+            <div class="d-flex gap-2 flex-wrap" data-chip-group>
+              <button class="chip is-active">همه</button>
+              <button class="chip">نرم‌افزار</button>
+              <button class="chip">خدمات</button>
+              <button class="chip">سخت‌افزار</button>
+            </div>
+            <select class="select" style="width:auto"><option>مرتب‌سازی: پرفروش‌ترین</option><option>ارزان‌ترین</option><option>گران‌ترین</option><option>کم‌موجود</option></select>
+          </div>
+        </div>
+
+        <!-- ============================== کارت‌ها ============================== -->
+        <div class="grid-cards mb-5">
+          <div class="card card-hover widget" data-win="prd-101" data-win-title="لایسنس سالانه CRM" data-win-icon="package" data-win-size="760x560">
+            <div class="card-body">
+              <div class="d-flex items-start gap-3 mb-3">
+                <span class="stat-icon" style="width:54px;height:54px"><span data-icon="package" data-icon-size="24"></span></span>
+                <div class="flex-1">
+                  <div class="fw-700 text-strong">لایسنس سالانه CRM — سازمانی</div>
+                  <div class="fs-xs text-muted">کد کالا: PRD-101 · نرم‌افزار</div>
+                </div>
+                <span class="badge badge-success">موجود</span>
+              </div>
+              <div class="d-flex items-center gap-3 mb-3">
+                <div><div class="fs-xs text-muted">قیمت واحد</div><div class="fw-700 num">۱۸۰٫۰۰۰٫۰۰۰ تومان</div></div>
+                <div class="ms-auto text-left"><div class="fs-xs text-muted">فروش رفته</div><div class="fw-700 num">۱۲۸ مورد</div></div>
+              </div>
+              <div class="progress sm mb-4"><i style="width:86%"></i></div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-soft btn-sm flex-1"><span data-icon="pencil" data-icon-size="15"></span> ویرایش</button>
+                <button class="btn btn-sm" data-tip="افزودن به فاکتور" data-icon="invoice" data-icon-size="15"></button>
+                <button class="btn btn-sm" data-confirm="این کالا حذف شود؟" data-icon="trash" data-icon-size="15"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-hover widget" data-win="prd-102" data-win-title="ماژول مدیریت انبار" data-win-icon="boxes" data-win-size="760x560">
+            <div class="card-body">
+              <div class="d-flex items-start gap-3 mb-3">
+                <span class="stat-icon sky" style="width:54px;height:54px"><span data-icon="boxes" data-icon-size="24"></span></span>
+                <div class="flex-1">
+                  <div class="fw-700 text-strong">ماژول مدیریت انبار</div>
+                  <div class="fs-xs text-muted">کد کالا: PRD-102 · نرم‌افزار</div>
+                </div>
+                <span class="badge badge-success">موجود</span>
+              </div>
+              <div class="d-flex items-center gap-3 mb-3">
+                <div><div class="fs-xs text-muted">قیمت واحد</div><div class="fw-700 num">۹۶٫۰۰۰٫۰۰۰ تومان</div></div>
+                <div class="ms-auto text-left"><div class="fs-xs text-muted">فروش رفته</div><div class="fw-700 num">۷۴ مورد</div></div>
+              </div>
+              <div class="progress sm mb-4"><i style="width:64%"></i></div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-soft btn-sm flex-1"><span data-icon="pencil" data-icon-size="15"></span> ویرایش</button>
+                <button class="btn btn-sm" data-icon="invoice" data-icon-size="15"></button>
+                <button class="btn btn-sm" data-confirm="این کالا حذف شود؟" data-icon="trash" data-icon-size="15"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-hover widget" data-win="prd-103" data-win-title="بسته آموزش حضوری" data-win-icon="presentation" data-win-size="760x560">
+            <div class="card-body">
+              <div class="d-flex items-start gap-3 mb-3">
+                <span class="stat-icon violet" style="width:54px;height:54px"><span data-icon="presentation" data-icon-size="24"></span></span>
+                <div class="flex-1">
+                  <div class="fw-700 text-strong">بسته آموزش حضوری تیم فروش</div>
+                  <div class="fs-xs text-muted">کد کالا: PRD-103 · خدمات</div>
+                </div>
+                <span class="badge badge-warning">۱۲ ظرفیت</span>
+              </div>
+              <div class="d-flex items-center gap-3 mb-3">
+                <div><div class="fs-xs text-muted">قیمت هر دوره</div><div class="fw-700 num">۳۴٫۰۰۰٫۰۰۰ تومان</div></div>
+                <div class="ms-auto text-left"><div class="fs-xs text-muted">برگزارشده</div><div class="fw-700 num">۴۱ دوره</div></div>
+              </div>
+              <div class="progress sm mb-4"><i style="width:52%"></i></div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-soft btn-sm flex-1"><span data-icon="pencil" data-icon-size="15"></span> ویرایش</button>
+                <button class="btn btn-sm" data-icon="invoice" data-icon-size="15"></button>
+                <button class="btn btn-sm" data-confirm="این کالا حذف شود؟" data-icon="trash" data-icon-size="15"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-hover widget" data-win="prd-105" data-win-title="کارتخوان هوشمند" data-win-icon="credit-card" data-win-size="760x560">
+            <div class="card-body">
+              <div class="d-flex items-start gap-3 mb-3">
+                <span class="stat-icon amber" style="width:54px;height:54px"><span data-icon="credit-card" data-icon-size="24"></span></span>
+                <div class="flex-1">
+                  <div class="fw-700 text-strong">دستگاه کارتخوان هوشمند</div>
+                  <div class="fs-xs text-muted">کد کالا: PRD-105 · سخت‌افزار</div>
+                </div>
+                <span class="badge badge-warning">موجودی ۲۶</span>
+              </div>
+              <div class="d-flex items-center gap-3 mb-3">
+                <div><div class="fs-xs text-muted">قیمت واحد</div><div class="fw-700 num">۱۸٫۵۰۰٫۰۰۰ تومان</div></div>
+                <div class="ms-auto text-left"><div class="fs-xs text-muted">فروش رفته</div><div class="fw-700 num">۱۵۲ مورد</div></div>
+              </div>
+              <div class="progress sm warn mb-4"><i style="width:34%"></i></div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-soft btn-sm flex-1"><span data-icon="pencil" data-icon-size="15"></span> ویرایش</button>
+                <button class="btn btn-sm" data-icon="invoice" data-icon-size="15"></button>
+                <button class="btn btn-sm" data-confirm="این کالا حذف شود؟" data-icon="trash" data-icon-size="15"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-hover widget" data-win="prd-106" data-win-title="هندزفری اپراتور" data-win-icon="headphones" data-win-size="760x560">
+            <div class="card-body">
+              <div class="d-flex items-start gap-3 mb-3">
+                <span class="stat-icon rose" style="width:54px;height:54px"><span data-icon="headphones" data-icon-size="24"></span></span>
+                <div class="flex-1">
+                  <div class="fw-700 text-strong">هندزفری اپراتور حرفه‌ای</div>
+                  <div class="fs-xs text-muted">کد کالا: PRD-106 · سخت‌افزار</div>
+                </div>
+                <span class="badge badge-danger">۸ عدد</span>
+              </div>
+              <div class="d-flex items-center gap-3 mb-3">
+                <div><div class="fs-xs text-muted">قیمت واحد</div><div class="fw-700 num">۸٫۹۰۰٫۰۰۰ تومان</div></div>
+                <div class="ms-auto text-left"><div class="fs-xs text-muted">فروش رفته</div><div class="fw-700 num">۹۶ مورد</div></div>
+              </div>
+              <div class="progress sm danger mb-4"><i style="width:14%"></i></div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-soft btn-sm flex-1"><span data-icon="pencil" data-icon-size="15"></span> ویرایش</button>
+                <button class="btn btn-sm" data-icon="invoice" data-icon-size="15"></button>
+                <button class="btn btn-sm" data-confirm="این کالا حذف شود؟" data-icon="trash" data-icon-size="15"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-dashed card-hover" style="border-style:dashed;display:grid;place-items:center;min-height:250px;cursor:pointer" data-modal-open="#modalProduct">
+            <div class="text-center">
+              <span class="stat-icon" style="margin:0 auto 10px"><span data-icon="plus" data-icon-size="22"></span></span>
+              <div class="fw-600 text-strong">افزودن کالا یا خدمت جدید</div>
+              <div class="fs-sm text-muted">دسته‌بندی، قیمت و موجودی را تعیین کنید</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================== جدول ============================== -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title" data-icon="table" data-icon-size="18"> نمای جدولی کالاها</div>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-soft"><span data-icon="download" data-icon-size="15"></span> خروجی</button>
+            </div>
+          </div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="sortable"><span class="th-in">کد</span></th>
+                    <th class="sortable"><span class="th-in">نام کالا / خدمت</span></th>
+                    <th class="sortable"><span class="th-in">دسته</span></th>
+                    <th class="sortable num"><span class="th-in">قیمت واحد</span></th>
+                    <th class="sortable"><span class="th-in">موجودی</span></th>
+                    <th class="sortable"><span class="th-in">تعداد فروش</span></th>
+                    <th class="table-row-actions">عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="productsBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-foot">
+            <span>نمایش ۶ رکورد از ۶ کالا</span>
+            <div class="pagination ms-auto"><button disabled data-icon="chevron-right" data-icon-size="15"></button><button class="is-active">۱</button><button data-icon="chevron-left" data-icon-size="15"></button></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="modalProduct" style="display:none">
+  <div class="modal modal-lg" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">افزودن کالا یا خدمت</div><div class="modal-sub">اطلاعات پایه کالا را وارد کنید</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#modalProduct" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="کالا/خدمت جدید ذخیره شد." data-close-modal="#modalProduct" data-reset-on-submit>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div class="form-group" style="grid-column:span 2">
+            <label class="form-label">نام کالا یا خدمت <span class="req">*</span></label>
+            <input class="input" required placeholder="مثلاً ماژول گزارش‌ساز پیشرفته">
+          </div>
+          <div class="form-group">
+            <label class="form-label">کد کالا (SKU)</label>
+            <input class="input ltr" placeholder="PRD-107">
+          </div>
+          <div class="form-group">
+            <label class="form-label">دسته‌بندی</label>
+            <select class="select"><option>نرم‌افزار</option><option>خدمات</option><option>سخت‌افزار</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">قیمت واحد (تومان) <span class="req">*</span></label>
+            <input class="input num" required placeholder="۴۵٫۰۰۰٫۰۰۰">
+          </div>
+          <div class="form-group">
+            <label class="form-label">موجودی</label>
+            <input class="input num" placeholder="۱۰۰">
+          </div>
+          <div class="form-group" style="grid-column:span 2;margin-bottom:0">
+            <label class="form-label">توضیحات</label>
+            <textarea class="textarea" placeholder="ویژگی‌ها و شرایط فروش…"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary">ذخیره کالا</button>
+        <button type="button" class="btn" data-modal-close="#modalProduct">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  CRM.$('#productsBody').innerHTML = CRM.data.products.map(function (p) {
+    var low = p.stock !== '∞' && +p.stock < 10;
+    return '<tr>' +
+      '<td class="num fs-sm text-muted">' + CRM.esc(p.sku) + '</td>' +
+      '<td class="cell-main">' + CRM.esc(p.name) + '</td>' +
+      '<td><span class="badge">' + CRM.esc(p.cat) + '</span></td>' +
+      '<td class="num">' + CRM.num(p.price) + '</td>' +
+      '<td>' + (p.stock === '∞' ? '<span class="badge badge-success">نامحدود</span>' :
+        '<span class="badge ' + (low ? 'badge-danger' : 'badge-outline') + '">' + CRM.fa(p.stock) + ' عدد</span>') + '</td>' +
+      '<td class="num">' + CRM.num(p.sold) + '</td>' +
+      '<td><span class="table-actions">' +
+        '<button class="tb-icon" style="width:30px;height:30px" data-tip="ویرایش" data-modal-open="#modalProduct" data-icon="pencil" data-icon-size="16"></button>' +
+        '<button class="tb-icon" style="width:30px;height:30px" data-tip="حذف" data-confirm="کالای «' + CRM.esc(p.name) + '» حذف شود؟" data-icon="trash" data-icon-size="16"></button>' +
+      '</span></td>' +
+    '</tr>';
+  }).join('');
+})();
+</script>
+</body>
+</html>
