@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" data-theme="light">
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/layout.css">
-<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 </head>
 <body class="app" data-page="desktop" data-taskbar>
 <div class="app-shell" id="appShell">
@@ -238,7 +237,7 @@
   CRM.$('#miniCalTitle').textContent = CRM.JMonthNames[today.month - 1] + ' ' + CRM.fa(today.year);
   var firstWeekday = grid.length ? grid[0].weekday : 0;
   var html = '';
-  for (var i = 0; i < firstWeekday; i++) html += '<div class="cal-cell muted" style="min-height:34px"></div>';
+  for (var i = 0; i < firstWeekday; i++) html += '<div class="cal-cell muted" data-no-tip style="min-height:34px"></div>';
   grid.forEach(function (d) {
     var ev = (d.day % 7 === 0) ? '<i class="cal-ev" style="display:block"></i>' : '';
     html += '<div class="cal-cell' + (d.isToday ? ' today' : '') + '" style="min-height:34px;padding:4px">' +

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" data-theme="light">
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,28 +10,26 @@
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/layout.css">
-<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 </head>
-<body data-shell="none" data-page="lock" style="background:linear-gradient(150deg,#101114 0%,#20243a 45%,#3f6bc9 100%);overflow:hidden" data-win-auto="off">
+<body data-shell="none" data-page="lock" style="background:linear-gradient(150deg,#f4f7fd 0%,#e6edfb 45%,#dbe6fb 100%);overflow:hidden" data-win-auto="off">
 
 <!-- پس‌زمینه تزئینی -->
 <div style="position:fixed;inset:0;pointer-events:none">
-  <div style="position:absolute;inset-inline-end:-140px;top:-160px;width:460px;height:460px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
-  <div style="position:absolute;inset-inline-start:-120px;bottom:-180px;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.05)"></div>
+  <div style="position:absolute;inset-inline-end:-140px;top:-160px;width:460px;height:460px;border-radius:50%;background:rgba(85,131,224,.10)"></div>
+  <div style="position:absolute;inset-inline-start:-120px;bottom:-180px;width:420px;height:420px;border-radius:50%;background:rgba(232,105,95,.07)"></div>
 </div>
 
 <div style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 18px">
 
-  <div class="d-flex items-center gap-3 mb-6" style="color:#fff">
-    <span style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.16);display:grid;place-items:center" data-icon="sparkles" data-icon-size="22"></span>
+  <div class="d-flex items-center gap-3 mb-6" style="color:var(--text-strong)">
+    <span class="brand-mark" style="width:42px;height:42px;border-radius:12px" data-icon="sparkles" data-icon-size="22"></span>
     <div>
       <div style="font-size:18px;font-weight:700">مدرن‌CRM</div>
       <div style="font-size:11px;opacity:.8">سامانه مدیریت ارتباط با مشتری</div>
     </div>
-    <button class="tb-icon" style="color:rgba(255,255,255,.85)" data-theme-toggle aria-label="تغییر تم" data-icon-size="19"></button>
   </div>
 
-  <div class="card" style="width:100%;max-width:420px;background:var(--glass);backdrop-filter:var(--blur)">
+  <div class="card" style="width:100%;max-width:420px;background:var(--surface)">
     <div class="card-body text-center" style="padding:28px">
       <div style="position:relative;width:104px;margin:0 auto 14px">
         <span class="avatar" style="--size:96px;font-size:34px;background:var(--brand-soft);color:var(--brand)">مه</span>
@@ -63,8 +61,8 @@
     </div>
   </div>
 
-  <div class="d-flex gap-4 mt-5" style="color:rgba(255,255,255,.75);font-size:12.5px">
-    <a href="dashboard.html" style="color:#fff">بازگشت بدون رمز (نسخه نمایشی)</a>
+  <div class="d-flex gap-4 mt-5">
+    <a class="fs-sm text-brand fw-600" href="dashboard.html">بازگشت بدون رمز (نسخه نمایشی)</a>
   </div>
 </div>
 

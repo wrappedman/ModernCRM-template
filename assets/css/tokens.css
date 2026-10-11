@@ -5,7 +5,7 @@
  *  هویت بصری برگرفته از تم مرجع (theme.jpg):
  *    بوم خاکستری-آبی روشن، کارت‌های سفید با گوشه‌های بسیار گرد،
  *    لهجه اصلی آبی ملایم، لهجه دوم مرجانی و «مشکی» برای حالت‌های فعال.
- *  تم روشن: پیش‌فرض | تم تیره: html[data-theme="dark"]
+ *  تم برنامه: فقط روشن (حالت شب از قالب حذف شده است)
  * ============================================================================
  */
 
@@ -128,6 +128,7 @@
   --z-startmenu: 310;
   --z-cmdk: 1100;
   --z-toast: 1200;
+  --z-tip: 1300;       /* لایه تولتیپ سراسری — همیشه بالاترین لایه */
 
   /* ----------------------------------------------------------- effects */
   --blur: saturate(180%) blur(16px);
@@ -136,8 +137,7 @@
 /* ==========================================================================
  *  تم روشن
  * ========================================================================== */
-:root,
-html[data-theme="light"] {
+:root {
   color-scheme: light;
 
   /* بوم خاکستری-آبی و لایه‌های روی آن */
@@ -216,94 +216,6 @@ html[data-theme="light"] {
   --grad-coral: linear-gradient(135deg, #f0907f 0%, #d2544a 100%);
   --grad-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 100%);
   --glass: rgba(255, 255, 255, 0.72);
-}
-
-/* ==========================================================================
- *  تم تیره
- * ========================================================================== */
-html[data-theme="dark"] {
-  color-scheme: dark;
-
-  --bg: #0d1017;
-  --bg-soft: #12161f;
-  --bg-grad: linear-gradient(180deg, #121620 0%, #0b0e14 100%);
-  --bg-sheen: radial-gradient(1100px 560px at 80% -12%, rgba(85, 131, 224, 0.12), transparent 62%);
-  --surface: #171b24;
-  --surface-2: #1c212b;
-  --surface-3: #232936;
-  --surface-hover: #1f2531;
-  --surface-inset: #12161e;
-
-  --text: #e9edf5;
-  --text-strong: #f6f8fc;
-  --text-muted: #9aa3b4;
-  --text-soft: #6f7789;
-  --text-invert: #0b0e14;
-  --text-on-brand: #0b1220;
-
-  --border: #242a37;
-  --border-strong: #303849;
-  --border-muted: #1e232e;
-
-  --brand: var(--brand-400);
-  --brand-hover: var(--brand-300);
-  --brand-soft: rgba(85, 131, 224, 0.16);
-  --brand-soft-2: rgba(85, 131, 224, 0.26);
-  --brand-ring: rgba(117, 157, 235, 0.32);
-  --brand-contrast: #0c1220;
-  --brand-ink: var(--brand-300);
-  --brand-btn: var(--brand-400);
-  --brand-btn-hover: var(--brand-300);
-
-  --success: #5cc796;
-  --success-soft: rgba(53, 160, 110, 0.16);
-  --success-ring: rgba(92, 199, 150, 0.28);
-  --warning: #e8b662;
-  --warning-soft: rgba(223, 164, 63, 0.16);
-  --warning-ring: rgba(232, 182, 98, 0.28);
-  --danger: #f0827a;
-  --danger-soft: rgba(232, 105, 95, 0.16);
-  --danger-ring: rgba(240, 130, 122, 0.28);
-  --info: #7ba6f0;
-  --info-soft: rgba(85, 131, 224, 0.16);
-  --info-ring: rgba(123, 166, 240, 0.28);
-
-  --accent: var(--accent-400);
-  --accent-soft: rgba(232, 105, 95, 0.16);
-  --accent-ring: rgba(240, 139, 127, 0.28);
-
-  /* در تم تیره حالت فعال روشن است (آینه‌ی حالت مشکی تم روشن)
-     بنابراین --ink در تم تیره به «سفید» تغییر می‌کند و --on-ink تیره می‌شود */
-  --ink: #f4f6fb;
-  --ink-soft: #e4e8f1;
-  --ink-hover: #ffffff;
-  --on-ink: #0d1017;
-  --on-ink-muted: #4e5766;
-
-  --sidebar-bg: transparent;
-  --sidebar-text: #9aa3b4;
-  --sidebar-text-active: #0d1017;
-  --sidebar-item-hover: rgba(255, 255, 255, 0.06);
-  --sidebar-item-active: #ffffff;
-  --sidebar-border: transparent;
-
-  --topbar-bg: rgba(13, 16, 23, 0.72);
-  --modal-bg: rgba(4, 6, 10, 0.66);
-  --dock-bg: rgba(23, 27, 36, 0.82);
-
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 2px 10px -4px rgba(0, 0, 0, 0.55);
-  --shadow: 0 10px 28px -16px rgba(0, 0, 0, 0.7);
-  --shadow-md: 0 20px 46px -24px rgba(0, 0, 0, 0.8);
-  --shadow-lg: 0 36px 76px -30px rgba(0, 0, 0, 0.9);
-  --shadow-card: 0 20px 44px -30px rgba(0, 0, 0, 0.85), 0 2px 6px -3px rgba(0, 0, 0, 0.4);
-  --shadow-brand: 0 12px 26px -12px rgba(63, 107, 201, 0.55);
-  --shadow-ink: 0 12px 26px -14px rgba(0, 0, 0, 0.75);
-
-  --grad-brand: linear-gradient(135deg, var(--brand-500) 0%, var(--brand-700) 100%);
-  --grad-coral: linear-gradient(135deg, var(--accent-500) 0%, var(--accent-700) 100%);
-  --grad-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 100%);
-  --glass: rgba(23, 27, 36, 0.74);
 }
 
 /* ==========================================================================

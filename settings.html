@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" data-theme="light">
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/layout.css">
-<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 </head>
 <body class="app" data-page="settings">
 <div class="app-shell" id="appShell">
@@ -111,42 +110,14 @@
               <div class="card-body">
                 <div class="form-group">
                   <label class="form-label">حالت نمایش</label>
-                  <div class="grid-3" id="themeCards">
-                    <button class="card card-hover p-0" data-set-theme="light" style="text-align:right;padding:0">
-                      <div style="height:74px;border-radius:var(--radius) var(--radius) 0 0;background:#eef1f8;border-bottom:1px solid var(--border);padding:10px">
-                        <div style="height:8px;width:60%;background:#dfeafc;border-radius:4px"></div>
-                        <div style="height:8px;width:40%;background:#e6eaf2;border-radius:4px;margin-top:6px"></div>
-                        <div style="height:8px;width:75%;background:#e6eaf2;border-radius:4px;margin-top:6px"></div>
-                      </div>
-                      <div class="d-flex items-center gap-2 p-3" style="padding:10px 12px">
-                        <span data-icon="sun" data-icon-size="18"></span>
-                        <span class="fw-600 fs-sm">حالت روشن</span>
-                        <span class="ms-auto" data-icon="check-circle" data-icon-size="16" style="color:var(--brand)"></span>
-                      </div>
-                    </button>
-                    <button class="card card-hover p-0" data-set-theme="dark" style="text-align:right;padding:0">
-                      <div style="height:74px;border-radius:var(--radius) var(--radius) 0 0;background:#12161f;border-bottom:1px solid var(--border);padding:10px">
-                        <div style="height:8px;width:60%;background:#1b2844;border-radius:4px"></div>
-                        <div style="height:8px;width:40%;background:#242a37;border-radius:4px;margin-top:6px"></div>
-                        <div style="height:8px;width:75%;background:#242a37;border-radius:4px;margin-top:6px"></div>
-                      </div>
-                      <div class="d-flex items-center gap-2" style="padding:10px 12px">
-                        <span data-icon="moon" data-icon-size="18"></span>
-                        <span class="fw-600 fs-sm">حالت تیره</span>
-                        <span class="ms-auto d-none" data-icon="check-circle" data-icon-size="16" style="color:var(--brand)"></span>
-                      </div>
-                    </button>
-                    <button class="card card-hover p-0" data-set-theme="auto" style="text-align:right;padding:0">
-                      <div style="height:74px;border-radius:var(--radius) var(--radius) 0 0;background:linear-gradient(90deg,#eef1f8 50%,#12161f 50%);border-bottom:1px solid var(--border);padding:10px">
-                        <div style="height:8px;width:55%;background:#dfeafc;border-radius:4px"></div>
-                        <div style="height:8px;width:65%;background:#242a37;border-radius:4px;margin-top:6px;margin-inline-start:auto"></div>
-                      </div>
-                      <div class="d-flex items-center gap-2" style="padding:10px 12px">
-                        <span data-icon="monitor" data-icon-size="18"></span>
-                        <span class="fw-600 fs-sm">هماهنگ با سیستم</span>
-                        <span class="ms-auto d-none" data-icon="check-circle" data-icon-size="16" style="color:var(--brand)"></span>
-                      </div>
-                    </button>
+                  <div class="d-flex items-center gap-3 p-3" id="themeCards"
+                       style="border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-2)">
+                    <span class="stat-ic" style="background:var(--brand-soft);color:var(--brand-ink)" data-icon="sun" data-icon-size="18"></span>
+                    <div class="flex-1">
+                      <div class="fw-600 fs-sm">حالت روشن (تنها حالت قالب)</div>
+                      <div class="fs-xs text-muted mt-1">قالب مدرن‌CRM فقط در حالت روشن ارائه می‌شود؛ حالت شب از برنامه حذف شده است.</div>
+                    </div>
+                    <span data-icon="check-circle" data-icon-size="18" style="color:var(--brand)"></span>
                   </div>
                 </div>
 
@@ -382,29 +353,6 @@
 (function () {
   'use strict';
   var CRM = window.CRM;
-
-  /* کارت‌های انتخاب تم */
-  function markTheme(mode) {
-    CRM.$$('#themeCards .card').forEach(function (c) {
-      var on = c.getAttribute('data-set-theme') === mode;
-      c.style.borderColor = on ? 'var(--brand)' : '';
-      c.querySelector('[data-icon="check-circle"]').classList.toggle('d-none', !on);
-    });
-  }
-  CRM.$$('#themeCards .card').forEach(function (c) {
-    c.addEventListener('click', function () {
-      var mode = c.getAttribute('data-set-theme');
-      if (mode === 'auto') {
-        var sys = (typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-        CRM.theme.set(sys);
-        CRM.toast({ type: 'info', title: 'هماهنگ با سیستم', msg: 'تم بر اساس تنظیمات سیستم‌عامل شما انتخاب می‌شود.' });
-      } else {
-        CRM.theme.set(mode);
-      }
-      markTheme(mode);
-    });
-  });
-  markTheme(document.documentElement.getAttribute('data-theme'));
 
   /* دکمه‌های ذخیره نمایشی */
   CRM.$$('[data-demo-save]').forEach(function (b) {

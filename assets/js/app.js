@@ -137,24 +137,186 @@ window.CRM = (function (w, d) {
   }
 
   /* ==========================================================================
-   *  2) تم روشن / تیره
+   *  2) تولتیپ سراسری
+   *  همه‌ی منوها، دکمه‌ها و عناصر [data-tip] به‌صورت خودکار تولتیپ می‌گیرند.
+   *  تولتیپ در یک لایه‌ی مشترک روی <body> ساخته می‌شود تا هرگز زیر پنل‌ها
+   *  نرود یا توسط کادرها بریده/پنهان نشود.
    * ========================================================================== */
-  var THEME_KEY = 'moderncrm-theme';
-  var theme = {
-    get: function () { return d.documentElement.getAttribute('data-theme') || 'light'; },
-    set: function (mode) {
-      d.documentElement.setAttribute('data-theme', mode);
-      try { localStorage.setItem(THEME_KEY, mode); } catch (e) { }
-      $$('[data-theme-toggle]').forEach(function (b) {
-        b.innerHTML = icon(mode === 'dark' ? 'sun' : 'moon', +(b.getAttribute('data-icon-size') || 19));
-      });
-      $$('[data-theme-label]').forEach(function (b) {
-        b.textContent = mode === 'dark' ? 'تم روشن' : 'تم تیره';
-      });
-      w.dispatchEvent(new CustomEvent('crm:theme', { detail: { theme: mode } }));
-    },
-    toggle: function () { theme.set(theme.get() === 'dark' ? 'light' : 'dark'); }
-  };
+  var tip = (function () {
+    var el = null, target = null, showTimer = null, hideTimer = null;
+    /* هر عنصری که «تولتیپ‌پذیر» است: منوها، دکمه‌ها، تب‌ها، آیتم‌های جدول و… */
+    var TIP_SELECTOR = 'button, a.btn, a.tb-icon, .nav-item, .dropdown-item, .chip, .tab, .seg, .task-item, .tray-btn, .task-start, .start-app, .cal-cell, .pagination button, .list-item, [data-tip]';
+    /* برای دکمه‌های فقط-آیکون، نام آیکون به برچسب فارسی تبدیل می‌شود
+       تا هیچ دکمه‌ای بدون tooltip نماند. */
+    var ICON_LABEL = {
+      'more': 'گزینه‌های بیشتر', 'more-horizontal': 'گزینه‌های بیشتر', 'more-vertical': 'گزینه‌های بیشتر',
+      'x': 'بستن', 'circle-x': 'بستن', 'trash': 'حذف', 'pencil': 'ویرایش', 'edit': 'ویرایش',
+      'eye': 'مشاهده', 'search': 'جستجو', 'copy': 'کپی', 'files': 'کپی', 'download': 'دانلود',
+      'upload': 'بارگذاری', 'plus': 'افزودن', 'minus': 'کاستن', 'refresh': 'به‌روزرسانی',
+      'chevron-right': 'بعدی', 'chevron-left': 'قبلی', 'chevron-down': 'باز کردن', 'chevron-up': 'بستن',
+      'arrow-right': 'بعدی', 'arrow-left': 'قبلی', 'invoice': 'فاکتور', 'receipt': 'رسید',
+      'filter': 'فیلتر', 'list-filter': 'فیلتر فهرست', 'sliders': 'تنظیمات نمایش',
+      'bell': 'اعلان‌ها', 'message': 'پیام‌ها', 'messages': 'پیام‌ها', 'mail': 'ایمیل',
+      'settings': 'تنظیمات', 'user': 'کاربر', 'users': 'کاربران', 'print': 'چاپ',
+      'share': 'اشتراک‌گذاری', 'link': 'پیوند', 'external-link': 'باز کردن در پنجره تازه',
+      'calendar': 'تقویم', 'clock': 'زمان', 'phone': 'تماس', 'star': 'نشان‌گذاری',
+      'check': 'تأیید', 'check-circle': 'تأیید', 'lock': 'قفل', 'key': 'کلید',
+      'maximize': 'بزرگ‌نمایی', 'minimize': 'کوچک‌کردن', 'move': 'جابه‌جایی', 'grip-vertical': 'جابه‌جایی',
+      'layout-grid': 'چیدمان شبکه‌ای', 'list': 'نمایش فهرستی', 'table': 'نمایش جدولی',
+      'sun': 'روشن', 'palette': 'رنگ‌ها', 'send': 'ارسال', 'paperclip': 'پیوست',
+      'archive': 'بایگانی', 'tag': 'برچسب', 'wallet': 'مالی', 'chart-line': 'نمودار',
+      'help-circle': 'راهنما', 'circle-help': 'راهنما', 'info': 'اطلاعات', 'alert': 'هشدار',
+      'menu': 'منو', 'window': 'پنجره', 'layers': 'لایه‌ها', 'grid': 'شبکه', 'star-off': 'برداشتن نشان'
+    };
+
+    function node() {
+      if (!el) {
+        el = d.createElement('div');
+        el.className = 'tip';
+        el.setAttribute('role', 'tooltip');
+        d.body.appendChild(el);
+      }
+      return el;
+    }
+
+    function iconName(t) {
+      var own = t.getAttribute('data-icon');
+      if (own) return own;
+      var child = t.querySelector('[data-icon]');
+      if (child) return child.getAttribute('data-icon');
+      /* نوع دکمه‌های استاندارد */
+      if (t.classList.contains('modal-x') || t.closest('.modal-x')) return 'x';
+      return '';
+    }
+
+    function label(t) {
+      var text = t.getAttribute('data-tip');
+      if (!text) {
+        var aria = t.getAttribute('aria-label');
+        if (aria) text = aria;
+      }
+      if (!text) {
+        var alt = t.querySelector('img[alt]');
+        if (alt) text = alt.getAttribute('alt');
+      }
+      if (!text) {
+        var raw = (t.textContent || '').replace(/\s+/g, ' ').trim();
+        /* اگر متن دکمه فقط آیکون/عدد/نماد است، از نام آیکون استفاده کن */
+        var meaningful = raw.replace(/[\u200c\s۰-۹0-9٪%._,،\-–—()/]+/g, '');
+        if (raw && meaningful.length >= 2) text = raw.length > 56 ? raw.slice(0, 53) + '…' : raw;
+      }
+      if (!text) {
+        /* دکمه‌های نمادی مثل ± و × در فرم‌ها */
+        var sym = (t.textContent || '').trim();
+        var SYM = { '−': 'کاهش تعداد', '-': 'کاهش تعداد', '+': 'افزایش تعداد', '×': 'حذف', '✕': 'بستن', '؟': 'راهنما' };
+        if (SYM[sym]) text = SYM[sym];
+      }
+      if (!text) {
+        var digits = (t.textContent || '').replace(/\s+/g, ' ').trim();
+        if (/^[۰-۹0-9]+$/.test(digits)) {
+          text = t.closest('.pagination') ? 'صفحه ' + digits : digits;
+        }
+      }
+      if (!text) text = ICON_LABEL[iconName(t)] || '';
+      return text || '';
+    }
+
+    function tippable(t) {
+      if (!t || t.closest('[data-no-tip]')) return null;
+      var owner = t.closest('[data-tip]');
+      if (owner) return owner;
+      if (!t.matches(TIP_SELECTOR)) return null;
+      /* دکمه‌های خیلی بزرگ (مثل کل یک کارت) تولتیپ نمی‌گیرند */
+      var r = t.getBoundingClientRect();
+      if (r.height > 90 || r.width > 380) return null;
+      return t;
+    }
+
+    function place(t) {
+      var n = node();
+      n.textContent = label(t);
+      if (!n.textContent) { hide(true); return; }
+      var pos = t.getAttribute('data-tip-pos') || 'top';
+      var r = t.getBoundingClientRect();
+      var nr = n.getBoundingClientRect();
+      var gap = 9;
+      var x, y;
+      var fitsTop = r.top - nr.height - gap > 6;
+      var fitsBottom = r.bottom + nr.height + gap < w.innerHeight - 6;
+      if (pos === 'top' && !fitsTop && fitsBottom) pos = 'bottom';
+      else if (pos === 'bottom' && !fitsBottom && fitsTop) pos = 'top';
+      if (pos === 'left') {
+        if (r.left - nr.width - gap < 6) pos = 'right';
+      } else if (pos === 'right') {
+        if (r.right + nr.width + gap > w.innerWidth - 6) pos = 'left';
+      }
+      if (pos === 'left') { x = r.left - nr.width - gap; y = r.top + r.height / 2 - nr.height / 2; }
+      else if (pos === 'right') { x = r.right + gap; y = r.top + r.height / 2 - nr.height / 2; }
+      else if (pos === 'bottom') { x = r.left + r.width / 2 - nr.width / 2; y = r.bottom + gap; }
+      else { x = r.left + r.width / 2 - nr.width / 2; y = r.top - nr.height - gap; }
+      x = Math.max(6, Math.min(x, w.innerWidth - nr.width - 6));
+      y = Math.max(6, Math.min(y, w.innerHeight - nr.height - 6));
+      n.setAttribute('data-pos', pos);
+      n.style.transform = 'translate(' + Math.round(x) + 'px,' + Math.round(y) + 'px)';
+      n.classList.add('is-on');
+      w.dispatchEvent(new CustomEvent('crm:tip', { detail: { target: t } }));
+    }
+
+    function hide(now) {
+      clearTimeout(showTimer);
+      if (target) target.removeAttribute('aria-describedby');
+      target = null;
+      if (now) {
+        if (el) el.classList.remove('is-on');
+        return;
+      }
+      hideTimer = setTimeout(function () { if (el) el.classList.remove('is-on'); }, 70);
+    }
+
+    function show(t) {
+      clearTimeout(hideTimer);
+      if (target === t) return;
+      hide(true);
+      target = t;
+      var n = node();
+      n.textContent = label(t);           /* برای اندازه‌گیری قبل از نمایش */
+      n.classList.add('is-on');
+      n.style.transform = 'translate(-9999px,-9999px)';
+      requestAnimationFrame(function () { if (target === t) place(t); });
+      if (n.textContent) n.setAttribute('id', 'crmTip');
+      if (n.textContent) { t.setAttribute('aria-describedby', 'crmTip'); }
+    }
+
+    function fromEvent(e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var hit = tippable(t);
+      if (!hit) { if (target) hide(); return; }
+      if (hit === target) return;
+      clearTimeout(showTimer);
+      var delay = hit.hasAttribute('data-tip') ? 40 : 260;   /* متن‌های صریح سریع‌تر از متن‌های استنباطی */
+      showTimer = setTimeout(function () { show(hit); }, delay);
+    }
+
+    d.addEventListener('mouseover', fromEvent);
+    d.addEventListener('mouseout', function (e) {
+      if (!target) return;
+      if (target.contains(e.target) && (e.relatedTarget && target.contains(e.relatedTarget))) return;
+      hide();
+    });
+    d.addEventListener('focusin', fromEvent);
+    d.addEventListener('focusout', function () { hide(); });
+    d.addEventListener('click', function () { hide(true); }, true);
+    d.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(true); });
+    w.addEventListener('scroll', function () { hide(true); }, true);
+    w.addEventListener('resize', function () { hide(true); });
+    /* اگر کاربر با انگشت (لمس) کار می‌کند، تولتیپ روی هاور نمایش داده نمی‌شود */
+    if (w.matchMedia && w.matchMedia('(hover: none)').matches) {
+      d.addEventListener('touchstart', function () { hide(true); }, { passive: true });
+    }
+
+    return { show: show, hide: hide, label: label };
+  })();
 
   /* ==========================================================================
    *  3) توست (پیام شناور)
@@ -722,7 +884,6 @@ window.CRM = (function (w, d) {
         { label: 'ثبت معامله جدید', icon: 'deals', href: 'deals.html', group: 'میان‌بر' },
         { label: 'صدور فاکتور', icon: 'invoice', href: 'invoices.html', group: 'میان‌بر' },
         { label: 'ثبت تیکت پشتیبانی', icon: 'ticket', href: 'ticket-new.html', group: 'میان‌بر' },
-        { label: 'تغییر تم روشن/تیره', icon: 'theme', action: 'theme', group: 'فرمان' },
         { label: 'ورود به میزکار پنجره‌ای', icon: 'window', href: 'desktop.html', group: 'فرمان' },
         { label: 'خروج از حساب کاربری', icon: 'logout', href: 'login.html', group: 'فرمان' }
       ];
@@ -798,7 +959,6 @@ window.CRM = (function (w, d) {
       if (!item) return;
       var action = item.getAttribute('data-action');
       var href = item.getAttribute('data-href');
-      if (action === 'theme') { theme.toggle(); }
       close();
       if (href) setTimeout(function () { w.location.href = href; }, 120);
     });
@@ -819,17 +979,18 @@ window.CRM = (function (w, d) {
           var isActive = it.id === active || (it.children && it.children.some(function (c) { return c.id === active; }));
           var badge = it.badge ? '<span class="nav-badge ' + (it.badgeStyle === 'solid' ? '' : 'soft') + '">' + esc(fa(it.badge)) + '</span>' : '';
           if (it.children) {
-            groups += '<button class="nav-item' + (it.open ? ' is-open' : '') + '" data-nav-toggle>' +
+            groups += '<button class="nav-item' + (it.open ? ' is-open' : '') + '" data-nav-toggle data-tip="' + esc(it.label) + '">' +
               '<span data-icon="' + it.icon + '" data-icon-size="19"></span>' +
               '<span class="nav-label">' + esc(it.label) + '</span>' + badge +
               '<span class="nav-caret" data-icon="chevron-down" data-icon-size="15"></span></button>';
             groups += '<div class="nav-sub" ' + (it.open ? '' : 'style="display:none"') + '>' +
               it.children.map(function (c) {
-                return '<a class="nav-item' + (c.id === active ? ' is-active' : '') + '" href="' + c.href + '">' +
+                return '<a class="nav-item' + (c.id === active ? ' is-active' : '') + '" href="' + c.href + '" data-tip="' + esc(c.label) + '">' +
+                  '<span data-icon="' + (c.icon || 'dot') + '" data-icon-size="15"></span>' +
                   '<span class="nav-label">' + esc(c.label) + '</span></a>';
               }).join('') + '</div>';
           } else {
-            groups += '<a class="nav-item' + (isActive ? ' is-active' : '') + '" href="' + it.href + '">' +
+            groups += '<a class="nav-item' + (isActive ? ' is-active' : '') + '" href="' + it.href + '" data-tip="' + esc(it.label) + '">' +
               '<span data-icon="' + it.icon + '" data-icon-size="19"></span>' +
               '<span class="nav-label">' + esc(it.label) + '</span>' + badge + '</a>';
           }
@@ -856,9 +1017,9 @@ window.CRM = (function (w, d) {
 
     function topbarHTML() {
       return '' +
-        '<button class="tb-icon topbar-mobile-btn" data-sidebar-toggle aria-label="منو" data-icon="menu" data-icon-size="21"></button>' +
+        '<button class="tb-icon topbar-mobile-btn" data-sidebar-toggle data-tip="نمایش منو" aria-label="منو" data-icon="menu" data-icon-size="21"></button>' +
         '<div class="tb-search">' +
-          '<button class="search-box" data-palette-open>' +
+          '<button class="search-box" data-palette-open data-tip="جستجو در همه بخش‌ها (Ctrl+K)">' +
             '<span data-icon="search" data-icon-size="18"></span>' +
             '<span class="sb-text">جستجو در مشتریان، معاملات، فاکتورها…</span>' +
             '<span class="kbd">Ctrl</span><span class="kbd">K</span>' +
@@ -866,7 +1027,7 @@ window.CRM = (function (w, d) {
         '</div>' +
         '<div class="tb-actions">' +
           '<div class="dropdown">' +
-            '<button class="btn btn-primary btn-sm" data-dropdown-toggle>' +
+            '<button class="btn btn-primary btn-sm" data-dropdown-toggle data-tip="ایجاد سریع">' +
               '<span data-icon="plus" data-icon-size="15"></span> ایجاد سریع' +
               '<span data-icon="chevron-down" data-icon-size="14"></span></button>' +
             '<div class="dropdown-menu">' +
@@ -877,10 +1038,10 @@ window.CRM = (function (w, d) {
               '<a class="dropdown-item" href="invoices.html"><span data-icon="invoice" data-icon-size="17"></span> صدور فاکتور</a>' +
             '</div>' +
           '</div>' +
-          '<button class="tb-icon" data-theme-toggle aria-label="تغییر تم" data-icon-size="19"></button>' +
-          '<button class="tb-icon" data-palette-open aria-label="جستجو" data-icon="search" data-icon-size="19"></button>' +
+          '<button class="tb-icon" data-tip="تنظیمات" aria-label="تنظیمات" onclick="location.href=\'settings.html\'" data-icon="settings" data-icon-size="19"></button>' +
+          '<button class="tb-icon" data-palette-open data-tip="جستجوی سراسری (Ctrl+K)" aria-label="جستجو" data-icon="search" data-icon-size="19"></button>' +
           '<div class="dropdown">' +
-            '<button class="tb-icon" data-dropdown-toggle aria-label="پیام‌ها" data-icon="message" data-icon-size="19">' +
+            '<button class="tb-icon" data-dropdown-toggle data-tip="پیام‌های اخیر" aria-label="پیام‌ها" data-icon="message" data-icon-size="19">' +
               '<span class="badge-dot-red"></span></button>' +
             '<div class="dropdown-menu" style="min-width:290px">' +
               '<div class="dropdown-label">آخرین پیام‌ها</div>' +
@@ -896,7 +1057,7 @@ window.CRM = (function (w, d) {
             '</div>' +
           '</div>' +
           '<div class="dropdown">' +
-            '<button class="tb-icon" data-dropdown-toggle aria-label="اعلان‌ها" data-icon="bell" data-icon-size="19">' +
+            '<button class="tb-icon" data-dropdown-toggle data-tip="اعلان‌ها" aria-label="اعلان‌ها" data-icon="bell" data-icon-size="19">' +
               '<span class="badge-dot-red"></span></button>' +
             '<div class="dropdown-menu" style="min-width:330px">' +
               '<div class="dropdown-label">اعلان‌ها (۳ خوانده‌نشده)</div>' +
@@ -911,7 +1072,7 @@ window.CRM = (function (w, d) {
             '</div>' +
           '</div>' +
           '<div class="dropdown">' +
-            '<button class="tb-user" data-dropdown-toggle>' +
+            '<button class="tb-user" data-dropdown-toggle data-tip="حساب کاربری">' +
               avatar('مهدی کریمی', 36) +
               '<span class="u-meta u-name">مهدی کریمی<span class="u-role d-block">مدیر فروش</span></span>' +
               '<span data-icon="chevron-down" data-icon-size="14"></span>' +
@@ -932,14 +1093,13 @@ window.CRM = (function (w, d) {
 
     function taskbarHTML() {
       return '' +
-        '<button class="task-start" data-start-toggle>' +
+        '<button class="task-start" data-start-toggle data-tip="منوی شروع">' +
           '<span class="brand-mark" data-icon="sparkles" data-icon-size="15"></span><span>میزکار</span>' +
         '</button>' +
         '<div class="task-items" id="taskItems"></div>' +
         '<div class="task-tray">' +
-          '<button class="tray-btn" data-theme-toggle data-tooltip="تغییر تم"><span data-icon-size="17" data-icon="theme"></span></button>' +
-          '<button class="tray-btn" data-tray-openwin title="بازکردن پنجره‌ها"><span data-icon="window" data-icon-size="17"></span><span id="trayWinCount">۰</span></button>' +
-          '<button class="tray-btn" data-tray-fullscreen title="تمام‌صفحه"><span data-icon="maximize" data-icon-size="17"></span></button>' +
+          '<button class="tray-btn" data-tray-openwin data-tip="پنجره‌های شناور"><span data-icon="window" data-icon-size="17"></span><span id="trayWinCount">۰</span></button>' +
+          '<button class="tray-btn" data-tray-fullscreen data-tip="تمام‌صفحه"><span data-icon="maximize" data-icon-size="17"></span></button>' +
           '<div class="tray-clock"><div class="tc-time" id="trayTime">۰۰:۰۰</div><div class="tc-date" id="trayDate">—</div></div>' +
         '</div>';
     }
@@ -970,8 +1130,7 @@ window.CRM = (function (w, d) {
             '<a class="dropdown-item" href="help.html"><span data-icon="help" data-icon-size="17"></span> راهنما</a>' +
             '<div class="dropdown-sep"></div>' +
             '<div class="nav-group-title mt-2">نمایش</div>' +
-            '<button class="dropdown-item" data-theme-toggle><span data-icon-size="17" data-icon="moon"></span> <span data-theme-label>تم تیره</span></button>' +
-            '<label class="dropdown-item" style="cursor:pointer">' +
+            '<label class="dropdown-item" style="cursor:pointer" data-tip="نمایش کارت‌ها به‌صورت پنجره شناور">' +
               '<span data-icon="panels" data-icon-size="17"></span> پنجره‌های شناور' +
               '<span class="switch ms-auto"><input type="checkbox" data-float-toggle checked><span class="track"></span></span>' +
             '</label>' +
@@ -987,15 +1146,27 @@ window.CRM = (function (w, d) {
         b.addEventListener('click', function () { d.body.classList.toggle('sidebar-open'); });
       });
       var shellEl = $('#appShell');
+      function paintCollapseBtn() {
+        var collapsed = shellEl && shellEl.classList.contains('sidebar-collapsed');
+        var b = $('[data-sidebar-collapse]');
+        if (!b) return;
+        /* در RTL سایدبار سمت راست است: پیکان رو به راست = جمع‌شدن، رو به چپ = باز شدن */
+        b.innerHTML = icon(collapsed ? 'chevron-left' : 'chevron-right', 18);
+        b.setAttribute('data-tip', collapsed ? 'باز کردن منو' : 'جمع کردن منو');
+        b.setAttribute('aria-label', collapsed ? 'باز کردن منو' : 'جمع کردن منو');
+      }
       $$('[data-sidebar-collapse]').forEach(function (b) {
-        b.addEventListener('click', function () {
+        b.addEventListener('click', function (e) {
+          e.preventDefault();
           shellEl.classList.toggle('sidebar-collapsed');
           try { localStorage.setItem('moderncrm-sidebar', shellEl.classList.contains('sidebar-collapsed') ? '1' : '0'); } catch (e) { }
+          paintCollapseBtn();
         });
       });
       if (shellEl && (function () { try { return localStorage.getItem('moderncrm-sidebar') === '1'; } catch (e) { return false; } })()) {
         shellEl.classList.add('sidebar-collapsed');
       }
+      paintCollapseBtn();
 
       /* زیرمنوهای سایدبار */
       $$('[data-nav-toggle]').forEach(function (btn) {
@@ -1054,18 +1225,19 @@ window.CRM = (function (w, d) {
       var tb = $('#topbar'); if (tb) tb.innerHTML = topbarHTML();
       var task = $('#taskbar'); if (task) task.innerHTML = taskbarHTML();
       var sm = $('#startMenu'); if (sm) sm.innerHTML = startMenuHTML();
-      bind();
-      body.classList.toggle('has-taskbar', body.hasAttribute('data-taskbar'));
-      /* دکمه جمع‌کردن سایدبار */
+      /* دکمه جمع‌کردن سایدبار باید قبل از bind ساخته شود */
       var brand = $('.sidebar-brand');
-      if (brand && sb) {
+      if (brand && sb && !brand.querySelector('[data-sidebar-collapse]')) {
         var btn = d.createElement('button');
-        btn.className = 'tb-icon ms-auto';
+        btn.className = 'sidebar-collapse-btn';
         btn.setAttribute('data-sidebar-collapse', '');
         btn.setAttribute('aria-label', 'جمع کردن منو');
-        btn.innerHTML = icon('panel-right', 19);
+        btn.setAttribute('data-tip', 'جمع / باز کردن منو');
+        btn.setAttribute('data-tip-pos', 'bottom');
         brand.appendChild(btn);
       }
+      bind();
+      body.classList.toggle('has-taskbar', body.hasAttribute('data-taskbar'));
     }
 
     return { mount: mount, sidebarHTML: sidebarHTML, topbarHTML: topbarHTML, startMenuHTML: startMenuHTML };
@@ -1119,9 +1291,13 @@ window.CRM = (function (w, d) {
         });
       });
     });
-    $$('[data-theme-toggle]', s).forEach(function (b) {
+    $$('[data-tooltip]', s).forEach(function (b) {
       if (b.__bound) return; b.__bound = true;
-      b.addEventListener('click', function (e) { e.preventDefault(); theme.toggle(); });
+      if (!b.hasAttribute('data-tip')) {
+        var txt = b.getAttribute('data-tooltip') || b.getAttribute('title');
+        if (txt) b.setAttribute('data-tip', txt);
+      }
+      b.removeAttribute('title');
     });
     $$('.overlay', s).forEach(function (ov) {
       if (ov.__bound) return; ov.__bound = true;
@@ -1164,7 +1340,9 @@ window.CRM = (function (w, d) {
    * 13) راه‌اندازی
    * ========================================================================== */
   function boot() {
-    theme.set(theme.get());
+    /* قالب تک‌حالته است (روشن)؛ فقط اثر تم قدیمی پاک می‌شود */
+    d.documentElement.removeAttribute('data-theme');
+    try { localStorage.removeItem('moderncrm-theme'); } catch (e) { }
     shell.mount();
     init(d);
     if (w.CRM && w.CRM.win && w.CRM.win.mount) w.CRM.win.mount();
@@ -1198,7 +1376,7 @@ window.CRM = (function (w, d) {
     icon: icon, renderIcons: renderIcons, avatar: avatar, rel: rel, debounce: debounce, clamp: clamp, uid: uid,
     jDate: jDate, jLong: jLong, jsWeekday: jsWeekday, jalaliMonthGrid: jalaliMonthGrid,
     todayJalali: todayJalali, JMonthNames: JMonthNames, JWeekNames: JWeekNames,
-    theme: theme, toast: toast, modal: modal, drawer: drawer,
+    tip: tip, toast: toast, modal: modal, drawer: drawer,
     charts: charts, palette: palette, shell: shell, init: init, boot: boot, data: DATA
   };
 })(window, document);

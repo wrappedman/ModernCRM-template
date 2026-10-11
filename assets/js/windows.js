@@ -604,6 +604,10 @@
       if (autoOff) return;
       if (card.hasAttribute('data-win') || card.hasAttribute('data-win-nobtn')) return;
       if (card.closest('.window')) return;
+      /* اگر کارت داخل عنصری است که خودش data-win دارد (مثل ویجت‌های میزکار)،
+         پنجره‌ی همان والد کافی است و نباید دکمه‌ی دومی ساخته شود */
+      var owner = card.parentElement && card.parentElement.closest('[data-win]');
+      if (owner) return;
       var head0 = card.querySelector('.card-head');
       var titleEl = card.querySelector('.card-title');
       if (!head0 || !titleEl) return;
@@ -614,11 +618,12 @@
       if (ic && ic.getAttribute('data-icon')) card.setAttribute('data-win-icon', ic.getAttribute('data-icon'));
     });
 
-    /* دکمه ⛶ در سربرگ کارت‌ها */
+    /* دکمه ⛶ در سربرگ کارت‌ها — هر سربرگ فقط یک دکمه */
     $$('[data-win]').forEach(function (card) {
       if (card.hasAttribute('data-win-nobtn')) return;
       if (card.closest('.window')) return;
       var head = card.querySelector('.card-head');
+      if (head && head.querySelector('.win-open-btn')) return;   /* قبلاً ساخته شده */
       var id = card.getAttribute('data-win');
       var btn = d.createElement('button');
       btn.className = 'tb-icon win-open-btn';
@@ -637,13 +642,11 @@
         actions.insertBefore(btn, actions.firstChild);
         return;
       }
-      /* کارت‌های خلاصه (KPI) که سربرگ ندارند: دکمه گوشه‌ی کارت، در هاور */
-      if (card.querySelector('.card-body, .stat, .stat-icon')) {
-        if (w.getComputedStyle(card).position === 'static') card.style.position = 'relative';
-        btn.className += ' win-open-btn--corner';
-        btn.setAttribute('data-tip-pos', 'bottom');
-        card.appendChild(btn);
-      }
+      /* کارت‌هایی که سربرگ ندارند (KPI، تب‌ها، دموها): دکمه گوشه‌ی کارت، در هاور */
+      if (w.getComputedStyle(card).position === 'static') card.style.position = 'relative';
+      btn.className += ' win-open-btn--corner';
+      btn.setAttribute('data-tip-pos', 'bottom');
+      card.appendChild(btn);
     });
   }
 

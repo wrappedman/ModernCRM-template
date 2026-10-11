@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" data-theme="light">
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/layout.css">
-<script>(function(){try{var t=localStorage.getItem('moderncrm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 </head>
 <body class="app" data-page="design-system">
 <div class="app-shell" id="appShell">
@@ -31,7 +30,6 @@
             <p class="page-desc">همه اجزای قالب، متغیرهای رنگ و الگوهای آماده در یک صفحه</p>
           </div>
           <div class="head-actions">
-            <button class="btn" data-theme-toggle><span data-icon="theme" data-icon-size="16"></span> تغییر تم</button>
             <a class="btn btn-primary" href="README.md"><span data-icon="book" data-icon-size="16"></span> مستندات قالب</a>
           </div>
         </div>
@@ -52,7 +50,7 @@
             <div class="alert-desc">
               بوم خاکستری-آبی روشن، کارت‌های سفید با گوشه‌های بسیار گرد (تا ۳۴ پیکسل)، لهجه‌ی اصلی <b>آبی ملایم</b>،
               لهجه‌ی دوم <b>مرجانی</b> و <b>مشکی جوهری</b> برای حالت‌های فعال. دکمه‌ها، تب‌ها، چیپ‌ها، نوار وظیفه و آیتم فعال سایدبار
-              همه از همین زبان بصری استفاده می‌کنند و در تم تیره به‌صورت آینه‌ای روشن می‌شوند.
+              همه از همین زبان بصری استفاده می‌کنند و رنگ‌ها از یک فایل توکن مشترک می‌آیند.
             </div>
           </div>
         </div>
@@ -381,7 +379,7 @@
               <div class="accordion" data-accordion>
                 <div class="acc-item is-open"><button class="acc-head">آیا می‌توانم رنگ برند را تغییر دهم؟<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button><div class="acc-body">بله — فقط متغیرهای <b class="ltr">--brand-*</b> در فایل tokens.css را تغییر دهید.</div></div>
                 <div class="acc-item"><button class="acc-head">آیا قالب ریسپانسیو است؟<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button><div class="acc-body">تمام صفحات برای موبایل، تبلت و دسکتاپ بهینه شده‌اند و سایدبار در موبایل کشویی می‌شود.</div></div>
-                <div class="acc-item"><button class="acc-head">تم تیره چگونه فعال می‌شود؟<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button><div class="acc-body">با ویژگی <b class="ltr">data-theme="dark"</b> روی تگ html یا از دکمه تغییر تم در نوار بالا.</div></div>
+                <div class="acc-item"><button class="acc-head">آیا حالت شب (تم تیره) دارد؟<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button><div class="acc-body">خیر. قالب مدرن‌CRM فقط در حالت روشن ارائه می‌شود و تمام رنگ‌ها از توکن‌های <b class="ltr">tokens.css</b> گرفته می‌شوند.</div></div>
               </div>
             </div>
           </div>

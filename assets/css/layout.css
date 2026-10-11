@@ -38,6 +38,19 @@
   color: #fff; flex: 0 0 auto;
   box-shadow: var(--shadow-brand);
 }
+/* دکمه جمع/باز کردن سایدبار: بدون قاب اضافه و با فاصله‌ی متوازن از دیواره‌ها */
+.sidebar-collapse-btn {
+  margin-inline-start: auto;
+  width: 34px; height: 34px; flex: 0 0 auto;
+  border-radius: var(--radius-full);
+  display: grid; place-items: center;
+  color: var(--text-muted);
+  transition: background-color var(--t-fast), color var(--t-fast);
+}
+.sidebar-collapse-btn:hover { background: var(--surface-hover); color: var(--text-strong); }
+.sidebar-collapse-btn .icon { width: 18px; height: 18px; }
+.app-shell.sidebar-collapsed .sidebar-collapse-btn { margin-inline: auto; }
+
 .brand-name { font-size: var(--fs-lg); font-weight: 700; color: var(--text-strong); line-height: 1.2; }
 .brand-name small { display: block; font-size: var(--fs-2xs); font-weight: 500; color: var(--text-soft); letter-spacing: 0.04em; }
 
@@ -85,6 +98,9 @@
 .nav-item .nav-badge.soft { background: var(--surface-inset); color: var(--text-muted); }
 .nav-sub { padding-inline-start: 20px; margin-bottom: 4px; }
 .nav-sub .nav-item { font-size: var(--fs-sm); padding: 7px 11px; }
+/* آیکون زیرمنوها: نقطه‌ی راهنمای کوچک، هم‌تراز با آیکون‌های سطح اول */
+.nav-sub .nav-item .icon { width: 16px; height: 16px; color: var(--text-soft); }
+.nav-sub .nav-item.is-active .icon { color: currentColor; }
 .nav-caret { color: var(--text-soft); transition: transform var(--t); }
 .nav-item.is-open .nav-caret { transform: rotate(180deg); }
 
@@ -123,7 +139,14 @@
 .app-shell.sidebar-collapsed .nav-item.is-active { background: var(--ink); border-color: transparent; color: var(--on-ink); }
 .app-shell.sidebar-collapsed .nav-item .nav-badge { display: none; }
 .app-shell.sidebar-collapsed .sidebar-scroll { padding: 12px 8px; }
-.app-shell.sidebar-collapsed .sidebar-brand { justify-content: center; padding: 0; }
+/* در حالت جمع‌شده، نشان برند و دکمه بازکردن زیر هم و وسط‌چین می‌نشینند
+   تا هیچ‌کدام به دیواره‌های سایدبار نچسبند. */
+.app-shell.sidebar-collapsed .sidebar-brand {
+  flex-direction: column; justify-content: center; gap: 6px;
+  height: auto; padding: 10px 6px; margin-inline: 6px;
+}
+.app-shell.sidebar-collapsed .sidebar-brand .brand-mark { width: 32px; height: 32px; }
+.app-shell.sidebar-collapsed .sidebar-collapse-btn { width: 32px; height: 32px; margin-inline: 0; }
 .app-shell.sidebar-collapsed .nav-sub { display: none; }
 
 /* ---------------------------------------------------------------- محتوا */
@@ -448,6 +471,34 @@ body.has-taskbar .taskbar { transform: none; }
 .tray-clock { text-align: center; line-height: 1.25; padding: 0 8px; }
 .tray-clock .tc-time { font-size: var(--fs-sm); font-weight: 600; color: var(--text-strong); }
 .tray-clock .tc-date { font-size: var(--fs-2xs); color: var(--text-soft); }
+
+/* ==========================================================================
+ *  لایه‌ی تولتیپ (موتور جاوااسکریپت CRM.tip)
+ *  روی <body> ساخته می‌شود تا هرگز زیر پنل‌ها نرود یا بریده نشود.
+ * ========================================================================== */
+.tip {
+  position: fixed;
+  /* مختصات فیزیکی: مکان‌یابی با transform و بر پایه‌ی rect انجام می‌شود،
+     پس در RTL نباید از خصوصیت منطقی استفاده کرد. */
+  left: 0; top: 0;
+  z-index: var(--z-tip);
+  max-width: 280px;
+  padding: 7px 11px;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  line-height: 1.7;
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  opacity: 0;
+  transform: translate(-9999px, -9999px);
+  transition: opacity 120ms ease;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.tip.is-on { opacity: 1; }
 
 /* منوی شروع */
 .start-menu {

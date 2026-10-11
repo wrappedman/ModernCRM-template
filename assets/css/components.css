@@ -9,8 +9,10 @@
  * ========================================================================== */
 .btn {
   --btn-bg: var(--surface);
+  --btn-bg-hover: var(--surface-hover);
   --btn-fg: var(--text);
   --btn-bd: var(--border);
+  --btn-bd-hover: var(--border-strong);
   --btn-h: 38px;
   display: inline-flex;
   align-items: center;
@@ -33,7 +35,7 @@
   transition: background-color var(--t-fast), border-color var(--t-fast),
               color var(--t-fast), box-shadow var(--t-fast), transform var(--t-fast);
 }
-.btn:hover { background: var(--surface-hover); border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+.btn:hover { background: var(--btn-bg-hover); border-color: var(--btn-bd-hover); box-shadow: var(--shadow-sm); }
 .btn:active { transform: translateY(1px); }
 .btn:disabled, .btn.is-disabled {
   opacity: 0.5; pointer-events: none; cursor: not-allowed;
@@ -42,20 +44,23 @@
 
 .btn-primary {
   --btn-bg: var(--brand-btn);
+  --btn-bg-hover: var(--brand-btn-hover);
   --btn-fg: var(--text-on-brand, #fff);
   --btn-bd: transparent;
+  --btn-bd-hover: transparent;
   font-weight: 600;
   box-shadow: var(--shadow-brand);
 }
 /* دکمه مشکی: همان «حالت فعال» تم مرجع */
 .btn-ink {
   --btn-bg: var(--ink);
+  --btn-bg-hover: var(--ink-hover);
   --btn-fg: var(--on-ink);
   --btn-bd: transparent;
+  --btn-bd-hover: transparent;
   font-weight: 600;
   box-shadow: var(--shadow-ink);
 }
-.btn-ink:hover { --btn-bg: var(--ink-hover); border-color: transparent; }
 .btn-primary:hover { --btn-bg: var(--brand-btn-hover); border-color: transparent; }
 .btn-primary:active { box-shadow: var(--shadow-xs); }
 
@@ -74,22 +79,20 @@
   --btn-bd: transparent;
   font-weight: 500;
 }
-.btn-soft:hover { --btn-bg: var(--brand-soft-2); border-color: transparent; }
+.btn-soft { --btn-bg-hover: var(--brand-soft-2); --btn-bd-hover: transparent; }
 
-.btn-ghost { --btn-bg: transparent; --btn-bd: transparent; --btn-fg: var(--text-muted); }
-.btn-ghost:hover { --btn-bg: var(--surface-hover); --btn-fg: var(--text-strong); border-color: transparent; }
+.btn-ghost { --btn-bg: transparent; --btn-bd: transparent; --btn-fg: var(--text-muted); --btn-bg-hover: var(--surface-hover); --btn-bd-hover: transparent; }
+.btn-ghost:hover { --btn-fg: var(--text-strong); }
 
-.btn-outline-brand { --btn-fg: var(--brand); --btn-bd: var(--brand); --btn-bg: transparent; }
-.btn-outline-brand:hover { --btn-bg: var(--brand-soft); }
+.btn-outline-brand { --btn-fg: var(--brand-ink); --btn-bd: var(--brand); --btn-bg: transparent; --btn-bg-hover: var(--brand-soft); --btn-bd-hover: var(--brand); }
 
-.btn-danger { --btn-bg: var(--danger); --btn-fg: #fff; --btn-bd: transparent; font-weight: 600; }
-.btn-danger:hover { filter: brightness(1.08); border-color: transparent; }
-.btn-danger-soft { --btn-bg: var(--danger-soft); --btn-fg: var(--danger); --btn-bd: transparent; }
-.btn-danger-soft:hover { --btn-bg: var(--danger-soft); filter: brightness(0.97); border-color: transparent; }
-.btn-success { --btn-bg: var(--success); --btn-fg: #fff; --btn-bd: transparent; font-weight: 600; }
-.btn-success:hover { filter: brightness(1.08); border-color: transparent; }
-.btn-dark { --btn-bg: var(--n-900); --btn-fg: #fff; --btn-bd: transparent; }
-.btn-dark:hover { --btn-bg: var(--n-800); border-color: transparent; }
+.btn-danger { --btn-bg: var(--danger); --btn-fg: #fff; --btn-bd: transparent; --btn-bd-hover: transparent; font-weight: 600; }
+.btn-danger:hover { filter: brightness(1.08); }
+.btn-danger-soft { --btn-bg: var(--danger-soft); --btn-fg: var(--danger); --btn-bd: transparent; --btn-bd-hover: transparent; }
+.btn-danger-soft:hover { filter: brightness(0.96); }
+.btn-success { --btn-bg: var(--success); --btn-fg: #fff; --btn-bd: transparent; --btn-bd-hover: transparent; font-weight: 600; }
+.btn-success:hover { filter: brightness(1.08); }
+.btn-dark { --btn-bg: var(--n-900); --btn-bg-hover: var(--n-800); --btn-fg: #fff; --btn-bd: transparent; --btn-bd-hover: transparent; }
 
 .btn-sm { --btn-h: 31px; padding: 0 10px; font-size: var(--fs-sm); gap: 5px; border-radius: var(--radius-xs); }
 .btn-lg { --btn-h: 46px; padding: 0 22px; font-size: var(--fs-base); font-weight: 600; border-radius: var(--radius); }
@@ -140,7 +143,7 @@
   color: #fff;
   backdrop-filter: blur(8px);
 }
-.btn-glass:hover { background: rgba(255, 255, 255, 0.26); border-color: rgba(255, 255, 255, 0.4); }
+.btn-glass { --btn-bg-hover: rgba(255, 255, 255, 0.28); --btn-bd-hover: rgba(255, 255, 255, 0.45); }
 
 /* ==========================================================================
  *  2) برچسب‌ها، نشان‌ها و چیپ‌ها
@@ -166,7 +169,6 @@
 .badge-danger { background: var(--danger-soft); color: var(--danger); }
 .badge-info { background: var(--info-soft); color: var(--info); }
 .badge-violet { background: rgba(138, 126, 232, 0.15); color: #6d5fd6; }
-html[data-theme="dark"] .badge-violet { color: #a99ff2; }
 .badge-outline { background: transparent; border: 1px solid var(--border-strong); color: var(--text-muted); }
 .badge-lg { height: 28px; padding: 0 12px; font-size: var(--fs-sm); }
 .badge-solid { background: var(--brand); color: #fff; }
@@ -425,14 +427,14 @@ html[dir="rtl"] .select { background-position: left 12px center; }
   transition: all var(--t);
 }
 .switch .track::after {
-  content: ""; position: absolute; top: 2px; inset-inline-end: 2px;
+  content: ""; position: absolute; top: 2px; inset-inline-start: 2px;
   width: 18px; height: 18px; border-radius: 50%;
   background: var(--surface); box-shadow: var(--shadow-sm);
-  transition: transform var(--t), inset-inline-end var(--t);
+  transition: inset-inline-start var(--t), background-color var(--t);
 }
-.switch input:checked ~ .track { background: var(--brand); border-color: var(--brand); }
-.switch input:checked ~ .track::after { transform: translateX(-18px); background: #fff; }
-html[dir="rtl"] .switch input:checked ~ .track::after { transform: translateX(-18px); }
+.switch input:checked ~ .track { background: var(--brand-btn); border-color: var(--brand-btn); }
+/* جابه‌جایی با ویژگی منطقی تا در RTL دکمه از کادر بیرون نزند */
+.switch input:checked ~ .track::after { inset-inline-start: calc(100% - 20px); background: #fff; }
 .switch input:focus-visible ~ .track { box-shadow: 0 0 0 3.5px var(--brand-ring); }
 .switch .lbl { font-size: var(--fs-md); }
 
@@ -693,24 +695,8 @@ html[dir="rtl"] .dropdown-menu { transform-origin: top right; }
 .dropdown-item.is-active { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
 .dropdown-sep { height: 1px; background: var(--border-muted); margin: 5px 0; }
 
-[data-tip] { position: relative; }
-[data-tip]::after {
-  content: attr(data-tip);
-  position: absolute; bottom: calc(100% + 8px); inset-inline-start: 50%;
-  transform: translateX(50%) translateY(4px);
-  background: var(--n-900); color: #fff;
-  font-size: var(--fs-xs); font-weight: 500; white-space: nowrap;
-  padding: 5px 9px; border-radius: var(--radius-xs);
-  opacity: 0; pointer-events: none; transition: all var(--t-fast);
-  z-index: var(--z-dropdown);
-  box-shadow: var(--shadow-md);
-}
-html[data-theme="dark"] [data-tip]::after { background: var(--surface-3); color: var(--text-strong); border: 1px solid var(--border); }
-[data-tip]:hover::after { opacity: 1; transform: translateX(50%) translateY(0); }
-[data-tip-pos="left"]::after { bottom: 50%; inset-inline-start: auto; inset-inline-end: calc(100% + 8px); transform: translateY(50%); }
-[data-tip-pos="left"]:hover::after { transform: translateY(50%); }
-[data-tip-pos="bottom"]::after { bottom: auto; top: calc(100% + 8px); transform: translateX(50%) translateY(-4px); }
-[data-tip-pos="bottom"]:hover::after { transform: translateX(50%) translateY(0); }
+/* تولتیپ‌ها با موتور جاوااسکریپت (CRM.tip) نمایش داده می‌شوند تا هرگز
+   زیر پنل‌ها گیر نکنند یا بیرون کادر بریده نشوند. استایل‌ها در layout.css است. */
 
 /* ==========================================================================
  *  9) مودال، دراور، پاپ‌اور
@@ -1069,12 +1055,12 @@ html[data-theme="dark"] [data-tip]::after { background: var(--surface-3); color:
 /* ==========================================================================
  * 16) نمودارها (SVG تولیدشده توسط CRM.charts)
  * ========================================================================== */
-.chart { position: relative; width: 100%; }
+.chart { position: relative; width: 100%; display: flex; flex-direction: column; }
 .chart.h-160 { height: 160px; }
 .chart.h-200 { height: 200px; }
 .chart.h-240 { height: 240px; }
 .chart.h-280 { height: 280px; }
-.chart-svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.chart-svg { width: 100%; height: 100%; flex: 1 1 auto; min-height: 0; display: block; overflow: visible; }
 .chart-x {
   display: flex; justify-content: space-between; gap: 4px;
   font-size: var(--fs-2xs); color: var(--text-soft);
