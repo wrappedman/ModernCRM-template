@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گزارش موجودی انبار | انبار | مدرن‌CRM</title>
+<meta name="description" content="گزارش موجودی انبار اصلی، فرعی، عمومی و گزارش مقایسه‌ای بر اساس مجموعه و محصولات انتخاب‌شده">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="warehouse-stock">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="warehouse.html">انبار</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">گزارش موجودی انبار</span>
+            </div>
+            <h1 class="page-title">گزارش موجودی انبار</h1>
+            <p class="page-desc">مجموعه‌ها و محصولات را انتخاب کنید و موجودی هر انبار یا مقایسه‌ی انبارها را ببینید.</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" type="button" data-print><span data-icon="printer" data-icon-size="16"></span> چاپ گزارش</button>
+            <button class="btn btn-primary" type="button" id="btnExport"><span data-icon="file-spreadsheet" data-icon-size="16"></span> خروجی Excel</button>
+          </div>
+        </div>
+
+        <!-- ============================ انتخاب نوع گزارش ============================ -->
+        <div class="card mb-5">
+          <div class="card-body tight d-flex flex-wrap items-center gap-3">
+            <div class="tabs tabs-pill" id="reportTabs" role="tablist" aria-label="نوع گزارش">
+              <button class="tab is-active" data-report="main" role="tab"><span data-icon="boxes" data-icon-size="15"></span> مشاهده انبار اصلی</button>
+              <button class="tab" data-report="sub" role="tab"><span data-icon="archive" data-icon-size="15"></span> مشاهده انبار فرعی</button>
+              <button class="tab" data-report="public" role="tab"><span data-icon="globe" data-icon-size="15"></span> انبار عمومی</button>
+              <button class="tab" data-report="compare" role="tab"><span data-icon="arrow-left-right" data-icon-size="15"></span> گزارش مقایسه‌ای</button>
+            </div>
+            <div class="fs-xs text-muted ms-auto d-flex items-center gap-2" id="reportHint"><span data-icon="info" data-icon-size="14"></span> <span>—</span></div>
+          </div>
+        </div>
+
+        <div class="grid-1-2">
+          <!-- ============================ انتخاب محصولات ============================ -->
+          <div class="card" data-win-nobtn style="align-self:start">
+            <div class="card-head">
+              <div class="card-title" data-icon="filter" data-icon-size="18"> انتخاب محصولات</div>
+              <div class="card-actions"><button class="btn btn-sm btn-ghost" type="button" id="btnReset"><span data-icon="refresh" data-icon-size="14"></span> همه</button></div>
+            </div>
+            <div class="card-body" style="border-bottom:1px solid var(--border-muted)">
+              <div class="form-label mb-2">مجموعه محصولات</div>
+              <div class="d-flex flex-wrap gap-2" id="catChips"></div>
+              <div class="form-hint mt-2"><span data-icon="info" data-icon-size="13"></span> چند مجموعه را می‌توانید همزمان انتخاب کنید؛ بدون انتخاب، همه نمایش داده می‌شوند.</div>
+            </div>
+            <div class="card-body tight" style="border-bottom:1px solid var(--border-muted)">
+              <div class="input-wrap">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" id="pSearch" placeholder="جستجو در محصولات…" aria-label="جستجو در محصولات">
+              </div>
+            </div>
+            <div style="max-height:440px;overflow:auto">
+              <table class="table table-compact">
+                <thead style="position:sticky;top:0;z-index:1">
+                  <tr>
+                    <th style="width:44px"><label class="check" data-tip="انتخاب همه"><input type="checkbox" id="chkAll"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>
+                    <th style="width:60px">کد</th>
+                    <th>نام محصول</th>
+                  </tr>
+                </thead>
+                <tbody id="pickBody"></tbody>
+              </table>
+            </div>
+            <div class="table-foot"><span id="pickFoot">—</span></div>
+          </div>
+
+          <!-- ============================ نتیجه گزارش ============================ -->
+          <div class="d-flex flex-col gap-5" style="min-width:0">
+            <div class="grid-4">
+              <div class="card"><div class="card-body tight"><div class="stat-label">اقلام گزارش</div><div class="stat-value" id="kItems">—</div></div></div>
+              <div class="card"><div class="card-body tight"><div class="stat-label" id="kTotalLbl">جمع موجودی</div><div class="stat-value" id="kTotal">—</div></div></div>
+              <div class="card"><div class="card-body tight"><div class="stat-label">کم‌موجود</div><div class="stat-value text-warning" id="kLow">—</div></div></div>
+              <div class="card"><div class="card-body tight"><div class="stat-label">ناموجود</div><div class="stat-value text-danger" id="kOut">—</div></div></div>
+            </div>
+
+            <div class="card" data-win="wh-stock-report" data-win-title="گزارش موجودی انبار" data-win-icon="chart-column" data-win-size="1100x640">
+              <div class="card-head">
+                <div class="card-title"><span data-icon="chart-column" data-icon-size="18"></span> <span id="reportTitle">موجودی انبار اصلی</span></div>
+                <div class="card-actions">
+                  <select class="select select-sm" id="sortBy" style="width:auto" aria-label="مرتب‌سازی">
+                    <option value="code">مرتب‌سازی: کد</option>
+                    <option value="stockAsc">کمترین موجودی</option>
+                    <option value="stockDesc">بیشترین موجودی</option>
+                    <option value="name">نام محصول</option>
+                  </select>
+                </div>
+              </div>
+              <div class="card-body flush">
+                <div class="table-wrap">
+                  <table class="table" id="tblReport">
+                    <thead id="reportHead"></thead>
+                    <tbody id="reportBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="table-foot"><span id="reportFoot">—</span><span class="ms-auto fs-xs text-muted">تاریخ گزارش: <span class="num" id="reportDate">—</span></span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/warehouse.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, WH = window.WH, D = CRM.data, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, num = CRM.num, esc = CRM.esc;
+  var report = 'main', cats = [], selected = {};
+  var today = CRM.jalali.format(CRM.jalali.toJalali(new Date())), month = today.slice(0, 7);
+  D.whProducts.forEach(function (p) { selected[p.code] = true; });
+  $('#reportDate').textContent = today;
+
+  var HINTS = {
+    main: 'موجودی فعلی انبار اصلی به همراه ورود و خروج ماه جاری',
+    sub: 'موجودی فعلی انبار فرعی به همراه ورود و خروج ماه جاری',
+    public: 'محصولاتی که «مشاهده در انبار عمومی» برایشان فعال است — موجودی کل',
+    compare: 'مقایسه موجودی انبار اصلی و فرعی برای هر محصول'
+  };
+  var TITLES = { main: 'موجودی انبار اصلی', sub: 'موجودی انبار فرعی', public: 'انبار عمومی', compare: 'گزارش مقایسه‌ای انبارها' };
+
+  /* ------------------------------------------------ مجموعه‌ها */
+  function renderCats() {
+    $('#catChips').innerHTML = D.whCategories.map(function (c) {
+      var count = D.whProducts.filter(function (p) { return p.cat === c.id; }).length;
+      return '<button type="button" class="chip' + (cats.indexOf(c.id) > -1 ? ' is-active' : '') + '" data-cat="' + c.id + '">' + esc(c.title) + ' <span class="num">' + fa(count) + '</span></button>';
+    }).join('');
+  }
+  $('#catChips').addEventListener('click', function (e) {
+    var c = e.target.closest('[data-cat]'); if (!c) return;
+    var id = c.getAttribute('data-cat'), i = cats.indexOf(id);
+    if (i > -1) cats.splice(i, 1); else cats.push(id);
+    renderCats(); renderPick(); renderReport();
+  });
+
+  /* ------------------------------------------------ فهرست انتخاب محصول */
+  function visible() {
+    var q = $('#pSearch').value.trim().toLowerCase();
+    return D.whProducts.filter(function (p) {
+      if (cats.length && cats.indexOf(p.cat) === -1) return false;
+      if (report === 'public' && !p.public) return false;
+      return !q || (p.name + ' ' + p.code).toLowerCase().indexOf(q) > -1;
+    });
+  }
+  function renderPick() {
+    var list = visible();
+    $('#pickBody').innerHTML = list.map(function (p) {
+      return '<tr><td><label class="check"><input type="checkbox" data-code="' + p.code + '"' + (selected[p.code] ? ' checked' : '') + '><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td>' +
+        '<td class="num text-muted">' + fa(p.code) + '</td><td class="cell-main"><span class="ltr-cell">' + esc(p.name) + '</span></td></tr>';
+    }).join('');
+    CRM.renderIcons($('#pickBody'));
+    var sel = list.filter(function (p) { return selected[p.code]; }).length;
+    $('#chkAll').checked = list.length > 0 && sel === list.length;
+    $('#chkAll').indeterminate = sel > 0 && sel < list.length;
+    $('#pickFoot').textContent = fa(sel) + ' از ' + fa(list.length) + ' محصول انتخاب شده';
+  }
+  $('#pickBody').addEventListener('change', function (e) {
+    var c = e.target.closest('[data-code]'); if (!c) return;
+    selected[c.getAttribute('data-code')] = c.checked; renderPick(); renderReport();
+  });
+  $('#chkAll').addEventListener('change', function () {
+    var on = this.checked; visible().forEach(function (p) { selected[p.code] = on; }); renderPick(); renderReport();
+  });
+  $('#pSearch').addEventListener('input', CRM.debounce(renderPick, 120));
+  $('#btnReset').addEventListener('click', function () {
+    cats = []; $('#pSearch').value = ''; D.whProducts.forEach(function (p) { selected[p.code] = true; });
+    renderCats(); renderPick(); renderReport();
+  });
+
+  /* ------------------------------------------------ گزارش */
+  function moved(p, store, kind) {
+    var src = kind === 'in' ? D.whIn : D.whOut;
+    return src.filter(function (r) { return r.product === p.code && r.store === store && r.date.slice(0, 7) === month; })
+      .reduce(function (s, r) { return s + r.qty; }, 0);
+  }
+  function rows() {
+    var list = visible().filter(function (p) { return selected[p.code]; });
+    var key = $('#sortBy').value;
+    var stock = function (p) { return report === 'compare' ? p.main + p.sub : WH.stockOf(p, report); };
+    list.sort(function (a, b) {
+      if (key === 'stockAsc') return stock(a) - stock(b);
+      if (key === 'stockDesc') return stock(b) - stock(a);
+      if (key === 'name') return a.name.localeCompare(b.name);
+      return a.code - b.code;
+    });
+    return list;
+  }
+  function th(cols) { return '<tr>' + cols.map(function (c) { return '<th' + (c[1] ? ' class="' + c[1] + '"' : '') + '>' + c[0] + '</th>'; }).join('') + '</tr>'; }
+
+  function renderReport() {
+    var list = rows(), store = report === 'compare' || report === 'public' ? 'all' : report, html = '';
+    var stocked = list.filter(WH.isStocked);
+
+    if (report === 'main' || report === 'sub') {
+      $('#reportHead').innerHTML = th([['کد', ''], ['محصول', ''], ['موجودی', 'num'], ['حداقل', 'num'], ['ورود ماه', 'num'], ['خروج ماه', 'num'], ['وضعیت', '']]);
+      html = list.map(function (p) {
+        var s = WH.isStocked(p), q = WH.stockOf(p, report), min = report === 'sub' ? Math.ceil(p.min / 3) : p.min;
+        var i = moved(p, report, 'in'), o = moved(p, report, 'out');
+        return '<tr><td class="num text-muted">' + fa(p.code) + '</td><td>' + WH.productCell(p) + '</td>' +
+          '<td class="num fw-700">' + (s ? fa(q) + ' <span class="fs-2xs text-muted fw-600">' + esc(p.unit) + '</span>' : '∞') + '</td>' +
+          '<td class="num text-muted">' + (s ? fa(min) : '—') + '</td>' +
+          '<td class="num">' + (i ? '<span class="text-success">+' + fa(i) + '</span>' : '<span class="text-soft">۰</span>') + '</td>' +
+          '<td class="num">' + (o ? '<span class="text-danger">−' + fa(o) + '</span>' : '<span class="text-soft">۰</span>') + '</td>' +
+          '<td>' + WH.stockBadge(p, report) + '</td></tr>';
+      }).join('');
+    } else if (report === 'public') {
+      $('#reportHead').innerHTML = th([['کد', ''], ['محصول', ''], ['قیمت مصرف‌کننده', 'num'], ['موجودی کل', 'num'], ['وضعیت', '']]);
+      html = list.map(function (p) {
+        var s = WH.isStocked(p);
+        return '<tr><td class="num text-muted">' + fa(p.code) + '</td><td>' + WH.productCell(p) + '</td>' +
+          '<td class="num">' + num(p.consumer) + ' <span class="fs-2xs text-muted">تومان</span></td>' +
+          '<td class="num fw-700">' + (s ? fa(p.main + p.sub) + ' <span class="fs-2xs text-muted fw-600">' + esc(p.unit) + '</span>' : '∞') + '</td>' +
+          '<td>' + WH.stockBadge(p, 'all') + '</td></tr>';
+      }).join('');
+    } else {
+      $('#reportHead').innerHTML = th([['کد', ''], ['محصول', ''], ['انبار اصلی', 'num'], ['انبار فرعی', 'num'], ['جمع', 'num'], ['مقایسه', ''], ['سهم فرعی', 'num']]);
+      html = list.map(function (p) {
+        if (!WH.isStocked(p)) return '<tr><td class="num text-muted">' + fa(p.code) + '</td><td>' + WH.productCell(p) + '</td><td colspan="5" class="text-soft fs-sm">بدون موجودی فیزیکی</td></tr>';
+        var rowMax = Math.max(p.main, p.sub, 1), tot = p.main + p.sub, share = tot ? Math.round(p.sub / tot * 100) : 0;
+        return '<tr><td class="num text-muted">' + fa(p.code) + '</td><td>' + WH.productCell(p) + '</td>' +
+          '<td class="num fw-600">' + fa(p.main) + '</td><td class="num fw-600">' + fa(p.sub) + '</td><td class="num fw-700">' + fa(tot) + '</td>' +
+          '<td><div class="cmp-bars">' +
+            '<div class="cmp-bar"><span style="min-width:30px">اصلی</span><span class="cb-track"><i style="width:' + Math.round(p.main / rowMax * 100) + '%"></i></span></div>' +
+            '<div class="cmp-bar alt"><span style="min-width:30px">فرعی</span><span class="cb-track"><i style="width:' + Math.round(p.sub / rowMax * 100) + '%"></i></span></div>' +
+          '</div></td>' +
+          '<td class="num">' + fa(share) + '٪</td></tr>';
+      }).join('');
+    }
+    var cols = $('#reportHead').querySelectorAll('th').length;
+    $('#reportBody').innerHTML = html || '<tr><td colspan="' + cols + '"><div class="empty" style="padding:40px"><div class="empty-ic" data-icon="package" data-icon-size="28"></div><div class="empty-title">محصولی انتخاب نشده است</div><div class="empty-desc">از ستون «انتخاب محصولات» حداقل یک محصول را انتخاب کنید.</div></div></td></tr>';
+    CRM.renderIcons($('#reportBody'));
+
+    /* شاخص‌ها */
+    var keyStore = report === 'compare' || report === 'public' ? 'all' : report;
+    var total = stocked.reduce(function (s, p) { return s + WH.stockOf(p, keyStore); }, 0);
+    $('#kItems').textContent = num(list.length);
+    $('#kTotal').textContent = num(total);
+    $('#kTotalLbl').textContent = report === 'compare' ? 'جمع دو انبار' : report === 'public' ? 'جمع موجودی عمومی' : 'جمع موجودی';
+    $('#kLow').textContent = num(stocked.filter(function (p) { return WH.stockState(p, keyStore === 'all' ? 'all' : keyStore).key === 'low'; }).length);
+    $('#kOut').textContent = num(stocked.filter(function (p) { return WH.stockState(p, keyStore === 'all' ? 'all' : keyStore).key === 'out'; }).length);
+    $('#reportFoot').textContent = fa(list.length) + ' محصول در گزارش' + (report === 'compare' ? ' — اصلی: ' + num(stocked.reduce(function (s, p) { return s + p.main; }, 0)) + ' · فرعی: ' + num(stocked.reduce(function (s, p) { return s + p.sub; }, 0)) : '');
+  }
+  $('#sortBy').addEventListener('change', renderReport);
+
+  /* ------------------------------------------------ تب‌ها */
+  function setReport(r) {
+    report = r;
+    $$('#reportTabs [data-report]').forEach(function (b) { var on = b.getAttribute('data-report') === r; b.classList.toggle('is-active', on); b.setAttribute('aria-selected', on); });
+    $('#reportTitle').textContent = TITLES[r];
+    $('#reportHint').lastElementChild.textContent = HINTS[r];
+    renderPick(); renderReport();
+  }
+  $('#reportTabs').addEventListener('click', function (e) { var b = e.target.closest('[data-report]'); if (b) setReport(b.getAttribute('data-report')); });
+  $('#btnExport').addEventListener('click', function () { WH.exportToast('stock-' + report); });
+
+  renderCats();
+  setReport('main');
+})();
+</script>
+</body>
+</html>

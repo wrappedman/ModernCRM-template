@@ -1161,3 +1161,183 @@ body.no-float .win-open-btn { display: none; }
 @media (hover: none) { .win-open-btn--corner { opacity: .85; } }
 
 body.no-float .win-hint { display: none; }
+
+/* ==========================================================================
+ * 19) اجزای فرم پیشرفته (انبار و فرم‌های عملیاتی)
+ * ========================================================================== */
+
+/* ---- انتخابگر تاریخ شمسی: <input data-jdate> ---- */
+.jdp {
+  position: fixed; z-index: var(--z-popover);
+  width: 276px; padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  opacity: 0; transform: translateY(-4px) scale(.98);
+  pointer-events: none; visibility: hidden;
+  transition: opacity var(--t-fast), transform var(--t-fast), visibility 0s linear 120ms;
+}
+.jdp.is-open { opacity: 1; transform: none; pointer-events: auto; visibility: visible; transition-delay: 0s; }
+.jdp-head { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.jdp-title { flex: 1; text-align: center; font-weight: 700; color: var(--text-strong); font-size: var(--fs-md); }
+.jdp-nav {
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
+  display: grid; place-items: center; color: var(--text-muted);
+}
+.jdp-nav:hover { background: var(--surface-hover); color: var(--text-strong); }
+.jdp-week, .jdp-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.jdp-week span { text-align: center; font-size: var(--fs-2xs); color: var(--text-soft); font-weight: 600; padding: 4px 0; }
+.jdp-day {
+  height: 34px; border-radius: var(--radius-xs);
+  font-size: var(--fs-sm); color: var(--text); font-weight: 500;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.jdp-day:hover { background: var(--brand-soft); color: var(--brand-ink); }
+.jdp-day.is-holiday { color: var(--accent-600); }
+.jdp-day.is-today { box-shadow: inset 0 0 0 1.5px var(--brand); color: var(--brand-ink); font-weight: 700; }
+.jdp-day.is-selected, .jdp-day.is-selected:hover { background: var(--ink); color: var(--on-ink); box-shadow: none; }
+.jdp-day:disabled { opacity: .3; cursor: not-allowed; background: none; }
+.jdp-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-muted); }
+.input-wrap > .icon-btn.trail {
+  position: absolute; inset-inline-end: 5px;
+  width: 30px; height: 30px; border-radius: var(--radius-xs);
+  display: grid; place-items: center; color: var(--text-muted);
+}
+.input-wrap > .icon-btn.trail:hover { background: var(--surface-hover); color: var(--brand-ink); }
+.input-wrap > .icon-btn.trail ~ .input,
+.input-wrap > .input:has(~ .icon-btn.trail) { padding-inline-end: 40px; }
+
+/* ---- بخش‌بندی فرم‌های طولانی ---- */
+.form-section + .form-section { margin-top: 6px; padding-top: 20px; border-top: 1px dashed var(--border); }
+.form-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.form-section-head .fs-ic {
+  width: 32px; height: 32px; border-radius: 10px; flex: none;
+  display: grid; place-items: center;
+  background: var(--brand-soft); color: var(--brand-ink);
+}
+.form-section-head .fs-title { font-weight: 700; color: var(--text-strong); font-size: var(--fs-md); }
+.form-section-head .fs-desc { font-size: var(--fs-xs); color: var(--text-muted); }
+.form-section-head .fs-end { margin-inline-start: auto; }
+
+/* برچسب با کنترل کناری (مثلاً «از شماره سریال» + چک‌باکس) */
+.form-label-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
+.form-label-row .form-label { margin-bottom: 0; }
+.form-label-row .check .lbl { font-size: var(--fs-xs); color: var(--text-muted); }
+
+/* پسوند واحد داخل فیلد (تومان، عدد…) */
+.input-wrap > .unit {
+  position: absolute; inset-inline-end: 12px;
+  font-size: var(--fs-xs); color: var(--text-soft); pointer-events: none;
+}
+.input-wrap > .input:has(~ .unit) { padding-inline-end: 52px; }
+
+/* نوار دکمه‌های پایین فرم */
+.form-actions {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 14px 18px; border-top: 1px solid var(--border-muted);
+  background: var(--surface-2);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+.form-actions .spacer { flex: 1; }
+
+/* ---- کارت‌های گزینه (رادیو/چک‌باکس به شکل کاشی) ---- */
+.opt-cards { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(116px, 1fr)); }
+.opt-card { position: relative; display: block; cursor: pointer; user-select: none; }
+.opt-card > input { position: absolute; opacity: 0; width: 0; height: 0; }
+.opt-card .opt-body {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px; height: 100%;
+  padding: 12px; border-radius: var(--radius);
+  border: 1px solid var(--border); background: var(--surface);
+  transition: border-color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast), color var(--t-fast);
+}
+.opt-card .opt-ic {
+  width: 34px; height: 34px; border-radius: 11px; flex: none;
+  display: grid; place-items: center; background: var(--surface-3); color: var(--text-muted);
+  transition: inherit;
+}
+.opt-card .opt-title { font-weight: 600; font-size: var(--fs-md); color: var(--text-strong); line-height: 1.4; }
+.opt-card .opt-desc { font-size: var(--fs-2xs); color: var(--text-muted); line-height: 1.5; }
+.opt-card:hover .opt-body { border-color: var(--border-strong); background: var(--surface-hover); }
+.opt-card > input:focus-visible + .opt-body { box-shadow: 0 0 0 3.5px var(--brand-ring); }
+.opt-card > input:checked + .opt-body { background: var(--ink); border-color: transparent; box-shadow: var(--shadow-ink); }
+.opt-card > input:checked + .opt-body .opt-title { color: var(--on-ink); }
+.opt-card > input:checked + .opt-body .opt-desc { color: var(--on-ink-muted); }
+.opt-card > input:checked + .opt-body .opt-ic { background: rgba(255, 255, 255, .14); color: var(--on-ink); }
+.opt-card > input:disabled + .opt-body { opacity: .5; cursor: not-allowed; }
+
+/* پنل شرطی که با انتخاب یک گزینه ظاهر می‌شود */
+.reveal { animation: reveal-in 220ms var(--t-slow) both; }
+@keyframes reveal-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* ---- فهرست قابل انتخاب (مثلاً فهرست محصولات کنار فرم) ---- */
+.pick-list { display: flex; flex-direction: column; padding: 6px; gap: 2px; }
+.pick-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 9px 10px; border-radius: var(--radius-sm); text-align: start;
+  transition: background var(--t-fast);
+}
+.pick-item:hover { background: var(--surface-hover); }
+.pick-item .pi-code {
+  min-width: 34px; height: 26px; padding: 0 6px; border-radius: 8px; flex: none;
+  display: grid; place-items: center;
+  background: var(--surface-3); color: var(--text-muted); font-size: var(--fs-xs); font-weight: 700;
+}
+.pick-item .pi-main { flex: 1; min-width: 0; }
+.pick-item .pi-title { font-weight: 600; color: var(--text-strong); font-size: var(--fs-md); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; unicode-bidi: plaintext; text-align: right; }
+.pick-item .pi-sub { font-size: var(--fs-2xs); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pick-item.is-selected { background: var(--ink); }
+.pick-item.is-selected .pi-title { color: var(--on-ink); }
+.pick-item.is-selected .pi-sub { color: var(--on-ink-muted); }
+.pick-item.is-selected .pi-code { background: rgba(255, 255, 255, .14); color: var(--on-ink); }
+
+/* ---- انتخاب تصویر با پیش‌نمایش ---- */
+.img-pick { display: flex; align-items: center; gap: 14px; }
+.img-pick .ip-thumb {
+  width: 96px; height: 96px; border-radius: var(--radius); flex: none;
+  border: 1.5px dashed var(--border-strong); background: var(--surface-2);
+  display: grid; place-items: center; overflow: hidden; color: var(--text-soft);
+}
+.img-pick .ip-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.img-pick.has-img .ip-thumb { border-style: solid; border-color: var(--border); }
+
+/* ---- کاشی‌های میان‌بر (نمای کلی بخش‌ها) ---- */
+.tile-links { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+.tile-link {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 18px; border-radius: var(--radius-lg);
+  background: var(--surface); border: 1px solid var(--border-muted);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+}
+.tile-link:hover { transform: translateY(-2px); border-color: var(--border-strong); box-shadow: var(--shadow-md); }
+.tile-link .tl-title { font-weight: 700; color: var(--text-strong); }
+.tile-link .tl-desc { font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.8; }
+.tile-link .tl-go { margin-top: auto; display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); font-weight: 600; color: var(--brand-ink); }
+
+/* ---- نوار مقایسه (گزارش مقایسه‌ای انبارها) ---- */
+.cmp-bars { display: flex; flex-direction: column; gap: 4px; min-width: 140px; }
+.cmp-bar { display: flex; align-items: center; gap: 8px; font-size: var(--fs-2xs); color: var(--text-muted); }
+.cmp-bar .cb-track { flex: 1; height: 7px; border-radius: 99px; background: var(--surface-inset); overflow: hidden; }
+.cmp-bar .cb-track > i { display: block; height: 100%; border-radius: inherit; background: var(--c1); }
+.cmp-bar.alt .cb-track > i { background: var(--c2); }
+.cmp-bar .cb-val { min-width: 26px; text-align: left; font-weight: 600; color: var(--text); }
+
+/* کد محصول با حروف لاتین در جدول‌های راست‌چین */
+.ltr-cell { unicode-bidi: plaintext; display: inline-block; white-space: nowrap; }
+
+@media (max-width: 640px) {
+  .opt-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .form-actions .btn { flex: 1; }
+  .form-actions .spacer { display: none; }
+}
+
+/* فیلدهای غیرفعال */
+.input:disabled, .select:disabled, .textarea:disabled {
+  background: var(--surface-2); color: var(--text-soft); cursor: not-allowed; border-style: dashed;
+}
+.input[readonly]:not([data-jdate]) { background: var(--surface-2); }
+.form-group.is-disabled > .form-label { color: var(--text-soft); }
+.input.is-invalid, .select.is-invalid, .textarea.is-invalid { border-color: var(--danger); box-shadow: 0 0 0 3.5px var(--danger-ring); }
+.form-group.mb-0, .mb-0 { margin-bottom: 0; }
+.tab { display: inline-flex; align-items: center; gap: 6px; }

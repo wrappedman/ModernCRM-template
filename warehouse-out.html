@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خروج محصول | انبار | مدرن‌CRM</title>
+<meta name="description" content="ثبت خروج کالا از انبار اصلی و فرعی: فروش، دمو، پرزنت، خراب و پشتیبانی">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<!--
+  این صفحه هر دو فرم «خروج محصول (اصلی)» و «خروج محصول (فرعی)» را پوشش می‌دهد:
+    warehouse-out.html            → انبار اصلی
+    warehouse-out.html?store=sub  → انبار فرعی (بدون ستون «شماره فاکتور» و خروجی Excel، مانند برنامه فعلی)
+-->
+<body class="app" data-page="warehouse-out">
+<script>if (/[?&]store=sub\b/.test(location.search)) { document.body.setAttribute('data-page', 'warehouse-out-sub'); document.body.setAttribute('data-store', 'sub'); }</script>
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="warehouse.html">انبار</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current" data-store-text="خروج محصول (اصلی)|خروج محصول (فرعی)">خروج محصول (اصلی)</span>
+            </div>
+            <h1 class="page-title">خروج محصول <span class="badge badge-lg" id="storeBadge" style="vertical-align:middle">انبار اصلی</span></h1>
+            <p class="page-desc">نوع خروج (فروش، دمو، پرزنت، خراب یا پشتیبانی) را مشخص کنید؛ فیلدهای مرتبط به‌صورت خودکار نمایش داده می‌شوند.</p>
+          </div>
+          <div class="head-actions">
+            <div class="segmented" role="tablist" aria-label="انتخاب انبار">
+              <a class="seg" href="warehouse-out.html" data-store-tab="main"><span data-icon="boxes" data-icon-size="15"></span> انبار اصلی</a>
+              <a class="seg" href="warehouse-out.html?store=sub" data-store-tab="sub"><span data-icon="archive" data-icon-size="15"></span> انبار فرعی</a>
+            </div>
+            <button class="btn" type="button" data-main-only id="btnExportTop"><span data-icon="file-spreadsheet" data-icon-size="16"></span> خروجی Excel</button>
+          </div>
+        </div>
+
+        <div class="grid-2-1 mb-5">
+          <!-- ============================ فرم خروج ============================ -->
+          <form class="card" id="outForm" data-win-nobtn novalidate>
+            <div class="card-head">
+              <div class="card-title" data-icon="package-minus" data-icon-size="18"> ثبت فرم خروج</div>
+              <div class="card-actions"><span class="badge badge-outline" id="formState">فرم جدید</span></div>
+            </div>
+            <div class="card-body">
+
+              <!-- ۱) مشخصات فرم -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="clipboard" data-icon-size="17"></span>
+                  <div><div class="fs-title">مشخصات فرم</div><div class="fs-desc">شماره فرم، مشتری، مسئول و تاریخ خروج</div></div>
+                </div>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="fForm">شماره فرم</label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="notebook" data-icon-size="17"></span>
+                      <input class="input num" id="fForm" data-fa-mask placeholder="خودکار">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fDate">تاریخ خروج</label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="calendar-days" data-icon-size="17"></span>
+                      <input class="input num" id="fDate" data-jdate="today">
+                      <button type="button" class="icon-btn trail" data-jdate-trigger data-tip="باز کردن تقویم" data-icon="chevron-down" data-icon-size="15"></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fCustomer">نام مشتری</label>
+                    <div class="input-group">
+                      <input class="input" id="fCustomer" readonly placeholder="از فهرست مشتریان انتخاب کنید">
+                      <button type="button" class="btn" id="btnPickCustomer" data-tip="انتخاب مشتری"><span data-icon="users" data-icon-size="16"></span></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fOwner">مسئول فرم</label>
+                    <select class="select" id="fOwner"></select>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۲) کالا -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="package" data-icon-size="17"></span>
+                  <div><div class="fs-title">کالا</div><div class="fs-desc">محصول، تعداد، شماره سریال و نوع کارتخوان</div></div>
+                </div>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="fCat">نام مجموعه</label>
+                    <select class="select" id="fCat"></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fProduct">نام محصول <span class="req">*</span></label>
+                    <select class="select" id="fProduct" required></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fQty">تعداد <span class="req">*</span></label>
+                    <div class="input-wrap"><input class="input num" id="fQty" data-num-mask required placeholder="۰"><span class="unit" id="fUnit">عدد</span></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fReader">نوع کارتخوان <span class="req">*</span></label>
+                    <select class="select" id="fReader"></select>
+                  </div>
+                  <div class="form-group" style="grid-column:1 / -1">
+                    <div class="form-label-row">
+                      <label class="form-label" for="fSerial">از شماره سریال</label>
+                      <label class="check"><input type="checkbox" id="chkSerial"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">انتخاب بر اساس سریال</span></label>
+                    </div>
+                    <select class="select ltr" id="fSerial"><option value="">ابتدا محصول را انتخاب کنید</option></select>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۳) نوع خروج -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="route" data-icon-size="17"></span>
+                  <div><div class="fs-title">نوع خروج</div><div class="fs-desc">علت خروج کالا از انبار</div></div>
+                </div>
+                <div class="opt-cards mb-4" id="exitTypes" role="radiogroup" aria-label="نوع خروج"></div>
+
+                <!-- فروش: شماره فاکتور + جایگزینی -->
+                <div class="panel reveal d-none mb-4" data-when="sale">
+                  <div class="grid-2" style="align-items:end">
+                    <div class="form-group mb-0">
+                      <label class="form-label" for="fInvoice">شماره فاکتور</label>
+                      <select class="select" id="fInvoice"></select>
+                    </div>
+                    <div class="form-group mb-0">
+                      <label class="check" style="min-height:42px;align-items:center">
+                        <input type="checkbox" id="fReplace"><span class="box"><span data-icon="check" data-icon-size="12"></span></span>
+                        <span class="lbl">جایگزینی<small>این کالا جایگزین کالای قبلی مشتری است</small></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- دمو: تاریخ بازگشت -->
+                <div class="panel reveal d-none mb-4" data-when="demo">
+                  <div class="grid-2" style="align-items:end">
+                    <div class="form-group mb-0">
+                      <label class="form-label" for="fReturn">تاریخ بازگشت دمو <span class="req">*</span></label>
+                      <div class="input-wrap">
+                        <span class="icon lead" data-icon="rotate-ccw" data-icon-size="17"></span>
+                        <input class="input num" id="fReturn" data-jdate>
+                        <button type="button" class="icon-btn trail" data-jdate-trigger data-tip="باز کردن تقویم" data-icon="chevron-down" data-icon-size="15"></button>
+                      </div>
+                    </div>
+                    <div class="d-flex gap-2 flex-wrap" id="returnQuick">
+                      <button type="button" class="chip" data-days="7">یک هفته</button>
+                      <button type="button" class="chip" data-days="14">دو هفته</button>
+                      <button type="button" class="chip" data-days="30">یک ماه</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group mb-0">
+                  <label class="form-label" for="fNote">توضیحات</label>
+                  <textarea class="textarea" id="fNote" rows="2" style="min-height:72px" placeholder="توضیحات تکمیلی فرم خروج…"></textarea>
+                </div>
+              </section>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> ثبت خروج</button>
+              <button type="button" class="btn" id="btnCancel"><span data-icon="eraser" data-icon-size="16"></span> انصراف</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-soft" id="btnSearch" data-tip="جستجو در خروجی‌ها بر اساس فیلدهای پرشده"><span data-icon="search" data-icon-size="16"></span> جستجو</button>
+            </div>
+          </form>
+
+          <!-- ============================ خلاصه فرم ============================ -->
+          <div style="align-self:start;position:sticky;top:calc(var(--topbar-h) + 12px)" class="d-flex flex-col gap-5">
+            <div class="card" data-win-nobtn>
+              <div class="card-head"><div class="card-title" data-icon="clipboard" data-icon-size="18"> خلاصه فرم</div></div>
+              <div class="card-body" id="summary"></div>
+            </div>
+            <div class="card card-ink">
+              <div class="card-body">
+                <div class="d-flex items-center gap-3 mb-3">
+                  <span class="stat-icon ink" style="background:rgba(255,255,255,.12)"><span data-icon="rotate-ccw" data-icon-size="20"></span></span>
+                  <div><div class="stat-label">دموهای این انبار</div><div class="stat-value" id="demoCount">—</div></div>
+                </div>
+                <div class="fs-xs" style="color:var(--on-ink-muted);line-height:1.9" id="demoNote">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================ جدول خروجی‌ها ============================ -->
+        <div class="card" data-win="wh-out-table" data-win-title="خروجی‌های انبار" data-win-icon="table" data-win-size="1200x640">
+          <div class="card-head flex-wrap" style="gap:10px">
+            <div class="card-title" data-icon="table" data-icon-size="18"> خروجی‌های ثبت‌شده</div>
+            <div class="card-actions flex-wrap" style="gap:8px">
+              <div class="input-wrap" style="width:220px">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" placeholder="جستجو در جدول…" data-table-search="#tblOut" aria-label="جستجو">
+              </div>
+              <button class="btn btn-sm btn-soft" type="button" data-main-only id="btnExport"><span data-icon="file-spreadsheet" data-icon-size="15"></span> Excel</button>
+            </div>
+          </div>
+          <div class="card-body tight d-flex gap-2 flex-wrap" id="typeChips" style="border-bottom:1px solid var(--border-muted)"></div>
+          <div class="alert alert-info d-none" id="filterBar" style="border-radius:0;border-inline:0">
+            <span data-icon="filter" data-icon-size="17"></span>
+            <div class="alert-title" id="filterText">فیلتر فعال</div>
+            <button class="btn btn-sm btn-soft ms-auto" type="button" id="btnClearFilter"><span data-icon="x" data-icon-size="14"></span> حذف فیلتر</button>
+          </div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table" id="tblOut">
+                <thead>
+                  <tr>
+                    <th style="width:56px">ردیف</th>
+                    <th>وضعیت</th>
+                    <th class="sortable" data-sort><span class="th-in">محصول</span></th>
+                    <th>شماره سریال</th>
+                    <th>نوع کارتخوان</th>
+                    <th class="sortable" data-sort><span class="th-in">تاریخ ورود</span></th>
+                    <th class="sortable num" data-sort><span class="th-in">تعداد</span></th>
+                    <th data-main-only>شماره فاکتور</th>
+                    <th>مشتری</th>
+                    <th class="table-row-actions">عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="outBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-foot">
+            <span id="outFoot">—</span>
+            <div class="pagination ms-auto"><button disabled data-icon="chevron-right" data-icon-size="15"></button><button class="is-active">۱</button><button data-icon="chevron-left" data-icon-size="15"></button></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/warehouse.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, WH = window.WH, D = CRM.data, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, num = CRM.num, esc = CRM.esc;
+  var STORE = document.body.getAttribute('data-store') === 'sub' ? 'sub' : 'main';
+  var IS_MAIN = STORE === 'main';
+  var form = $('#outForm'), filter = null, typeFilter = '', editing = null;
+
+  /* ------------------------------------------------ تفاوت اصلی / فرعی */
+  document.title = (IS_MAIN ? 'خروج محصول (اصلی)' : 'خروج محصول (فرعی)') + ' | انبار | مدرن‌CRM';
+  $('#storeBadge').textContent = IS_MAIN ? 'انبار اصلی' : 'انبار فرعی';
+  $('#storeBadge').className = 'badge badge-lg ' + (IS_MAIN ? 'badge-primary' : 'badge-violet');
+  $$('[data-store-text]').forEach(function (el) { el.textContent = el.getAttribute('data-store-text').split('|')[IS_MAIN ? 0 : 1]; });
+  $$('[data-store-tab]').forEach(function (a) { a.classList.toggle('is-active', a.getAttribute('data-store-tab') === STORE); a.setAttribute('aria-selected', a.getAttribute('data-store-tab') === STORE); });
+  if (!IS_MAIN) $$('[data-main-only]').forEach(function (el) { el.remove(); });
+
+  var F = {
+    form: $('#fForm'), date: $('#fDate'), customer: $('#fCustomer'), owner: $('#fOwner'),
+    cat: $('#fCat'), product: $('#fProduct'), qty: $('#fQty'), reader: $('#fReader'), chk: $('#chkSerial'), serial: $('#fSerial'),
+    invoice: $('#fInvoice'), replace: $('#fReplace'), ret: $('#fReturn'), note: $('#fNote')
+  };
+  function n(v) { return +String(CRM.en(v || '')).replace(/[^\d]/g, '') || 0; }
+  function today() { return CRM.jalali.format(CRM.jalali.toJalali(new Date())); }
+  function nextForm() {
+    var list = D.whOut.filter(function (o) { return o.store === STORE; }).map(function (o) { return n(o.form); });
+    return fa((Math.max.apply(null, list.concat([IS_MAIN ? 7800 : 5200])) + 1));
+  }
+
+  /* ------------------------------------------------ کنترل‌ها */
+  WH.linkCategoryProduct(F.cat, F.product, { withStock: true, store: STORE });
+  WH.fillReaders(F.reader, 0);
+  WH.fillUsers(F.owner);
+  if (F.invoice) WH.fillInvoices(F.invoice);
+  F.form.value = nextForm();
+
+  /* سریال‌های موجود محصول (نمایشی: از رسیدهای ورود ساخته می‌شود) */
+  function fillSerials() {
+    var p = WH.product(F.product.value), list = [];
+    if (p) {
+      D.whIn.filter(function (r) { return r.product === p.code && r.serial; }).forEach(function (r) {
+        var m = r.serial.match(/^(.*?)(\d+)$/); if (!m) return;
+        for (var i = 0; i < Math.min(r.qty, 6); i++) { var s = String(+m[2] + i); while (s.length < m[2].length) s = '0' + s; list.push(m[1] + s); }
+      });
+      if (!list.length && WH.isStocked(p)) for (var j = 1; j <= 5; j++) list.push(String(p.code).padStart(3, '0') + '-24-' + String(100 + j * 7).padStart(5, '0'));
+    }
+    F.serial.innerHTML = '<option value="">' + (p ? (list.length ? 'انتخاب شماره سریال…' : 'این محصول سریال ندارد') : 'ابتدا محصول را انتخاب کنید') + '</option>' +
+      list.map(function (s) { return '<option>' + esc(s) + '</option>'; }).join('');
+  }
+  F.product.addEventListener('change', function () {
+    var p = WH.product(F.product.value);
+    $('#fUnit').textContent = p ? p.unit : 'عدد';
+    fillSerials(); summary();
+  });
+  WH.linkToggle(F.chk, F.serial, function (on) { if (on && n(F.qty.value) !== 1) F.qty.value = fa(1); summary(); });
+  F.serial.addEventListener('change', summary);
+
+  /* ------------------------------------------------ نوع خروج */
+  $('#exitTypes').innerHTML = D.whExitTypes.map(function (t) {
+    return '<label class="opt-card"><input type="radio" name="exitType" value="' + t.id + '">' +
+      '<span class="opt-body"><span class="opt-ic">' + CRM.icon(t.icon, 17) + '</span>' +
+      '<span><span class="opt-title d-block">' + t.title + '</span><span class="opt-desc d-block">' + t.desc + '</span></span></span></label>';
+  }).join('');
+  function exitType() { var r = form.querySelector('input[name="exitType"]:checked'); return r ? r.value : ''; }
+  function syncType() {
+    var t = exitType();
+    $$('[data-when]').forEach(function (p) { p.classList.toggle('d-none', p.getAttribute('data-when') !== t); });
+    if (t === 'demo' && !F.ret.value) setReturn(14);
+    summary();
+  }
+  $('#exitTypes').addEventListener('change', syncType);
+
+  function setReturn(days) {
+    var base = CRM.jalali.parse(F.date.value) || CRM.jalali.toJalali(new Date());
+    var g = CRM.jalali.toGregorian(base.jy, base.jm, base.jd);
+    g.setDate(g.getDate() + days);
+    F.ret.value = CRM.jalali.format(CRM.jalali.toJalali(g));
+  }
+  $('#returnQuick').addEventListener('click', function (e) {
+    var c = e.target.closest('[data-days]'); if (!c) return;
+    $$('#returnQuick .chip').forEach(function (x) { x.classList.toggle('is-active', x === c); });
+    setReturn(+c.getAttribute('data-days')); summary();
+  });
+  F.date.addEventListener('change', function () { F.ret.setAttribute('data-jdate-min', F.date.value); summary(); });
+  F.ret.setAttribute('data-jdate-min', F.date.value);
+  [F.qty, F.ret, F.customer, F.owner, F.reader].forEach(function (i) { i.addEventListener('input', summary); i.addEventListener('change', summary); });
+
+  $('#btnPickCustomer').addEventListener('click', function () { WH.openCustomerPicker(F.customer); });
+  F.customer.addEventListener('click', function () { WH.openCustomerPicker(F.customer); });
+
+  /* ------------------------------------------------ خلاصه فرم */
+  function summary() {
+    var p = WH.product(F.product.value), t = exitType(), qty = n(F.qty.value);
+    var html = '';
+    if (!p) {
+      html = '<div class="empty" style="padding:18px 6px"><div class="empty-ic" data-icon="package" data-icon-size="26"></div>' +
+        '<div class="empty-desc">برای دیدن موجودی و خلاصه فرم، محصول را انتخاب کنید.</div></div>';
+    } else {
+      var stock = WH.stockOf(p, STORE), left = stock - qty, stocked = WH.isStocked(p);
+      var pct = stocked ? Math.max(0, Math.min(100, Math.round(left / Math.max(1, stock) * 100))) : 100;
+      html += '<div class="d-flex items-center gap-3 mb-4">' + WH.productCell(p).replace('<div class="d-flex items-center gap-3">', '<div class="d-flex items-center gap-3 flex-1">') + '</div>';
+      if (stocked) {
+        html += '<div class="d-flex justify-between fs-xs text-muted mb-1"><span>موجودی ' + (IS_MAIN ? 'انبار اصلی' : 'انبار فرعی') + '</span><span class="num fw-700 text-strong">' + fa(stock) + ' ' + esc(p.unit) + '</span></div>' +
+          '<div class="progress ' + (left < 0 ? 'danger' : left <= p.min ? 'warn' : '') + ' mb-1"><i style="width:' + Math.max(3, pct) + '%"></i></div>' +
+          '<div class="fs-2xs ' + (left < 0 ? 'text-danger' : 'text-muted') + ' mb-4">' + (qty ? (left < 0 ? 'تعداد خروج بیش از موجودی است!' : 'پس از خروج: ' + fa(left) + ' ' + esc(p.unit)) : 'تعداد خروج را وارد کنید') + '</div>';
+      } else {
+        html += '<div class="alert alert-info mb-4" style="padding:10px 12px"><span data-icon="info" data-icon-size="16"></span><div class="fs-xs">این محصول موجودی فیزیکی ندارد.</div></div>';
+      }
+      var x = t ? WH.exitType(t) : null;
+      html += '<dl class="kv" style="grid-template-columns:96px 1fr;font-size:var(--fs-sm)">' +
+        '<dt>نوع خروج</dt><dd>' + (x ? '<span class="badge badge-' + x.tone + '">' + x.title + '</span>' : '<span class="text-soft">انتخاب نشده</span>') + '</dd>' +
+        '<dt>مشتری</dt><dd>' + (F.customer.value ? esc(F.customer.value) : '<span class="text-soft">—</span>') + '</dd>' +
+        '<dt>تعداد</dt><dd class="num">' + (qty ? fa(qty) + ' ' + esc(p.unit) : '—') + '</dd>' +
+        '<dt>کارتخوان</dt><dd>' + esc(WH.reader(F.reader.value)) + '</dd>' +
+        (F.chk.checked && F.serial.value ? '<dt>سریال</dt><dd><span class="ltr-cell num">' + esc(F.serial.value) + '</span></dd>' : '') +
+        (t === 'demo' && F.ret.value ? '<dt>بازگشت دمو</dt><dd class="num">' + esc(F.ret.value) + '</dd>' : '') +
+        (t === 'sale' && F.invoice && F.invoice.value ? '<dt>فاکتور</dt><dd class="num">' + esc(F.invoice.value) + (F.replace.checked ? ' <span class="badge badge-warning">جایگزینی</span>' : '') + '</dd>' : '') +
+      '</dl>';
+    }
+    $('#summary').innerHTML = html;
+    CRM.renderIcons($('#summary'));
+  }
+
+  /* ------------------------------------------------ جدول */
+  function statusCell(o) {
+    var x = WH.exitType(o.type);
+    var extra = '';
+    if (o.type === 'demo' && o.returnDate) {
+      var late = CRM.en(o.returnDate) < CRM.en(today());
+      extra = '<div class="fs-2xs ' + (late ? 'text-danger fw-600' : 'text-muted') + ' mt-1">' + (late ? 'معوق — ' : 'بازگشت ') + '<span class="num">' + esc(o.returnDate) + '</span></div>';
+    }
+    if (o.type === 'sale' && o.replace) extra = '<div class="fs-2xs text-muted mt-1">جایگزینی</div>';
+    return '<span class="badge badge-' + x.tone + '"><span data-icon="' + x.icon + '" data-icon-size="12"></span> ' + x.title + '</span>' + extra;
+  }
+  function rows() {
+    return D.whOut.filter(function (o) {
+      if (o.store !== STORE) return false;
+      if (typeFilter && o.type !== typeFilter) return false;
+      if (!filter) return true;
+      var p = WH.product(o.product);
+      return (!filter.form || o.form === filter.form) && (!filter.customer || o.customer === filter.customer) &&
+        (!filter.cat || p.cat === filter.cat) && (!filter.product || o.product === +filter.product) &&
+        (!filter.type || o.type === filter.type) && (!filter.owner || o.owner === filter.owner);
+    });
+  }
+  function render() {
+    var list = rows(), cols = IS_MAIN ? 10 : 9;
+    $('#outBody').innerHTML = list.length ? list.map(function (o, i) {
+      var p = WH.product(o.product);
+      return '<tr>' +
+        '<td>' + WH.row(i) + '<div class="fs-2xs text-soft num">فرم ' + esc(o.form) + '</div></td>' +
+        '<td>' + statusCell(o) + '</td>' +
+        '<td>' + WH.productCell(p) + '</td>' +
+        '<td>' + (o.serial ? '<span class="ltr-cell fs-sm num">' + esc(o.serial) + '</span>' : '<span class="text-soft fs-sm">—</span>') + '</td>' +
+        '<td><span class="badge' + (o.reader ? ' badge-primary' : '') + '">' + esc(WH.reader(o.reader)) + '</span></td>' +
+        '<td class="num fs-sm">' + esc(o.inDate) + '</td>' +
+        '<td class="num fw-700">' + num(o.qty) + '</td>' +
+        (IS_MAIN ? '<td class="num fs-sm">' + (o.invoice ? '<a href="invoices.html" class="text-brand">' + esc(o.invoice) + '</a>' : '<span class="text-soft">—</span>') + '</td>' : '') +
+        '<td class="fs-sm">' + esc(o.customer) + '<div class="fs-2xs text-muted num">' + esc(o.date) + ' · ' + esc(o.owner) + '</div></td>' +
+        '<td><span class="table-actions">' +
+          (o.type === 'demo' ? '<button type="button" class="tb-icon" style="width:30px;height:30px" data-return="' + esc(o.form) + '" data-tip="ثبت بازگشت دمو به انبار" data-icon="rotate-ccw" data-icon-size="16"></button>' : '') +
+          '<button type="button" class="tb-icon" style="width:30px;height:30px" data-edit="' + esc(o.form) + '" data-tip="ویرایش در فرم" data-icon="pencil" data-icon-size="16"></button>' +
+          '<button type="button" class="tb-icon" style="width:30px;height:30px" data-print data-tip="چاپ حواله خروج" data-icon="printer" data-icon-size="16"></button>' +
+          '<button type="button" class="tb-icon" style="width:30px;height:30px" data-del="' + esc(o.form) + '" data-tip="حذف" data-icon="trash" data-icon-size="16"></button>' +
+        '</span></td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="' + cols + '"><div class="empty" style="padding:34px"><div class="empty-ic" data-icon="inbox" data-icon-size="28"></div><div class="empty-title">خروجی‌ای یافت نشد</div><div class="empty-desc">فیلتر را تغییر دهید یا فرم خروج جدیدی ثبت کنید.</div></div></td></tr>';
+    CRM.renderIcons($('#outBody'));
+    $('#outFoot').textContent = 'نمایش ' + fa(list.length) + ' فرم خروج — جمع اقلام: ' + num(list.reduce(function (s, o) { return s + o.qty; }, 0));
+    chips(); demoCard();
+  }
+  function chips() {
+    var all = D.whOut.filter(function (o) { return o.store === STORE; });
+    $('#typeChips').innerHTML = '<button type="button" class="chip' + (!typeFilter ? ' is-active' : '') + '" data-type="">همه <span class="num">' + fa(all.length) + '</span></button>' +
+      D.whExitTypes.map(function (t) {
+        var c = all.filter(function (o) { return o.type === t.id; }).length;
+        return '<button type="button" class="chip' + (typeFilter === t.id ? ' is-active' : '') + '" data-type="' + t.id + '">' + CRM.icon(t.icon, 14) + ' ' + t.title + ' <span class="num">' + fa(c) + '</span></button>';
+      }).join('');
+  }
+  function demoCard() {
+    var demos = D.whOut.filter(function (o) { return o.store === STORE && o.type === 'demo'; });
+    var late = demos.filter(function (o) { return CRM.en(o.returnDate || '') < CRM.en(today()); });
+    $('#demoCount').textContent = fa(demos.length);
+    $('#demoNote').textContent = demos.length ? (late.length ? fa(late.length) + ' دمو از تاریخ بازگشت گذشته است. ' : 'همه دموها در مهلت بازگشت هستند. ') + 'برای ثبت بازگشت، از دکمه ↺ در جدول استفاده کنید.' : 'دموی بازی در این انبار وجود ندارد.';
+  }
+  $('#typeChips').addEventListener('click', function (e) { var c = e.target.closest('[data-type]'); if (!c) return; typeFilter = c.getAttribute('data-type'); render(); });
+
+  function find(form) { for (var i = 0; i < D.whOut.length; i++) if (D.whOut[i].store === STORE && D.whOut[i].form === form) return D.whOut[i]; return null; }
+  $('#outBody').addEventListener('click', function (e) {
+    var b;
+    if ((b = e.target.closest('[data-del]'))) {
+      var o = find(b.getAttribute('data-del'));
+      CRM.modal.confirm({ title: 'حذف فرم خروج', msg: 'فرم شماره ' + o.form + ' حذف شود؟ کالا به موجودی انبار بازمی‌گردد.', danger: true, okText: 'بله، حذف کن', icon: 'trash' })
+        .then(function (ok) { if (!ok) return; D.whOut.splice(D.whOut.indexOf(o), 1); render(); CRM.toast({ type: 'success', title: 'حذف شد', msg: 'فرم خروج حذف شد.' }); });
+    } else if ((b = e.target.closest('[data-return]'))) {
+      var d = find(b.getAttribute('data-return'));
+      CRM.modal.confirm({ title: 'بازگشت دمو', msg: 'کالای دموی «' + d.customer + '» به انبار بازگشت داده شود؟', okText: 'ثبت بازگشت', icon: 'rotate-ccw' })
+        .then(function (ok) { if (!ok) return; D.whOut.splice(D.whOut.indexOf(d), 1); WH.product(d.product)[STORE] += d.qty; render(); CRM.toast({ type: 'success', title: 'بازگشت ثبت شد', msg: 'کالای دمو به ' + (IS_MAIN ? 'انبار اصلی' : 'انبار فرعی') + ' بازگشت.' }); });
+    } else if ((b = e.target.closest('[data-edit]'))) {
+      load(find(b.getAttribute('data-edit')));
+    }
+  });
+
+  /* ------------------------------------------------ فرم: بارگذاری / ثبت / انصراف / جستجو */
+  function load(o) {
+    editing = o;
+    var p = WH.product(o.product);
+    F.form.value = o.form; F.date.value = o.date; F.customer.value = o.customer === '—' ? '' : o.customer; F.owner.value = o.owner;
+    F.cat.value = p.cat; WH.fillProducts(F.product, p.cat, { withStock: true, store: STORE }); F.product.value = p.code;
+    $('#fUnit').textContent = p.unit; fillSerials();
+    F.qty.value = fa(o.qty); F.reader.value = o.reader;
+    F.chk.checked = !!o.serial; F.chk.dispatchEvent(new Event('change'));
+    if (o.serial) { if (![].some.call(F.serial.options, function (x) { return x.value === o.serial; })) F.serial.insertAdjacentHTML('beforeend', '<option>' + esc(o.serial) + '</option>'); F.serial.value = o.serial; }
+    F.qty.value = fa(o.qty);
+    form.querySelector('input[name="exitType"][value="' + o.type + '"]').checked = true;
+    if (F.invoice) F.invoice.value = o.invoice || ''; if (F.replace) F.replace.checked = !!o.replace;
+    F.ret.value = o.returnDate || '';
+    syncType();
+    $('#formState').className = 'badge badge-violet'; $('#formState').textContent = 'ویرایش فرم ' + o.form;
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function reset() {
+    editing = null; form.reset();
+    F.date.value = today(); F.form.value = nextForm();
+    WH.fillProducts(F.product, '', { withStock: true, store: STORE }); fillSerials();
+    F.chk.dispatchEvent(new Event('change'));
+    $$('#returnQuick .chip').forEach(function (x) { x.classList.remove('is-active'); });
+    form.querySelectorAll('.is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+    $('#formState').className = 'badge badge-outline'; $('#formState').textContent = 'فرم جدید';
+    syncType();
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var t = exitType(), bad = [];
+    if (!F.product.value) bad.push(F.product);
+    if (n(F.qty.value) < 1) bad.push(F.qty);
+    if (F.chk.checked && !F.serial.value) bad.push(F.serial);
+    if (t === 'demo' && !F.ret.value) bad.push(F.ret);
+    [F.product, F.qty, F.serial, F.ret].forEach(function (x) { x.classList.toggle('is-invalid', bad.indexOf(x) > -1); });
+    if (bad.length) { bad[0].focus(); CRM.toast({ type: 'danger', title: 'اطلاعات ناقص است', msg: 'فیلدهای ستاره‌دار را تکمیل کنید.' }); return; }
+    if (!t) { $('#exitTypes').scrollIntoView({ behavior: 'smooth', block: 'center' }); CRM.toast({ type: 'warning', title: 'نوع خروج', msg: 'یکی از گزینه‌های فروش، دمو، پرزنت، خراب یا پشتیبانی را انتخاب کنید.' }); return; }
+    var p = WH.product(F.product.value), qty = n(F.qty.value);
+    if (WH.isStocked(p) && qty > WH.stockOf(p, STORE) + (editing ? editing.qty : 0)) { F.qty.classList.add('is-invalid'); CRM.toast({ type: 'danger', title: 'موجودی کافی نیست', msg: 'موجودی فعلی ' + fa(WH.stockOf(p, STORE)) + ' ' + p.unit + ' است.' }); return; }
+    var rec = {
+      form: F.form.value || nextForm(), store: STORE, type: t, customer: F.customer.value || '—', product: p.code,
+      serial: F.chk.checked ? F.serial.value : '', reader: +F.reader.value, inDate: (D.whIn.filter(function (r) { return r.product === p.code; })[0] || { date: '—' }).date,
+      qty: qty, invoice: t === 'sale' && F.invoice ? F.invoice.value : '', replace: t === 'sale' && F.replace ? F.replace.checked : false,
+      date: F.date.value, owner: F.owner.value || 'مهدی کریمی', returnDate: t === 'demo' ? F.ret.value : ''
+    };
+    if (editing) { Object.assign(editing, rec); CRM.toast({ type: 'success', title: 'فرم به‌روزرسانی شد', msg: 'تغییرات فرم ' + rec.form + ' ثبت شد.' }); }
+    else { if (WH.isStocked(p)) p[STORE] -= qty; D.whOut.unshift(rec); CRM.toast({ type: 'success', title: 'خروج کالا ثبت شد', msg: 'فرم ' + rec.form + ' — ' + WH.exitType(t).title + ' «' + p.name + '»' }); }
+    typeFilter = ''; filter = null; $('#filterBar').classList.add('d-none');
+    render(); reset();
+  });
+  $('#btnCancel').addEventListener('click', reset);
+  $('#btnSearch').addEventListener('click', function () {
+    filter = { form: editing ? '' : '', customer: F.customer.value, cat: F.cat.value, product: F.product.value, type: exitType(), owner: F.owner.value };
+    var parts = [];
+    if (filter.customer) parts.push('مشتری: ' + filter.customer);
+    if (filter.cat) parts.push('مجموعه: ' + WH.category(filter.cat).title);
+    if (filter.product) parts.push('محصول: ' + WH.product(filter.product).name);
+    if (filter.type) parts.push('نوع: ' + WH.exitType(filter.type).title);
+    if (filter.owner) parts.push('مسئول: ' + filter.owner);
+    $('#filterText').textContent = 'فیلتر فعال — ' + (parts.join(' · ') || 'همه');
+    $('#filterBar').classList.remove('d-none');
+    render();
+    $('#tblOut').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  $('#btnClearFilter').addEventListener('click', function () { filter = null; $('#filterBar').classList.add('d-none'); render(); });
+  ['#btnExport', '#btnExportTop'].forEach(function (s) { var b = $(s); if (b) b.addEventListener('click', function () { WH.exportToast('warehouse-out-main'); }); });
+
+  reset();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -98,6 +98,67 @@ window.CRM = (function (w, d) {
     return jDate(date);
   }
 
+  /* ------------------------------------------------------------------
+   * تبدیل دقیق جلالی ⇄ میلادی (الگوریتم jalaali-js — بدون وابستگی)
+   * ------------------------------------------------------------------ */
+  var jalali = (function () {
+    var BREAKS = [-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178];
+    function div(a, b) { return ~~(a / b); }
+    function mod(a, b) { return a - ~~(a / b) * b; }
+    function jalCal(jy) {
+      var gy = jy + 621, leapJ = -14, jp = BREAKS[0], jm, jump = 0, leap, leapG, march, n, i;
+      for (i = 1; i < BREAKS.length; i++) {
+        jm = BREAKS[i]; jump = jm - jp;
+        if (jy < jm) break;
+        leapJ = leapJ + div(jump, 33) * 8 + div(mod(jump, 33), 4);
+        jp = jm;
+      }
+      n = jy - jp;
+      leapJ = leapJ + div(n, 33) * 8 + div(mod(n, 33) + 3, 4);
+      if (mod(jump, 33) === 4 && jump - n === 4) leapJ += 1;
+      leapG = div(gy, 4) - div((div(gy, 100) + 1) * 3, 4) - 150;
+      march = 20 + leapJ - leapG;
+      if (jump - n < 6) n = n - jump + div(jump + 4, 33) * 33;
+      leap = mod(mod(n + 1, 33) - 1, 4);
+      if (leap === -1) leap = 4;
+      return { leap: leap, gy: gy, march: march };
+    }
+    function g2d(gy, gm, gd) {
+      var x = div((gy + div(gm - 8, 6) + 100100) * 1461, 4) + div(153 * mod(gm + 9, 12) + 2, 5) + gd - 34840408;
+      return x - div(div(gy + 100100 + div(gm - 8, 6), 100) * 3, 4) + 752;
+    }
+    function d2g(jdn) {
+      var j = 4 * jdn + 139361631;
+      j = j + div(div(4 * jdn + 183187720, 146097) * 3, 4) * 4 - 3908;
+      var i = div(mod(j, 1461), 4) * 5 + 308;
+      var gd = div(mod(i, 153), 5) + 1, gm = mod(div(i, 153), 12) + 1;
+      return { gy: div(j, 1461) - 100100 + div(8 - gm, 6), gm: gm, gd: gd };
+    }
+    function j2d(jy, jm, jd) { var r = jalCal(jy); return g2d(r.gy, 3, r.march) + (jm - 1) * 31 - div(jm, 7) * (jm - 7) + jd - 1; }
+    function d2j(jdn) {
+      var gy = d2g(jdn).gy, jy = gy - 621, r = jalCal(jy), k = jdn - g2d(gy, 3, r.march);
+      if (k >= 0) {
+        if (k <= 185) return { jy: jy, jm: 1 + div(k, 31), jd: mod(k, 31) + 1 };
+        k -= 186;
+      } else { jy -= 1; k += 179; if (r.leap === 1) k += 1; }
+      return { jy: jy, jm: 7 + div(k, 30), jd: mod(k, 30) + 1 };
+    }
+    function isLeap(jy) { return jalCal(jy).leap === 0; }
+    function monthLength(jy, jm) { return jm <= 6 ? 31 : jm <= 11 ? 30 : (isLeap(jy) ? 30 : 29); }
+    function toGregorian(jy, jm, jd) { var g = d2g(j2d(jy, jm, jd)); return new Date(g.gy, g.gm - 1, g.gd); }
+    function toJalali(date) { date = date || new Date(); return d2j(g2d(date.getFullYear(), date.getMonth() + 1, date.getDate())); }
+    /* «۱۴۰۵/۰۷/۲۰» ⇄ {jy, jm, jd} */
+    function parse(str) {
+      var m = String(en(str || '')).match(/(\d{4})\D(\d{1,2})\D(\d{1,2})/);
+      if (!m) return null;
+      var o = { jy: +m[1], jm: +m[2], jd: +m[3] };
+      if (o.jm < 1 || o.jm > 12 || o.jd < 1 || o.jd > monthLength(o.jy, o.jm)) return null;
+      return o;
+    }
+    function format(o) { return fa(o.jy) + '/' + fa(pad(o.jm)) + '/' + fa(pad(o.jd)); }
+    return { toGregorian: toGregorian, toJalali: toJalali, monthLength: monthLength, isLeap: isLeap, parse: parse, format: format };
+  })();
+
   function esc(s) {
     return String(s === null || s === undefined ? '' : s)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -117,7 +178,11 @@ window.CRM = (function (w, d) {
   function renderIcons(scope) {
     $$('[data-icon]', scope || d).forEach(function (el) {
       if (el.getAttribute('data-icon-done') === '1') return;
-      el.innerHTML = icon(el.getAttribute('data-icon'), +(el.getAttribute('data-icon-size') || 18), el.getAttribute('data-icon-class') || '');
+      /* متن کنار آیکون (مثل <div class="card-title" data-icon="table"> عنوان</div>) حفظ می‌شود */
+      var txt = el.getAttribute('data-icon-text');
+      if (txt === null) { txt = el.children.length ? '' : el.textContent.trim(); if (txt) el.setAttribute('data-icon-text', txt); }
+      el.innerHTML = icon(el.getAttribute('data-icon'), +(el.getAttribute('data-icon-size') || 18), el.getAttribute('data-icon-class') || '') +
+        (txt ? '<span class="icon-text">' + esc(txt) + '</span>' : '');
       el.setAttribute('data-icon-done', '1');
     });
   }
@@ -742,7 +807,7 @@ window.CRM = (function (w, d) {
       vals.forEach(function (v, i) {
         var len = (v / total) * C;
         html += '<circle cx="80" cy="80" r="' + R + '" fill="none" stroke="' + (colors[i] || 'var(--brand)') + '" stroke-width="18" ' +
-          'stroke-dasharray="' + (len - 2).toFixed(2) + ' ' + (C - len + 2).toFixed(2) + '" ' +
+          'stroke-dasharray="' + Math.max(0.01, len - 2).toFixed(2) + ' ' + (C - Math.max(0.01, len - 2)).toFixed(2) + '" ' +
           'stroke-dashoffset="' + (-acc).toFixed(2) + '" stroke-linecap="round" transform="rotate(-90 80 80)">' +
           (labels[i] ? '<title>' + esc(labels[i]) + '</title>' : '') + '</circle>';
         acc += len;
@@ -1035,11 +1100,12 @@ window.CRM = (function (w, d) {
           var isActive = it.id === active || (it.children && it.children.some(function (c) { return c.id === active; }));
           var badge = it.badge ? '<span class="nav-badge ' + (it.badgeStyle === 'solid' ? '' : 'soft') + '">' + esc(fa(it.badge)) + '</span>' : '';
           if (it.children) {
-            groups += '<button class="nav-item' + (it.open ? ' is-open' : '') + '" data-nav-toggle data-tip="' + esc(it.label) + '">' +
+            var opened = it.open || isActive; /* زیرمنوی صفحه‌ی فعال همیشه باز است */
+            groups += '<button class="nav-item' + (opened ? ' is-open' : '') + '" data-nav-toggle data-tip="' + esc(it.label) + '">' +
               '<span data-icon="' + it.icon + '" data-icon-size="19"></span>' +
               '<span class="nav-label">' + esc(it.label) + '</span>' + badge +
               '<span class="nav-caret" data-icon="chevron-down" data-icon-size="15"></span></button>';
-            groups += '<div class="nav-sub" ' + (it.open ? '' : 'style="display:none"') + '>' +
+            groups += '<div class="nav-sub" ' + (opened ? '' : 'style="display:none"') + '>' +
               it.children.map(function (c) {
                 return '<a class="nav-item' + (c.id === active ? ' is-active' : '') + '" href="' + c.href + '" data-tip="' + esc(c.label) + '">' +
                   '<span data-icon="' + (c.icon || 'dot') + '" data-icon-size="15"></span>' +
@@ -1315,6 +1381,144 @@ window.CRM = (function (w, d) {
   })();
 
   /* ==========================================================================
+   * 11-ب) انتخابگر تاریخ شمسی — <input data-jdate>
+   *  - data-jdate="today"  مقدار پیش‌فرض امروز
+   *  - data-jdate-min / data-jdate-max  (اختیاری، به شکل ۱۴۰۵/۰۷/۰۱)
+   *  لایه‌ی تقویم مثل تولتیپ فرزند <body> است تا در مودال و کارت‌ها بریده نشود.
+   *  رویداد change روی input پس از انتخاب ارسال می‌شود.
+   * ========================================================================== */
+  var datePicker = (function () {
+    var pop = null, input = null, view = null;
+    var WD = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+    function el() {
+      if (pop) return pop;
+      pop = d.createElement('div');
+      pop.className = 'jdp';
+      pop.setAttribute('role', 'dialog');
+      pop.setAttribute('aria-label', 'انتخاب تاریخ');
+      d.body.appendChild(pop);
+      pop.addEventListener('mousedown', function (e) { e.preventDefault(); }); /* فوکوس روی input بماند */
+      pop.addEventListener('click', function (e) {
+        var b = e.target.closest('button'); if (!b) return;
+        if (b.hasAttribute('data-jdp-prev')) shift(-1);
+        else if (b.hasAttribute('data-jdp-next')) shift(1);
+        else if (b.hasAttribute('data-jdp-today')) pick(jalali.toJalali(new Date()));
+        else if (b.hasAttribute('data-jdp-clear')) { input.value = ''; fire(); close(); }
+        else if (b.hasAttribute('data-jdp-day')) pick({ jy: view.jy, jm: view.jm, jd: +b.getAttribute('data-jdp-day') });
+      });
+      return pop;
+    }
+    function fire() { input.dispatchEvent(new Event('change', { bubbles: true })); input.dispatchEvent(new Event('input', { bubbles: true })); }
+    function pick(o) { input.value = jalali.format(o); fire(); close(); input.focus(); }
+    function shift(n) {
+      var m = view.jm + n, y = view.jy;
+      if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; }
+      view = { jy: y, jm: m }; render();
+    }
+    function cmp(a, b) { return (a.jy - b.jy) || (a.jm - b.jm) || (a.jd - b.jd); }
+    function render() {
+      var today = jalali.toJalali(new Date());
+      var sel = jalali.parse(input.value);
+      var min = jalali.parse(input.getAttribute('data-jdate-min'));
+      var max = jalali.parse(input.getAttribute('data-jdate-max'));
+      var first = jalali.toGregorian(view.jy, view.jm, 1);
+      var lead = (first.getDay() + 1) % 7; /* شنبه = ۰ */
+      var len = jalali.monthLength(view.jy, view.jm);
+      var cells = '';
+      for (var i = 0; i < lead; i++) cells += '<span class="jdp-pad"></span>';
+      for (var dd = 1; dd <= len; dd++) {
+        var o = { jy: view.jy, jm: view.jm, jd: dd };
+        var cls = 'jdp-day';
+        if (cmp(o, today) === 0) cls += ' is-today';
+        if (sel && cmp(o, sel) === 0) cls += ' is-selected';
+        if ((lead + dd - 1) % 7 === 6) cls += ' is-holiday';
+        var dis = (min && cmp(o, min) < 0) || (max && cmp(o, max) > 0);
+        cells += '<button type="button" class="' + cls + '" data-jdp-day="' + dd + '"' + (dis ? ' disabled' : '') + '>' + fa(dd) + '</button>';
+      }
+      el().innerHTML =
+        '<div class="jdp-head">' +
+          '<button type="button" class="jdp-nav" data-jdp-prev data-tip="ماه قبل">' + icon('chevron-right', 16) + '</button>' +
+          '<div class="jdp-title">' + JMonthNames[view.jm - 1] + ' <span class="num">' + fa(view.jy) + '</span></div>' +
+          '<button type="button" class="jdp-nav" data-jdp-next data-tip="ماه بعد">' + icon('chevron-left', 16) + '</button>' +
+        '</div>' +
+        '<div class="jdp-week">' + WD.map(function (x) { return '<span>' + x + '</span>'; }).join('') + '</div>' +
+        '<div class="jdp-grid">' + cells + '</div>' +
+        '<div class="jdp-foot">' +
+          '<button type="button" class="btn btn-sm btn-soft" data-jdp-today>' + icon('calendar-check', 14) + ' امروز</button>' +
+          '<button type="button" class="btn btn-sm btn-ghost" data-jdp-clear>پاک کردن</button>' +
+        '</div>';
+    }
+    function place() {
+      if (!pop || !input) return;
+      var r = (input.closest('.input-wrap') || input).getBoundingClientRect();
+      var pw = pop.offsetWidth, ph = pop.offsetHeight;
+      var top = r.bottom + 6;
+      if (top + ph > w.innerHeight - 8 && r.top - ph - 6 > 8) top = r.top - ph - 6;
+      var left = r.right - pw; /* راست‌چین با فیلد */
+      left = clamp(left, 8, w.innerWidth - pw - 8);
+      pop.style.top = top + 'px'; pop.style.left = left + 'px';
+    }
+    function open(inp) {
+      if (inp.disabled || inp.hasAttribute('data-jdate-off')) return;
+      input = inp;
+      var cur = jalali.parse(inp.value) || jalali.toJalali(new Date());
+      view = { jy: cur.jy, jm: cur.jm };
+      render();
+      el().classList.add('is-open');
+      inp.setAttribute('aria-expanded', 'true');
+      place();
+    }
+    function close() {
+      if (pop) pop.classList.remove('is-open');
+      if (input) input.setAttribute('aria-expanded', 'false');
+      input = null;
+    }
+    function bindAll(scope) {
+      $$('[data-jdate]', scope).forEach(function (inp) {
+        if (inp.__jdp) return; inp.__jdp = true;
+        inp.setAttribute('autocomplete', 'off');
+        inp.setAttribute('aria-haspopup', 'dialog');
+        if (!inp.placeholder) inp.placeholder = '۱۴۰۵/۰۱/۰۱';
+        if (inp.getAttribute('data-jdate') === 'today' && !inp.value) inp.value = jalali.format(jalali.toJalali(new Date()));
+        inp.addEventListener('focus', function () { open(inp); });
+        inp.addEventListener('click', function () { if (input !== inp) open(inp); });
+        inp.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' || e.key === 'Tab') close();
+          if (e.key === 'ArrowDown' && input !== inp) { e.preventDefault(); open(inp); }
+        });
+        inp.addEventListener('blur', function () { setTimeout(function () { if (input === inp && d.activeElement !== inp) close(); }, 120); });
+        inp.addEventListener('input', function () { if (input === inp) { var o = jalali.parse(inp.value); if (o) { view = { jy: o.jy, jm: o.jm }; render(); } } });
+        /* دکمه‌ی تقویم کنار فیلد */
+        var wrap = inp.closest('.input-wrap');
+        var trig = wrap && wrap.querySelector('[data-jdate-trigger]');
+        if (trig) trig.addEventListener('click', function (e) { e.preventDefault(); if (input === inp) close(); else inp.focus(); open(inp); });
+      });
+    }
+    d.addEventListener('mousedown', function (e) {
+      if (!input || !pop) return;
+      if (pop.contains(e.target) || e.target === input || e.target.closest('[data-jdate-trigger]')) return;
+      close();
+    });
+    w.addEventListener('resize', place);
+    w.addEventListener('scroll', function (e) { if (pop && !pop.contains(e.target)) place(); }, true);
+    return { bind: bindAll, open: open, close: close };
+  })();
+
+  /* قالب‌بندی عددی هنگام تایپ: <input data-num-mask> → ۱۲٫۵۰۰٫۰۰۰ */
+  function initNumMasks(scope) {
+    $$('[data-num-mask]', scope).forEach(function (inp) {
+      if (inp.__nm) return; inp.__nm = true;
+      inp.setAttribute('inputmode', 'numeric');
+      var fmt = function () {
+        var raw = String(en(inp.value)).replace(/[^\d]/g, '');
+        inp.value = raw ? num(+raw) : '';
+      };
+      inp.addEventListener('input', fmt);
+      if (inp.value) fmt();
+    });
+  }
+
+  /* ==========================================================================
    * 12) مقداردهی کلی
    * ========================================================================== */
   function init(scope) {
@@ -1328,6 +1532,8 @@ window.CRM = (function (w, d) {
     initKanban(s);
     initViews(s);
     initCounters(s);
+    datePicker.bind(s);
+    initNumMasks(s);
     charts.render(s);
 
     /* باز/بسته کردن مودال‌ها و دراورها */
@@ -1503,6 +1709,7 @@ window.CRM = (function (w, d) {
     $: $, $$: $$, fa: fa, en: en, num: num, money: money, moneyShort: moneyShort, esc: esc,
     icon: icon, renderIcons: renderIcons, avatar: avatar, rel: rel, debounce: debounce, clamp: clamp, uid: uid,
     jDate: jDate, jLong: jLong, jsWeekday: jsWeekday, jalaliMonthGrid: jalaliMonthGrid,
+    jalali: jalali, datePicker: datePicker,
     todayJalali: todayJalali, JMonthNames: JMonthNames, JWeekNames: JWeekNames,
     tip: tip, toast: toast, modal: modal, drawer: drawer,
     charts: charts, palette: palette, shell: shell, init: init, boot: boot, data: DATA

@@ -50,10 +50,11 @@ ModernCRM-template/
 │   │   ├── components.css    کتابخانه اجزا (دکمه، فرم، جدول، مودال، نمودار، …)
 │   │   └── layout.css        پوسته برنامه، سایدبار، تاپ‌بار، نوار وظیفه، پنجره‌ها
 │   ├── js/
-│   │   ├── icons.js          ۱۷۱ آیکون SVG (بر پایه Lucide — مجوز ISC)
+│   │   ├── icons.js          ۱۸۰+ آیکون SVG (بر پایه Lucide — مجوز ISC)
 │   │   ├── data.js           ★ داده‌های نمایشی و مدل منوی سایدبار
 │   │   ├── app.js            هسته: تولتیپ، توست، مودال، دراور، نمودار، جدول، پالت فرمان
-│   │   └── windows.js        مدیر پنجره‌ها (درگ، تغییر اندازه، ماکسیمایز، اسنپ)
+│   │   ├── windows.js        مدیر پنجره‌ها (درگ، تغییر اندازه، ماکسیمایز، اسنپ)
+│   │   └── warehouse.js      ابزارهای مشترک صفحه‌های انبار (فقط در صفحه‌های warehouse-*)
 │   ├── fonts/                وزیرمتن (Variable + وزن‌های اصلی) + مجوز OFL
 │   └── img/                  لوگو و فاوآیکون SVG
 │
@@ -70,6 +71,7 @@ ModernCRM-template/
 | عمومی | `dashboard.html` `desktop.html` `journey.html` `activity.html` `calendar.html` `notifications.html` `search.html` |
 | مشتریان و فروش | `customers.html` `customer-new.html` `customer-profile.html` `pipeline.html` `deals.html` `products.html` |
 | مالی و گزارش | `invoices.html` `print-invoice.html` `reports.html` |
+| انبار | `warehouse.html` `warehouse-products.html` `warehouse-in.html` `warehouse-out.html` (اصلی) `warehouse-out.html?store=sub` (فرعی) `warehouse-stock.html` |
 | پشتیبانی | `tickets.html` `ticket-new.html` `messages.html` `kb.html` `help.html` |
 | احراز هویت | `login.html` `register.html` `forgot-password.html` `reset-password.html` `otp.html` `change-password.html` `lock.html` |
 | مدیریت | `users.html` `settings.html` `profile.html` `design-system.html` |
@@ -294,6 +296,48 @@ ModernCRM-template/
 
 نمونه‌ی کامل همه‌ی این اجزا در `design-system.html` و نمونه‌ی چیدمان جریان مراحل
 (شبیه تم مرجع) در `journey.html` قابل مشاهده است.
+
+### ۴-ب) بخش انبار و اجزای فرم عملیاتی
+
+بخش انبار از روی فرم‌های برنامه فعلی («بعد پنجم») بازطراحی شده است؛ فیلدها و منطق همان است و فقط ظاهر با زبان بصری قالب یکی شده:
+
+| صفحه | معادل در برنامه فعلی | نکات |
+| --- | --- | --- |
+| `warehouse.html` | صفحه‌ی خالی منوی انبار | شاخص‌ها، میان‌برها، گردش کالا، هشدار موجودی، دموهای باز |
+| `warehouse-products.html` | تعریف محصولات | فرم بخش‌بندی‌شده + فهرست محصولات کنار فرم (کلیک = ویرایش)، ثبت / انصراف / جستجو / حذف |
+| `warehouse-in.html` | ورود محصول به انبار | مجموعه ← محصول (وابسته)، «از شماره سریال» با محاسبه‌ی بازه، تاریخ شمسی، جدول ورودی‌ها |
+| `warehouse-out.html` | خروج محصول (اصلی) و (فرعی) | با `?store=sub` نسخه‌ی فرعی (بدون ستون فاکتور و Excel)؛ نوع خروج به‌شکل کاشی؛ فروش ← شماره فاکتور + جایگزینی، دمو ← تاریخ بازگشت |
+| `warehouse-stock.html` | گزارش موجودی انبار | تب‌های اصلی / فرعی / عمومی / مقایسه‌ای، انتخاب چندتایی مجموعه و محصولات |
+
+داده‌های نمایشی در `CRM_DATA.whCategories`، `whProducts`، `whIn`، `whOut`، `whCardReaders` و `whExitTypes` هستند.
+
+اجزای عمومی جدید (قابل استفاده در هر صفحه):
+
+```html
+<!-- انتخابگر تاریخ شمسی (بدون کتابخانه؛ لایه روی body، بالای مودال) -->
+<div class="input-wrap">
+  <span class="icon lead" data-icon="calendar-days" data-icon-size="17"></span>
+  <input class="input num" data-jdate="today" data-jdate-min="۱۴۰۵/۰۱/۰۱">
+  <button type="button" class="icon-btn trail" data-jdate-trigger data-icon="chevron-down"></button>
+</div>
+
+<!-- فیلد مبلغ با جداکننده‌ی هزارگان و پسوند واحد -->
+<div class="input-wrap"><input class="input num" data-num-mask><span class="unit">تومان</span></div>
+
+<!-- رادیو به‌شکل کاشی -->
+<div class="opt-cards">
+  <label class="opt-card"><input type="radio" name="t" value="a">
+    <span class="opt-body"><span class="opt-ic" data-icon="receipt"></span>
+    <span><span class="opt-title d-block">فروش</span><span class="opt-desc d-block">توضیح</span></span></span>
+  </label>
+</div>
+
+<!-- بخش‌بندی فرم طولانی + نوار دکمه‌های پایین کارت -->
+<section class="form-section"><div class="form-section-head">…</div> … </section>
+<div class="form-actions"> … <span class="spacer"></span> … </div>
+```
+
+تبدیل دقیق تاریخ: `CRM.jalali.toJalali(date)`، `CRM.jalali.toGregorian(1405, 7, 20)`، `CRM.jalali.parse('۱۴۰۵/۰۷/۲۰')`، `CRM.jalali.format({jy, jm, jd})`.
 
 ### ۵) اتصال به بک‌اند
 

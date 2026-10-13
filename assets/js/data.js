@@ -45,6 +45,23 @@ window.CRM_DATA = (function () {
       ]
     },
     {
+      group: 'انبار',
+      key: 'warehouse',
+      items: [
+        { id: 'warehouse', label: 'نمای کلی انبار', icon: 'warehouse', href: 'warehouse.html' },
+        { id: 'warehouse-products', label: 'تعریف محصولات', icon: 'package', href: 'warehouse-products.html' },
+        { id: 'warehouse-in', label: 'ورود محصول به انبار', icon: 'package-plus', href: 'warehouse-in.html' },
+        {
+          id: 'warehouse-out', label: 'خروج محصول', icon: 'truck', href: 'warehouse-out.html', open: false,
+          children: [
+            { id: 'warehouse-out', label: 'خروج از انبار اصلی', href: 'warehouse-out.html' },
+            { id: 'warehouse-out-sub', label: 'خروج از انبار فرعی', href: 'warehouse-out.html?store=sub' }
+          ]
+        },
+        { id: 'warehouse-stock', label: 'گزارش موجودی انبار', icon: 'chart-column', href: 'warehouse-stock.html' }
+      ]
+    },
+    {
       group: 'پشتیبانی',
       items: [
         { id: 'tickets', label: 'تیکت‌ها', icon: 'tickets', href: 'tickets.html', badge: '۵' },
@@ -199,10 +216,119 @@ window.CRM_DATA = (function () {
     { q: 'محدودیت تعداد کاربران در پلن حرفه‌ای چقدر است؟', a: 'پلن حرفه‌ای تا ۵۰ کاربر فعال پشتیبانی می‌کند و برای تعداد بیشتر، پلن سازمانی پیشنهاد می‌شود.' }
   ];
 
+
+  /* ==========================================================================
+   *  انبار — داده‌های نمایشی
+   *  (ساختار برگرفته از برنامه فعلی «بعد پنجم»؛ در اتصال واقعی از API می‌آیند)
+   * ========================================================================== */
+  /* مجموعه محصولات */
+  var WH_CATEGORIES = [
+    { id: 'main', title: 'دستگاه‌های اصلی', icon: 'fingerprint', tone: '' },
+    { id: 'main-acc', title: 'قطعات جانبی دستگاه‌های اصلی', icon: 'box', tone: 'sky' },
+    { id: 'software', title: 'نرم‌افزار', icon: 'monitor', tone: 'violet' },
+    { id: 'service', title: 'خدمات پشتیبانی', icon: 'life-buoy', tone: 'success' },
+    { id: 'security', title: 'دستگاه‌های حفاظتی', icon: 'shield', tone: 'amber' },
+    { id: 'security-acc', title: 'قطعات جانبی دستگاه‌های حفاظتی', icon: 'shield-check', tone: 'coral' },
+    { id: 'obsolete', title: 'دستگاه‌های منسوخ‌شده', icon: 'archive', tone: 'ink' },
+    { id: 'antenna', title: 'آنتن', icon: 'antenna', tone: 'sky' }
+  ];
+
+  /* انواع کارتخوان */
+  var WH_CARD_READERS = ['بدون کارتخوان', 'کارتخوان EM (۱۲۵ کیلوهرتز)', 'کارتخوان Mifare', 'کارتخوان HID'];
+
+  /* واحدهای شمارش */
+  var WH_UNITS = ['دستگاه', 'عدد', 'بسته', 'لایسنس', 'ماه', 'سری'];
+
+  /* انواع خروج کالا (رادیوهای فرم خروج) */
+  var WH_EXIT_TYPES = [
+    { id: 'sale', title: 'فروش', icon: 'receipt', tone: 'success', desc: 'تحویل به مشتری با فاکتور' },
+    { id: 'demo', title: 'دمو', icon: 'presentation', tone: 'info', desc: 'امانی؛ با تاریخ بازگشت' },
+    { id: 'present', title: 'پرزنت', icon: 'gift', tone: 'violet', desc: 'هدیه یا نمونه رایگان' },
+    { id: 'broken', title: 'خراب', icon: 'x-circle', tone: 'danger', desc: 'خروج کالای معیوب' },
+    { id: 'support', title: 'پشتیبانی', icon: 'headset', tone: 'warning', desc: 'تعویض یا تعمیر' }
+  ];
+
+  /* انبارها */
+  var WH_STORES = [
+    { id: 'main', title: 'انبار اصلی', icon: 'boxes' },
+    { id: 'sub', title: 'انبار فرعی', icon: 'archive' },
+    { id: 'public', title: 'انبار عمومی', icon: 'globe' }
+  ];
+
+  /* محصولات (فیلدها مطابق فرم «تعریف محصولات») */
+  function P(code, name, cat, corp, unit, consumer, partner, agent, cost, main, sub, min, pub, feature) {
+    return {
+      code: code, name: name, cat: cat, corp: corp, unit: unit,
+      consumer: consumer, partner: partner, agent: agent, cost: cost,
+      main: main, sub: sub, min: min, public: pub, feature: feature || '',
+      invoiceName: name, proformaName: name
+    };
+  }
+  var WH_PRODUCTS = [
+    P(1, 'HP - 510', 'main', 'دستگاه حضور و غیاب اثر انگشتی HP510', 'دستگاه', 18500000, 16200000, 15400000, 11800000, 42, 9, 10, true, 'اثر انگشت + کارت، ظرفیت ۳۰۰۰ اثر انگشت، شبکه TCP/IP'),
+    P(2, 'HP - 310', 'main', 'دستگاه حضور و غیاب اثر انگشتی HP310', 'دستگاه', 14200000, 12500000, 11900000, 9100000, 27, 6, 10, true, 'اثر انگشت، ظرفیت ۱۵۰۰ اثر انگشت'),
+    P(3, 'HP - 210', 'main', 'دستگاه حضور و غیاب HP210', 'دستگاه', 9800000, 8600000, 8100000, 6300000, 6, 2, 8, true, 'مدل اقتصادی؛ کارت و رمز'),
+    P(4, 'EP - 810', 'main', 'دستگاه تشخیص چهره EP810', 'دستگاه', 32500000, 28900000, 27400000, 21000000, 18, 4, 6, true, 'تشخیص چهره و کف دست، نمایشگر ۵ اینچ لمسی'),
+    P(5, 'EP - 710', 'main', 'دستگاه تشخیص چهره EP710', 'دستگاه', 27400000, 24300000, 23000000, 17600000, 11, 3, 6, true, 'تشخیص چهره، دوربین دوگانه'),
+    P(6, 'EB - 420 C', 'main', 'دستگاه کنترل تردد EB420C', 'دستگاه', 12600000, 11100000, 10500000, 8000000, 34, 12, 10, true, 'کنترل درب و تردد با کارت'),
+    P(7, 'EB - 320 C', 'main', 'دستگاه کنترل تردد EB320C', 'دستگاه', 10900000, 9600000, 9100000, 6900000, 22, 5, 10, true),
+    P(8, 'EB - 220 C', 'main', 'دستگاه کنترل تردد EB220C', 'دستگاه', 8700000, 7700000, 7300000, 5600000, 4, 1, 8, false),
+    P(9, 'EB - 820 C', 'main', 'دستگاه کنترل تردد EB820C', 'دستگاه', 21300000, 18900000, 17900000, 13700000, 15, 3, 6, true),
+    P(10, 'EB - 720 C', 'main', 'دستگاه کنترل تردد EB720C', 'دستگاه', 18800000, 16700000, 15800000, 12100000, 9, 2, 6, true),
+    P(11, 'EB - 120 TC', 'main', 'دستگاه حضور و غیاب EB120TC', 'دستگاه', 7400000, 6500000, 6200000, 4700000, 31, 8, 10, true),
+    P(12, 'EB - 920 TC', 'main', 'دستگاه حضور و غیاب EB920TC', 'دستگاه', 24600000, 21800000, 20700000, 15800000, 7, 0, 6, true),
+    P(13, 'EB - 100', 'obsolete', 'دستگاه حضور و غیاب EB100 (منسوخ)', 'دستگاه', 5200000, 4600000, 4300000, 3300000, 3, 0, 0, false, 'تولید متوقف شده؛ فقط برای پشتیبانی'),
+    P(14, 'HB - 630 A', 'main', 'دستگاه حضور و غیاب HB630A', 'دستگاه', 16900000, 15000000, 14200000, 10900000, 19, 4, 8, true),
+    P(15, 'HB - 530 A', 'main', 'دستگاه حضور و غیاب HB530A', 'دستگاه', 14800000, 13100000, 12400000, 9500000, 23, 6, 8, true),
+    P(16, 'HB - 430 A', 'main', 'دستگاه حضور و غیاب HB430A', 'دستگاه', 12300000, 10900000, 10300000, 7900000, 5, 2, 8, true),
+    P(17, 'HB - 330', 'main', 'دستگاه حضور و غیاب HB330', 'دستگاه', 10100000, 8900000, 8400000, 6500000, 14, 3, 8, true),
+    P(18, 'HB - 230', 'main', 'دستگاه حضور و غیاب HB230', 'دستگاه', 8400000, 7400000, 7000000, 5400000, 26, 7, 8, true),
+    P(19, 'HB - 130 BA', 'main', 'دستگاه حضور و غیاب HB130BA', 'دستگاه', 6900000, 6100000, 5800000, 4400000, 2, 0, 8, true),
+    P(20, 'MB - 200', 'security', 'دستگاه دزدگیر اماکن MB200', 'دستگاه', 11500000, 10200000, 9600000, 7400000, 17, 5, 6, true, 'دزدگیر سیم‌کارتی با ۸ زون'),
+    P(21, 'MB - 300', 'security', 'دستگاه دزدگیر اماکن MB300', 'دستگاه', 14900000, 13200000, 12500000, 9600000, 12, 2, 6, true, 'دزدگیر سیم‌کارتی و تلفن ثابت با ۱۶ زون'),
+    P(22, 'MP - 100', 'security-acc', 'آژیر داخلی MP100', 'عدد', 1450000, 1280000, 1210000, 930000, 64, 20, 20, true),
+    P(23, 'MP - 51 A', 'security-acc', 'چشمی حرکتی MP51A', 'عدد', 980000, 860000, 820000, 630000, 88, 30, 20, true),
+    P(24, 'HB - 1000 A', 'main', 'دستگاه حضور و غیاب HB1000A', 'دستگاه', 29700000, 26300000, 24900000, 19100000, 8, 1, 4, true),
+    P(25, 'آداپتور ۱۲ ولت', 'main-acc', 'آداپتور ۱۲ ولت ۲ آمپر', 'عدد', 450000, 390000, 370000, 280000, 140, 40, 30, true),
+    P(26, 'کارت RFID (بسته ۱۰۰ عددی)', 'main-acc', 'کارت تردد RFID 125KHz', 'بسته', 2100000, 1850000, 1750000, 1300000, 36, 10, 10, true),
+    P(27, 'نرم‌افزار حضور و غیاب تحت وب', 'software', 'نرم‌افزار تایم‌شیت بعد پنجم', 'لایسنس', 24000000, 21000000, 20000000, 0, 0, 0, 0, true, 'نامحدود — بدون موجودی فیزیکی'),
+    P(28, 'پشتیبانی سالانه', 'service', 'قرارداد پشتیبانی ۱۲ ماهه', 'ماه', 1500000, 1300000, 1250000, 0, 0, 0, 0, false, 'خدمت — بدون موجودی فیزیکی'),
+    P(29, 'آنتن خارجی GSM', 'antenna', 'آنتن تقویتی GSM با کابل ۳ متری', 'عدد', 620000, 540000, 510000, 390000, 3, 6, 10, true)
+  ];
+
+  /* ورودی‌های انبار (فرم «ورود محصول به انبار») */
+  var WH_IN = [
+    { id: 'IN-3108', product: 1, serial: '510-24-00811', qty: 20, date: '۱۴۰۵/۰۷/۲۰', reader: 1, store: 'main', by: 'داوود توکلی' },
+    { id: 'IN-3107', product: 4, serial: '810-24-00301', qty: 10, date: '۱۴۰۵/۰۷/۱۸', reader: 2, store: 'main', by: 'داوود توکلی' },
+    { id: 'IN-3106', product: 25, serial: '', qty: 100, date: '۱۴۰۵/۰۷/۱۶', reader: 0, store: 'main', by: 'لیلا مستوفی' },
+    { id: 'IN-3105', product: 6, serial: '420-24-01250', qty: 15, date: '۱۴۰۵/۰۷/۱۴', reader: 1, store: 'main', by: 'داوود توکلی' },
+    { id: 'IN-3104', product: 20, serial: '200-24-00090', qty: 12, date: '۱۴۰۵/۰۷/۱۲', reader: 0, store: 'main', by: 'رضا پورمند' },
+    { id: 'IN-3103', product: 23, serial: '', qty: 60, date: '۱۴۰۵/۰۷/۰۹', reader: 0, store: 'main', by: 'لیلا مستوفی' },
+    { id: 'IN-3102', product: 15, serial: '530-24-00410', qty: 10, date: '۱۴۰۵/۰۷/۰۵', reader: 3, store: 'main', by: 'داوود توکلی' },
+    { id: 'IN-3101', product: 11, serial: '120-24-02001', qty: 25, date: '۱۴۰۵/۰۷/۰۲', reader: 1, store: 'main', by: 'رضا پورمند' }
+  ];
+
+  /* خروجی‌های انبار (فرم «خروج محصول» اصلی و فرعی) */
+  var WH_OUT = [
+    { form: '۷۸۴۱', store: 'main', type: 'sale', customer: 'گروه صنعتی البرز', product: 1, serial: '510-24-00790', reader: 1, inDate: '۱۴۰۵/۰۶/۲۸', qty: 4, invoice: '۱۴۰۴-۰۵۲۱', date: '۱۴۰۵/۰۷/۲۰', owner: 'مهدی کریمی', replace: false },
+    { form: '۷۸۴۰', store: 'main', type: 'demo', customer: 'پارس‌نیکان', product: 4, serial: '810-24-00295', reader: 2, inDate: '۱۴۰۵/۰۶/۱۵', qty: 1, date: '۱۴۰۵/۰۷/۱۹', owner: 'نیما عباسی', returnDate: '۱۴۰۵/۰۸/۰۴' },
+    { form: '۷۸۳۹', store: 'main', type: 'support', customer: 'هلدینگ داده‌پرداز', product: 6, serial: '420-24-01102', reader: 1, inDate: '۱۴۰۵/۰۵/۳۰', qty: 1, date: '۱۴۰۵/۰۷/۱۸', owner: 'سمیرا رحیمی' },
+    { form: '۷۸۳۸', store: 'main', type: 'sale', customer: 'فناوران آبی', product: 15, serial: '530-24-00399', reader: 3, inDate: '۱۴۰۵/۰۶/۰۲', qty: 2, invoice: '۱۴۰۴-۰۵۱۸', date: '۱۴۰۵/۰۷/۱۶', owner: 'مهدی کریمی', replace: true },
+    { form: '۷۸۳۷', store: 'main', type: 'present', customer: 'آتلیه طراحی نور', product: 26, serial: '', reader: 0, inDate: '۱۴۰۵/۰۶/۱۰', qty: 1, date: '۱۴۰۵/۰۷/۱۴', owner: 'نیما عباسی' },
+    { form: '۷۸۳۶', store: 'main', type: 'broken', customer: '—', product: 3, serial: '210-23-00544', reader: 0, inDate: '۱۴۰۵/۰۲/۱۱', qty: 1, date: '۱۴۰۵/۰۷/۱۱', owner: 'رضا پورمند' },
+    { form: '۷۸۳۵', store: 'main', type: 'demo', customer: 'تجهیزات پزشکی رها', product: 9, serial: '820-24-00117', reader: 1, inDate: '۱۴۰۵/۰۵/۲۲', qty: 1, date: '۱۴۰۵/۰۷/۰۶', owner: 'مهدی کریمی', returnDate: '۱۴۰۵/۰۷/۲۰' },
+    { form: '۵۲۱۴', store: 'sub', type: 'sale', customer: 'بوتیک ونوس', product: 11, serial: '120-24-01980', reader: 1, inDate: '۱۴۰۵/۰۶/۲۰', qty: 3, date: '۱۴۰۵/۰۷/۱۹', owner: 'نیما عباسی' },
+    { form: '۵۲۱۳', store: 'sub', type: 'support', customer: 'گروه صنعتی البرز', product: 6, serial: '420-24-01251', reader: 1, inDate: '۱۴۰۵/۰۷/۱۴', qty: 1, date: '۱۴۰۵/۰۷/۱۷', owner: 'سمیرا رحیمی' },
+    { form: '۵۲۱۲', store: 'sub', type: 'demo', customer: 'هلدینگ داده‌پرداز', product: 18, serial: '230-24-00620', reader: 0, inDate: '۱۴۰۵/۰۶/۰۸', qty: 1, date: '۱۴۰۵/۰۷/۱۰', owner: 'مهدی کریمی', returnDate: '۱۴۰۵/۰۷/۲۴' },
+    { form: '۵۲۱۱', store: 'sub', type: 'broken', customer: '—', product: 22, serial: '', reader: 0, inDate: '۱۴۰۵/۰۴/۰۱', qty: 2, date: '۱۴۰۵/۰۷/۰۳', owner: 'رضا پورمند' }
+  ];
+
   return {
     nav: NAV, kpis: KPIS, customers: CUSTOMERS, dealStages: DEAL_STAGES, deals: DEALS,
     tickets: TICKETS, invoices: INVOICES, products: PRODUCTS, threads: THREADS,
     activities: ACTIVITIES, notifications: NOTIFICATIONS, tasks: TASKS, team: TEAM,
-    users: USERS, messages: MESSAGES, files: FILES, faq: FAQ
+    users: USERS, messages: MESSAGES, files: FILES, faq: FAQ,
+    whCategories: WH_CATEGORIES, whCardReaders: WH_CARD_READERS, whUnits: WH_UNITS,
+    whExitTypes: WH_EXIT_TYPES, whStores: WH_STORES, whProducts: WH_PRODUCTS, whIn: WH_IN, whOut: WH_OUT
   };
 })();
