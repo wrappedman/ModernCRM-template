@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پشتیبانی | مدرن‌CRM</title>
+<meta name="description" content="نمای کلی بخش پشتیبانی: صف برنامه‌ریزی، برنامه‌ی هفته، خدمات اخیر و اعتبارهای رو به اتمام">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="support">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">پشتیبانی</span>
+            </div>
+            <h1 class="page-title">نمای کلی پشتیبانی</h1>
+            <p class="page-desc" id="desc">—</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="support-desk.html"><span data-icon="headset" data-icon-size="16"></span> پشتیبانی مشتریان</a>
+            <a class="btn" href="support-planning.html"><span data-icon="calendar-range" data-icon-size="16"></span> برنامه‌ریزی</a>
+            <a class="btn btn-primary" href="support-workplan.html"><span data-icon="plus" data-icon-size="16"></span> برنامه کاری جدید</a>
+          </div>
+        </div>
+
+        <!-- شاخص‌ها -->
+        <div class="grid-4 mb-5">
+          <a class="card card-hover" href="support-planning.html">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon sky"><span data-icon="hourglass" data-icon-size="22"></span></span>
+              <div><div class="stat-label">منتظر برنامه‌ریزی</div><div class="stat-value" id="kWait">—</div></div>
+              <span class="badge badge-info ms-auto">فرم</span>
+            </div>
+          </a>
+          <a class="card card-hover" href="#week">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon"><span data-icon="calendar-check" data-icon-size="22"></span></span>
+              <div><div class="stat-label">کارهای امروز</div><div class="stat-value" id="kToday">—</div></div>
+              <span class="badge badge-primary ms-auto" id="kWeek">—</span>
+            </div>
+          </a>
+          <a class="card card-hover" href="support-formdata.html">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon violet"><span data-icon="clipboard" data-icon-size="22"></span></span>
+              <div><div class="stat-label">منتظر ثبت اطلاعات</div><div class="stat-value" id="kData">—</div></div>
+              <span class="badge badge-violet ms-auto">فرم</span>
+            </div>
+          </a>
+          <a class="card card-hover" href="support-desk.html">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon amber"><span data-icon="alarm" data-icon-size="22"></span></span>
+              <div><div class="stat-label">اعتبار رو به اتمام</div><div class="stat-value" id="kCredit">—</div></div>
+              <span class="badge badge-warning ms-auto">۳۰ روز</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- بخش‌ها -->
+        <div class="section-title mb-3"><span data-icon="layout-grid" data-icon-size="18"></span> عملیات پشتیبانی</div>
+        <div class="tile-links mb-5">
+          <a class="tile-link" href="support-workplan.html">
+            <span class="stat-icon"><span data-icon="clipboard" data-icon-size="22"></span></span>
+            <div><div class="tl-title">برنامه کاری</div><div class="tl-desc">ثبت فرم نصب، پشتیبانی، آموزش، فروش، دمو و جلسه</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="support-planning.html">
+            <span class="stat-icon sky"><span data-icon="calendar-range" data-icon-size="22"></span></span>
+            <div><div class="tl-title">برنامه‌ریزی</div><div class="tl-desc">تعیین زمان و کارشناس، کنسلی/ناقصی و گردش فرم</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="support-formdata.html">
+            <span class="stat-icon violet"><span data-icon="notebook" data-icon-size="22"></span></span>
+            <div><div class="tl-title">ثبت اطلاعات فرم</div><div class="tl-desc">بارنامه/قبض، نحوه ارسال و مدت زمان صرف‌شده</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="support-desk.html">
+            <span class="stat-icon amber"><span data-icon="headset" data-icon-size="22"></span></span>
+            <div><div class="tl-title">پشتیبانی مشتریان</div><div class="tl-desc">ثبت خدمات، افراد مرتبط، عملکرد و پرونده مشتری</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="report.html?r=support-perf">
+            <span class="stat-icon coral"><span data-icon="chart-column" data-icon-size="22"></span></span>
+            <div><div class="tl-title">عملکرد پشتیبانی</div><div class="tl-desc">گزارش خدمات به تفکیک مسئول پشتیبانی</div></div>
+            <span class="tl-go">مشاهده‌ی گزارش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="support-userperf.html">
+            <span class="stat-icon success"><span data-icon="user-check" data-icon-size="22"></span></span>
+            <div><div class="tl-title">ثبت عملکرد کاربر</div><div class="tl-desc">محل، تأخیر، نواقص، زمان و رضایت مشتری</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="tickets.html">
+            <span class="stat-icon rose"><span data-icon="tickets" data-icon-size="22"></span></span>
+            <div><div class="tl-title">تیکت‌ها</div><div class="tl-desc">درخواست‌های پشتیبانی آنلاین مشتریان</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="kb.html">
+            <span class="stat-icon ink"><span data-icon="book" data-icon-size="22"></span></span>
+            <div><div class="tl-title">پایگاه دانش</div><div class="tl-desc">راهنماها و پاسخ مشکلات پرتکرار</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+        </div>
+
+        <div class="grid-2-1 mb-5" id="week">
+          <div class="card" style="min-width:0;align-self:start" data-win="sup-week" data-win-title="برنامه‌ی این هفته" data-win-icon="calendar-range" data-win-size="760x560">
+            <div class="card-head">
+              <div class="card-title" data-icon="calendar-range" data-icon-size="18"> برنامه‌ی این هفته</div>
+              <div class="card-actions"><a class="btn btn-sm btn-ghost" href="support-planning.html?all=1">همه‌ی فرم‌ها</a></div>
+            </div>
+            <div class="card-body flush"><div class="sup-agenda" id="agenda"></div></div>
+          </div>
+          <div class="d-flex flex-col gap-5" style="min-width:0;align-self:start">
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title" data-icon="alarm" data-icon-size="18"> اعتبار رو به اتمام / منقضی</div>
+                <div class="card-actions"><a class="btn btn-sm btn-ghost" href="support-desk.html">همه</a></div>
+              </div>
+              <div class="card-body flush"><div class="list" id="credit"></div></div>
+            </div>
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title" data-icon="history" data-icon-size="18"> آخرین خدمات</div>
+                <div class="card-actions"><a class="btn btn-sm btn-ghost" href="report.html?r=support-perf">گزارش</a></div>
+              </div>
+              <div class="card-body flush"><div class="list" id="svc"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/support.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, $ = CRM.$, fa = CRM.fa, esc = CRM.esc;
+  var today = CRM.jDate(), o = CRM.jalali.parse(today), g = CRM.jalali.toGregorian(o.jy, o.jm, o.jd);
+  var start = SUP.addDays(today, -((g.getDay() + 1) % 7)), end = SUP.addDays(start, 6);
+  var ks = SUP.key(start), ke = SUP.key(end);
+
+  var wait = D.supPlans.filter(function (p) { return p.status === 'sent'; });
+  var week = D.supPlans.filter(function (p) { var k = p.plan ? SUP.key(p.plan.date) : 0; return k >= ks && k <= ke && p.status !== 'cancel'; })
+    .sort(function (a, b) { return SUP.key(a.plan.date) - SUP.key(b.plan.date) || a.plan.time.localeCompare(b.plan.time); });
+  var todayL = week.filter(function (p) { return p.plan.date === today; });
+  var pend = D.supPlans.filter(function (p) { return (p.status === 'confirmed' || p.status === 'printed') && !p.data; });
+  var cred = D.supCompanies.filter(function (c) { var n = SUP.daysLeft(c.credit); return n !== null && n <= 30 && n >= -120; }).sort(function (a, b) { return SUP.daysLeft(a.credit) - SUP.daysLeft(b.credit); });
+  var soon = cred.filter(function (c) { return SUP.daysLeft(c.credit) >= 0; });
+
+  $('#kWait').textContent = fa(wait.length);
+  $('#kToday').textContent = fa(todayL.length);
+  $('#kWeek').textContent = fa(week.length) + ' در هفته';
+  $('#kData').textContent = fa(pend.length);
+  $('#kCredit').textContent = fa(soon.length);
+  $('#desc').innerHTML = 'امروز ' + esc(SUP.weekday(today)) + ' <span class="num">' + esc(today) + '</span> · ' + fa(todayL.length) + ' کار برنامه‌ریزی‌شده و ' + fa(wait.length) + ' فرم در صف برنامه‌ریزی.';
+
+  $('#agenda').innerHTML = week.length ? week.map(function (p) {
+    var c = SUP.co(p.company) || {}, isToday = p.plan.date === today;
+    return '<div class="sup-ag" data-no="' + esc(p.no) + '"' + (isToday ? ' style="background:var(--brand-soft)"' : '') + '><div class="t num">' + esc(p.plan.time) + '<small>' + esc(SUP.weekday(p.plan.date)) + ' ' + esc(p.plan.date.slice(5)) + '</small></div>' +
+      '<span class="bar ' + SUP.type(p.types[0]).tone + '"></span>' +
+      '<div style="min-width:0"><div class="fw-600 text-strong text-truncate">' + esc(c.name || '—') + '</div>' +
+      '<div class="fs-xs text-muted text-truncate">' + p.types.map(function (t) { return SUP.type(t).title; }).join('، ') + ' · کارشناس: ' + esc(p.plan.expert) + ' · فرم <span class="num">' + esc(p.no) + '</span></div></div>' +
+      SUP.statusBadge(p.status) + '</div>';
+  }).join('') : SUP.empty('برای این هفته کاری برنامه‌ریزی نشده است.', 'calendar-check');
+  $('#agenda').addEventListener('click', function (e) { var r = e.target.closest('[data-no]'); if (r) SUP.viewPlan(r.getAttribute('data-no')); });
+
+  $('#credit').innerHTML = cred.slice(0, 5).map(function (c) {
+    var n = SUP.daysLeft(c.credit);
+    return '<div class="list-item" style="cursor:pointer" data-file="' + c.code + '"><span class="stat-icon ' + (n < 0 ? 'rose' : 'amber') + '" style="width:36px;height:36px"><span data-icon="building" data-icon-size="17"></span></span>' +
+      '<div style="min-width:0;flex:1"><div class="li-title text-truncate">' + esc(c.name) + '</div><div class="li-sub"><span class="num">' + esc(c.credit) + '</span> · ' + esc(c.coop) + '</div></div>' +
+      '<span class="li-end"><span class="badge ' + (n < 0 ? 'badge-danger' : 'badge-warning') + '">' + (n < 0 ? 'منقضی' : fa(n) + ' روز') + '</span></span></div>';
+  }).join('') || SUP.empty('اعتباری رو به اتمام نیست.', 'check-check');
+  $('#credit').addEventListener('click', function (e) { var r = e.target.closest('[data-file]'); if (r) SUP.file(r.getAttribute('data-file')); });
+
+  $('#svc').innerHTML = D.supServices.slice().sort(function (a, b) { return b.at.localeCompare(a.at); }).slice(0, 5).map(function (s) {
+    var c = SUP.co(s.company) || {};
+    return '<div class="list-item" style="cursor:pointer" data-perf="' + s.company + '">' + CRM.avatar(s.owner, 34) +
+      '<div style="min-width:0;flex:1"><div class="li-title text-truncate fs-sm">' + esc(c.name || '—') + '</div><div class="li-sub text-truncate">' + esc(s.kind) + ' · ' + esc(s.owner) + ' · ' + fa(s.minutes) + ' دقیقه</div></div>' +
+      '<span class="li-end fs-2xs text-muted num">' + esc(s.at.split(' ')[0]) + '</span></div>';
+  }).join('');
+  $('#svc').addEventListener('click', function (e) { var r = e.target.closest('[data-perf]'); if (r) SUP.perf(r.getAttribute('data-perf')); });
+})();
+</script>
+</body>
+</html>

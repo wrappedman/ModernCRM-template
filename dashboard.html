@@ -651,8 +651,9 @@
         return [stat(fa(stocked.length), 'محصول انباری'), stat(fa(low), 'کم‌موجود / ناموجود', low ? 'danger' : '')];
       },
       'm-support': function () {
-        return [stat(fa(count(D.tickets, function (x) { return x.status !== 'closed' && x.status !== 'answered'; })), 'تیکت باز', 'warn'),
-                stat(fa((D.threads || []).reduce(function (a, t) { return a + (t.unread || 0); }, 0)), 'پیام خوانده‌نشده')];
+        var wait = count(D.supPlans, function (p) { return p.status === 'sent'; });
+        return [stat(fa(wait), 'فرم منتظر برنامه‌ریزی', wait ? 'warn' : ''),
+                stat(fa(count(D.tickets, function (x) { return x.status !== 'closed' && x.status !== 'answered'; })), 'تیکت باز')];
       },
       'm-accounting': function () {
         var amt = function (x) { return Math.max(0, x.base * (x.qty || 1) - (x.discount || 0)); }, bal = 0;
@@ -661,7 +662,7 @@
         var ch = count(D.accDocs, function (x) { var o = CRM.jalali.parse(x.chequeDate); return x.pay === 'cheque' && o && CRM.jalali.toGregorian(o.jy, o.jm, o.jd) >= t; });
         return [stat(CRM.moneyShort(bal), 'موجودی تنخواه'), stat(fa(ch), 'چک در جریان', ch ? 'warn' : '')];
       },
-      'm-reports': function () { return [stat(fa(count(D.modules.filter(function (m) { return m.id === 'm-reports'; })[0].children, function (c) { return c.href.indexOf('report.html?') === 0; })), 'گزارش آماده'), stat(fa(D.kpis[3].value) + '٪', 'نرخ تبدیل')]; },
+      'm-reports': function () { var mr = D.modules.filter(function (m) { return m.id === 'm-reports'; })[0]; return [stat(fa(count(mr.children.concat(mr.links || []), function (c) { return c.href.indexOf('report.html?') === 0; })), 'گزارش آماده'), stat(fa(D.kpis[3].value) + '٪', 'نرخ تبدیل')]; },
       'm-defs': function () { return [stat(fa(count(D.defUsers, function (u) { return u.active; })), 'کاربر فعال'), stat(fiscalYear(), 'دوره مالی جاری')]; }
     };
     var MAX_LINKS = 4;

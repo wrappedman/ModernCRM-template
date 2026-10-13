@@ -1576,3 +1576,104 @@ body.no-float .win-hint { display: none; }
   .rp-table tr { break-inside: avoid; }
   .rp-table tbody tr:nth-child(even) td { background: #f7f7f7; }
 }
+
+/* ==========================================================================
+ * 25) پشتیبانی (support-*.html + support.js) — برگه‌ی فرم، فیلترها، الفبا، دستورکار
+ * ========================================================================== */
+.modal-foot .spacer { flex: 1; }
+.sup-kv { grid-template-columns: 128px minmax(0, 1fr); gap: 8px 14px; font-size: var(--fs-sm); align-content: start; }
+.sup-kv dd { color: var(--text-strong); line-height: 1.8; min-width: 0; }
+.sup-link { background: none; border: 0; padding: 0; color: var(--brand); cursor: pointer; font: inherit; }
+.sup-link:hover { text-decoration: underline; }
+
+/* برگه‌ی فقط‌خواندنی برنامه کاری */
+.sup-sheet { display: flex; flex-direction: column; gap: 16px; }
+.sup-sheet-sec { display: flex; flex-direction: column; gap: 8px; }
+.sup-sheet-t { font-size: var(--fs-xs); font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.sup-sheet-t::after { content: ""; flex: 1; height: 1px; background: var(--border-muted); }
+.sup-cks { display: flex; flex-wrap: wrap; gap: 6px; }
+.sup-ck {
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px 3px 12px; border-radius: var(--radius-full);
+  border: 1px dashed var(--border); color: var(--text-muted); font-size: var(--fs-xs); background: var(--surface);
+}
+.sup-ck.on { border-style: solid; border-color: var(--brand); background: var(--brand-soft); color: var(--brand-ink); font-weight: 600; }
+
+/* گروه چک‌باکس / رادیوی افقی داخل فرم */
+.sup-checks { display: flex; flex-wrap: wrap; gap: 10px 18px; min-height: 42px; align-items: center; }
+.sup-checks.boxed { padding: 10px 14px; border: 1px solid var(--border-muted); border-radius: var(--radius); background: var(--surface-2); }
+.sup-type-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.sup-type {
+  position: relative; display: flex; align-items: center; gap: 9px; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--surface); cursor: pointer; font-size: var(--fs-sm); transition: border-color var(--t-fast), background var(--t-fast);
+}
+.sup-type input { position: absolute; opacity: 0; pointer-events: none; }
+.sup-type .ic { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--surface-2); color: var(--text-muted); flex: none; }
+.sup-type:hover { border-color: var(--border-strong, var(--text-muted)); }
+.sup-type:has(input:checked) { border-color: var(--brand); background: var(--brand-soft); color: var(--brand-ink); font-weight: 600; }
+.sup-type:has(input:checked) .ic { background: var(--brand); color: #fff; }
+.sup-type:has(input:focus-visible) { box-shadow: var(--ring, 0 0 0 3px var(--brand-soft)); }
+@media (max-width: 900px) { .sup-type-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* راهنمای قرمز و جعبه‌ی اطلاعات */
+.sup-hint { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: var(--danger); }
+.sup-info {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding: 10px 14px; font-size: var(--fs-xs); color: var(--text-muted);
+  background: var(--surface-2); border-bottom: 1px solid var(--border-muted);
+}
+.sup-info b { color: var(--text-strong); font-weight: 700; }
+.sup-legend { display: inline-flex; align-items: center; gap: 6px; }
+.sup-legend i { width: 12px; height: 12px; border-radius: 3px; background: var(--warning-soft); border: 1px solid var(--warning); }
+.sup-legend i.x { background: var(--danger-soft, #fde8e8); border-color: var(--danger); }
+
+/* نوار الفبا (پشتیبانی مشتریان) */
+.sup-alpha { display: flex; flex-wrap: wrap; gap: 3px; padding: 10px 14px; border-bottom: 1px solid var(--border-muted); background: var(--surface); }
+.sup-alpha button {
+  min-width: 30px; height: 30px; padding: 0 7px; border-radius: 8px; border: 1px solid transparent; background: none; color: var(--brand);
+  font: inherit; font-size: var(--fs-sm); font-weight: 600; cursor: pointer;
+}
+.sup-alpha button:hover { background: var(--brand-soft); }
+.sup-alpha button.is-active { background: var(--ink); color: var(--on-ink); }
+.sup-alpha button:disabled { color: var(--text-faint, var(--text-muted)); opacity: .4; cursor: default; background: none; }
+
+/* ردیف‌های جدول: اعتبار رو به اتمام / منقضی / انتخاب‌شده */
+.table tr.sup-warn td { background: var(--warning-soft); }
+.table tr.sup-expired td { background: color-mix(in srgb, var(--danger) 7%, transparent); }
+.table tr.is-selected td { background: var(--brand-soft) !important; }
+.table tr.is-selected td:first-child { box-shadow: inset -3px 0 0 var(--brand); }
+.sup-co { display: block; max-width: 330px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; color: var(--text-strong); }
+.sup-acts { display: inline-flex; gap: 4px; }
+.sup-acts .btn { height: 30px; padding: 0 10px; font-size: var(--fs-xs); }
+
+/* روزهای هفته (برنامه‌ریزی) */
+.sup-days { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+.sup-day {
+  flex: 1 0 92px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 6px; border-radius: var(--radius);
+  border: 1px solid var(--border); background: var(--surface); cursor: pointer; font: inherit; color: var(--text);
+}
+.sup-day .dn { font-size: var(--fs-xs); color: var(--text-muted); }
+.sup-day .dd { font-weight: 700; font-size: var(--fs-sm); }
+.sup-day .dc { font-size: var(--fs-2xs); color: var(--text-muted); }
+.sup-day.is-today { border-color: var(--brand); }
+.sup-day.is-active { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
+.sup-day.is-active .dn, .sup-day.is-active .dc { color: var(--on-ink-muted); }
+.sup-wd { font-weight: 700; color: var(--text-strong); cursor: context-menu; border-bottom: 1px dashed var(--border); }
+
+/* دستورکار امروز (نمای کلی) */
+.sup-agenda { display: flex; flex-direction: column; }
+.sup-ag {
+  display: grid; grid-template-columns: 64px 4px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 11px 16px;
+  border-bottom: 1px solid var(--border-muted); cursor: pointer;
+}
+.sup-ag:last-child { border-bottom: 0; }
+.sup-ag:hover { background: var(--surface-hover); }
+.sup-ag .t { font-weight: 700; color: var(--text-strong); text-align: center; font-size: var(--fs-md); }
+.sup-ag .t small { display: block; font-weight: 500; font-size: var(--fs-2xs); color: var(--text-muted); }
+.sup-ag .bar { width: 4px; height: 36px; border-radius: 4px; background: var(--brand); }
+.sup-ag .bar.warning { background: var(--warning); } .sup-ag .bar.success { background: var(--success); }
+.sup-ag .bar.violet { background: var(--violet, #7c5cff); } .sup-ag .bar.danger { background: var(--danger); } .sup-ag .bar.info { background: var(--info, var(--brand)); }
+
+/* پنل پایین برنامه‌ریزی (تأیید زمان) */
+.sup-confirm { border-top: 1px solid var(--border-muted); background: var(--surface-2); padding: 16px; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+.sup-confirm .grid-4 { align-items: end; }
+.sup-confirm.is-off { opacity: .55; pointer-events: none; }
+.sup-file-panel { min-height: 260px; }

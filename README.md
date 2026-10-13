@@ -55,11 +55,12 @@ ModernCRM-template/
 │   │   ├── app.js            هسته: تولتیپ، توست، مودال، دراور، نمودار، جدول، پالت فرمان
 │   │   ├── windows.js        مدیر پنجره‌ها (درگ، تغییر اندازه، ماکسیمایز، اسنپ)
 │   │   ├── warehouse.js      ابزارهای مشترک صفحه‌های انبار (فقط در صفحه‌های warehouse-*)
+│   │   ├── support.js        ابزارهای مشترک صفحه‌های پشتیبانی (SUP: انتخاب شرکت، برگه‌ی برنامه کاری، گردش فرم، پرونده مشتری)
 │   │   └── reports.js        ★ موتور گزارش‌ها: رجیستری گزارش‌ها + کارت فیلتر + نمایشگر (report.html و reports-hub.html)
 │   ├── fonts/                وزیرمتن (Variable + وزن‌های اصلی) + مجوز OFL
 │   └── img/                  لوگو و فاوآیکون SVG
 │
-└── صفحه‌ها (۵۱ فایل HTML در ریشه پروژه)
+└── صفحه‌ها (۵۷ فایل HTML در ریشه پروژه)
 ```
 
 ---
@@ -73,9 +74,9 @@ ModernCRM-template/
 | مشتریان | `customers.html` `customer-new.html` `customer-profile.html` |
 | فروش | `pipeline.html` `deals.html` `invoices.html` `print-invoice.html` |
 | انبار | `warehouse.html` `warehouse-products.html` `products.html` (کاتالوگ) `warehouse-in.html` `warehouse-out.html` (اصلی) `warehouse-out.html?store=sub` (فرعی) `warehouse-stock.html` |
-| پشتیبانی | `tickets.html` `ticket-new.html` `journey.html` `messages.html` `kb.html` `help.html` |
+| پشتیبانی | `support.html` (نمای کلی) `support-workplan.html` `support-planning.html` `support-formdata.html` `support-desk.html` `report.html?r=support-perf` `support-userperf.html` (جدول بخش ۴-ه) `tickets.html` `ticket-new.html` `journey.html` `messages.html` `kb.html` `help.html` |
 | حسابداری | `accounting.html` |
-| گزارشات | `reports-hub.html` (همه‌ی گزارش‌ها) `report.html?r=…` (۹ گزارش؛ جدول بخش ۴-د) `reports.html` (داشبورد تحلیلی) |
+| گزارشات | `reports-hub.html` (همه‌ی گزارش‌ها) `report.html?r=…` (۱۰ گزارش؛ جدول بخش ۴-د) `reports.html` (داشبورد تحلیلی) |
 | تعاریف | `defs.html` `defs-users.html` (با مودال سطح دسترسی) `users.html` `defs-fiscal.html` `defs-basic.html` `defs-settings.html` `settings.html` |
 | احراز هویت | `login.html` `register.html` `forgot-password.html` `reset-password.html` `otp.html` `change-password.html` `lock.html` |
 | حساب کاربری | `profile.html` `design-system.html` |
@@ -393,14 +394,35 @@ ModernCRM-template/
 | `devices` | ریز وضعیت دستگاه‌ها | مجموعه ← محصولات (وابسته)، وضعیت، تاریخ خروج، مشتری | گروه‌بندی بر اساس محصول |
 | `payments` | مالی پرداختی‌ها* | بازه، نحوه پرداخت، نوع سند، فقط نماینده | از اسناد حسابداری |
 | `expenses` | هزینه‌ها و خسارت* | بازه، نوع، تنخواه | گروه‌بندی با جمع هر گروه |
+| `support-perf` | عملکرد پشتیبانی | شرکت مرجع، نام شرکت، بازه، مسئول فعالیت (چندتایی)، نوع خدمات | گروه‌بندی «مسئول پشتیبانی: …» با جمع دقیقه؛ در منوی پشتیبانی (`crumb`) |
 
 \* از این گزارش‌ها اسکرین‌شاتی نبود؛ ستون‌ها پیشنهادی‌اند و با یک تغییر در `build` اصلاح می‌شوند.
 
-**افزودن گزارش جدید:** یک شیء به `REPORTS` اضافه کنید (`id`، `title`، `cat`، `icon`، `desc`، `filters`، `build(f)`)، سپس یک فرزند `{ id: 'rep-<id>', href: 'report.html?r=<id>' }` در بخش گزارشات `modules`. خروجی `build`: `{ title, subtitle, columns, rows, totals, groupBy, groupSum, note }`. انواع فیلتر: `daterange`، `radio` (گزینه با `note`)، `checks` (`cols`، `search`، `dependsOn`، `options` تابعی)، `flags` (`disabledWhen`)، `select`، `text` — `span` از ۱ تا ۴. انواع ستون: `text`، `num`، `money`، `date`، `ltr`، `wrap`، `badge`، `bar`؛ `group` = سرستون دوردیفه، `total: true` = جمع در ردیف پایانی.
+**افزودن گزارش جدید:** یک شیء به `REPORTS` اضافه کنید (`id`، `title`، `cat`، `icon`، `desc`، `filters`، `build(f)`)، سپس یک فرزند `{ id: 'rep-<id>', href: 'report.html?r=<id>' }` در بخش گزارشات `modules`. خروجی `build`: `{ title, subtitle, columns, rows, totals, groupBy, groupLabel, groupSum, note }`؛ `crumb: { label, href }` اختیاری مسیر نان‌ریزه را عوض می‌کند. انواع فیلتر: `daterange`، `radio` (گزینه با `note`)، `checks` (`cols`، `search`، `dependsOn`، `options` تابعی)، `flags` (`disabledWhen`)، `select`، `text` — `span` از ۱ تا ۴. انواع ستون: `text`، `num`، `money`، `date`، `ltr`، `wrap`، `badge`، `bar`؛ `group` = سرستون دوردیفه، `total: true` = جمع در ردیف پایانی.
 
 داده‌ها: `msgMe`، `msgTypes`، `msgs`، `accTypes`، `accBanks`، `accDocs`، `repOwners`، `repAgents`، `repSms`، `repCompanies`، `repDevices`، `repInvoices`.
 
 کلاس‌های جدید: `.msg-table tr.is-unread`، `.msg-preview`، `.msg-full`، `.inbox-grid`، `.row-flash`، `.rf-*` (کارت فیلتر)، `.rv-*` (نمایشگر)، `.rp-*` (کاغذ گزارش)، `.rep-tile`.
+
+### ۴-ه) پشتیبانی (برنامه کاری تا عملکرد کاربر)
+
+چرخه‌ی فرم: **ثبت** (پیش‌نویس، چاپ فعال) ← **ارسال** (صف برنامه‌ریزی) ← **تأیید** (تاریخ، ساعت، کارشناس) ← چاپ ← **ثبت اطلاعات فرم** (انجام شد) — یا **کنسل / ناقص** با علت. هر مرحله یک ردیف در `flow` فرم است و در «گردش فرم» دیده می‌شود.
+
+| صفحه | معادل در برنامه فعلی | نکات |
+| --- | --- | --- |
+| `support.html` | صفحه‌ی خالی منوی پشتیبانی | شاخص‌ها (منتظر برنامه‌ریزی، کارهای امروز، منتظر ثبت اطلاعات، اعتبار رو به اتمام)، کاشی بخش‌ها، برنامه‌ی هفته، اعتبارها و آخرین خدمات |
+| `support-workplan.html` | برنامه کاری | کارت‌های چندانتخابی نوع فرم؛ انتخاب شرکت با «…» (آدرس/تلفن خودکار، شخص هماهنگ‌شده از افراد شرکت)؛ جهت تسویه، نحوه تسویه/ارسال، پس/پیش کرایه؛ اقلام با «اضافه به لیست» و «به تفکیک محصول»؛ «چاپ» تا ثبت غیرفعال؛ مودال جستجو (ویرایش / مشاهده)؛ `?no=` |
+| `support-planning.html` | برنامه ریزی | فیلترها + تیک «برنامه ریزی نشده»؛ نوار روزهای هفته با تعداد کار؛ **کلیک راست روی ستون ایام هفته** = نمایش فرم؛ «تأیید» پنل پایین (زمان، ساعت `hh:mm`، کارشناس) را فعال می‌کند؛ مودال کنسلی/ناقصی با علت؛ گردش فرم؛ `?all=1` |
+| `support-formdata.html` | ثبت اطلاعات فرم | شماره فرم + Enter ← مشخصات فقط‌خواندنی؛ بارنامه/قبض، تاریخ، نحوه ارسال، مدت زمان؛ ثبت / ثبت جدید؛ فهرست «منتظر ثبت اطلاعات»؛ جستجو با تیک «فرم‌هایی که ثبت اطلاعات نشده‌اند»؛ `?no=` |
+| `support-desk.html` | پشتیبانی | فیلترها (بیشتر/کمتر) و Excel؛ نوار الفبا؛ ردیف زرد = اعتبار کمتر از «روز مانده»، قرمز کم‌رنگ = منقضی؛ «…» = افراد مرتبط؛ **اطلاعات** = مودال خدمات (۵ نوع، لیست تعمیرات فقط برای تعمیرات، تمدید اعتبار، سوابق — کلیک = مشاهده با «ثبت کننده فرم»)؛ **عملکرد** = گزارش خدمات شرکت (چاپ)؛ **پرونده مشتری** = مودال تب‌دار (مشخصات و وضعیت‌ها، دستگاه‌ها، فاکتورها، فرم‌ها، خدمات، فایل‌ها) |
+| `report.html?r=support-perf` | عملکرد پشتیبانی | گزارش موتور گزارش‌ها؛ گروه‌بندی بر اساس مسئول پشتیبانی |
+| `support-userperf.html` | ثبت عملکرد کاربر | کاربر ← برنامه‌ی روزانه (شرکت، تاریخ، فرم و تعداد دستگاه خودکار)؛ نصب / پشتیبانی / نرم‌افزار؛ محل نصب؛ بله/خیرها با `segmented`؛ نواقص، علت‌ها، زمان، رضایت، هزینه و خسارت؛ فهرست عملکردهای ثبت‌شده با جستجو |
+
+`support.js` ← `window.SUP`: `co`، `plan`، `type`، `status`، `typeBadges`، `statusBadge`، `fill`، `pickCompany`، `bindCompany`، `viewPlan` (برگه + چاپ)، `flow`، `people`، `perf`، `file(code, tab)`، `weekday`، `daysLeft`، `addDays`، `now`، `printHtml`.
+
+داده‌ها: `supFormTypes`، `supStatuses`، `supCoords`، `supExperts`، `supLists` (تسویه، ارسال، علت‌ها، رضایت، تعمیرات، …)، `supCompanies` (افراد، دستگاه‌ها، فاکتورها، فایل‌ها، `flags`، `credit`)، `supPlans` (`plan`، `flow`، `data`، `cancel`)، `supServices`، `supUserPerf`.
+
+کلاس‌های جدید (بخش ۲۵ components.css): `.sup-type-grid` / `.sup-type`، `.sup-checks`، `.sup-ck`، `.sup-sheet`، `.sup-kv`، `.sup-alpha`، `tr.sup-warn` / `tr.sup-expired` / `tr.is-selected`، `.sup-days` / `.sup-day`، `.sup-agenda` / `.sup-ag`، `.sup-confirm`، `.sup-hint`، `.sup-info`، `.sup-legend`، `.sup-link`.
 
 ### ۵) اتصال به بک‌اند
 

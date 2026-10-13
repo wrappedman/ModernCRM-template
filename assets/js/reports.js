@@ -5,9 +5,9 @@
  *  • CRM_REPORTS.mount  ساخت صفحه‌ی report.html?r=<id>: کارت فیلتر + نمایشگر گزارش
  *
  *  هر گزارش:
- *    { id, title, cat, icon, tone, desc, filters: [...], build: function (f) {...} }
+ *    { id, title, cat, icon, tone, desc, crumb?, filters: [...], build: function (f) {...} }
  *  build(f) خروجی می‌دهد:
- *    { title, subtitle?, columns: [...], rows: [...], groupBy?, groupSum?, totals?, note? }
+ *    { title, subtitle?, columns: [...], rows: [...], groupBy?, groupLabel?, groupSum?, totals?, note? }
  *
  *  انواع فیلتر (type):
  *    daterange {from,to}  ·  radio (option.note)  ·  checks (cols, search, dependsOn, options:fn)
@@ -460,6 +460,50 @@
           rows: rows, groupBy: 'group', groupSum: 'amount', totals: true
         };
       }
+    },
+
+    /* ---------------------------------------------------------------- ۱۰) عملکرد پشتیبانی */
+    {
+      id: 'support-perf', cat: 'ops', icon: 'headset', tone: 'amber', crumb: { label: 'پشتیبانی', href: 'support.html' },
+      title: 'عملکرد پشتیبانی',
+      desc: 'خدمات ثبت‌شده برای مشتریان به تفکیک مسئول پشتیبانی با زمان صرف‌شده و وضعیت قرارداد',
+      filters: [
+        { id: 'ref', type: 'select', label: 'شرکت مرجع', span: 1, options: [{ v: '', t: 'همه' }].concat(D.supLists.refCompanies.map(function (x) { return { v: x, t: x }; })) },
+        { id: 'q', type: 'text', label: 'نام شرکت', span: 1, placeholder: 'مثلاً آریا گستر' },
+        { id: 'date', type: 'daterange', label: 'بازه‌ی زمانی', from: '', to: '', span: 2 },
+        { id: 'owners', type: 'checks', label: 'مسئول فعالیت', span: 3, cols: 5, search: true, options: uniq(D.supExperts.concat(D.repOwners)), value: 'all' },
+        { id: 'kinds', type: 'checks', label: 'نوع خدمات', span: 1, cols: 2, options: D.supLists.serviceKinds, value: 'all' }
+      ],
+      build: function (f) {
+        var q = f.q.trim(), CO = {};
+        D.supCompanies.forEach(function (c) { CO[c.code] = c; });
+        var rows = D.supServices.filter(function (x) {
+          var c = CO[x.company] || {};
+          return f.owners.indexOf(x.owner) > -1 && f.kinds.indexOf(x.kind) > -1 && inRange(x.at.split(' ')[0], f.date) &&
+            (!q || (c.name || '').indexOf(q) > -1) && (!f.ref || (c.ref || 'سامانه‌های بعد پنجم') === f.ref);
+        }).sort(function (a, b) { return a.owner.localeCompare(b.owner, 'fa') || key(b.at.split(' ')[0]) - key(a.at.split(' ')[0]); }).map(function (x) {
+          return {
+            owner: x.owner, customer: (CO[x.company] || {}).name || '—', kind: { text: x.kind, tone: x.kind === 'حضوری' ? 'badge-primary' : x.kind === 'تعمیرات' || x.kind === 'گزارش تعمیرات' ? 'badge-danger' : x.kind === 'ریموت' ? 'badge-violet' : 'badge-info' },
+            at: x.at, expert: x.expert, cust: x.custExpert || '—', minutes: x.minutes, status: x.status || '—', contract: x.contract || '—', note: x.note
+          };
+        });
+        return {
+          title: 'گزارش عملکرد پشتیبانی',
+          subtitle: rangeText(f.date) + ' · مسئول: ' + listText(f.owners) + (q ? ' · شرکت: «' + q + '»' : '') + (f.ref ? ' · مرجع: ' + f.ref : ''),
+          columns: [
+            { key: 'customer', title: 'مشتری', type: 'wrap' },
+            { key: 'kind', title: 'نوع خدمات', type: 'badge' },
+            { key: 'at', title: 'تاریخ و زمان ثبت', type: 'date' },
+            { key: 'expert', title: 'کارشناس شرکت' },
+            { key: 'cust', title: 'کارشناس مشتری' },
+            { key: 'minutes', title: 'زمان صرف شده (دقیقه)', type: 'num', total: true },
+            { key: 'status', title: 'وضعیت' },
+            { key: 'contract', title: 'پشتیبانی' },
+            { key: 'note', title: 'توضیحات', type: 'wrap' }
+          ],
+          rows: rows, groupBy: 'owner', groupLabel: 'مسئول پشتیبانی', groupSum: 'minutes', totals: true
+        };
+      }
     }
   ];
   var BY_ID = {}; REPORTS.forEach(function (r) { BY_ID[r.id] = r; });
@@ -540,7 +584,7 @@
     root.innerHTML =
       '<div class="page-head">' +
         '<div><div class="breadcrumb"><a href="dashboard.html">خانه</a><span class="sep" data-icon="chevron-left" data-icon-size="13"></span>' +
-        '<a href="reports-hub.html">گزارشات</a><span class="sep" data-icon="chevron-left" data-icon-size="13"></span><span class="current">' + esc(R.title) + '</span></div>' +
+        '<a href="' + (R.crumb ? R.crumb.href : 'reports-hub.html') + '">' + (R.crumb ? esc(R.crumb.label) : 'گزارشات') + '</a><span class="sep" data-icon="chevron-left" data-icon-size="13"></span><span class="current">' + esc(R.title) + '</span></div>' +
         '<h1 class="page-title">' + esc(R.title) + ' <span class="badge badge-lg" style="vertical-align:middle">' + esc(cat.title) + '</span></h1>' +
         '<p class="page-desc">' + esc(R.desc) + '</p></div>' +
         '<div class="head-actions">' +
@@ -734,7 +778,7 @@
         if (o.groupBy && row[o.groupBy] !== prevG) {
           prevG = row[o.groupBy];
           var gr = rows.filter(function (r) { return r[o.groupBy] === prevG; });
-          body += '<tr class="rp-grp"><td colspan="' + (cols.length + 1) + '"><bdi>' + esc(prevG) + '</bdi> <span class="rp-grp-n">' + fa(gr.length) + ' ردیف' +
+          body += '<tr class="rp-grp"><td colspan="' + (cols.length + 1) + '">' + (o.groupLabel ? '<span class="text-muted fw-500">' + esc(o.groupLabel) + ': </span>' : '') + '<bdi>' + esc(prevG) + '</bdi> <span class="rp-grp-n">' + fa(gr.length) + ' ردیف' +
             (o.groupSum ? ' · جمع ' + CRM.num(sum(gr, o.groupSum)) : '') + '</span></td></tr>';
         }
         body += '<tr' + (start + i === hitRow ? ' class="rp-hit"' : '') + ' data-ri="' + (start + i) + '"><td class="rp-idx">' + fa(start + i + 1) + '</td>' +

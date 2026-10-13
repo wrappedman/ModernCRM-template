@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ثبت عملکرد کاربر | پشتیبانی | مدرن‌CRM</title>
+<meta name="description" content="ثبت عملکرد کارشناس پس از نصب یا پشتیبانی: محل، تأخیر، نواقص، زمان، رضایت مشتری و هزینه">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<!--
+  ثبت عملکرد کاربر: هر کارشناس برای هر برنامه‌ی روزانه (فرم تأییدشده) عملکرد خود را ثبت می‌کند.
+  با انتخاب «برنامه روزانه»، شرکت، تاریخ و شماره فرم خودکار پر می‌شود.
+-->
+<body class="app" data-page="support-userperf">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="support.html">پشتیبانی</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">ثبت عملکرد کاربر</span>
+            </div>
+            <h1 class="page-title">ثبت عملکرد کاربر</h1>
+            <p class="page-desc">گزارش کارشناس از انجام نصب یا پشتیبانی: محل، تأخیر، نواقص، زمان صرف‌شده و رضایت مشتری.</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="support-formdata.html"><span data-icon="clipboard" data-icon-size="16"></span> ثبت اطلاعات فرم</a>
+          </div>
+        </div>
+
+        <div class="grid-2-1 mb-5">
+          <form class="card" id="uForm" data-win-nobtn novalidate style="min-width:0">
+            <div class="card-head">
+              <div class="card-title" data-icon="user-check" data-icon-size="18"> فرم عملکرد</div>
+              <div class="card-actions"><span class="badge badge-outline" id="uState">ثبت جدید</span></div>
+            </div>
+            <div class="card-body">
+              <!-- ۱) برنامه -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="calendar-check" data-icon-size="17"></span>
+                  <div><div class="fs-title">کاربر و برنامه</div><div class="fs-desc">با انتخاب برنامه‌ی روزانه، شرکت و شماره فرم پر می‌شود</div></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="fUser">کاربر <span class="req">*</span></label>
+                    <select class="select" id="fUser"></select>
+                  </div>
+                  <div class="form-group" style="grid-column:span 2">
+                    <label class="form-label" for="fPlan">برنامه روزانه</label>
+                    <select class="select" id="fPlan"><option value="">ابتدا کاربر را انتخاب کنید</option></select>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="fCompany">شرکت <span class="req">*</span></label>
+                    <div class="input-group"><input class="input" id="fCompany" readonly placeholder="انتخاب…"><button type="button" class="btn" id="btnPick"><span data-icon="more-h" data-icon-size="16"></span></button></div>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="fDate">تاریخ</label>
+                    <div class="input-wrap"><input class="input num" id="fDate" data-jdate="today"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar-days" data-icon-size="15"></button></div>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="fForm">شماره فرم</label>
+                    <input class="input num" id="fForm" data-fa-mask>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۲) نوع کار -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="wrench" data-icon-size="17"></span>
+                  <div><div class="fs-title">نوع کار و محل</div><div class="fs-desc">نصب، پشتیبانی و نرم‌افزار؛ محل انجام کار و علت تأخیر</div></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group"><label class="form-label" for="fInstall">نصب</label><select class="select" id="fInstall"></select></div>
+                  <div class="form-group"><label class="form-label" for="fSupport">پشتیبانی</label><select class="select" id="fSupport"></select></div>
+                  <div class="form-group"><label class="form-label" for="fSoftware">نرم افزار</label><select class="select" id="fSoftware"></select></div>
+                  <div class="form-group mb-0" style="grid-column:span 2">
+                    <label class="form-label">محل نصب</label>
+                    <div class="sup-checks boxed" id="fPlace"></div>
+                  </div>
+                  <div class="form-group mb-0"><label class="form-label" for="fDelay">علت تاخیر</label><select class="select" id="fDelay"></select></div>
+                </div>
+              </section>
+
+              <!-- ۳) جزئیات -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="list-checks" data-icon-size="17"></span>
+                  <div><div class="fs-title">جزئیات انجام کار</div><div class="fs-desc">دستگاه‌ها، ادامه‌ی نصب، موعد مقرر و نواقص</div></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="fDevices">تعداد دستگاه</label>
+                    <div class="input-wrap"><input class="input num" id="fDevices" data-num-mask placeholder="۰"><span class="unit">عدد</span></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">محصولات قبلاً تحویل شده</label>
+                    <div class="segmented" data-segmented data-yn="prev"><button type="button" class="seg" data-v="1">بله</button><button type="button" class="seg is-active" data-v="0">خیر</button></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">نصب اشتراکی</label>
+                    <div class="segmented" data-segmented data-yn="shared"><button type="button" class="seg" data-v="1">بله</button><button type="button" class="seg is-active" data-v="0">خیر</button></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fCont">ادامه نصب فرم شماره</label>
+                    <input class="input num" id="fCont" data-fa-mask placeholder="در صورت ادامه‌ی کار قبلی">
+                  </div>
+                  <div class="form-group" style="grid-column:span 2">
+                    <label class="form-label">نصب یا پشتیبانی در موعد مقرر انجام شده</label>
+                    <div class="segmented" data-segmented data-yn="onTime"><button type="button" class="seg is-active" data-v="1">بله</button><button type="button" class="seg" data-v="0">خیر</button></div>
+                  </div>
+                  <div class="form-group mb-0"><label class="form-label" for="fDefects">نواقص نصب</label><select class="select" id="fDefects"></select></div>
+                  <div class="form-group mb-0"><label class="form-label" for="fIncomplete">علت کامل انجام نشدن نصب</label><select class="select" id="fIncomplete"></select></div>
+                  <div class="form-group mb-0"><label class="form-label" for="fRemote">علت ریموت شدن</label><select class="select" id="fRemote"></select></div>
+                </div>
+              </section>
+
+              <!-- ۴) زمان، رضایت و هزینه -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="timer" data-icon-size="17"></span>
+                  <div><div class="fs-title">زمان، رضایت و هزینه</div><div class="fs-desc">مبالغ به تومان</div></div>
+                </div>
+                <div class="grid-4">
+                  <div class="form-group">
+                    <label class="form-label" for="fMinutes">مدت زمان صرف شده <span class="req">*</span></label>
+                    <div class="input-wrap"><input class="input num" id="fMinutes" data-num-mask placeholder="۰"><span class="unit">دقیقه</span></div>
+                  </div>
+                  <div class="form-group"><label class="form-label" for="fSat">میزان رضایت مشتری</label><select class="select" id="fSat"></select></div>
+                  <div class="form-group">
+                    <label class="form-label" for="fCost">هزینه</label>
+                    <div class="input-wrap"><input class="input num" id="fCost" data-num-mask placeholder="۰"><span class="unit">تومان</span></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fDamage">خسارت به شرکت</label>
+                    <div class="input-wrap"><input class="input num" id="fDamage" data-num-mask placeholder="۰"><span class="unit">تومان</span></div>
+                  </div>
+                </div>
+                <div class="form-group mb-0">
+                  <label class="form-label" for="fNote">توضیحات</label>
+                  <textarea class="textarea" id="fNote" rows="3"></textarea>
+                </div>
+              </section>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> ثبت</button>
+              <button type="button" class="btn" id="btnCancel"><span data-icon="eraser" data-icon-size="16"></span> انصراف</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-ghost" id="btnSearch"><span data-icon="search" data-icon-size="16"></span> جستجو</button>
+            </div>
+          </form>
+
+          <div style="align-self:start;position:sticky;top:calc(var(--topbar-h) + 12px);min-width:0" class="d-flex flex-col gap-5">
+            <div class="card" data-win-nobtn>
+              <div class="card-head">
+                <div class="card-title" data-icon="history" data-icon-size="18"> عملکردهای ثبت‌شده</div>
+                <div class="card-actions"><span class="badge" id="rCount">—</span></div>
+              </div>
+              <div class="card-body flush">
+                <div class="p-3" style="border-bottom:1px solid var(--border-muted)"><div class="input-wrap"><span class="icon lead" data-icon="search" data-icon-size="16"></span><input class="input" id="rq" placeholder="کاربر، شرکت یا شماره فرم…"></div></div>
+                <div class="sup-agenda" id="recent" style="max-height:620px;overflow:auto"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/support.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, esc = CRM.esc, L = D.supLists;
+  var cur = null;
+  SUP.fill('#fUser', D.supExperts, 'انتخاب کاربر…');
+  SUP.fill('#fInstall', L.install); SUP.fill('#fSupport', L.support); SUP.fill('#fSoftware', L.software);
+  SUP.fill('#fDelay', L.delay); SUP.fill('#fDefects', L.defects); SUP.fill('#fIncomplete', L.incomplete); SUP.fill('#fRemote', L.remote); SUP.fill('#fSat', L.satisfaction, '—');
+  $('#fPlace').innerHTML = L.placeOf.map(function (x) { return '<label class="check"><input type="checkbox" name="place" value="' + esc(x) + '"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">' + esc(x) + '</span></label>'; }).join('');
+  SUP.bindCompany('#fCompany', '#btnPick');
+
+  function yn(k, v) {
+    var g = $('[data-yn="' + k + '"]');
+    if (v === undefined) return (g.querySelector('.is-active') || {}).getAttribute ? g.querySelector('.is-active').getAttribute('data-v') === '1' : false;
+    $$('.seg', g).forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-v') === (v ? '1' : '0')); });
+  }
+  function num(s) { return +CRM.en($(s).value || '').replace(/\D/g, '') || 0; }
+
+  /* برنامه‌های روزانه‌ی کاربر */
+  $('#fUser').addEventListener('change', function () {
+    var u = this.value, l = D.supPlans.filter(function (p) { return p.plan && p.plan.expert === u && p.status !== 'cancel'; });
+    SUP.fill('#fPlan', l.map(function (p) { var c = SUP.co(p.company) || {}; return { v: p.no, t: p.plan.date + ' · فرم ' + p.no + ' · ' + (c.name || '').slice(0, 34) }; }), u ? (l.length ? 'انتخاب برنامه…' : 'برنامه‌ای برای این کاربر نیست') : 'ابتدا کاربر را انتخاب کنید');
+  });
+  $('#fPlan').addEventListener('change', function () {
+    var p = SUP.plan(this.value); if (!p) return;
+    var c = SUP.co(p.company) || {};
+    $('#fCompany').value = c.name || ''; $('#fCompany').setAttribute('data-code', p.company); $('#fDate').value = p.plan.date; $('#fForm').value = p.no;
+    var n = p.items.reduce(function (a, i) { return a + i.qty; }, 0); if (n) $('#fDevices').value = fa(n);
+    if (p.types.indexOf('install') > -1) $('#fInstall').value = 'نصب کامل';
+    if (p.types.indexOf('support') > -1) $('#fSupport').value = 'حضوری';
+  });
+
+  function load(r) {
+    cur = r; var c = SUP.co(r.company) || {};
+    $('#fUser').value = r.user; $('#fUser').dispatchEvent(new Event('change')); $('#fPlan').value = r.form;
+    $('#fCompany').value = c.name || ''; $('#fCompany').setAttribute('data-code', r.company); $('#fDate').value = r.date; $('#fForm').value = r.form;
+    $('#fInstall').value = r.install; $('#fSupport').value = r.support; $('#fSoftware').value = r.software; $('#fDelay').value = r.delay;
+    $$('[name=place]').forEach(function (x) { x.checked = r.place.indexOf(x.value) > -1; });
+    $('#fDevices').value = r.devices ? fa(r.devices) : ''; yn('prev', r.prevDelivered); yn('shared', r.shared); yn('onTime', r.onTime); $('#fCont').value = r.contForm || '';
+    $('#fDefects').value = r.defects; $('#fIncomplete').value = r.incomplete; $('#fRemote').value = r.remote;
+    $('#fMinutes').value = fa(r.minutes); $('#fSat').value = r.satisfaction; $('#fCost').value = r.cost ? CRM.num(r.cost) : ''; $('#fDamage').value = r.damage ? CRM.num(r.damage) : ''; $('#fNote').value = r.note;
+    $('#uState').textContent = 'ویرایش · ' + r.user + ' · فرم ' + r.form; $('#uState').className = 'badge badge-info';
+    renderRecent(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function reset() {
+    cur = null; $('#uForm').reset(); $('#fCompany').setAttribute('data-code', ''); $('#fDate').value = CRM.jDate();
+    yn('prev', false); yn('shared', false); yn('onTime', true); $('#fUser').dispatchEvent(new Event('change'));
+    $('#uState').textContent = 'ثبت جدید'; $('#uState').className = 'badge badge-outline'; renderRecent();
+  }
+  $('#uForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!$('#fUser').value) { CRM.toast({ type: 'warning', title: 'کاربر', msg: 'کاربر را انتخاب کنید.' }); $('#fUser').focus(); return; }
+    if (!+$('#fCompany').getAttribute('data-code')) { CRM.toast({ type: 'warning', title: 'شرکت', msg: 'شرکت را انتخاب کنید یا یک برنامه‌ی روزانه برگزینید.' }); return; }
+    if (!num('#fMinutes')) { CRM.toast({ type: 'warning', title: 'مدت زمان', msg: 'مدت زمان صرف‌شده را وارد کنید.' }); $('#fMinutes').focus(); return; }
+    var r = {
+      user: $('#fUser').value, form: $('#fForm').value, company: +$('#fCompany').getAttribute('data-code'), date: $('#fDate').value,
+      install: $('#fInstall').value, support: $('#fSupport').value, software: $('#fSoftware').value, place: $$('[name=place]:checked').map(function (x) { return x.value; }), delay: $('#fDelay').value,
+      devices: num('#fDevices'), prevDelivered: yn('prev'), contForm: $('#fCont').value, shared: yn('shared'), onTime: yn('onTime'),
+      defects: $('#fDefects').value, incomplete: $('#fIncomplete').value, remote: $('#fRemote').value, minutes: num('#fMinutes'), satisfaction: $('#fSat').value,
+      cost: num('#fCost'), damage: num('#fDamage'), note: $('#fNote').value.trim()
+    };
+    if (cur) Object.assign(cur, r); else D.supUserPerf.unshift(Object.assign({ code: D.supUserPerf.length + 1 }, r));
+    CRM.toast({ type: 'success', title: cur ? 'عملکرد ویرایش شد' : 'عملکرد ثبت شد', msg: r.user + ' · ' + fa(r.minutes) + ' دقیقه' + (r.satisfaction ? ' · رضایت ' + r.satisfaction : '') });
+    reset();
+  });
+  $('#btnCancel').addEventListener('click', reset);
+  $('#btnSearch').addEventListener('click', function () { $('#rq').focus(); $('#rq').select(); });
+
+  var SAT = { 'عالی': 'success', 'خوب': 'info', 'متوسط': 'warning', 'ضعیف': 'danger' };
+  function renderRecent() {
+    var q = fa($('#rq').value.trim());
+    var l = D.supUserPerf.filter(function (r) { var c = SUP.co(r.company) || {}; return !q || (r.user + ' ' + (c.name || '') + ' ' + r.form).indexOf(q) > -1; });
+    $('#rCount').textContent = fa(l.length);
+    $('#recent').innerHTML = l.length ? l.map(function (r) {
+      var c = SUP.co(r.company) || {};
+      return '<div class="sup-ag" data-code="' + r.code + '" style="grid-template-columns:auto minmax(0,1fr) auto' + (cur === r ? ';background:var(--brand-soft)' : '') + '">' + CRM.avatar(r.user, 34) +
+        '<div style="min-width:0"><div class="fw-600 text-strong fs-sm">' + esc(r.user) + ' <span class="text-muted fw-400 num">· فرم ' + esc(r.form || '—') + '</span></div><div class="fs-xs text-muted text-truncate">' + esc(c.name || '—') + '</div>' +
+        '<div class="fs-2xs text-muted num">' + esc(r.date) + ' · ' + fa(r.minutes) + ' دقیقه' + (r.onTime ? '' : ' · <span class="text-danger">خارج از موعد</span>') + '</div></div>' +
+        (r.satisfaction ? '<span class="badge badge-' + SAT[r.satisfaction] + '">' + esc(r.satisfaction) + '</span>' : '') + '</div>';
+    }).join('') : SUP.empty('موردی پیدا نشد.', 'search');
+  }
+  $('#rq').addEventListener('input', CRM.debounce(renderRecent, 120));
+  $('#recent').addEventListener('click', function (e) { var r = e.target.closest('[data-code]'); if (r) load(D.supUserPerf.filter(function (x) { return x.code === +r.getAttribute('data-code'); })[0]); });
+
+  reset();
+})();
+</script>
+</body>
+</html>

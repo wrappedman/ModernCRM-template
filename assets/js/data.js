@@ -60,9 +60,16 @@ window.CRM_DATA = (function () {
       ]
     },
     {
-      id: 'm-support', label: 'پشتیبانی', icon: 'headset', tone: 'amber', href: 'tickets.html', badge: '۵',
-      desc: 'تیکت‌ها، سفر پرونده تا رضایت مشتری، گفتگو و پایگاه دانش',
+      id: 'm-support', label: 'پشتیبانی', icon: 'headset', tone: 'amber', href: 'support.html', badge: '۵',
+      desc: 'برنامه کاری و برنامه‌ریزی کارشناسان، خدمات مشتریان، تیکت‌ها و پایگاه دانش',
       children: [
+        { id: 'support', label: 'نمای کلی پشتیبانی', href: 'support.html' },
+        { id: 'support-workplan', label: 'برنامه کاری', href: 'support-workplan.html' },
+        { id: 'support-planning', label: 'برنامه‌ریزی', href: 'support-planning.html' },
+        { id: 'support-formdata', label: 'ثبت اطلاعات فرم', href: 'support-formdata.html' },
+        { id: 'support-desk', label: 'پشتیبانی مشتریان', href: 'support-desk.html' },
+        { id: 'rep-support-perf', label: 'عملکرد پشتیبانی', href: 'report.html?r=support-perf' },
+        { id: 'support-userperf', label: 'ثبت عملکرد کاربر', href: 'support-userperf.html' },
         { id: 'tickets', label: 'تیکت‌ها', href: 'tickets.html' },
         { id: 'ticket-new', label: 'ثبت تیکت جدید', href: 'ticket-new.html' },
         { id: 'journey', label: 'سفر مشتری (پرونده‌ها)', href: 'journey.html' },
@@ -98,7 +105,8 @@ window.CRM_DATA = (function () {
         { id: 'reports', label: 'داشبورد تحلیلی', href: 'reports.html' }
       ],
       links: [
-        { label: 'گزارش موجودی انبار', href: 'warehouse-stock.html' }
+        { label: 'گزارش موجودی انبار', href: 'warehouse-stock.html' },
+        { label: 'عملکرد پشتیبانی', href: 'report.html?r=support-perf' }
       ]
     },
     {
@@ -703,6 +711,199 @@ window.CRM_DATA = (function () {
     });
   })();
 
+  /* ==========================================================================
+   * پشتیبانی: برنامه کاری، برنامه‌ریزی، ثبت اطلاعات فرم، خدمات، عملکرد کاربر
+   * ========================================================================== */
+  function F(s) { return String(s).replace(/\d/g, function (d) { return '۰۱۲۳۴۵۶۷۸۹'[d]; }); }
+  var SUP_FORM_TYPES = [
+    { id: 'install', title: 'نصب', icon: 'zap', tone: 'primary' },
+    { id: 'support', title: 'پشتیبانی', icon: 'headset', tone: 'warning' },
+    { id: 'training', title: 'آموزش', icon: 'presentation', tone: 'violet' },
+    { id: 'sale', title: 'فروش', icon: 'receipt', tone: 'success' },
+    { id: 'demo', title: 'ارسال دمو', icon: 'send', tone: 'info' },
+    { id: 'meeting', title: 'جلسه', icon: 'users', tone: 'gray' },
+    { id: 'card', title: 'چاپ کارت', icon: 'id-card', tone: 'info' },
+    { id: 'swap', title: 'تعویض و بازگشت', icon: 'rotate-ccw', tone: 'danger' }
+  ];
+  /* وضعیت فرم: پیش‌نویس ← ارسال (منتظر برنامه‌ریزی) ← تأیید ← چاپ ← انجام شد | کنسل | ناقص */
+  var SUP_STATUSES = [
+    { id: 'draft', title: 'پیش‌نویس', tone: 'gray' },
+    { id: 'sent', title: 'ارسال شده', tone: 'info' },
+    { id: 'confirmed', title: 'تأیید شده', tone: 'primary' },
+    { id: 'printed', title: 'چاپ شده', tone: 'violet' },
+    { id: 'done', title: 'انجام شد', tone: 'success' },
+    { id: 'incomplete', title: 'ناقص', tone: 'warning' },
+    { id: 'cancel', title: 'کنسل', tone: 'danger' }
+  ];
+  var SUP_COORDS = ['توکلی', 'باصری', 'کاظمی', 'لشکریان', 'میلاد فتاحی', 'عدالت'];
+  var SUP_EXPERTS = ['فتحی', 'قورچیان', 'سحرخیز', 'دایجی', 'آقاجانپور', 'جانی پور', 'درگزی', 'احمدی تبار'];
+  var SUP_LISTS = {
+    settle: ['نقدی', 'چک', 'کارتخوان', 'واریز به حساب', 'اعتباری (قرارداد)'],
+    send: ['داخل شرکت', 'پیک موتوری', 'تیپاکس', 'پست پیشتاز', 'باربری', 'تحویل حضوری'],
+    settleDocs: ['مهر', 'معرفی نامه', 'کارت شناسایی'],
+    cancelReasons: ['عدم حضور مشتری', 'آماده نبودن محل نصب', 'درخواست مشتری', 'عدم تسویه حساب', 'نقص تجهیزات', 'تداخل برنامه‌ی کارشناس'],
+    delay: ['بدون تأخیر', 'ترافیک', 'تأخیر در برنامه‌ی قبلی', 'عدم هماهنگی مشتری', 'مشکل خودرو'],
+    defects: ['بدون نقص', 'کابل‌کشی ناقص', 'نبود پریز برق', 'عدم دسترسی به شبکه', 'آماده نبودن سیستم نرم‌افزار'],
+    incomplete: ['انجام کامل', 'عدم آمادگی شبکه', 'عدم حضور مسئول IT', 'نقص قطعه', 'کمبود زمان'],
+    remote: ['ریموت نشده', 'درخواست مشتری', 'فاصله‌ی زیاد', 'مشکل نرم‌افزاری', 'کاهش هزینه'],
+    satisfaction: ['عالی', 'خوب', 'متوسط', 'ضعیف'],
+    install: ['نصب کامل', 'نصب سخت‌افزار', 'نصب نرم‌افزار', 'جابجایی دستگاه', 'بدون نصب'],
+    support: ['بدون پشتیبانی', 'حضوری', 'تلفنی', 'ریموت', 'تعمیرات'],
+    software: ['بدون نرم‌افزار', 'حضور و غیاب تحت وب', 'حضور و غیاب ویندوزی', 'کنترل تردد', 'سلف سرویس'],
+    placeOf: ['داخل شرکت', 'تهران', 'حومه تهران', 'شهرستان'],
+    serviceKinds: ['حضوری', 'تعمیرات', 'تلفنی', 'ریموت', 'گزارش تعمیرات'],
+    serviceStatus: ['اتمام پیگیری', 'در حال پیگیری', 'ارجاع به تعمیرات', 'منتظر پاسخ مشتری'],
+    repairs: ['تعویض برد', 'تعویض سنسور اثر انگشت', 'تعویض آداپتور', 'تعمیر صفحه‌کلید', 'به‌روزرسانی فریم‌ور'],
+    deskFilters: ['همه', 'اعتبار رو به اتمام (۳۰ روز)', 'اعتبار منقضی', 'دارای پیگیری باز', 'نماینده‌ها'],
+    following: ['همه', 'در حال پیگیری', 'بدون پیگیری'],
+    refCompanies: ['سامانه‌های بعد پنجم', 'آریا گستر', 'پیشگامان فناوری پارس']
+  };
+
+  /* شرکت‌های پشتیبانی (با افراد، دستگاه‌ها، فاکتورها و فایل‌ها برای «پرونده مشتری») */
+  var SUP_COMPANIES = [];
+  (function () {
+    var seed = 31; function r(n) { seed = (seed * 9301 + 49297) % 233280; return Math.floor(seed / 233280 * n); }
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    var prods = ['EB - 920 TC', 'HP - 200', 'EB - 102', 'HP - 510', 'EP - 810', 'HP - 310', 'EB - 720 C'];
+    var readers = ['ID', 'بدون_کارتخوان', 'Mifare', 'EM'];
+    var owners = ['انصاری', 'رحیمی', 'حسینی', 'میلاد فتاحی', 'باصری'];
+    var units = ['مدیریت', 'اداری', 'مالی', 'IT', 'منابع انسانی', ''];
+    var roles = ['مدیرعامل', 'کارشناس', 'مسئول خرید', 'مسئول IT', ''];
+    var fn = ['امیری', 'احمدی', 'صباغ زاده', 'ذبیحی', 'غضنفری', 'برزگر', 'قائمی', 'زنوزی', 'قاسمی', 'حسن زاده', 'رضایی', 'کریمی', 'نوری'];
+    function mk(code, name, coop, addr, phone, credit, follow, o) {
+      o = o || {};
+      var people = o.people || [];
+      if (!o.people) for (var i = 0, n = 3 + r(5); i < n; i++) people.push({ name: (r(2) ? 'جناب آقای ' : 'سرکار خانم ') + fn[r(fn.length)], unit: units[r(units.length)], role: i === 0 ? 'مدیرعامل' : roles[r(roles.length)], tel1: r(2) ? phone : '', tel2: '', mobile: r(2) ? F('0912' + (1000000 + r(8999999))) : '', email: '' });
+      var devices = [];
+      for (var k = 0, m = 1 + r(4); k < m; k++) {
+        var y = 1392 + r(13), mo = 1 + r(12), d = 1 + r(28);
+        devices.push({ product: prods[r(prods.length)], invoice: r(3) ? F((y - 1300) + '/' + p(mo) + '/' + (100 + r(800))) : '', serial: F(String(1000000000 + r(899999) * 4099)), out: F(y + '/' + mo + '/' + d), reader: readers[r(readers.length)], type: 'فروش', owner: owners[r(owners.length)], note: '', credit: F((y + 1) + '/' + p(mo) + '/' + p(d)) });
+      }
+      var invoices = [];
+      for (var j = 0, q = 1 + r(3); j < q; j++) { var iy = 1394 + r(11), im = 1 + r(12); invoices.push({ no: F((iy - 1300) + '/' + p(im) + '/' + (100 + r(800))), date: F(iy + '/' + p(im) + '/' + p(1 + r(28))), owner: owners[r(owners.length)] }); }
+      SUP_COMPANIES.push(Object.assign({
+        code: code, name: name, coop: coop, address: addr, phone: phone, email: '', ref: '', expert: SUP_EXPERTS[r(SUP_EXPERTS.length)], owner: owners[r(owners.length)],
+        econ: '', postal: F(String(1000000000 + r(899999999))), reg: F(String(10000 + r(80000))), invType: ['رسمی کامل', 'غیررسمی', 'رسمی'][r(3)], note: '',
+        credit: credit, follow: follow, flags: [], people: people, devices: devices, invoices: invoices,
+        files: [{ name: 'فرم فروش', date: devices[0].out, by: 'اسکندری', note: '' }, { name: 'قرارداد پشتیبانی', date: F('1404/03/31'), by: 'باصری', note: 'اسکن امضاشده' }]
+      }, o));
+    }
+    mk(26, 'جناب آقای مهدی عرب نجفی (شرکت صنایع الکترونیک آریا گستر)', 'نماینده', 'کرج، چهارراه هفت‌تیر، مجتمع تجاری کیش، طبقه اول، واحد ۲۰۵', '۰۲۶۳۲۲۸۴۱۰۲', '۱۴۰۵/۱۲/۲۶', '', {
+      email: 'jafi@faratel.com', owner: 'رحیمی', postal: '۳۱۳۴۷۶۳۳۹۴', reg: '۶۱۰۴۱۲۹۶۲۲۹', invType: 'رسمی کامل', note: '۰۰۶۹۳۶۰۰۸۱', expert: 'احمدی تبار', flags: ['good'],
+      people: [
+        { name: 'جناب آقای -', unit: 'مدیریت', role: 'مدیرعامل', tel1: '-', tel2: '۰۲۶۳۲۲۸۴۱۰۲', mobile: '۰۹۱۲۳۶۳۲۴۹۴', email: 'aryagostar205@gmail.com' },
+        { name: 'سرکار خانم امیری', unit: '', role: '', tel1: '', tel2: '', mobile: '', email: '' },
+        { name: 'سرکار خانم احمدی', unit: '', role: '', tel1: '۰۲۶۳۲۲۸۴۱۰۱-۲', tel2: '', mobile: '', email: '' },
+        { name: 'جناب آقای صباغ زاده', unit: '', role: '', tel1: '', tel2: '', mobile: '', email: '' },
+        { name: 'سرکار خانم ذبیحی', unit: '', role: '', tel1: '', tel2: '', mobile: '', email: '' },
+        { name: 'سرکار خانم غضنفری', unit: '', role: '', tel1: '', tel2: '', mobile: '', email: '' },
+        { name: 'سرکار خانم برزگر', unit: '', role: '', tel1: '', tel2: '', mobile: '', email: '' },
+        { name: 'سرکار خانم قائمی', unit: '', role: '', tel1: '', tel2: '', mobile: '', email: '' },
+        { name: 'سرکار خانم زنوزی', unit: '', role: '', tel1: '', tel2: '', mobile: '', email: '' },
+        { name: 'جناب آقای مهدی نجفی', unit: '', role: '', tel1: '۰۲۶۳۲۲۸۴۱۰۲', tel2: '۰۲۶۳۲۲۸۴۱۰۱', mobile: '۰۹۱۲۳۶۳۲۴۹۴', email: 'aryagostar205@gmail.com' },
+        { name: 'سرکار خانم قاسمی', unit: '', role: '', tel1: '', tel2: '', mobile: '۰۹۲۱۲۹۴۲۳۸۳', email: '' },
+        { name: 'سرکار خانم حسن زاده', unit: '', role: '', tel1: '۰۲۶۳۲۲۸۴۱۰۱', tel2: '', mobile: '۰۹۲۱۲۹۴۲۳۸۳', email: '' }
+      ],
+      devices: [
+        { product: 'EB - 920 TC', invoice: '', serial: '۲۶۶۲۳۲۰۰۱۹', out: '۱۳۹۲/۲/۸', reader: 'ID', type: 'فروش', owner: 'انصاری', note: '', credit: '۱۳۹۳/۰۲/۰۸' },
+        { product: 'HP - 200', invoice: '', serial: '۰۲۰۳۰۴۰۰۷۶', out: '۱۳۹۲/۲/۴', reader: 'ID', type: 'فروش', owner: 'انصاری', note: 'نصب در زیوار صنعت', credit: '۱۳۹۳/۰۲/۰۴' },
+        { product: 'EB - 102', invoice: '', serial: '۳۱۴۲۳۴۰۰۵۱', out: '۱۳۹۲/۲/۴', reader: 'بدون_کارتخوان', type: 'فروش', owner: 'انصاری', note: '', credit: '۱۳۹۳/۰۲/۰۴' }
+      ],
+      invoices: [{ no: '۹۵/۰۹/۱۲۸', date: '۱۳۹۵/۰۹/۲۸', owner: 'حسینی' }, { no: '۹۶/۰۹/۱۷۶', date: '۱۳۹۶/۰۹/۲۲', owner: 'رحیمی' }, { no: '۹۷/۰۵/۵۰-۱', date: '۱۳۹۷/۰۵/۰۸', owner: 'میلاد فتاحی' }],
+      files: [{ name: 'فرم فروش', date: '۱۳۹۲/۰۶/۱۸', by: 'اسکندری', note: '' }, { name: 'فرم فروش', date: '۱۳۹۲/۰۶/۱۸', by: 'اسکندری', note: '' }]
+    });
+    mk(6614, 'شرکت آریا گستر', 'فرصت مشتری', 'تهران، خیابان ولیعصر، بالاتر از پارک ساعی، کوچه‌ی نوبخت، پلاک ۱۲', '۰۲۱۸۸۷۷۴۵۲۱', '۱۴۰۵/۰۳/۳۱', '', { flags: [] });
+    mk(20859, 'وحید قدیمی-آریا گسترش', 'مشتری غیر مستقیم', 'اصفهان، خیابان چهارباغ بالا، مجتمع پارک، واحد ۹', '۰۳۱۳۶۶۲۱۴۵۰', '۱۴۰۵/۰۳/۱۰', '', {});
+    mk(21891, 'شرکت کوشا آریاگستر نت', 'فرصت مشتری', 'تهران، شهرک غرب، بلوار فرحزادی، پلاک ۴۲', '۰۲۱۲۲۰۸۴۵۶۷', '', '', {});
+    mk(1000, 'شرکت سامانه‌های بعد پنجم', 'داخلی', 'تهران، بزرگراه جلال آل احمد، شرق به غرب، نرسیده به چهارراه آریافر، پلاک ۲۷۹، واحد ۱۰', '۰۲۱۸۸۲۵۶۰۰۰', '', '', { people: [{ name: 'فتحی', unit: 'فنی', role: 'کارشناس', tel1: '۰۲۱۸۸۲۵۶۰۰۰', tel2: '', mobile: '۰۹۱۲۱۰۰۲۰۳۰', email: '' }, { name: 'توکلی', unit: 'فروش', role: 'هماهنگ‌کننده', tel1: '', tel2: '', mobile: '', email: '' }] });
+    mk(5748, 'شرکت پادا نقش جهان جی', 'مشتری نهایی', 'اصفهان، شهرک صنعتی جی، انتهای خیابان یکم فرعی ۱۴، پلاک ۱۸۴', '۰۳۱۳۵۷۲۲۵۴۸', '۱۴۰۶/۰۷/۱۲', '', { people: [{ name: 'مرضیه طاهری دولت آبادی', unit: 'اداری', role: 'مسئول اداری', tel1: '۰۳۱۳۵۷۲۲۵۴۸', tel2: '', mobile: '۰۹۱۳۲۲۴۵۶۱۰', email: '' }, { name: 'جناب آقای نوری', unit: 'IT', role: 'مسئول IT', tel1: '', tel2: '', mobile: '۰۹۱۳۸۸۰۴۵۲۱', email: '' }] });
+    mk(1021, 'گروه صنعتی البرز', 'مشتری نهایی', 'کرج، جاده مخصوص، کیلومتر ۱۲، خیابان صنعت', '۰۲۶۳۴۴۱۲۲۰۰', '۱۴۰۵/۰۸/۰۵', '۱۴۰۵/۰۷/۲۳', {});
+    mk(1028, 'پارس‌نیکان', 'مشتری نهایی', 'تهران، خیابان مطهری، خیابان سلیمان خاطر، پلاک ۸', '۰۲۱۸۸۳۴۲۹۷۹', '۱۴۰۴/۱۱/۲۰', '', { flags: ['bad'] });
+    mk(1035, 'داده‌پرداز', 'همکار فروش', 'تهران، میدان ونک، خیابان ملاصدرا، پلاک ۱۲۰', '۰۲۱۸۸۶۱۷۰۲۰', '۱۴۰۵/۰۷/۲۸', '۱۴۰۵/۰۷/۲۲', {});
+    mk(1042, 'شهرداری خرم‌دره', 'مشتری نهایی', 'خرم‌دره، بلوار امام، ساختمان شهرداری', '۰۲۴۳۵۵۲۲۱۰۰', '۱۴۰۶/۰۱/۱۵', '', {});
+    mk(1049, 'آریا جم', 'نماینده', 'شیراز، خیابان زند، نبش کوچه ۲۲', '۰۷۱۳۲۳۴۵۶۷۰', '۱۴۰۵/۰۸/۰۱', '', {});
+    mk(1056, 'کیمیا شیمی دماوند', 'مشتری نهایی', 'دماوند، شهرک صنعتی، خیابان سوم', '۰۲۱۷۶۳۲۰۴۴۰', '۱۴۰۵/۰۶/۳۰', '۱۴۰۵/۰۷/۲۵', {});
+  })();
+
+  /* فرم‌های برنامه کاری (منبع «برنامه‌ریزی»، «ثبت اطلاعات فرم» و «گردش فرم») */
+  var SUP_PLANS = [
+    { no: '۰۵۷۵۱', created: '۱۴۰۵/۰۷/۲۰', types: ['install'], coord: 'توکلی', docs: [], company: 1000, person: 'فتحی', mobile: '', settle: 'نقدی', send: '', freight: '', official: false,
+      items: [{ product: 'HP - 510', reader: 'کارتخوان Mifare', qty: 1 }], note: '', status: 'sent', plan: null, data: null, cancel: null,
+      flow: [{ st: 'sent', user: 'توکلی', at: '۱۴۰۵/۰۷/۲۰ ۱۰:۵۲:۱۱', date: '', time: '', note: '' }] },
+    { no: '۰۵۷۵۰', created: '۱۴۰۵/۰۷/۲۰', types: ['support'], coord: 'کاظمی', docs: ['معرفی نامه'], company: 1021, person: '', mobile: '', settle: 'اعتباری (قرارداد)', send: 'داخل شرکت', freight: '', official: false,
+      items: [], note: 'دستگاه طبقه‌ی دوم اثر انگشت نمی‌خواند', status: 'sent', plan: null, data: null, cancel: null,
+      flow: [{ st: 'sent', user: 'کاظمی', at: '۱۴۰۵/۰۷/۲۰ ۰۹:۱۲:۴۰', date: '', time: '', note: '' }] },
+    { no: '۰۵۷۴۹', created: '۱۴۰۵/۰۷/۱۹', types: ['install', 'training'], coord: 'باصری', docs: ['مهر'], company: 1035, person: '', mobile: '', settle: 'چک', send: 'داخل شرکت', freight: '', official: true,
+      items: [{ product: 'EP - 810', reader: 'کارتخوان EM (۱۲۵ کیلوهرتز)', qty: 2 }, { product: 'نرم‌افزار حضور و غیاب', reader: 'بدون کارتخوان', qty: 1 }], note: '', status: 'confirmed',
+      plan: { date: '۱۴۰۵/۰۷/۲۲', time: '۱۰:۳۰', expert: 'قورچیان', note: '' }, data: null, cancel: null,
+      flow: [{ st: 'sent', user: 'باصری', at: '۱۴۰۵/۰۷/۱۹ ۱۱:۰۲:۱۸', date: '', time: '', note: '' }, { st: 'confirmed', user: 'کاظمی', at: '۱۴۰۵/۰۷/۲۰ ۰۸:۴۵:۰۹', date: '۱۴۰۵/۰۷/۲۲', time: '۱۰:۳۰', note: '' }] },
+    { no: '۰۵۷۴۸', created: '۱۴۰۵/۰۷/۱۹', types: ['sale'], coord: 'باصری', docs: [], company: 5748, person: 'مرضیه طاهری دولت آبادی', mobile: '', settle: 'واریز به حساب', send: 'تیپاکس', freight: 'pre', official: false,
+      items: [{ product: 'HP - 310', reader: 'کارتخوان Mifare', qty: 1 }], note: '', status: 'printed',
+      plan: { date: '۱۴۰۵/۰۷/۱۹', time: '۱۴:۰۰', expert: 'سحرخیز', note: '' }, data: null, cancel: null,
+      flow: [{ st: 'sent', user: 'باصری', at: '۱۴۰۵/۰۷/۱۹ ۰۹:۴۶:۴۵', date: '', time: '', note: '' }, { st: 'confirmed', user: 'کاظمی', at: '۱۴۰۵/۰۷/۱۹ ۱۰:۲۰:۱۳', date: '۱۴۰۵/۰۷/۱۹', time: '۱۴:۰۰', note: '' }, { st: 'printed', user: 'باصری', at: '۱۴۰۵/۰۷/۱۹ ۱۰:۳۱:۵۹', date: '', time: '', note: '' }] },
+    { no: '۰۵۷۴۷', created: '۱۴۰۵/۰۷/۱۸', types: ['demo'], coord: 'لشکریان', docs: ['کارت شناسایی'], company: 1049, person: '', mobile: '', settle: 'نقدی', send: 'باربری', freight: 'post', official: false,
+      items: [{ product: 'EP - 810', reader: 'کارتخوان HID', qty: 1 }], note: 'دمو دو هفته‌ای', status: 'done',
+      plan: { date: '۱۴۰۵/۰۷/۱۸', time: '۱۶:۰۰', expert: 'دایجی', note: '' }, data: { waybill: '۴۵۸۸۲۱۰', date: '۱۴۰۵/۰۷/۱۸', send: 'باربری', minutes: 40, note: 'تحویل باربری راه‌آهن' }, cancel: null,
+      flow: [{ st: 'sent', user: 'لشکریان', at: '۱۴۰۵/۰۷/۱۸ ۰۹:۰۰:۰۲', date: '', time: '', note: '' }, { st: 'confirmed', user: 'توکلی', at: '۱۴۰۵/۰۷/۱۸ ۰۹:۳۰:۴۴', date: '۱۴۰۵/۰۷/۱۸', time: '۱۶:۰۰', note: '' }, { st: 'printed', user: 'لشکریان', at: '۱۴۰۵/۰۷/۱۸ ۰۹:۴۱:۱۰', date: '', time: '', note: '' }, { st: 'done', user: 'دایجی', at: '۱۴۰۵/۰۷/۱۸ ۱۷:۱۲:۳۰', date: '', time: '', note: 'ثبت اطلاعات فرم' }] },
+    { no: '۰۵۷۴۶', created: '۱۴۰۵/۰۷/۱۷', types: ['install'], coord: 'توکلی', docs: ['مهر', 'معرفی نامه'], company: 1042, person: '', mobile: '', settle: 'چک', send: 'داخل شرکت', freight: '', official: true,
+      items: [{ product: 'HP - 510', reader: 'کارتخوان Mifare', qty: 3 }], note: '', status: 'cancel',
+      plan: { date: '۱۴۰۵/۰۷/۲۰', time: '۰۹:۰۰', expert: 'آقاجانپور', note: '' }, data: null, cancel: { kind: 'cancel', reason: 'آماده نبودن محل نصب', note: 'کابل‌کشی شبکه انجام نشده بود' },
+      flow: [{ st: 'sent', user: 'توکلی', at: '۱۴۰۵/۰۷/۱۷ ۱۲:۱۰:۳۳', date: '', time: '', note: '' }, { st: 'confirmed', user: 'کاظمی', at: '۱۴۰۵/۰۷/۱۸ ۰۸:۱۵:۲۰', date: '۱۴۰۵/۰۷/۲۰', time: '۰۹:۰۰', note: '' }, { st: 'cancel', user: 'توکلی', at: '۱۴۰۵/۰۷/۲۰ ۱۱:۰۹:۰۰', date: '', time: '', note: 'آماده نبودن محل نصب' }] },
+    { no: '۰۵۷۴۵', created: '۱۴۰۵/۰۷/۱۶', types: ['support', 'card'], coord: 'عدالت', docs: [], company: 1056, person: '', mobile: '', settle: 'نقدی', send: 'پیک موتوری', freight: 'post', official: false,
+      items: [{ product: 'کارت RFID (بسته ۱۰۰ عددی)', reader: 'بدون کارتخوان', qty: 2 }], note: 'چاپ ۲۰۰ کارت پرسنلی', status: 'incomplete',
+      plan: { date: '۱۴۰۵/۰۷/۱۷', time: '۱۱:۰۰', expert: 'جانی پور', note: '' }, data: null, cancel: { kind: 'incomplete', reason: 'نقص تجهیزات', note: 'عکس ۴۰ نفر از پرسنل ارسال نشده' },
+      flow: [{ st: 'sent', user: 'عدالت', at: '۱۴۰۵/۰۷/۱۶ ۱۰:۰۰:۰۰', date: '', time: '', note: '' }, { st: 'confirmed', user: 'توکلی', at: '۱۴۰۵/۰۷/۱۶ ۱۳:۲۲:۱۹', date: '۱۴۰۵/۰۷/۱۷', time: '۱۱:۰۰', note: '' }, { st: 'incomplete', user: 'جانی پور', at: '۱۴۰۵/۰۷/۱۷ ۱۵:۴۰:۰۸', date: '', time: '', note: 'نقص تجهیزات' }] },
+    { no: '۰۵۷۴۴', created: '۱۴۰۵/۰۷/۱۵', types: ['meeting'], coord: 'میلاد فتاحی', docs: [], company: 1028, person: '', mobile: '', settle: 'نقدی', send: '', freight: '', official: false,
+      items: [], note: 'جلسه‌ی ارائه‌ی سامانه‌ی کنترل تردد', status: 'done',
+      plan: { date: '۱۴۰۵/۰۷/۱۶', time: '۱۰:۰۰', expert: 'درگزی', note: '' }, data: { waybill: '', date: '۱۴۰۵/۰۷/۱۶', send: 'داخل شرکت', minutes: 90, note: '' }, cancel: null,
+      flow: [{ st: 'sent', user: 'میلاد فتاحی', at: '۱۴۰۵/۰۷/۱۵ ۱۴:۰۵:۳۷', date: '', time: '', note: '' }, { st: 'confirmed', user: 'توکلی', at: '۱۴۰۵/۰۷/۱۵ ۱۵:۰۰:۱۰', date: '۱۴۰۵/۰۷/۱۶', time: '۱۰:۰۰', note: '' }, { st: 'done', user: 'درگزی', at: '۱۴۰۵/۰۷/۱۶ ۱۲:۱۱:۴۲', date: '', time: '', note: 'ثبت اطلاعات فرم' }] },
+    { no: '۰۵۷۴۳', created: '۱۴۰۵/۰۷/۱۴', types: ['swap'], coord: 'کاظمی', docs: [], company: 26, person: 'جناب آقای مهدی نجفی', mobile: '۰۹۱۲۳۶۳۲۴۹۴', settle: 'نقدی', send: 'تیپاکس', freight: 'post', official: false,
+      items: [{ product: 'EB - 920 TC', reader: 'ID', qty: 1 }], note: 'تعویض دستگاه معیوب', status: 'printed',
+      plan: { date: '۱۴۰۵/۰۷/۲۱', time: '۱۲:۰۰', expert: 'احمدی تبار', note: '' }, data: null, cancel: null,
+      flow: [{ st: 'sent', user: 'کاظمی', at: '۱۴۰۵/۰۷/۱۴ ۰۹:۵۰:۲۱', date: '', time: '', note: '' }, { st: 'confirmed', user: 'توکلی', at: '۱۴۰۵/۰۷/۲۰ ۰۹:۱۰:۰۰', date: '۱۴۰۵/۰۷/۲۱', time: '۱۲:۰۰', note: '' }, { st: 'printed', user: 'کاظمی', at: '۱۴۰۵/۰۷/۲۰ ۰۹:۲۰:۴۵', date: '', time: '', note: '' }] },
+    { no: '۰۵۷۴۲', created: '۱۴۰۵/۰۷/۱۲', types: ['install'], coord: 'باصری', docs: ['مهر'], company: 6614, person: '', mobile: '', settle: 'کارتخوان', send: 'داخل شرکت', freight: '', official: true,
+      items: [{ product: 'HP - 310', reader: 'کارتخوان Mifare', qty: 2 }], note: '', status: 'sent', plan: null, data: null, cancel: null,
+      flow: [{ st: 'sent', user: 'باصری', at: '۱۴۰۵/۰۷/۱۲ ۱۶:۰۲:۱۱', date: '', time: '', note: '' }] },
+    { no: '۰۵۷۴۱', created: '۱۴۰۵/۰۷/۲۱', types: ['training'], coord: 'توکلی', docs: [], company: 20859, person: '', mobile: '', settle: 'نقدی', send: '', freight: '', official: false,
+      items: [], note: 'آموزش نرم‌افزار به واحد اداری', status: 'draft', plan: null, data: null, cancel: null, flow: [] }
+  ];
+
+  /* خدمات انجام‌شده برای شرکت‌ها (پنجره‌ی «اطلاعات» و گزارش «عملکرد پشتیبانی») */
+  var SUP_SERVICES = [
+    [26, 'تلفنی', 'احمدی تبار', 'احمدی تبار', 'اقبال', 5, 'اتمام پیگیری', '', '۱۳۹۸/۱۱/۲۶ ۱۷:۲۳', 'قرارداد پشتیبانی تا ۱۴۰۵/۰۳/۳۱', 'مشتریشون خانه ایده‌آل نرم‌افزارشون باز نمی‌شد؛ مشکل قفل داشتن، پورت رو عوض کردن حل شد'],
+    [26, 'تلفنی', 'احمدی تبار', 'احمدی تبار', 'برزگر', 10, 'اتمام پیگیری', '', '۱۳۹۸/۱۱/۲۰ ۱۶:۴۹', 'گارانتی نرم‌افزار تا ۱۴۰۶/۰۷/۱۲', 'حذف مدیر دستگاه برای مشتریشون انجام شد'],
+    [26, 'تلفنی', 'احمدی تبار', 'احمدی تبار', 'اقبال', 20, 'اتمام پیگیری', '', '۱۳۹۸/۱۱/۱۴ ۰۸:۵۵', 'قرارداد پشتیبانی تا ۱۴۰۵/۰۳/۳۱', 'نحوه تنظیم کردن پیامک تو نرم‌افزار رو به طور کامل براشون توضیح دادم. همچنین مشتریشون مشکل ارتباط داشت؛ چک کردم پینگ نداشت، راهنمایی کردم آی‌پی ست کنن'],
+    [26, 'تلفنی', 'احمدی تبار', 'احمدی تبار', '-', 8, 'اتمام پیگیری', '', '۱۳۹۸/۱۱/۰۷ ۱۲:۰۴', 'گارانتی نرم‌افزار تا ۱۴۰۶/۰۷/۱۲', 'می‌خواستن حکم یکی از پرسنل تو نرم‌افزار بر اساس فقط یک ایتم (اضافه کار ازاد) باشه؛ راهنمایی کردم چجوری تعریف کنن'],
+    [26, 'تلفنی', 'احمدی تبار', 'احمدی تبار', 'برزگر', 8, 'اتمام پیگیری', '', '۱۳۹۸/۱۱/۰۲ ۰۹:۱۱', 'گارانتی نرم‌افزار تا ۱۴۰۶/۰۷/۱۲', 'برای مرکز بهداشت کرج تماس گرفتن؛ یک دستگاهشون ارتباط نداشت، راهنمایی شد'],
+    [26, 'تلفنی', 'جانی پور', 'جانی پور', '-', 30, '', '', '۱۳۹۲/۰۴/۱۱ ۱۱:۴۸', '', 'مشکل داشتند که قفل مسدود شده؛ t5 در رابطه با نرم‌افزار بود. از شرکت کارتن ماشین تماس گرفته بودند که مشکل قفل حل شد'],
+    [26, 'ریموت', 'جانی پور', 'جانی پور', '-', 20, 'اتمام پیگیری', '', '۱۳۹۲/۰۴/۱۱ ۱۶:۳۲', '', 'با خانم رحمتی از کارتون ماشین صحبت کردیم که نرم‌افزار T5 قفل شده بود که مشکل قفل برطرف شد و نرم‌افزار t5 راه‌اندازی شد'],
+    [26, 'تلفنی', 'درگزی', 'درگزی', '-', 5, 'اتمام پیگیری', '', '۱۳۹۲/۰۶/۱۶ ۱۱:۲۴', '', 'usb تخلیه اطلاعات با'],
+    [26, 'ریموت', 'درگزی', 'درگزی', '-', 10, 'اتمام پیگیری', '', '۱۳۹۲/۰۷/۰۳ ۱۱:۴۲', '', 'خطای برقراری ارتباط میداد؛ مشکل رو رفع کردم a5 برنامه'],
+    [26, 'تلفنی', 'درگزی', 'درگزی', '-', 10, 'اتمام پیگیری', '', '۱۳۹۲/۰۷/۰۷ ۰۹:۵۰', '', 'در مورد خروجی حقوق و دستمزد سوال داشتند'],
+    [26, 'ریموت', 'آقاجانپور', 'آقاجانپور', 'زنوزی', 20, 'اتمام پیگیری', '', '۱۴۰۵/۰۷/۱۹ ۱۰:۱۴', 'قرارداد پشتیبانی تا ۱۴۰۵/۱۲/۲۶', 'خطای محدودیت چارت سازمانی وجود داشت که به دلیل عدم شناسایی قفل بود که با جابه‌جایی پورت آن مشکل برطرف شد.'],
+    [6614, 'حضوری', 'قورچیان', 'قورچیان', 'خانم صالحی', 90, 'اتمام پیگیری', '', '۱۴۰۵/۰۶/۲۸ ۱۱:۲۰', 'قرارداد پشتیبانی تا ۱۴۰۵/۰۳/۳۱', 'راه‌اندازی مجدد دستگاه‌ها پس از جابه‌جایی دفتر'],
+    [6614, 'تلفنی', 'سحرخیز', 'سحرخیز', 'خانم صالحی', 15, 'در حال پیگیری', '۱۴۰۵/۰۷/۲۴', '۱۴۰۵/۰۷/۱۸ ۰۹:۰۵', 'قرارداد پشتیبانی تا ۱۴۰۵/۰۳/۳۱', 'گزارش ماهانه خروجی اکسل نمی‌دهد؛ نسخه‌ی جدید ارسال شد'],
+    [20859, 'تعمیرات', 'دایجی', 'دایجی', 'وحید قدیمی', 45, 'ارجاع به تعمیرات', '۱۴۰۵/۰۷/۲۶', '۱۴۰۵/۰۷/۱۵ ۱۳:۴۰', 'گارانتی تا ۱۴۰۵/۰۳/۱۰', 'سنسور اثر انگشت آسیب دیده؛ دستگاه به تعمیرگاه ارسال شد'],
+    [1021, 'حضوری', 'قورچیان', 'قورچیان', 'آقای کاظمی', 60, 'اتمام پیگیری', '', '۱۴۰۵/۰۷/۱۰ ۱۰:۰۰', 'قرارداد پشتیبانی تا ۱۴۰۵/۰۸/۰۵', 'سرویس دوره‌ای و تمیزکاری سنسورها'],
+    [1021, 'ریموت', 'سحرخیز', 'سحرخیز', 'آقای کاظمی', 25, 'در حال پیگیری', '۱۴۰۵/۰۷/۲۳', '۱۴۰۵/۰۷/۲۰ ۱۴:۲۲', 'قرارداد پشتیبانی تا ۱۴۰۵/۰۸/۰۵', 'تنظیم شیفت‌های چرخشی؛ ادامه در جلسه‌ی بعد'],
+    [1035, 'تلفنی', 'فتحی', 'فتحی', '-', 10, 'اتمام پیگیری', '', '۱۴۰۵/۰۷/۰۸ ۰۹:۳۰', 'همکار فروش', 'راهنمایی نصب درایور USB'],
+    [1028, 'گزارش تعمیرات', 'دایجی', 'دایجی', '-', 30, 'اتمام پیگیری', '', '۱۴۰۵/۰۶/۱۲ ۱۶:۱۰', 'بدون قرارداد', 'تعویض آداپتور و تست ۲۴ ساعته'],
+    [1042, 'حضوری', 'آقاجانپور', 'آقاجانپور', 'مهندس رسولی', 120, 'اتمام پیگیری', '', '۱۴۰۵/۰۵/۲۲ ۱۰:۴۵', 'قرارداد پشتیبانی تا ۱۴۰۶/۰۱/۱۵', 'آموزش اپراتورهای جدید و بررسی گزارش‌ها'],
+    [1056, 'تلفنی', 'جانی پور', 'جانی پور', '-', 12, 'منتظر پاسخ مشتری', '۱۴۰۵/۰۷/۲۵', '۱۴۰۵/۰۷/۲۰ ۱۱:۱۰', 'قرارداد پشتیبانی تا ۱۴۰۵/۰۶/۳۰', 'تمدید قرارداد پشتیبانی پیشنهاد شد؛ منتظر تأیید مدیر مالی'],
+    [1049, 'ریموت', 'احمدی تبار', 'احمدی تبار', '-', 35, 'اتمام پیگیری', '', '۱۴۰۵/۰۷/۰۲ ۱۵:۰۰', 'نماینده', 'به‌روزرسانی نرم‌افزار نماینده به نسخه‌ی ۷']
+  ].map(function (r, i) {
+    return { code: 7000 + i, company: r[0], kind: r[1], owner: r[2], expert: r[3], custExpert: r[4], minutes: r[5], status: r[6], follow: r[7], at: r[8], contract: r[9], note: r[10],
+      operator: false, hw: r[1] === 'تعمیرات' || r[1] === 'گزارش تعمیرات', sw: r[1] !== 'تعمیرات', abbr: '', renew: false, repair: r[1] === 'تعمیرات' ? 'تعویض سنسور اثر انگشت' : '', form: '' };
+  });
+
+  /* ثبت عملکرد کاربر */
+  var SUP_USERPERF = [
+    { code: 1, user: 'قورچیان', form: '۰۵۷۴۹', company: 1035, date: '۱۴۰۵/۰۷/۲۲', install: 'نصب کامل', support: 'بدون پشتیبانی', software: 'حضور و غیاب تحت وب', place: ['تهران'], delay: 'بدون تأخیر', devices: 2, prevDelivered: false, contForm: '', shared: false, onTime: true, defects: 'بدون نقص', incomplete: 'انجام کامل', remote: 'ریموت نشده', minutes: 150, satisfaction: 'عالی', cost: 0, damage: 0, note: '' },
+    { code: 2, user: 'دایجی', form: '۰۵۷۴۷', company: 1049, date: '۱۴۰۵/۰۷/۱۸', install: 'بدون نصب', support: 'بدون پشتیبانی', software: 'بدون نرم‌افزار', place: ['داخل شرکت'], delay: 'بدون تأخیر', devices: 1, prevDelivered: false, contForm: '', shared: false, onTime: true, defects: 'بدون نقص', incomplete: 'انجام کامل', remote: 'ریموت نشده', minutes: 40, satisfaction: 'خوب', cost: 350000, damage: 0, note: 'تحویل باربری' },
+    { code: 3, user: 'جانی پور', form: '۰۵۷۴۵', company: 1056, date: '۱۴۰۵/۰۷/۱۷', install: 'بدون نصب', support: 'حضوری', software: 'بدون نرم‌افزار', place: ['حومه تهران'], delay: 'ترافیک', devices: 0, prevDelivered: true, contForm: '', shared: false, onTime: false, defects: 'بدون نقص', incomplete: 'نقص قطعه', remote: 'ریموت نشده', minutes: 95, satisfaction: 'متوسط', cost: 600000, damage: 0, note: 'عکس پرسنل ناقص بود' },
+    { code: 4, user: 'درگزی', form: '۰۵۷۴۴', company: 1028, date: '۱۴۰۵/۰۷/۱۶', install: 'بدون نصب', support: 'بدون پشتیبانی', software: 'کنترل تردد', place: ['تهران'], delay: 'بدون تأخیر', devices: 0, prevDelivered: false, contForm: '', shared: false, onTime: true, defects: 'بدون نقص', incomplete: 'انجام کامل', remote: 'ریموت نشده', minutes: 90, satisfaction: 'عالی', cost: 0, damage: 0, note: 'جلسه‌ی موفق' }
+  ];
+
   return {
     nav: NAV, modules: MODULES, kpis: KPIS, customers: CUSTOMERS, dealStages: DEAL_STAGES, deals: DEALS,
     tickets: TICKETS, invoices: INVOICES, products: PRODUCTS, threads: THREADS,
@@ -714,6 +915,8 @@ window.CRM_DATA = (function () {
     permPresets: PERM_PRESETS, defPerms: DEF_PERMS, fiscalPeriods: FISCAL_PERIODS, basicTypes: BASIC_TYPES,
     basicItems: BASIC_ITEMS, settingTypes: SETTING_TYPES, settingValues: SETTING_VALUES,
     msgMe: MSG_ME, msgTypes: MSG_TYPES, msgs: MSGS, accTypes: ACC_TYPES, accBanks: ACC_BANKS, accDocs: ACC_DOCS,
-    repOwners: REP_OWNERS, repAgents: REP_AGENTS, repSms: REP_SMS, repCompanies: REP_COMPANIES, repDevices: REP_DEVICES, repInvoices: REP_INVOICES
+    repOwners: REP_OWNERS, repAgents: REP_AGENTS, repSms: REP_SMS, repCompanies: REP_COMPANIES, repDevices: REP_DEVICES, repInvoices: REP_INVOICES,
+    supFormTypes: SUP_FORM_TYPES, supStatuses: SUP_STATUSES, supCoords: SUP_COORDS, supExperts: SUP_EXPERTS, supLists: SUP_LISTS,
+    supCompanies: SUP_COMPANIES, supPlans: SUP_PLANS, supServices: SUP_SERVICES, supUserPerf: SUP_USERPERF
   };
 })();

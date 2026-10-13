@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>برنامه کاری | پشتیبانی | مدرن‌CRM</title>
+<meta name="description" content="ثبت فرم برنامه کاری: نوع فرم، طرف مذاکره، نحوه تسویه و ارسال و اقلام مربوط به فرم">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<!--
+  برنامه کاری (فرم درخواست کار برای واحد پشتیبانی)
+  چرخه‌ی فرم:  ثبت (پیش‌نویس) → ارسال (به «برنامه‌ریزی») → تأیید زمان و کارشناس → چاپ → ثبت اطلاعات فرم (انجام شد)
+  دکمه‌ی «چاپ» تا وقتی فرم ثبت نشده غیرفعال است (مانند برنامه‌ی فعلی).
+-->
+<body class="app" data-page="support-workplan">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="support.html">پشتیبانی</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">برنامه کاری</span>
+            </div>
+            <h1 class="page-title">برنامه کاری</h1>
+            <p class="page-desc">فرم کار (نصب، پشتیبانی، آموزش، فروش، دمو…) را ثبت و برای برنامه‌ریزی ارسال کنید.</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" type="button" id="btnSearchTop"><span data-icon="search" data-icon-size="16"></span> جستجو</button>
+            <a class="btn" href="support-planning.html"><span data-icon="calendar-range" data-icon-size="16"></span> برنامه‌ریزی</a>
+            <button class="btn btn-primary" type="button" id="btnNew"><span data-icon="plus" data-icon-size="16"></span> فرم جدید</button>
+          </div>
+        </div>
+
+        <div class="grid-2-1 mb-5">
+          <form class="card" id="wpForm" data-win-nobtn novalidate style="min-width:0">
+            <div class="card-head">
+              <div class="card-title" data-icon="clipboard" data-icon-size="18"> فرم برنامه کاری</div>
+              <div class="card-actions"><span class="badge badge-outline" id="formState">فرم جدید</span></div>
+            </div>
+            <div class="card-body">
+
+              <!-- ۱) نوع فرم -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="list-checks" data-icon-size="17"></span>
+                  <div><div class="fs-title">نوع فرم <span class="req">*</span></div><div class="fs-desc">یک یا چند نوع کار را انتخاب کنید</div></div>
+                </div>
+                <div class="sup-type-grid mb-4" id="types"></div>
+                <div class="grid-3">
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="fNo">شماره فرم</label>
+                    <div class="input-wrap"><span class="icon lead" data-icon="notebook" data-icon-size="17"></span><input class="input num" id="fNo" readonly></div>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="fDate">تاریخ فرم</label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="calendar-days" data-icon-size="17"></span>
+                      <input class="input num" id="fDate" data-jdate="today">
+                      <button type="button" class="icon-btn trail" data-jdate-trigger data-icon="chevron-down" data-icon-size="15"></button>
+                    </div>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="fCoord">هماهنگ کننده <span class="req">*</span></label>
+                    <select class="select" id="fCoord"></select>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۲) طرف مذاکره -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="building" data-icon-size="17"></span>
+                  <div><div class="fs-title">خریدار / طرف مذاکره</div><div class="fs-desc">با انتخاب شرکت، آدرس و تلفن خودکار پر می‌شود</div></div>
+                </div>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="fCompany">خریدار / طرف مذاکره <span class="req">*</span></label>
+                    <div class="input-group">
+                      <input class="input" id="fCompany" readonly placeholder="انتخاب شرکت…">
+                      <button type="button" class="btn" id="btnPick" data-tip="انتخاب شرکت"><span data-icon="more-h" data-icon-size="16"></span></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fPerson">شخص هماهنگ شده</label>
+                    <select class="select" id="fPerson"><option value="">ابتدا شرکت را انتخاب کنید</option></select>
+                  </div>
+                  <div class="form-group" style="grid-column:1 / -1">
+                    <label class="form-label" for="fAddress">آدرس</label>
+                    <div class="input-wrap"><span class="icon lead" data-icon="map-pin" data-icon-size="17"></span><input class="input" id="fAddress"></div>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="fPhone">تلفن</label>
+                    <div class="input-wrap"><span class="icon lead" data-icon="phone" data-icon-size="17"></span><input class="input num ltr" id="fPhone" data-fa-mask></div>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="fMobile">موبایل</label>
+                    <div class="input-wrap"><span class="icon lead" data-icon="smartphone" data-icon-size="17"></span><input class="input num ltr" id="fMobile" data-fa-mask placeholder="۰۹۱۲…"></div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۳) تسویه و ارسال -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="truck" data-icon-size="17"></span>
+                  <div><div class="fs-title">تسویه و ارسال</div><div class="fs-desc">مدارک لازم جهت تسویه، نحوه‌ی تسویه و ارسال</div></div>
+                </div>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">جهت تسویه</label>
+                    <div class="sup-checks boxed" id="docs"></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fSettle">نحوه تسویه</label>
+                    <select class="select" id="fSettle"></select>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="fSend">نحوه ارسال</label>
+                    <select class="select" id="fSend"></select>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label">کرایه</label>
+                    <div class="sup-checks" id="freight">
+                      <label class="check"><input type="radio" name="freight" value="post"><span class="box round"></span><span class="lbl">پس کرایه</span></label>
+                      <label class="check"><input type="radio" name="freight" value="pre"><span class="box round"></span><span class="lbl">پیش کرایه</span></label>
+                      <button type="button" class="btn btn-ghost btn-sm" id="btnFreightClear">بدون کرایه</button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۴) اقلام -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="package" data-icon-size="17"></span>
+                  <div><div class="fs-title">اقلام مربوط به فرم</div><div class="fs-desc">محصولات تحویلی یا موردنیاز برای انجام کار</div></div>
+                  <label class="check ms-auto"><input type="checkbox" id="fOfficial"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">صورت جلسه رسمی</span></label>
+                </div>
+                <div class="grid-4" style="align-items:end">
+                  <div class="form-group">
+                    <label class="form-label" for="fCat">نام مجموعه</label>
+                    <select class="select" id="fCat"></select>
+                  </div>
+                  <div class="form-group" style="grid-column:span 2">
+                    <label class="form-label" for="fProduct">نام محصول</label>
+                    <select class="select" id="fProduct"></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fQty">تعداد</label>
+                    <div class="input-wrap"><input class="input num" id="fQty" data-num-mask value="۱"><span class="unit">عدد</span></div>
+                  </div>
+                  <div class="form-group mb-0" style="grid-column:span 2">
+                    <label class="form-label" for="fReader">نوع کارتخوان</label>
+                    <select class="select" id="fReader"></select>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="check" style="min-height:42px;align-items:center"><input type="checkbox" id="fSplit"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">به تفکیک محصول<small>هر عدد در یک ردیف</small></span></label>
+                  </div>
+                  <div class="form-group mb-0">
+                    <button type="button" class="btn btn-soft w-100" id="btnAddItem"><span data-icon="plus" data-icon-size="16"></span> اضافه به لیست</button>
+                  </div>
+                </div>
+                <div class="table-wrap mt-4" style="border:1px solid var(--border-muted);border-radius:var(--radius)">
+                  <table class="table table-compact">
+                    <thead><tr><th class="num">ردیف</th><th>نام محصول</th><th>نوع کارتخوان</th><th class="num">تعداد</th><th></th></tr></thead>
+                    <tbody id="itemsBody"></tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="form-section">
+                <div class="form-group mb-0">
+                  <label class="form-label" for="fNote">توضیحات</label>
+                  <textarea class="textarea" id="fNote" rows="3" placeholder="شرح کار، نکات هماهنگی، ساعت مناسب مشتری…"></textarea>
+                </div>
+              </section>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> ثبت</button>
+              <button type="button" class="btn btn-soft" id="btnSend"><span data-icon="send" data-icon-size="16"></span> ارسال</button>
+              <button type="button" class="btn" id="btnPrint" disabled data-tip="ابتدا فرم را ثبت کنید"><span data-icon="printer" data-icon-size="16"></span> چاپ</button>
+              <button type="button" class="btn" id="btnCancel"><span data-icon="eraser" data-icon-size="16"></span> انصراف</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-ghost" id="btnSearch"><span data-icon="search" data-icon-size="16"></span> جستجو</button>
+            </div>
+          </form>
+
+          <!-- ستون کناری -->
+          <div style="align-self:start;position:sticky;top:calc(var(--topbar-h) + 12px);min-width:0" class="d-flex flex-col gap-5">
+            <div class="card" data-win-nobtn>
+              <div class="card-head">
+                <div class="card-title" data-icon="history" data-icon-size="18"> فرم‌های اخیر</div>
+                <div class="card-actions"><a class="btn btn-ghost btn-sm" href="support-planning.html?all=1">همه</a></div>
+              </div>
+              <div class="card-body flush"><div class="sup-agenda" id="recent"></div></div>
+            </div>
+            <div class="card card-ink">
+              <div class="card-body">
+                <div class="fw-700 mb-3 d-flex items-center gap-2"><span data-icon="route" data-icon-size="18"></span> چرخه‌ی فرم</div>
+                <ol class="fs-xs" style="color:var(--on-ink-muted);line-height:2.1;padding-inline-start:18px;margin:0">
+                  <li><b style="color:var(--on-ink)">ثبت</b> — ذخیره به‌صورت پیش‌نویس و فعال شدن چاپ</li>
+                  <li><b style="color:var(--on-ink)">ارسال</b> — قرار گرفتن در صف «برنامه‌ریزی»</li>
+                  <li><b style="color:var(--on-ink)">تأیید</b> — تعیین تاریخ، ساعت و کارشناس</li>
+                  <li><b style="color:var(--on-ink)">ثبت اطلاعات فرم</b> — بارنامه، مدت زمان و نتیجه</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- جستجوی فرم -->
+<div class="overlay" id="searchModal" style="display:none">
+  <div class="modal modal-xl" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">جستجوی برنامه کاری</div><div class="modal-sub">برای ویرایش یا مشاهده، فرم را انتخاب کنید</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#searchModal" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body" style="padding-top:6px">
+      <div class="input-wrap mb-3"><span class="icon lead" data-icon="search" data-icon-size="16"></span><input class="input" id="sq" placeholder="شماره فرم، نام شرکت یا هماهنگ کننده…"></div>
+      <div class="table-wrap" style="max-height:380px;overflow:auto">
+        <table class="table table-compact">
+          <thead><tr><th>شماره فرم</th><th>تاریخ</th><th>شرکت</th><th>نوع فرم</th><th>هماهنگ کننده</th><th>وضعیت</th><th></th></tr></thead>
+          <tbody id="sBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn" data-modal-close="#searchModal">بستن</button></div>
+  </div>
+</div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/warehouse.js"></script>
+<script src="assets/js/support.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, esc = CRM.esc;
+  var items = [], current = null; /* current: فرم در حال ویرایش (پس از ثبت) */
+
+  /* ---------- پرکردن فیلدها */
+  $('#types').innerHTML = D.supFormTypes.map(function (t) {
+    return '<label class="sup-type"><input type="checkbox" name="type" value="' + t.id + '"><span class="ic" data-icon="' + t.icon + '" data-icon-size="16"></span>' + esc(t.title) + '</label>';
+  }).join('');
+  $('#docs').innerHTML = D.supLists.settleDocs.map(function (x) {
+    return '<label class="check"><input type="checkbox" name="doc" value="' + esc(x) + '"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">' + esc(x) + '</span></label>';
+  }).join('');
+  SUP.fill('#fCoord', D.supCoords, 'انتخاب…');
+  SUP.fill('#fSettle', D.supLists.settle);
+  SUP.fill('#fSend', D.supLists.send, '—');
+  WH.linkCategoryProduct($('#fCat'), $('#fProduct'));
+  WH.fillReaders($('#fReader'));
+
+  function nextNo() { var m = 0; D.supPlans.forEach(function (p) { m = Math.max(m, +CRM.en(p.no)); }); return fa(String(m + 1).padStart(5, '0')); }
+
+  /* ---------- شرکت */
+  function setCompany(c, person) {
+    $('#fCompany').value = c ? c.name : ''; $('#fCompany').setAttribute('data-code', c ? c.code : '');
+    $('#fAddress').value = c ? c.address : ''; $('#fPhone').value = c ? c.phone : '';
+    SUP.fill('#fPerson', c ? c.people.map(function (p) { return p.name; }) : [], c ? 'انتخاب شخص…' : 'ابتدا شرکت را انتخاب کنید');
+    if (person) { if (![].some.call($('#fPerson').options, function (o) { return o.value === person; })) $('#fPerson').insertAdjacentHTML('beforeend', '<option>' + esc(person) + '</option>'); $('#fPerson').value = person; }
+  }
+  $('#btnPick').addEventListener('click', function () { SUP.pickCompany(function (c) { setCompany(c); }); });
+  $('#fCompany').addEventListener('click', function () { $('#btnPick').click(); });
+  $('#fPerson').addEventListener('change', function () {
+    var c = SUP.co($('#fCompany').getAttribute('data-code')); if (!c) return;
+    var p = c.people.filter(function (x) { return x.name === this.value; }, this)[0];
+    if (p && p.mobile) $('#fMobile').value = p.mobile;
+  });
+  $('#btnFreightClear').addEventListener('click', function () { $$('[name=freight]').forEach(function (r) { r.checked = false; }); });
+
+  /* ---------- اقلام */
+  function renderItems() {
+    $('#itemsBody').innerHTML = items.length ? items.map(function (it, i) {
+      return '<tr><td class="num text-muted">' + fa(i + 1) + '</td><td class="fw-600"><bdi>' + esc(it.product) + '</bdi></td><td>' + esc(it.reader) + '</td><td class="num">' + fa(it.qty) + '</td>' +
+        '<td class="text-left"><button type="button" class="tb-icon" data-del="' + i + '" data-tip="حذف" data-icon="trash" data-icon-size="15"></button></td></tr>';
+    }).join('') : '<tr><td colspan="5" class="text-center text-muted fs-sm" style="padding:18px">هنوز قلمی اضافه نشده است.</td></tr>';
+    CRM.renderIcons($('#itemsBody'));
+  }
+  $('#btnAddItem').addEventListener('click', function () {
+    var p = WH.product($('#fProduct').value), q = +CRM.en($('#fQty').value || '0').replace(/\D/g, '');
+    if (!p) { CRM.toast({ type: 'warning', title: 'محصول انتخاب نشده', msg: 'ابتدا نام محصول را انتخاب کنید.' }); $('#fProduct').focus(); return; }
+    if (!q) { CRM.toast({ type: 'warning', title: 'تعداد نامعتبر', msg: 'تعداد باید حداقل ۱ باشد.' }); return; }
+    var r = WH.reader($('#fReader').value);
+    if ($('#fSplit').checked) for (var i = 0; i < q; i++) items.push({ product: p.name, reader: r, qty: 1 });
+    else items.push({ product: p.name, reader: r, qty: q });
+    renderItems();
+    $('#fQty').value = '۱';
+  });
+  $('#itemsBody').addEventListener('click', function (e) { var b = e.target.closest('[data-del]'); if (b) { items.splice(+b.getAttribute('data-del'), 1); renderItems(); } });
+
+  /* ---------- خواندن / نوشتن فرم */
+  function collect() {
+    return {
+      no: $('#fNo').value, created: $('#fDate').value, types: $$('[name=type]:checked').map(function (x) { return x.value; }), coord: $('#fCoord').value,
+      docs: $$('[name=doc]:checked').map(function (x) { return x.value; }), company: +$('#fCompany').getAttribute('data-code') || 0, person: $('#fPerson').value, mobile: $('#fMobile').value,
+      settle: $('#fSettle').value, send: $('#fSend').value, freight: ($$('[name=freight]:checked')[0] || {}).value || '', official: $('#fOfficial').checked, items: items.slice(), note: $('#fNote').value.trim()
+    };
+  }
+  function validate(f) {
+    if (!f.types.length) { CRM.toast({ type: 'warning', title: 'نوع فرم', msg: 'حداقل یک نوع فرم را انتخاب کنید.' }); return false; }
+    if (!f.coord) { CRM.toast({ type: 'warning', title: 'هماهنگ کننده', msg: 'هماهنگ کننده را انتخاب کنید.' }); $('#fCoord').focus(); return false; }
+    if (!f.company) { CRM.toast({ type: 'warning', title: 'طرف مذاکره', msg: 'شرکت را از فهرست انتخاب کنید.' }); return false; }
+    return true;
+  }
+  function setState() {
+    var st = current ? SUP.status(current.status) : null;
+    $('#formState').innerHTML = current ? 'فرم <span class="num">' + esc(current.no) + '</span> · ' + esc(st.title) : 'فرم جدید';
+    $('#formState').className = 'badge ' + (current ? 'badge-' + (st.tone === 'gray' ? 'outline' : st.tone) : 'badge-outline');
+    $('#btnPrint').disabled = !current;
+    $('#btnPrint').removeAttribute(current ? 'data-tip' : 'x'); if (!current) $('#btnPrint').setAttribute('data-tip', 'ابتدا فرم را ثبت کنید');
+    var locked = current && current.status !== 'draft' && current.status !== 'sent';
+    $('#btnSend').disabled = !!locked || (current && current.status === 'sent');
+  }
+  function load(p) {
+    current = p;
+    $('#fNo').value = p.no; $('#fDate').value = p.created; $('#fCoord').value = p.coord;
+    $$('[name=type]').forEach(function (x) { x.checked = p.types.indexOf(x.value) > -1; });
+    $$('[name=doc]').forEach(function (x) { x.checked = p.docs.indexOf(x.value) > -1; });
+    setCompany(SUP.co(p.company), p.person); $('#fMobile').value = p.mobile || '';
+    $('#fSettle').value = p.settle; $('#fSend').value = p.send;
+    $$('[name=freight]').forEach(function (r) { r.checked = r.value === p.freight; });
+    $('#fOfficial').checked = p.official; items = p.items.slice(); renderItems(); $('#fNote').value = p.note;
+    setState();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function reset() {
+    current = null; $('#wpForm').reset(); items = []; renderItems(); setCompany(null);
+    $('#fNo').value = nextNo(); $('#fDate').value = CRM.jDate(); $('#fQty').value = '۱';
+    setState();
+  }
+  function save(send) {
+    var f = collect(); if (!validate(f)) return;
+    if (current) { Object.assign(current, f); }
+    else { current = Object.assign(f, { status: 'draft', plan: null, data: null, cancel: null, flow: [] }); D.supPlans.unshift(current); }
+    if (send && (current.status === 'draft')) { current.status = 'sent'; current.flow.push({ st: 'sent', user: f.coord, at: SUP.now().at, date: '', time: '', note: '' }); }
+    setState(); renderRecent();
+    CRM.toast({ type: 'success', title: send ? 'فرم ارسال شد' : 'فرم ثبت شد', msg: 'فرم شماره ' + current.no + (send ? ' در صف برنامه‌ریزی قرار گرفت.' : ' به‌صورت پیش‌نویس ذخیره شد؛ چاپ فعال است.') });
+  }
+  $('#wpForm').addEventListener('submit', function (e) { e.preventDefault(); save(false); });
+  $('#btnSend').addEventListener('click', function () { save(true); });
+  $('#btnPrint').addEventListener('click', function () { if (current) SUP.viewPlan(current); });
+  $('#btnCancel').addEventListener('click', reset);
+  $('#btnNew').addEventListener('click', reset);
+
+  /* ---------- فرم‌های اخیر */
+  function renderRecent() {
+    $('#recent').innerHTML = D.supPlans.slice(0, 6).map(function (p) {
+      var c = SUP.co(p.company) || {}, t = SUP.type(p.types[0]);
+      return '<div class="sup-ag" data-view="' + esc(p.no) + '"><div class="t num">' + esc(p.no) + '<small>' + esc(p.created.slice(5)) + '</small></div><span class="bar ' + t.tone + '"></span>' +
+        '<div style="min-width:0"><div class="fw-600 text-strong text-truncate fs-sm">' + esc(c.name || '—') + '</div><div class="fs-xs text-muted text-truncate">' + p.types.map(function (x) { return SUP.type(x).title; }).join('، ') + ' · ' + esc(p.coord) + '</div></div>' +
+        SUP.statusBadge(p.status) + '</div>';
+    }).join('');
+  }
+  $('#recent').addEventListener('click', function (e) { var r = e.target.closest('[data-view]'); if (r) SUP.viewPlan(r.getAttribute('data-view')); });
+
+  /* ---------- جستجو */
+  function renderSearch() {
+    var q = CRM.fa($('#sq').value.trim());
+    var rows = D.supPlans.filter(function (p) { var c = SUP.co(p.company) || {}; return !q || (p.no + ' ' + (c.name || '') + ' ' + p.coord).indexOf(q) > -1; });
+    $('#sBody').innerHTML = rows.length ? rows.map(function (p) {
+      var c = SUP.co(p.company) || {};
+      return '<tr><td class="num fw-700">' + esc(p.no) + '</td><td class="num">' + esc(p.created) + '</td><td><span class="text-truncate d-inline-block" style="max-width:220px">' + esc(c.name || '—') + '</span></td><td>' + SUP.typeBadges(p.types) + '</td><td>' + esc(p.coord) + '</td><td>' + SUP.statusBadge(p.status) + '</td>' +
+        '<td class="text-left text-nowrap"><button type="button" class="btn btn-sm btn-soft" data-load="' + esc(p.no) + '">ویرایش</button> <button type="button" class="tb-icon" data-view="' + esc(p.no) + '" data-tip="مشاهده" data-icon="eye" data-icon-size="15"></button></td></tr>';
+    }).join('') : '<tr><td colspan="7">' + SUP.empty('فرمی پیدا نشد.', 'search') + '</td></tr>';
+    CRM.renderIcons($('#sBody'));
+  }
+  function openSearch() { $('#sq').value = $('#fCompany').value ? '' : ''; renderSearch(); CRM.modal.open('#searchModal'); setTimeout(function () { $('#sq').focus(); }, 80); }
+  $('#sq').addEventListener('input', CRM.debounce(renderSearch, 120));
+  $('#sBody').addEventListener('click', function (e) {
+    var l = e.target.closest('[data-load]'), v = e.target.closest('[data-view]');
+    if (l) { CRM.modal.close('#searchModal'); load(SUP.plan(l.getAttribute('data-load'))); }
+    if (v) SUP.viewPlan(v.getAttribute('data-view'));
+  });
+  $('#btnSearch').addEventListener('click', openSearch);
+  $('#btnSearchTop').addEventListener('click', openSearch);
+
+  var q = location.search.match(/[?&]no=([^&]+)/);
+  reset(); renderRecent();
+  if (q && SUP.plan(decodeURIComponent(q[1]))) load(SUP.plan(decodeURIComponent(q[1])));
+})();
+</script>
+</body>
+</html>
