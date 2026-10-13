@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسویه فاکتور | مدرن‌CRM</title>
+<meta name="description" content="ثبت پرداختی، گزارش پرداخت و پیگیری مانده‌ی فاکتورهای فروش">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="invoice-settlement">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="invoices.html">فاکتورها</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">تسویه فاکتور</span>
+            </div>
+            <h1 class="page-title">تسویه فاکتور</h1>
+            <p class="page-desc">ثبت پرداختی‌های نقدی و چکی، مشاهده‌ی گزارش پرداخت و کنترل مانده‌ی هر فاکتور</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" data-excel="تسویه-فاکتور"><span data-icon="download" data-icon-size="16"></span> خروجی Excel</button>
+          </div>
+        </div>
+
+        <!-- ========================== فیلترها ========================== -->
+        <div class="card mb-5" data-filter-root data-win-nobtn>
+          <div class="card-head tight">
+            <div class="card-title" data-icon="filter" data-icon-size="17"> جستجوی فاکتورها</div>
+            <div class="card-actions">
+              <label class="check"><input type="checkbox" id="fSettled"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">تسویه‌شده‌ها</span></label>
+              <label class="check ms-3"><input type="checkbox" id="fOpen" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">تسویه‌نشده‌ها</span></label>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="filter-grid">
+              <div class="form-group"><label class="form-label">مشتری</label>
+                <div class="picker"><input class="input" id="fCustomer" readonly data-pick-customer="#fCustomer" placeholder="همه مشتریان"><button type="button" class="btn" data-pick-customer="#fCustomer" data-icon="more-h" data-icon-size="16"></button></div>
+              </div>
+              <div class="form-group"><label class="form-label">از تاریخ</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" value="۱۴۰۵/۰۷/۰۱" data-fa-mask></div></div>
+              <div class="form-group"><label class="form-label">تا تاریخ</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" value="۱۴۰۵/۰۷/۲۱" data-fa-mask></div></div>
+              <div class="form-group"><label class="form-label">شرکت مرجع</label><select class="select" id="fRef"></select></div>
+              <div class="form-group d-none" data-fkey="no"><label class="form-label">از شماره فاکتور</label><input class="input num" value="۴۰۷۰۳" data-fa-mask></div>
+              <div class="form-group d-none" data-fkey="no"><label class="form-label">تا شماره فاکتور</label><input class="input num" value="۴۰۷۹۰" data-fa-mask></div>
+              <div class="form-group d-none" data-fkey="product"><label class="form-label">مجموعه محصولات</label><select class="select" id="fGroup"></select></div>
+              <div class="form-group d-none" data-fkey="product"><label class="form-label">محصولات</label><select class="select" id="fProduct"></select></div>
+              <div class="form-group d-none" data-fkey="amount"><label class="form-label">مبلغ فاکتور از</label><input class="input num" placeholder="۰" data-fa-mask></div>
+              <div class="form-group d-none" data-fkey="amount"><label class="form-label">مبلغ فاکتور تا</label><input class="input num" placeholder="بدون سقف" data-fa-mask></div>
+              <div class="form-group d-none" data-fkey="owner"><label class="form-label">مسئول فعالیت</label><select class="select" id="fOwner"></select></div>
+            </div>
+            <div class="filter-actions">
+              <div id="fpick"></div>
+              <div class="end">
+                <button type="button" class="btn" id="btnReset"><span data-icon="x" data-icon-size="16"></span> انصراف</button>
+                <button type="button" class="btn" data-excel="تسویه-فاکتور"><span data-icon="download" data-icon-size="16"></span> Excel</button>
+                <button type="button" class="btn btn-primary" id="btnSearch"><span data-icon="search" data-icon-size="16"></span> مشاهده</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== جمع‌ها ========================== -->
+        <div class="sum-grid mb-5" id="sums"></div>
+
+        <!-- ========================== جدول ========================== -->
+        <div class="card" data-s-root data-win="st-table" data-win-title="تسویه فاکتورها" data-win-icon="wallet" data-win-size="1280x700">
+          <div class="card-head flex-wrap" style="gap:10px">
+            <div class="card-title" data-icon="wallet" data-icon-size="18"> فاکتورها و وضعیت تسویه <span class="badge badge-gray num" id="resultCount">۰</span></div>
+            <div class="card-actions flex-wrap" style="gap:12px">
+              <span class="legend-chip"><i class="danger"></i> هشدار تسویه‌نشدن فعال است</span>
+              <div class="input-wrap" style="width:210px">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" placeholder="جستجو در نتایج…" data-table-search="#tblSettle">
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info d-none" data-s-bulk style="border-radius:0;border-inline:0">
+            <span data-icon="check-check" data-icon-size="18"></span>
+            <div class="alert-title"><span data-s-count>۰</span> فاکتور انتخاب شده است</div>
+            <div class="d-flex gap-2 ms-auto flex-wrap">
+              <button class="btn btn-sm btn-soft" data-bulk="warn"><span data-icon="bell" data-icon-size="14"></span> فعال‌سازی هشدار</button>
+              <button class="btn btn-sm btn-soft" data-bulk="lock"><span data-icon="lock" data-icon-size="14"></span> عدم امکان تغییر</button>
+              <button class="btn btn-sm btn-soft" data-bulk="unlock"><span data-icon="unlock" data-icon-size="14"></span> امکان تغییر</button>
+            </div>
+          </div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table table-compact table-wide" id="tblSettle">
+                <thead>
+                  <tr>
+                    <th style="width:40px"><label class="check"><input type="checkbox" data-s-all><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>
+                    <th>کد</th>
+                    <th>تاریخ فاکتور</th>
+                    <th>شماره فاکتور</th>
+                    <th>مسئول فعالیت</th>
+                    <th>نام مشتری</th>
+                    <th class="num">مبلغ کل</th>
+                    <th class="num">خالص فاکتور</th>
+                    <th class="num">ارزش افزوده</th>
+                    <th class="num">هزینه نصب</th>
+                    <th class="num">نرم‌افزار</th>
+                    <th class="num">باقیمانده</th>
+                    <th>وضعیت</th>
+                    <th class="text-center">هشدار</th>
+                    <th class="text-center">امکان تغییر</th>
+                    <th class="table-row-actions">پرداخت</th>
+                  </tr>
+                </thead>
+                <tbody id="settleBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-foot">
+            <span><span data-icon="info" data-icon-size="14"></span> برای مشاهده‌ی فاکتور روی «کد» کلیک کنید.</span>
+            <div class="pagination ms-auto"><button disabled data-icon="chevron-right" data-icon-size="15"></button><button class="is-active">۱</button><button data-icon="chevron-left" data-icon-size="15"></button></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===================== مودال پرداخت فاکتور ===================== -->
+<div class="overlay" id="mdlPay" style="display:none">
+  <div class="modal modal-lg" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <span class="stat-icon success" style="width:40px;height:40px"><span data-icon="wallet" data-icon-size="19"></span></span>
+      <div><div class="modal-title">پرداخت فاکتور <span class="num" id="payNo"></span></div><div class="modal-sub" id="payCust"></div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlPay" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="sum-grid mb-4">
+        <div class="sum-tile"><span class="lbl">مبلغ فاکتور</span><span class="val" id="payAmount">۰</span></div>
+        <div class="sum-tile success"><span class="lbl">پرداخت‌شده</span><span class="val" id="payPaid">۰</span></div>
+        <div class="sum-tile danger"><span class="lbl">مبلغ باقیمانده</span><span class="val text-danger" id="payRemain">۰</span></div>
+      </div>
+
+      <form id="payForm">
+        <div class="grid-2">
+          <div class="form-group"><label class="form-label">تاریخ پرداخت <span class="req">*</span></label>
+            <div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="payDate" data-fa-mask></div></div>
+          <div class="form-group"><label class="form-label">نوع تسویه</label><select class="select" id="paySettle"></select></div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group"><label class="form-label">نوع پرداختی</label>
+            <div class="segmented" data-segmented id="payMethod">
+              <button type="button" class="seg is-active" data-m="cash"><span data-icon="banknote" data-icon-size="14"></span> نقدی</button>
+              <button type="button" class="seg" data-m="cheque"><span data-icon="receipt" data-icon-size="14"></span> چک</button>
+            </div></div>
+          <div class="form-group"><label class="form-label">مبلغ پرداخت (تومان) <span class="req">*</span></label>
+            <div class="input-group"><input class="input num" id="payValue" data-fa-mask><button type="button" class="btn" id="payAll" data-tip="پرداخت کل مانده">کل مانده</button></div></div>
+        </div>
+        <div class="grid-3" id="cashBox">
+          <div class="form-group"><label class="form-label">بانک مقصد</label><select class="select" id="payBank"></select></div>
+          <div class="form-group"><label class="form-label">شماره پیگیری / پایا</label><input class="input ltr" placeholder="1405071805628534"></div>
+          <div class="form-group"><label class="form-label">تاریخ ثبت</label><input class="input num" id="payReg" readonly></div>
+        </div>
+        <div class="grid-3 d-none" id="chequeBox">
+          <div class="form-group"><label class="form-label">شماره چک</label><input class="input num" placeholder="۳۸۲۰۹۰" data-fa-mask></div>
+          <div class="form-group"><label class="form-label">تاریخ چک</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" placeholder="۱۴۰۵/۰۸/۱۲" data-fa-mask></div></div>
+          <div class="form-group"><label class="form-label">بانک / شعبه</label><input class="input" placeholder="ملت — شعبه مرکزی"></div>
+        </div>
+        <div class="form-group"><label class="form-label">توضیحات</label><textarea class="textarea" rows="2" placeholder="مثلاً: واریز مرحله دوم طبق قرارداد"></textarea></div>
+      </form>
+
+      <div class="section-title mt-2" style="font-size:var(--fs-md)"><span data-icon="history" data-icon-size="16"></span> پرداختی‌های ثبت‌شده</div>
+      <div class="table-wrap" style="border:1px solid var(--border)">
+        <table class="table table-compact"><thead><tr><th>تاریخ</th><th>نوع</th><th>بانک / پیگیری</th><th class="num">مبلغ</th><th>ثبت</th><th></th></tr></thead>
+          <tbody id="payList"></tbody></table>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-primary" id="btnPaySave"><span data-icon="check" data-icon-size="16"></span> ثبت پرداختی</button>
+      <button type="button" class="btn" id="btnPayReport"><span data-icon="reports" data-icon-size="16"></span> گزارش پرداخت</button>
+      <button type="button" class="btn ms-auto" data-modal-close="#mdlPay">بستن</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== مودال گزارش پرداخت ===================== -->
+<div class="overlay" id="mdlReport" style="display:none">
+  <div class="modal modal-xl" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">گزارش پرداخت</div><div class="modal-sub">ریز پرداختی‌های ثبت‌شده برای فاکتور</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlReport" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="report-toolbar">
+      <button class="btn btn-sm" data-print><span data-icon="printer" data-icon-size="14"></span> چاپ</button>
+      <button class="btn btn-sm" data-excel="گزارش-پرداخت"><span data-icon="download" data-icon-size="14"></span> خروجی</button>
+      <span class="sep"></span>
+      <span class="fs-xs text-muted">صفحه <b class="num">۱</b> از <b class="num">۱</b></span>
+    </div>
+    <div class="modal-body report-sheet">
+      <div class="report-meta" id="repMeta"></div>
+      <div class="table-wrap" style="border:1px solid var(--border)">
+        <table class="table table-compact table-wide">
+          <thead><tr><th>تاریخ فاکتور</th><th>نوع تسویه</th><th>نوع پرداختی</th><th>تاریخ چک</th><th>بانک / شماره پیگیری</th><th>شعبه بانک</th><th class="num">مبلغ</th><th>تاریخ ثبت</th></tr></thead>
+          <tbody id="repBody"></tbody>
+          <tfoot><tr><td colspan="6">جمع پرداختی‌ها</td><td class="num" id="repTotal">۰</td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn ms-auto" data-modal-close="#mdlReport">بستن</button></div>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/sales.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, S = window.SALES, D = S.data;
+  var $ = CRM.$, $$ = CRM.$$, esc = CRM.esc, fa = CRM.fa, m = S.money;
+  var list = D.invoices.filter(function (v) { return v.type === 'invoice'; });
+
+  $('#fpick').innerHTML = S.fpickHTML([['no', 'بازه شماره فاکتور'], ['product', 'مجموعه / محصول'], ['amount', 'بازه مبلغ فاکتور'], ['owner', 'مسئول فعالیت']]);
+  $('#fRef').innerHTML = S.options(D.companies.map(function (c) { return c.name; }), '', 'همه');
+  $('#fGroup').innerHTML = S.options(D.productGroups, '', 'همه مجموعه‌ها');
+  $('#fProduct').innerHTML = S.options(D.catalog.map(function (p) { return p.name; }), '', 'همه محصولات');
+  $('#fOwner').innerHTML = S.options(D.owners, '', 'همه');
+  $('#paySettle').innerHTML = S.options(D.settleTypes, 'نقدی');
+  $('#payBank').innerHTML = S.options(D.banks, 'ملت');
+
+  function net(v) { return v.amount - v.vat - v.install; }
+  function remain(v) { return Math.max(0, v.amount - v.paid); }
+
+  function sums(rows) {
+    var act = rows.filter(function (v) { return !v.cancelled; });
+    function t(fn) { return act.reduce(function (s, v) { return s + fn(v); }, 0); }
+    var tiles = [
+      ['جمع مبلغ کل فاکتور', t(function (v) { return v.amount; }), ''],
+      ['جمع خالص فاکتور', t(net), 'sky'],
+      ['جمع نرم‌افزار', t(function (v) { return v.software; }), 'violet'],
+      ['جمع ارزش افزوده', t(function (v) { return v.vat; }), 'warning'],
+      ['جمع هزینه نصب', t(function (v) { return v.install; }), 'success'],
+      ['جمع مبلغ باقیمانده', t(remain), 'danger']
+    ];
+    $('#sums').innerHTML = tiles.map(function (x) {
+      return '<div class="sum-tile ' + x[2] + '"><span class="lbl">' + x[0] + '</span><span class="val">' + m(x[1]) + ' <small>تومان</small></span></div>';
+    }).join('');
+  }
+
+  function row(v) {
+    var st = S.settleState(v), rem = remain(v);
+    return '<tr class="' + (v.warn ? 'row-danger' : '') + (v.cancelled ? ' row-muted' : '') + '" data-id="' + v.id + '">' +
+      '<td>' + S.checkCell('data-s-row') + '</td>' +
+      '<td><a class="btn btn-sm btn-ghost num" style="--btn-h:26px;padding:0 6px" href="print-invoice.html?no=' + encodeURIComponent(v.no) + '" target="_blank" data-tip="مشاهده فاکتور">' + fa(v.id) + '</a></td>' +
+      '<td class="num fs-sm">' + esc(v.date) + '</td>' +
+      '<td class="num fw-600">' + esc(v.no) + '</td>' +
+      '<td class="fs-sm">' + esc(v.owner) + '</td>' +
+      '<td><span class="cell-main">' + esc(v.customer) + '</span></td>' +
+      '<td class="num fw-600">' + m(v.amount) + '</td>' +
+      '<td class="num">' + m(net(v)) + '</td>' +
+      '<td class="num text-muted">' + m(v.vat) + '</td>' +
+      '<td class="num text-muted">' + m(v.install) + '</td>' +
+      '<td class="num text-muted">' + m(v.software) + '</td>' +
+      '<td class="num fw-700 ' + (rem ? 'text-danger' : 'text-success') + '">' + m(rem) + '</td>' +
+      '<td><span class="badge ' + st.c + ' badge-dot">' + st.l + '</span></td>' +
+      '<td class="text-center"><label class="switch" data-tip="هشدار تسویه‌نشدن فاکتور"><input type="checkbox" data-warn' + (v.warn ? ' checked' : '') + '><span class="track"></span></label></td>' +
+      '<td class="text-center">' + (v.editable ? '<span class="badge badge-success">دارد</span>' : '<span class="badge badge-gray"><span data-icon="lock" data-icon-size="12"></span> ندارد</span>') + '</td>' +
+      '<td><span class="d-inline-flex gap-1">' +
+        '<button class="btn btn-sm ' + (rem && !v.cancelled ? 'btn-soft' : '') + '" data-pay="' + v.id + '"' + (v.cancelled ? ' disabled' : '') + '><span data-icon="plus" data-icon-size="14"></span> ثبت پرداختی</button>' +
+        '<button class="tb-icon icon-btn-sm" data-report="' + v.id + '" data-tip="گزارش پرداخت" data-icon="reports" data-icon-size="16"></button>' +
+        '<button class="tb-icon icon-btn-sm" data-cancel-toggle="' + v.id + '" data-tip="' + (v.cancelled ? 'لغو کنسلی' : 'کنسل') + '" data-icon="' + (v.cancelled ? 'refresh' : 'x-circle') + '" data-icon-size="16"></button>' +
+      '</span></td>' +
+    '</tr>';
+  }
+
+  function apply() {
+    var showSettled = $('#fSettled').checked, showOpen = $('#fOpen').checked;
+    var cust = $('#fCustomer').value, owner = $('#fOwner').value;
+    var rows = list.filter(function (v) {
+      var paid = remain(v) === 0;
+      if (paid && !showSettled) return false;
+      if (!paid && !showOpen) return false;
+      if (cust && v.customer !== cust) return false;
+      if (owner && v.owner !== owner) return false;
+      return true;
+    });
+    var body = $('#settleBody');
+    body.innerHTML = rows.length ? rows.map(row).join('')
+      : '<tr><td colspan="16"><div class="empty"><div class="empty-ic" data-icon="wallet" data-icon-size="30"></div><div class="empty-title">فاکتوری برای نمایش وجود ندارد</div><div class="empty-desc">گزینه‌های «تسویه‌شده‌ها / تسویه‌نشده‌ها» یا فیلترها را تغییر دهید.</div></div></td></tr>';
+    $('#resultCount').textContent = fa(rows.length);
+    sums(rows);
+    S.syncSelection(body.closest('[data-s-root]'));
+    if (document.readyState !== 'loading') CRM.init(body);
+  }
+  $('#btnSearch').addEventListener('click', function (e) { S.busy(e.currentTarget, apply); });
+  $('#btnReset').addEventListener('click', function () { $('#fCustomer').value = ''; $('#fOwner').value = ''; $('#fSettled').checked = false; $('#fOpen').checked = true; apply(); });
+  ['#fSettled', '#fOpen'].forEach(function (s) { $(s).addEventListener('change', apply); });
+  $('#fCustomer').addEventListener('sales:customer', apply);
+  apply();
+
+  function byId(id) { return list.filter(function (v) { return v.id === Number(id); })[0]; }
+
+  /* ---------- مودال پرداخت ---------- */
+  var cur = null;
+  function payments(v) { return D.payments.filter(function (p) { return p.invoice === v.no; }); }
+  function fillPay(v) {
+    cur = v;
+    $('#payNo').textContent = v.no;
+    $('#payCust').textContent = v.customer + ' — تاریخ فاکتور ' + v.date;
+    $('#payAmount').textContent = m(v.amount);
+    $('#payPaid').textContent = m(v.paid);
+    $('#payRemain').textContent = m(remain(v));
+    $('#payDate').value = S.today();
+    $('#payReg').value = S.today();
+    $('#payValue').value = m(remain(v));
+    var ps = payments(v);
+    $('#payList').innerHTML = ps.length ? ps.map(function (p, i) {
+      return '<tr><td class="num fs-sm">' + esc(p.date) + '</td><td><span class="badge ' + (p.method === 'چک' ? 'badge-violet' : 'badge-info') + '">' + esc(p.method) + '</span></td>' +
+        '<td class="fs-xs">' + esc(p.bank) + '</td><td class="num fw-600">' + m(p.amount) + '</td><td class="num fs-xs text-muted">' + esc(p.reg) + '</td>' +
+        '<td><button class="btn btn-sm btn-danger-soft" data-del-pay="' + i + '"><span data-icon="trash" data-icon-size="13"></span> حذف پرداختی</button></td></tr>';
+    }).join('') : '<tr><td colspan="6" class="text-center text-soft fs-sm" style="padding:18px">هنوز پرداختی برای این فاکتور ثبت نشده است.</td></tr>';
+    CRM.init($('#mdlPay'));
+  }
+  $('#payMethod').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-m]'); if (!b) return;
+    var ch = b.getAttribute('data-m') === 'cheque';
+    $('#chequeBox').classList.toggle('d-none', !ch);
+    $('#cashBox').classList.toggle('d-none', ch);
+  });
+  $('#payAll').addEventListener('click', function () { if (cur) $('#payValue').value = m(remain(cur)); });
+  $('#btnPaySave').addEventListener('click', function (e) {
+    var val = S.toInt($('#payValue').value);
+    if (!val) { CRM.toast({ type: 'danger', title: 'مبلغ نامعتبر', msg: 'مبلغ پرداخت را وارد کنید.' }); return; }
+    if (val > remain(cur)) { CRM.toast({ type: 'warning', title: 'مبلغ بیش از مانده است', msg: 'حداکثر مبلغ قابل ثبت ' + m(remain(cur)) + ' تومان است.' }); return; }
+    S.busy(e.currentTarget, function () {
+      var cheque = !$('#chequeBox').classList.contains('d-none');
+      D.payments.push({ invoice: cur.no, date: $('#payDate').value, settle: $('#paySettle').value, method: cheque ? 'چک' : 'نقد', chequeDate: '—', bank: cheque ? 'چک بانکی' : $('#payBank').value, branch: '—', amount: val, reg: S.today() });
+      cur.paid += val;
+      fillPay(cur); apply();
+      CRM.toast({ type: 'success', title: 'پرداختی ثبت شد', msg: m(val) + ' تومان — مانده: ' + m(remain(cur)) + ' تومان' });
+    }, 500);
+  });
+  $('#payList').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-del-pay]'); if (!b) return;
+    var p = payments(cur)[+b.getAttribute('data-del-pay')];
+    CRM.modal.confirm({ title: 'حذف پرداختی', msg: 'پرداختی ' + m(p.amount) + ' تومانی حذف شود؟', danger: true, okText: 'بله، حذف کن', icon: 'trash' })
+      .then(function (ok) {
+        if (!ok) return;
+        D.payments.splice(D.payments.indexOf(p), 1);
+        cur.paid = Math.max(0, cur.paid - p.amount);
+        fillPay(cur); apply();
+        CRM.toast({ type: 'warning', title: 'پرداختی حذف شد', msg: 'مانده فاکتور: ' + m(remain(cur)) + ' تومان' });
+      });
+  });
+
+  /* ---------- گزارش پرداخت ---------- */
+  function openReport(v) {
+    var ps = payments(v);
+    $('#repMeta').innerHTML =
+      '<span><b>شماره فاکتور:</b> <span class="num fw-700">' + esc(v.no) + '</span></span>' +
+      '<span><b>تاریخ فاکتور:</b> <span class="num">' + esc(v.date) + '</span></span>' +
+      '<span><b>شرکت:</b> ' + esc(v.customer) + '</span>' +
+      '<span><b>مبلغ فاکتور:</b> <span class="num fw-700">' + m(v.amount) + '</span></span>' +
+      '<span><b>باقیمانده:</b> <span class="num fw-700 ' + (remain(v) ? 'text-danger' : 'text-success') + '">' + m(remain(v)) + '</span></span>';
+    $('#repBody').innerHTML = ps.length ? ps.map(function (p) {
+      return '<tr><td class="num">' + esc(v.date) + '</td><td>' + esc(p.settle) + '</td><td>' + esc(p.method) + '</td><td class="num">' + esc(p.chequeDate) + '</td>' +
+        '<td class="fs-sm" style="white-space:normal">' + esc(p.bank) + '</td><td class="fs-sm">' + esc(p.branch) + '</td><td class="num fw-600">' + m(p.amount) + '</td><td class="num">' + esc(p.reg) + '</td></tr>';
+    }).join('') : '<tr><td colspan="8" class="text-center text-soft" style="padding:20px">پرداختی ثبت نشده است.</td></tr>';
+    $('#repTotal').textContent = m(ps.reduce(function (s, p) { return s + p.amount; }, 0));
+    CRM.modal.open('#mdlReport');
+  }
+
+  document.addEventListener('click', function (e) {
+    var b;
+    if ((b = e.target.closest('[data-pay]'))) { fillPay(byId(b.getAttribute('data-pay'))); CRM.modal.open('#mdlPay'); return; }
+    if ((b = e.target.closest('[data-report]'))) { openReport(byId(b.getAttribute('data-report'))); return; }
+    if ((b = e.target.closest('#btnPayReport'))) { if (cur) openReport(cur); return; }
+    if ((b = e.target.closest('[data-cancel-toggle]'))) {
+      var v = byId(b.getAttribute('data-cancel-toggle'));
+      if (v.cancelled) { v.cancelled = false; apply(); CRM.toast({ type: 'success', title: 'از حالت کنسل خارج شد', msg: v.no }); return; }
+      CRM.modal.confirm({ title: 'کنسل فاکتور', msg: 'فاکتور ' + v.no + ' کنسل شود؟', danger: true, okText: 'بله، کنسل شود', icon: 'x-circle' })
+        .then(function (ok) { if (ok) { v.cancelled = true; apply(); CRM.toast({ type: 'warning', title: 'کنسل شد', msg: v.no }); } });
+      return;
+    }
+    if ((b = e.target.closest('[data-bulk]'))) {
+      var root = b.closest('[data-s-root]'), act = b.getAttribute('data-bulk');
+      CRM.$$('[data-s-row]:checked', root).forEach(function (c) {
+        var x = byId(c.closest('tr').getAttribute('data-id'));
+        if (act === 'warn') x.warn = true;
+        if (act === 'lock') x.editable = false;
+        if (act === 'unlock') x.editable = true;
+      });
+      apply();
+      CRM.toast({ type: 'success', title: 'اعمال شد', msg: { warn: 'هشدار تسویه فعال شد.', lock: 'امکان تغییر فاکتورها گرفته شد.', unlock: 'امکان تغییر فاکتورها داده شد.' }[act] });
+    }
+  });
+  document.addEventListener('change', function (e) {
+    var c = e.target.closest('[data-warn]'); if (!c) return;
+    var v = byId(c.closest('tr').getAttribute('data-id'));
+    v.warn = c.checked;
+    c.closest('tr').classList.toggle('row-danger', c.checked);
+    CRM.toast({ type: c.checked ? 'warning' : 'info', title: c.checked ? 'هشدار فعال شد' : 'هشدار غیرفعال شد', msg: 'فاکتور ' + v.no });
+  });
+})();
+</script>
+</body>
+</html>

@@ -55,12 +55,13 @@ ModernCRM-template/
 │   │   ├── app.js            هسته: تولتیپ، توست، مودال، دراور، نمودار، جدول، پالت فرمان
 │   │   ├── windows.js        مدیر پنجره‌ها (درگ، تغییر اندازه، ماکسیمایز، اسنپ)
 │   │   ├── warehouse.js      ابزارهای مشترک صفحه‌های انبار (فقط در صفحه‌های warehouse-*)
+│   │   ├── sales.js          ابزارهای مشترک صفحه‌های فروش (SALES: فرم زنده فاکتور، انتخابگر مشتری، فیلترها، انتخاب گروهی)
 │   │   ├── support.js        ابزارهای مشترک صفحه‌های پشتیبانی (SUP: انتخاب شرکت، برگه‌ی برنامه کاری، گردش فرم، پرونده مشتری)
 │   │   └── reports.js        ★ موتور گزارش‌ها: رجیستری گزارش‌ها + کارت فیلتر + نمایشگر (report.html و reports-hub.html)
 │   ├── fonts/                وزیرمتن (Variable + وزن‌های اصلی) + مجوز OFL
 │   └── img/                  لوگو و فاوآیکون SVG
 │
-└── صفحه‌ها (۵۷ فایل HTML در ریشه پروژه)
+└── صفحه‌ها (۶۶ فایل HTML در ریشه پروژه)
 ```
 
 ---
@@ -71,8 +72,8 @@ ModernCRM-template/
 | --- | --- |
 | ورود به قالب | `index.html` (فهرست کامل صفحه‌ها و پیش‌نمایش زنده) |
 | میز کار | `dashboard.html` (با پنل بخش‌های سامانه) `inbox.html` (پیغام‌ها) `desktop.html` `activity.html` `calendar.html` `notifications.html` `search.html` |
-| مشتریان | `customers.html` `customer-new.html` `customer-profile.html` |
-| فروش | `pipeline.html` `deals.html` `invoices.html` `print-invoice.html` |
+| مشتریان | `customers.html` `customer-new.html` `customer-profile.html` `customer-details.html` `customer-search.html` |
+| فروش | `sales-followup.html` `pipeline.html` `deals.html` `invoice-new.html` `invoices.html` `invoice-settlement.html` `invoices-reserved.html` `print-invoice.html` `letters.html` `sms.html` `sales-performance.html` |
 | انبار | `warehouse.html` `warehouse-products.html` `products.html` (کاتالوگ) `warehouse-in.html` `warehouse-out.html` (اصلی) `warehouse-out.html?store=sub` (فرعی) `warehouse-stock.html` |
 | پشتیبانی | `support.html` (نمای کلی) `support-workplan.html` `support-planning.html` `support-formdata.html` `support-desk.html` `report.html?r=support-perf` `support-userperf.html` (جدول بخش ۴-ه) `tickets.html` `ticket-new.html` `journey.html` `messages.html` `kb.html` `help.html` |
 | حسابداری | `accounting.html` |
@@ -119,8 +120,8 @@ ModernCRM-template/
 
 | بخش | صفحه‌ها |
 | --- | --- |
-| مشتریان | فهرست، افزودن، پروفایل مشتری |
-| فروش | قیف فروش، معاملات، فاکتورها |
+| مشتریان | فهرست، افزودن، پروفایل، مشخصات مشتری، اطلاعات مشتری |
+| فروش | پیگیری فروش، قیف فروش، معاملات، صدور فاکتور، مشاهده فاکتورها، تسویه فاکتور، فاکتورهای رزرو شده، نامه و قرارداد، پیامک، گزارش عملکرد فروش |
 | انبار | نمای کلی، تعریف محصولات، کاتالوگ کالا و خدمات، ورود، خروج اصلی، خروج فرعی، گزارش موجودی |
 | پشتیبانی | تیکت‌ها، ثبت تیکت، سفر مشتری (پرونده‌ها)، گفتگو، پایگاه دانش |
 | حسابداری | ثبت سند (+ پیوند کارت: مالی پرداختی‌ها، هزینه‌ها و خسارت) |
@@ -423,6 +424,30 @@ ModernCRM-template/
 داده‌ها: `supFormTypes`، `supStatuses`، `supCoords`، `supExperts`، `supLists` (تسویه، ارسال، علت‌ها، رضایت، تعمیرات، …)، `supCompanies` (افراد، دستگاه‌ها، فاکتورها، فایل‌ها، `flags`، `credit`)، `supPlans` (`plan`، `flow`، `data`، `cancel`)، `supServices`، `supUserPerf`.
 
 کلاس‌های جدید (بخش ۲۵ components.css): `.sup-type-grid` / `.sup-type`، `.sup-checks`، `.sup-ck`، `.sup-sheet`، `.sup-kv`، `.sup-alpha`، `tr.sup-warn` / `tr.sup-expired` / `tr.is-selected`، `.sup-days` / `.sup-day`، `.sup-agenda` / `.sup-ag`، `.sup-confirm`، `.sup-hint`، `.sup-info`، `.sup-legend`، `.sup-link`.
+
+### ۴-و) فروش (مشخصات مشتری تا گزارش عملکرد)
+
+قواعد نمایشی: مبالغ به **تومان**، تاریخ‌ها **۱۴۰۵**، ارزش افزوده ۱۰٪ فقط برای فاکتور «رسمی» و «رسمی کامل»؛ شماره فاکتور `۴۰۷xx-ل` و پیش‌فاکتور `۵۰۷xx-پ`.
+
+| صفحه | معادل در برنامه فعلی | نکات |
+| --- | --- | --- |
+| `customer-details.html` | مشخصات مشتری | فرم شرکت + مسئول خرید (پیشوند «جناب آقای / سرکار خانم»)؛ ثبت / جدید / حذف؛ ابزارها: جستجو، افراد مرتبط، اطلاعات بعد از خرید (کدها، خوش‌حساب/بدحساب/…، نوع فاکتور)، فعالیت، مدارک پیوستی، پرونده (تب‌های فقط‌خواندنی)؛ `?code=` |
+| `customer-search.html` | اطلاعات مشتری | سوییچ شرکت‌ها / افراد؛ فیلترهای اختیاری؛ ردیف جزئیات؛ انتخاب گروهی ← «انتقال اطلاعات به…» و «تغییر مسئول فایل»؛ افراد: سررسید، دعوتنامه، Excel، پیامک؛ `?view=people` |
+| `sales-followup.html` | فروش | ردیف زرد = زمان پیگیری رسیده، قرمز = عقب‌افتاده؛ ثبت (مودال پیگیری) / عملکرد (سابقه) / اطلاعات؛ فیلتر تاریخ آخرین و بعدی؛ `?due=today` |
+| `sales-performance.html` | گزارش عملکرد | فهرست مسئولین با «انتخاب همه»، بازه، نوع فعالیت، وضعیت؛ نمودار؛ برگه‌ی گزارش گروه‌بندی‌شده بر اساس مسئول |
+| `invoice-new.html` | فاکتور | فرم زنده‌ی فاکتور/پیش‌فاکتور (تخفیف، هزینه نصب، ارزش افزوده، عدد به حروف)؛ نوار ثبت / ویرایش / چاپ؛ `?type=proforma` |
+| `invoices.html` | مشاهده فاکتور | شاخص‌ها، فیلترها، انتخاب گروهی، ویرایش در مودال، تبدیل پیش‌فاکتور، کنسل، کپی |
+| `print-invoice.html` | چاپ فاکتور | دو قالب صورتحساب فروش و پیش‌فاکتور؛ `?type=proforma`، `?no=` |
+| `invoice-settlement.html` | تسویه فاکتور | ۶ کاشی جمع؛ جدول عریض با هشدار و «امکان تغییر»؛ مودال پرداخت (نقدی / چک) و گزارش پرداخت |
+| `invoices-reserved.html` | فاکتورهای رزرو شده | فیلتر مجموعه/محصول/مسئول/تاریخ؛ رزرو بیش از ۷ روز زرد؛ اقلام رزرو؛ ثبت خروج / آزادسازی |
+| `letters.html` | نامه و قرارداد | فرم + بایگانی؛ کلیک روی ردیف = ویرایش؛ کنسل |
+| `sms.html` | پیامک | گروهی / فردی، قالب‌های آماده، شمارنده‌ی بخش‌ها، پیش‌نمایش گوشی، صندوق دریافتی/ارسالی؛ `?to=` |
+
+`sales.js` ← `window.SALES`: `invoiceForm(el, { idp, mode, invoice })`، `picker` (ویژگی `data-pick-customer="#id"` ← رویداد `sales:customer`)، `fpickHTML` / `[data-filter-root]` / `data-fkey`، انتخاب گروهی `[data-s-root]` (`data-s-all`، `data-s-row`، `data-s-bulk`، `data-s-count`، `data-s-need`)، `data-row-toggle`، `[data-gender-root]`، `data-excel`، `settleState`، `money`، `words`، `options`، `today`.
+
+داده‌ها: `CRM_DATA.sales` (`seller`، `owners`، `companies`، `contacts`، `followups`، `performance`، `invoices`، `payments`، `letters`، `smsInbox`، `smsOutbox`، …).
+
+کلاس‌های جدید (بخش ۲۶ components.css): `.filter-grid`، `.date-field`، `.picker`، `.sum-grid` / `.sum-tile`، `tr.row-flag` / `tr.row-danger` / `tr.row-muted`، `.legend-chip`، `.row-detail` / `.dchip`، `.cell-input`، `.tool-grid` / `.tool-btn`، `.form-section-title`، `.option-row`، `.sales-pick-list`، `.total-box`، `.report-toolbar` / `.report-sheet`، `.sms-phone` / `.sms-bubble`، `.modal-2xl`.
 
 ### ۵) اتصال به بک‌اند
 

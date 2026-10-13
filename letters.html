@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نامه و قرارداد | مدرن‌CRM</title>
+<meta name="description" content="ثبت و بایگانی نامه‌ها و قراردادهای صادره برای مشتریان">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="letters">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span>فروش و بازاریابی</span>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">نامه و قرارداد</span>
+            </div>
+            <h1 class="page-title">نامه و قرارداد</h1>
+            <p class="page-desc">دبیرخانه‌ی فروش: ثبت شماره، موضوع و طرف مکاتبه‌ی نامه‌ها و قراردادها</p>
+          </div>
+        </div>
+
+        <div class="grid-1-2">
+          <!-- ======================= فرم ======================= -->
+          <div class="card" data-win-nobtn style="align-self:start">
+            <div class="card-head">
+              <div class="card-title" data-icon="pencil" data-icon-size="17"> <span id="formTitle">ثبت نامه جدید</span></div>
+              <div class="card-actions"><span class="badge badge-gray num" id="sysBadge">کد سیستمی: خودکار</span></div>
+            </div>
+            <div class="card-body">
+              <div class="form-group"><label class="form-label">نوع</label>
+                <div class="segmented w-100" data-segmented id="lType">
+                  <button type="button" class="seg is-active flex-1" data-t="نامه"><span data-icon="mail" data-icon-size="14"></span> نامه</button>
+                  <button type="button" class="seg flex-1" data-t="قرارداد"><span data-icon="file" data-icon-size="14"></span> قرارداد</button>
+                </div>
+              </div>
+              <div class="form-group"><label class="form-label">موضوع <span class="req">*</span></label><input class="input" id="lSubject" placeholder="مثلاً: قرارداد پشتیبانی سالانه"></div>
+              <div class="grid-2">
+                <div class="form-group"><label class="form-label">شماره</label><input class="input num" id="lNo" placeholder="خودکار"></div>
+                <div class="form-group"><label class="form-label">تاریخ</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="lDate" data-fa-mask></div></div>
+              </div>
+              <div class="form-group"><label class="form-label">شرکت / سازمان <span class="req">*</span></label>
+                <div class="picker"><input class="input" id="lCompany" placeholder="نام شرکت یا انتخاب از فهرست"><button type="button" class="btn" data-pick-customer="#lCompany" data-icon="more-h" data-icon-size="16"></button></div></div>
+              <div class="form-group"><label class="form-label">پیوست</label>
+                <div class="dropzone" style="padding:14px" id="dz">
+                  <div class="fw-600 text-strong fs-sm"><span data-icon="paperclip" data-icon-size="15"></span> اسکن نامه یا فایل قرارداد را رها کنید</div>
+                  <div class="fs-xs text-muted mt-1">PDF یا تصویر — حداکثر ۱۰ مگابایت</div>
+                </div>
+              </div>
+              <label class="check mb-4"><input type="checkbox" id="lCancel"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">کنسل شده <small>نامه در فهرست باقی می‌ماند ولی باطل علامت می‌خورد</small></span></label>
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary flex-1" id="btnSave"><span data-icon="check" data-icon-size="16"></span> ثبت</button>
+                <button class="btn" id="btnNew"><span data-icon="plus" data-icon-size="16"></span> جدید</button>
+                <button class="btn btn-danger-soft" id="btnDel" disabled><span data-icon="trash" data-icon-size="16"></span> حذف</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================= فهرست ======================= -->
+          <div class="card" style="min-width:0" data-win="letters" data-win-title="نامه‌ها و قراردادها" data-win-icon="mail" data-win-size="980x620">
+            <div class="card-head flex-wrap" style="gap:10px">
+              <div class="card-title" data-icon="archive" data-icon-size="18"> بایگانی <span class="badge badge-gray num" id="resultCount">۰</span></div>
+              <div class="card-actions flex-wrap" style="gap:8px">
+                <div class="segmented" id="tFilter">
+                  <button type="button" class="seg is-active" data-f="">همه</button>
+                  <button type="button" class="seg" data-f="نامه">نامه</button>
+                  <button type="button" class="seg" data-f="قرارداد">قرارداد</button>
+                </div>
+                <div class="input-wrap" style="width:190px">
+                  <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                  <input class="input input-sm" id="quick" placeholder="موضوع، شماره، شرکت…">
+                </div>
+              </div>
+            </div>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table table-compact" id="tbl">
+                  <thead><tr><th>کد سیستمی</th><th>نوع</th><th>شماره</th><th>موضوع</th><th>شرکت</th><th>تاریخ</th><th class="table-row-actions"></th></tr></thead>
+                  <tbody id="tbody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="table-foot"><span><span data-icon="info" data-icon-size="14"></span> برای ویرایش، روی ردیف کلیک کنید.</span></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/sales.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, S = window.SALES, D = S.data, d = document;
+  var $ = CRM.$, $$ = CRM.$$, esc = CRM.esc, fa = CRM.fa;
+  var cur = null, filter = '';
+
+  function type() { var a = $('#lType .seg.is-active'); return a ? a.getAttribute('data-t') : 'نامه'; }
+  function setType(t) { $$('#lType .seg').forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-t') === t); }); updTitle(); }
+  function updTitle() { $('#formTitle').textContent = (cur ? 'ویرایش ' : 'ثبت ') + type() + (cur ? '' : ' جدید'); }
+  $('#lType').addEventListener('click', function () { setTimeout(updTitle, 0); });
+
+  function render() {
+    var q = $('#quick').value.trim();
+    var rows = D.letters.filter(function (l) {
+      return (!filter || l.type === filter) && (!q || (l.subject + l.no + l.company + fa(l.sys)).indexOf(q) > -1);
+    });
+    $('#tbody').innerHTML = rows.length ? rows.map(function (l) {
+      return '<tr data-sys="' + l.sys + '" class="' + (l.cancelled ? 'row-muted' : '') + (cur && cur.sys === l.sys ? ' is-selected' : '') + '" style="cursor:pointer">' +
+        '<td class="num text-muted">' + fa(l.sys) + '</td>' +
+        '<td><span class="badge ' + (l.type === 'قرارداد' ? 'badge-violet' : 'badge-info') + '">' + esc(l.type) + '</span></td>' +
+        '<td class="num fw-600">' + esc(l.no) + '</td>' +
+        '<td style="white-space:normal">' + esc(l.subject) + (l.cancelled ? ' <span class="badge badge-gray">کنسل</span>' : '') + '</td>' +
+        '<td class="fs-sm" style="white-space:normal">' + esc(l.company) + '</td>' +
+        '<td class="num fs-sm">' + esc(l.date) + '</td>' +
+        '<td><button class="tb-icon icon-btn-sm" data-print-letter data-tip="چاپ" data-icon="printer" data-icon-size="15"></button></td></tr>';
+    }).join('') : '<tr><td colspan="7"><div class="empty"><div class="empty-ic" data-icon="mail" data-icon-size="30"></div><div class="empty-title">موردی یافت نشد</div></div></td></tr>';
+    $('#resultCount').textContent = fa(rows.length);
+    if (d.readyState !== 'loading') CRM.init($('#tbl'));
+  }
+
+  function load(l) {
+    cur = l || null;
+    l = l || {};
+    setType(l.type || 'نامه');
+    $('#lSubject').value = l.subject || '';
+    $('#lNo').value = l.no || '';
+    $('#lDate').value = l.date || S.today();
+    $('#lCompany').value = l.company || '';
+    $('#lCancel').checked = !!l.cancelled;
+    $('#sysBadge').textContent = cur ? 'کد سیستمی: ' + fa(cur.sys) : 'کد سیستمی: خودکار';
+    $('#btnDel').disabled = !cur;
+    $$('.is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+    render();
+  }
+
+  $('#tbody').addEventListener('click', function (e) {
+    if (e.target.closest('[data-print-letter]')) { CRM.toast({ type: 'info', title: 'آماده‌سازی چاپ', msg: 'پیش‌نمایش چاپ نامه باز شد (نمایشی).' }); return; }
+    var tr = e.target.closest('tr[data-sys]'); if (!tr) return;
+    var sys = Number(tr.getAttribute('data-sys'));
+    load(D.letters.filter(function (l) { return l.sys === sys; })[0]);
+  });
+  $('#btnNew').addEventListener('click', function () { load(null); $('#lSubject').focus(); });
+  $('#btnSave').addEventListener('click', function (e) {
+    var sub = $('#lSubject'), co = $('#lCompany'), bad = false;
+    [sub, co].forEach(function (x) { var b = !x.value.trim(); x.classList.toggle('is-invalid', b); bad = bad || b; });
+    if (bad) { CRM.toast({ type: 'danger', title: 'فیلدهای الزامی', msg: 'موضوع و شرکت را وارد کنید.' }); return; }
+    S.busy(e.currentTarget, function () {
+      var t = type();
+      if (!cur) {
+        var sys = Math.max.apply(null, D.letters.map(function (l) { return l.sys; })) + 1;
+        cur = { sys: sys, type: t, no: $('#lNo').value.trim() || fa(312191 + (sys - 2429)) + (t === 'قرارداد' ? '-ق' : '-ج'), cancelled: false };
+        D.letters.unshift(cur);
+      }
+      cur.type = t; cur.subject = sub.value.trim(); cur.company = co.value.trim(); cur.date = $('#lDate').value; cur.cancelled = $('#lCancel').checked;
+      if ($('#lNo').value.trim()) cur.no = $('#lNo').value.trim();
+      load(cur);
+      CRM.toast({ type: 'success', title: t + ' ثبت شد', msg: 'شماره ' + cur.no + ' — کد سیستمی ' + fa(cur.sys) });
+    }, 500);
+  });
+  $('#btnDel').addEventListener('click', function () {
+    if (!cur) return;
+    CRM.modal.confirm({ title: 'حذف ' + cur.type, msg: '«' + cur.subject + '» از بایگانی حذف شود؟', danger: true, tone: 'danger', icon: 'trash', okText: 'بله، حذف کن' }).then(function (ok) {
+      if (!ok) return;
+      D.letters.splice(D.letters.indexOf(cur), 1);
+      load(null);
+      CRM.toast({ type: 'warning', title: 'حذف شد' });
+    });
+  });
+  $('#tFilter').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-f]'); if (!b) return;
+    filter = b.getAttribute('data-f');
+    $$('#tFilter .seg').forEach(function (x) { x.classList.toggle('is-active', x === b); });
+    render();
+  });
+  $('#quick').addEventListener('input', CRM.debounce(render, 180));
+  $('#dz').addEventListener('click', function () { CRM.toast({ type: 'info', title: 'نسخه نمایشی', msg: 'بارگذاری پیوست شبیه‌سازی می‌شود.' }); });
+
+  load(null);
+})();
+</script>
+</body>
+</html>

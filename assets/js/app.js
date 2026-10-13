@@ -1010,7 +1010,7 @@ window.CRM = (function (w, d) {
       var actions = [
         { label: 'افزودن مشتری جدید', icon: 'user-plus', href: 'customer-new.html', group: 'میان‌بر' },
         { label: 'ثبت معامله جدید', icon: 'deals', href: 'deals.html', group: 'میان‌بر' },
-        { label: 'صدور فاکتور', icon: 'invoice', href: 'invoices.html', group: 'میان‌بر' },
+        { label: 'صدور فاکتور', icon: 'invoice', href: 'invoice-new.html', group: 'میان‌بر' },
         { label: 'ثبت تیکت پشتیبانی', icon: 'ticket', href: 'ticket-new.html', group: 'میان‌بر' },
         { label: 'ورود به میزکار پنجره‌ای', icon: 'window', href: 'desktop.html', group: 'فرمان' },
         { label: 'خروج از حساب کاربری', icon: 'logout', href: 'login.html', group: 'فرمان' }
@@ -1133,7 +1133,7 @@ window.CRM = (function (w, d) {
             '<span class="brand-name">مدرن‌CRM<small>سامانه مدیریت ارتباط با مشتری</small></span>' +
           '</span>' +
         '</div>' +
-        '<div class="sidebar-scroll">' + groups + '</div>' +
+        '<div class="sidebar-scroll"><div class="sidebar-scroll-inner">' + groups + '</div></div>' +
         '<div class="sidebar-foot">' +
           '<div class="side-card">' +
             '<div class="sc-title">پلن حرفه‌ای</div>' +
@@ -1164,7 +1164,7 @@ window.CRM = (function (w, d) {
               '<a class="dropdown-item" href="customer-new.html"><span data-icon="user-plus" data-icon-size="17"></span> مشتری جدید</a>' +
               '<a class="dropdown-item" href="deals.html"><span data-icon="deals" data-icon-size="17"></span> معامله جدید</a>' +
               '<a class="dropdown-item" href="ticket-new.html"><span data-icon="ticket" data-icon-size="17"></span> تیکت پشتیبانی</a>' +
-              '<a class="dropdown-item" href="invoices.html"><span data-icon="invoice" data-icon-size="17"></span> صدور فاکتور</a>' +
+              '<a class="dropdown-item" href="invoice-new.html"><span data-icon="invoice" data-icon-size="17"></span> صدور فاکتور</a>' +
             '</div>' +
           '</div>' +
           '<button class="tb-icon" data-tip="تنظیمات" aria-label="تنظیمات" onclick="location.href=\'settings.html\'" data-icon="settings" data-icon-size="19"></button>' +
@@ -1373,7 +1373,7 @@ window.CRM = (function (w, d) {
       var active = body.getAttribute('data-page') || '';
       var sb = $('#sidebar'); if (sb) sb.innerHTML = sidebarHTML(active);
       /* اگر آیتم فعال (مثلاً زیرمنوی یازدهمِ گزارشات) پایین‌تر از دید است، نوار کناری تا آن اسکرول شود */
-      var sc = sb && sb.querySelector('.sidebar-scroll'), act = sc && sc.querySelector('.nav-item.is-active');
+      var sc = sb && sb.querySelector('.sidebar-scroll-inner'), act = sc && sc.querySelector('.nav-item.is-active');
       if (act) {
         var top = act.getBoundingClientRect().top - sc.getBoundingClientRect().top;
         if (top + act.offsetHeight > sc.clientHeight) sc.scrollTop = top - sc.clientHeight / 2;

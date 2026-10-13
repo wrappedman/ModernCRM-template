@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پیامک | مدرن‌CRM</title>
+<meta name="description" content="ارسال پیامک گروهی و فردی به مشتریان، صندوق دریافت و گزارش ارسال">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="sms">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span>فروش و بازاریابی</span>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">پیامک</span>
+            </div>
+            <h1 class="page-title">پیامک</h1>
+            <p class="page-desc">ارسال پیامک گروهی یا فردی به مشتریان و مشاهده‌ی پیامک‌های دریافتی</p>
+          </div>
+          <div class="head-actions">
+            <span class="badge badge-success badge-dot" style="height:34px;padding:0 12px">اعتبار پنل: <b class="num ms-auto" style="margin-inline-start:4px">۱۲۴٬۵۰۰</b> پیامک</span>
+          </div>
+        </div>
+
+        <div class="grid-2-1 mb-5">
+          <!-- ======================= نگارش ======================= -->
+          <div class="card" data-win-nobtn style="min-width:0">
+            <div class="card-head">
+              <div class="card-title" data-icon="send" data-icon-size="17"> ارسال پیامک</div>
+              <div class="card-actions">
+                <div class="segmented" id="mode">
+                  <button type="button" class="seg is-active" data-mode="group"><span data-icon="users" data-icon-size="14"></span> گروهی</button>
+                  <button type="button" class="seg" data-mode="single"><span data-icon="user" data-icon-size="14"></span> فردی</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- گیرندگان: گروهی -->
+              <div data-m="group">
+                <div class="form-section-title"><span data-icon="users" data-icon-size="16"></span> گیرندگان <span class="badge badge-primary num" id="grpCount">۰ نفر</span></div>
+                <div class="grid-2 mb-4" id="groups"></div>
+                <div class="dropzone mb-4" style="padding:14px" id="dz">
+                  <div class="fw-600 text-strong fs-sm"><span data-icon="upload" data-icon-size="15"></span> یا فایل شماره‌ها را بارگذاری کنید</div>
+                  <div class="fs-xs text-muted mt-1">Excel یا TXT — هر شماره در یک سطر</div>
+                </div>
+              </div>
+              <!-- گیرندگان: فردی -->
+              <div data-m="single" class="d-none">
+                <div class="form-section-title"><span data-icon="user" data-icon-size="16"></span> گیرنده</div>
+                <div class="grid-2">
+                  <div class="form-group"><label class="form-label">شماره موبایل <span class="req">*</span></label><input class="input ltr num" id="to" placeholder="09121234567" maxlength="120"></div>
+                  <div class="form-group"><label class="form-label">یا انتخاب از مخاطبین</label><select class="select" id="toPick"></select></div>
+                </div>
+              </div>
+
+              <div class="form-section-title mt-2"><span data-icon="message" data-icon-size="16"></span> متن پیامک</div>
+              <div class="d-flex gap-2 flex-wrap mb-3" id="tpls"></div>
+              <div class="form-group">
+                <textarea class="textarea" rows="5" id="text" placeholder="متن پیامک را بنویسید… از {نام} برای درج نام گیرنده استفاده کنید."></textarea>
+                <div class="d-flex justify-between items-center mt-2 flex-wrap gap-2">
+                  <div class="sms-meter"><span>کاراکتر: <b id="mChars">۰</b></span><span>تعداد پیامک: <b id="mParts">۰</b></span><span>هزینه تقریبی: <b id="mCost">۰</b> پیامک</span></div>
+                  <label class="check"><input type="checkbox" id="optOut" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl fs-sm">افزودن «لغو۱۱»</span></label>
+                </div>
+              </div>
+              <div class="grid-2">
+                <div class="form-group"><label class="form-label">خط ارسال</label><select class="select"><option>۳۰۰۰۴۵۶۷ — خط خدماتی</option><option>۵۰۰۰۱۲۳۴ — خط تبلیغاتی</option></select></div>
+                <div class="form-group"><label class="form-label">زمان ارسال</label>
+                  <div class="segmented w-100" data-segmented id="when"><button type="button" class="seg is-active flex-1">همین حالا</button><button type="button" class="seg flex-1">زمان‌بندی</button></div></div>
+              </div>
+              <div class="d-flex gap-2 justify-end">
+                <button class="btn" id="btnClear"><span data-icon="x" data-icon-size="16"></span> پاک کردن</button>
+                <button class="btn btn-primary" id="btnSend"><span data-icon="send" data-icon-size="16"></span> ارسال</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================= پیش‌نمایش ======================= -->
+          <div class="card" style="align-self:start">
+            <div class="card-head tight"><div class="card-title" data-icon="smartphone" data-icon-size="17"> پیش‌نمایش</div></div>
+            <div class="card-body">
+              <div class="sms-phone">
+                <div class="sms-screen">
+                  <div class="text-center fs-2xs text-soft">مدرن‌CRM — <span class="num">۳۰۰۰۴۵۶۷</span></div>
+                  <div class="sms-bubble empty" id="bubble">متن پیامک اینجا نمایش داده می‌شود…</div>
+                  <div class="fs-2xs text-soft" style="align-self:flex-start" id="bubbleTime"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================= صندوق‌ها ======================= -->
+        <div class="card" data-tabs-root data-win="sms-box" data-win-title="صندوق پیامک" data-win-icon="inbox" data-win-size="980x600">
+          <div class="tabs" data-tabs style="padding:0 8px">
+            <button class="tab is-active" data-tab="in"><span data-icon="inbox" data-icon-size="16"></span> دریافتی <span class="badge badge-gray num" id="inCount"></span></button>
+            <button class="tab" data-tab="out"><span data-icon="send" data-icon-size="16"></span> ارسالی <span class="badge badge-gray num" id="outCount"></span></button>
+          </div>
+          <div class="card-body flush">
+            <div data-tab-panel="in"><div class="table-wrap"><table class="table table-compact"><thead><tr><th>فرستنده</th><th>متن</th><th>زمان</th><th></th></tr></thead><tbody id="inBody"></tbody></table></div></div>
+            <div data-tab-panel="out" class="d-none"><div class="table-wrap"><table class="table table-compact"><thead><tr><th>گیرنده</th><th>متن</th><th>زمان</th><th>وضعیت</th></tr></thead><tbody id="outBody"></tbody></table></div></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/sales.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, S = window.SALES, D = S.data, d = document;
+  var $ = CRM.$, $$ = CRM.$$, esc = CRM.esc, fa = CRM.fa;
+  var mode = 'group';
+  var GROUPS = [
+    ['همه مشتریان نهایی', 48], ['نمایندگان فروش', 12], ['مشتریان دارای سررسید این ماه', 9],
+    ['شرکت‌کنندگان نمایشگاه ۱۴۰۵', 31], ['مشتریان خوش‌حساب', 22], ['مشتریان بدون پشتیبانی فعال', 7]
+  ];
+  var TPLS = [
+    ['یادآوری سررسید', '{نام} گرامی، سررسید تمدید لایسنس شما نزدیک است. برای تمدید با ما تماس بگیرید.'],
+    ['ارسال پیش‌فاکتور', '{نام} عزیز، پیش‌فاکتور درخواستی برای شما ایمیل شد. سپاس از اعتمادتان.'],
+    ['تبریک', '{نام} گرامی، فرارسیدن سالروز همکاری‌مان را تبریک می‌گوییم.'],
+    ['دعوت به رویداد', 'از شما دعوت می‌کنیم در وبینار معرفی نسخه جدید شرکت کنید. ثبت‌نام: modern-crm.ir/webinar']
+  ];
+
+  $('#groups').innerHTML = GROUPS.map(function (g, i) {
+    return '<label class="check" style="padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm)"><input type="checkbox" class="grp" value="' + g[1] + '"' + (i === 0 ? ' checked' : '') + '>' +
+      '<span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl flex-1">' + g[0] + '</span><span class="badge badge-gray num">' + fa(g[1]) + '</span></label>';
+  }).join('');
+  $('#tpls').innerHTML = TPLS.map(function (t, i) { return '<button type="button" class="chip" data-tpl="' + i + '"><span data-icon="sparkles" data-icon-size="13"></span> ' + t[0] + '</button>'; }).join('');
+  $('#toPick').innerHTML = '<option value="">— انتخاب مخاطب —</option>' + D.contacts.map(function (p) { return '<option value="' + esc(p.mobile) + '">' + esc(p.name) + ' — ' + esc(p.company) + '</option>'; }).join('');
+
+  function recipients() {
+    if (mode === 'single') return $('#to').value.split(/[,،\s]+/).filter(function (x) { return x.trim(); }).length;
+    return $$('.grp:checked').reduce(function (s, c) { return s + Number(c.value); }, 0);
+  }
+  function update() {
+    var txt = $('#text').value + ($('#optOut').checked && $('#text').value ? '\nلغو۱۱' : '');
+    var n = txt.length;
+    var parts = n === 0 ? 0 : n <= 70 ? 1 : Math.ceil(n / 67);   /* متن فارسی: ۷۰ نویسه برای یک پیامک، ۶۷ برای چندبخشی */
+    var r = recipients();
+    $('#mChars').textContent = fa(n);
+    $('#mParts').textContent = fa(parts);
+    $('#mCost').textContent = CRM.num(parts * r);
+    $('#grpCount').textContent = fa(r) + ' نفر';
+    var b = $('#bubble');
+    b.classList.toggle('empty', !n);
+    b.textContent = n ? txt.replace(/\{نام\}/g, mode === 'single' && $('#toPick').selectedIndex > 0 ? $('#toPick').options[$('#toPick').selectedIndex].text.split(' — ')[0] : 'آقای توکلی') : 'متن پیامک اینجا نمایش داده می‌شود…';
+    $('#bubbleTime').textContent = n ? 'اکنون' : '';
+  }
+  function setMode(m) {
+    mode = m;
+    $$('#mode .seg').forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-mode') === m); });
+    $$('[data-m]').forEach(function (el) { el.classList.toggle('d-none', el.getAttribute('data-m') !== m); });
+    update();
+  }
+
+  function boxes() {
+    $('#inBody').innerHTML = D.smsInbox.map(function (s) {
+      return '<tr><td><div class="fw-600">' + esc(s.name) + '</div><div class="num ltr fs-xs text-muted" style="text-align:right">' + esc(s.from) + '</div></td>' +
+        '<td style="white-space:normal;min-width:260px" class="fs-sm">' + esc(s.text) + '</td><td class="num fs-xs text-nowrap">' + esc(s.time) + '</td>' +
+        '<td><button class="btn btn-sm btn-soft" data-reply="' + esc(s.from) + '"><span data-icon="corner-down-left" data-icon-size="13"></span> پاسخ</button></td></tr>';
+    }).join('');
+    $('#outBody').innerHTML = D.smsOutbox.map(function (s) {
+      var ok = s.status === 'delivered', q = s.status === 'queued';
+      return '<tr><td class="fs-sm fw-600 num">' + esc(s.to) + '</td><td style="white-space:normal;min-width:260px" class="fs-sm">' + esc(s.text) + '</td><td class="num fs-xs text-nowrap">' + esc(s.time) + '</td>' +
+        '<td><span class="badge ' + (ok ? 'badge-success' : q ? 'badge-info' : 'badge-danger') + ' badge-dot">' + (ok ? 'تحویل شده' : q ? 'در صف ارسال' : 'ناموفق') + '</span></td></tr>';
+    }).join('');
+    $('#inCount').textContent = fa(D.smsInbox.length);
+    $('#outCount').textContent = fa(D.smsOutbox.length);
+  }
+
+  $('#mode').addEventListener('click', function (e) { var b = e.target.closest('[data-mode]'); if (b) setMode(b.getAttribute('data-mode')); });
+  $('#text').addEventListener('input', update);
+  $('#optOut').addEventListener('change', update);
+  $('#to').addEventListener('input', update);
+  $('#groups').addEventListener('change', update);
+  $('#toPick').addEventListener('change', function () { if (this.value) $('#to').value = this.value; update(); });
+  $('#tpls').addEventListener('click', function (e) { var b = e.target.closest('[data-tpl]'); if (!b) return; $('#text').value = TPLS[+b.getAttribute('data-tpl')][1]; update(); $('#text').focus(); });
+  $('#dz').addEventListener('click', function () { CRM.toast({ type: 'info', title: 'نسخه نمایشی', msg: 'بارگذاری فایل شماره‌ها شبیه‌سازی می‌شود.' }); });
+  $('#btnClear').addEventListener('click', function () { $('#text').value = ''; $('#to').value = ''; $('#toPick').value = ''; update(); });
+  $('#btnSend').addEventListener('click', function (e) {
+    var r = recipients();
+    if (!$('#text').value.trim()) { $('#text').classList.add('is-invalid'); CRM.toast({ type: 'danger', title: 'متن خالی است', msg: 'متن پیامک را بنویسید.' }); return; }
+    $('#text').classList.remove('is-invalid');
+    if (!r) { CRM.toast({ type: 'danger', title: 'گیرنده‌ای انتخاب نشده', msg: mode === 'single' ? 'شماره موبایل را وارد کنید.' : 'حداقل یک گروه را انتخاب کنید.' }); return; }
+    S.busy(e.currentTarget, function () {
+      D.smsOutbox.unshift({ to: mode === 'single' ? $('#to').value : 'گروهی — ' + fa(r) + ' مخاطب', text: $('#text').value, time: S.today() + ' — اکنون', status: r > 1 ? 'queued' : 'delivered' });
+      boxes();
+      CRM.init($('#outBody'));
+      CRM.toast({ type: 'success', title: 'پیامک ارسال شد', msg: fa(r) + ' گیرنده — ' + $('#mParts').textContent + ' بخش' });
+    }, 700);
+  });
+  d.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-reply]'); if (!b) return;
+    setMode('single'); $('#to').value = CRM.en ? CRM.en(b.getAttribute('data-reply')) : b.getAttribute('data-reply');
+    $('#text').value = ''; update(); $('#text').focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var qTo = new URLSearchParams(location.search).get('to');
+  if (qTo) { setMode('single'); $('#to').value = CRM.en ? CRM.en(qTo) : qTo; }
+  boxes();
+  update();
+})();
+</script>
+</body>
+</html>
