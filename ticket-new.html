@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ثبت تیکت پشتیبانی | مدرن‌CRM</title>
+<meta name="description" content="ثبت تیکت پشتیبانی جدید با تعیین اولویت، دسته‌بندی و پیوست">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="ticket-new">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="tickets.html">تیکت‌ها</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">ثبت تیکت جدید</span>
+            </div>
+            <h1 class="page-title">ثبت تیکت پشتیبانی</h1>
+            <p class="page-desc">مشکل یا درخواست مشتری را با جزئیات کامل ثبت کنید تا سریع‌تر حل شود.</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="tickets.html"><span data-icon="arrow-right" data-icon-size="16"></span> بازگشت به فهرست</a>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <form data-demo-form="تیکت با شماره TK-5522 ثبت شد." class="card">
+            <div class="card-head">
+              <div class="card-title" data-icon="ticket" data-icon-size="18"> اطلاعات تیکت</div>
+              <div class="card-actions"><span class="badge badge-info">شناسه پیشنهادی: TK-5522</span></div>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label" for="subject">موضوع تیکت <span class="req">*</span></label>
+                <input class="input" id="subject" required placeholder="مثلاً خطا در ارسال فاکتور گروهی">
+              </div>
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label class="form-label">مشتری / سازمان <span class="req">*</span></label>
+                  <div class="input-wrap">
+                    <span class="icon lead" data-icon="users" data-icon-size="17"></span>
+                    <select class="select" required>
+                      <option>پارس‌نیکان — مریم رضایی</option>
+                      <option>داده‌پرداز — امیر شریفی</option>
+                      <option>فناوران آبی — علی محمدی</option>
+                      <option>گروه صنعتی البرز — حسین نوری</option>
+                      <option>مشتری جدید (بدون پرونده)</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">کانال دریافت</label>
+                  <select class="select">
+                    <option>تلفن</option><option>ایمیل</option><option>چت آنلاین</option><option>حضوری</option><option>پنل کاربری</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label class="form-label">دسته‌بندی</label>
+                  <select class="select">
+                    <option>مشکل فنی</option><option>سؤال مالی و فاکتور</option><option>درخواست آموزش</option><option>درخواست قابلیت جدید</option><option>سایر</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">محصول مرتبط</label>
+                  <select class="select">
+                    <option>لایسنس سالانه CRM</option><option>ماژول مدیریت انبار</option><option>ماژول فاکتور و مالی</option><option>سایر</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">اولویت <span class="req">*</span></label>
+                <div class="d-flex gap-2 flex-wrap" data-chip-group>
+                  <button type="button" class="chip">پایین — پاسخ تا ۴۸ ساعت</button>
+                  <button type="button" class="chip is-active">عادی — پاسخ تا ۸ ساعت</button>
+                  <button type="button" class="chip">بالا — پاسخ تا ۲ ساعت</button>
+                  <button type="button" class="chip">فوری — پاسخ فوری</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="desc">شرح مشکل <span class="req">*</span></label>
+                <textarea class="textarea" id="desc" required style="min-height:150px" placeholder="مراحل بازتولید مشکل، پیام خطا، زمان بروز و هر اطلاع مفید دیگر…"></textarea>
+                <div class="form-hint"><span data-icon="info" data-icon-size="13"></span> هرچه توضیحات کامل‌تر باشد، زمان حل کوتاه‌تر می‌شود.</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">پیوست فایل و تصویر</label>
+                <div class="dropzone">
+                  <div class="dz-icon" data-icon="upload" data-icon-size="24"></div>
+                  <div class="fw-600 text-strong">فایل‌ها را رها کنید یا کلیک کنید</div>
+                  <div class="fs-sm text-muted mt-1">تصویر خطا، لاگ سیستم یا فایل نمونه — حداکثر ۱۰ مگابایت</div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">ارجاع به</label>
+                <div class="d-flex items-center gap-3">
+                  <div class="dropdown">
+                    <button type="button" class="btn" data-dropdown-toggle><span data-icon="user-check" data-icon-size="16"></span> انتخاب کارشناس <span data-icon="chevron-down" data-icon-size="14"></span></button>
+                    <div class="dropdown-menu">
+                      <button type="button" class="dropdown-item"><span data-icon="user-round" data-icon-size="16"></span> مهدی کریمی — مدیر فروش</button>
+                      <button type="button" class="dropdown-item"><span data-icon="user-round" data-icon-size="16"></span> سمیرا رحیمی — پشتیبانی</button>
+                      <button type="button" class="dropdown-item"><span data-icon="user-round" data-icon-size="16"></span> رضا پورمند — فنی</button>
+                    </div>
+                  </div>
+                  <label class="switch"><span class="lbl">ارجاع خودکار بر اساس بار کاری</span><input type="checkbox" checked><span class="track"></span></label>
+                </div>
+              </div>
+
+              <div class="alert alert-info" style="margin-bottom:0">
+                <span data-icon="shield-check" data-icon-size="18"></span>
+                <div>
+                  <div class="alert-title">توافق سطح سرویس (SLA)</div>
+                  <div class="alert-desc">برای اولویت «عادی»، حداکثر زمان پاسخ ۸ ساعت کاری و زمان حل ۳ روز کاری است.</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-foot">
+              <button type="submit" class="btn btn-primary"><span data-icon="send" data-icon-size="16"></span> ثبت و ارسال تیکت</button>
+              <button type="button" class="btn"><span data-icon="note" data-icon-size="16"></span> ذخیره پیش‌نویس</button>
+              <button type="button" class="btn ms-auto" data-confirm="اطلاعات فرم پاک شود؟" data-confirm-title="پاک کردن فرم" data-confirm-ok="بله، پاک کن">پاک کردن فرم</button>
+            </div>
+          </form>
+
+          <div class="d-flex flex-col gap-4">
+            <div class="card">
+              <div class="card-head tight"><div class="card-title" data-icon="clipboard" data-icon-size="17"> قالب‌های آماده پاسخ</div></div>
+              <div class="card-body tight">
+                <div class="list">
+                  <button class="list-item w-100" style="text-align:right">
+                    <span class="avatar avatar-sm avatar-sq"><span data-icon="zap" data-icon-size="15"></span></span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">پاسخ اولیه دریافت درخواست</span><span class="li-sub">تشکر از تماس + زمان تقریبی پاسخ</span></span>
+                  </button>
+                  <button class="list-item w-100" style="text-align:right">
+                    <span class="avatar avatar-sm avatar-sq"><span data-icon="refresh" data-icon-size="15"></span></span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">درخواست اطلاعات بیشتر</span><span class="li-sub">نیاز به لاگ، اسکرین‌شات یا نسخه نرم‌افزار</span></span>
+                  </button>
+                  <button class="list-item w-100" style="text-align:right">
+                    <span class="avatar avatar-sm avatar-sq"><span data-icon="check-circle" data-icon-size="15"></span></span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">اعلام حل مشکل</span><span class="li-sub">توضیح راه‌حل + دعوت به بازخورد</span></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head tight"><div class="card-title" data-icon="book" data-icon-size="17"> مقالات مرتبط پایگاه دانش</div></div>
+              <div class="card-body tight">
+                <a class="dropdown-item" href="kb.html"><span data-icon="file" data-icon-size="16"></span> رفع خطای ارسال فاکتور گروهی</a>
+                <a class="dropdown-item" href="kb.html"><span data-icon="file" data-icon-size="16"></span> راهنمای اتصال به درگاه پرداخت</a>
+                <a class="dropdown-item" href="kb.html"><span data-icon="file" data-icon-size="16"></span> تنظیمات مالیات و ارزش افزوده</a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head tight"><div class="card-title" data-icon="gauge" data-icon-size="17"> وضعیت تیم پشتیبانی</div></div>
+              <div class="card-body tight">
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status online"></span> سمیرا رحیمی</span><span class="fs-sm text-muted">۳ تیکت باز</span></div>
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status busy"></span> رضا پورمند</span><span class="fs-sm text-muted">۵ تیکت باز</span></div>
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status offline"></span> مهدی کریمی</span><span class="fs-sm text-muted">۲ تیکت باز</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+</body>
+</html>

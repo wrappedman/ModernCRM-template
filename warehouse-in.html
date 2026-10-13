@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ورود محصول به انبار | انبار | مدرن‌CRM</title>
+<meta name="description" content="ثبت ورود کالا به انبار با شماره سریال، تعداد، تاریخ و نوع کارتخوان">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="warehouse-in">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="warehouse.html">انبار</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">ورود محصول به انبار</span>
+            </div>
+            <h1 class="page-title">ورود محصول به انبار</h1>
+            <p class="page-desc">کالای دریافتی را با تعداد، شماره سریال شروع و نوع کارتخوان در انبار اصلی ثبت کنید.</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="warehouse-stock.html"><span data-icon="chart-column" data-icon-size="16"></span> گزارش موجودی</a>
+            <button class="btn" type="button" data-wh-export="warehouse-in"><span data-icon="file-spreadsheet" data-icon-size="16"></span> خروجی Excel</button>
+          </div>
+        </div>
+
+        <!-- ============================ شاخص‌ها ============================ -->
+        <div class="grid-4 mb-5">
+          <div class="card card-hover">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon success"><span data-icon="package-plus" data-icon-size="22"></span></span>
+              <div><div class="stat-label">ورود امروز</div><div class="stat-value" id="kToday">—</div></div>
+            </div>
+          </div>
+          <div class="card card-hover">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon"><span data-icon="clipboard" data-icon-size="22"></span></span>
+              <div><div class="stat-label">رسیدهای این ماه</div><div class="stat-value" id="kCount">—</div></div>
+            </div>
+          </div>
+          <div class="card card-hover">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon sky"><span data-icon="boxes" data-icon-size="22"></span></span>
+              <div><div class="stat-label">اقلام واردشده این ماه</div><div class="stat-value" id="kQty">—</div></div>
+            </div>
+          </div>
+          <div class="card card-hover">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon violet"><span data-icon="clock" data-icon-size="22"></span></span>
+              <div><div class="stat-label">آخرین ورود</div><div class="stat-value fs-lg" id="kLast">—</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================ فرم ورود ============================ -->
+        <form class="card mb-5" id="inForm" data-win-nobtn novalidate>
+          <div class="card-head">
+            <div class="card-title" data-icon="package-plus" data-icon-size="18"> ثبت ورود کالا</div>
+            <div class="card-actions"><span class="badge badge-outline"><span data-icon="boxes" data-icon-size="12"></span> انبار اصلی</span></div>
+          </div>
+          <div class="card-body">
+            <div class="grid-3">
+              <div class="form-group">
+                <label class="form-label" for="fCat">نام مجموعه</label>
+                <select class="select" id="fCat"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="fProduct">نام محصول <span class="req">*</span></label>
+                <select class="select" id="fProduct" required></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="fQty">تعداد <span class="req">*</span></label>
+                <div class="input-wrap"><input class="input num" id="fQty" data-num-mask required placeholder="۰"><span class="unit" id="fUnit">عدد</span></div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-row">
+                  <label class="form-label" for="fSerial">از شماره سریال</label>
+                  <label class="check"><input type="checkbox" id="chkSerial"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">دارای سریال</span></label>
+                </div>
+                <div class="input-wrap">
+                  <span class="icon lead" data-icon="scan-barcode" data-icon-size="17"></span>
+                  <input class="input ltr" id="fSerial" placeholder="510-24-00811">
+                </div>
+                <div class="form-hint" id="serialHint"><span data-icon="info" data-icon-size="13"></span> سریال‌ها از این شماره به تعداد واردشده ثبت می‌شوند.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="fDate">تاریخ ورود</label>
+                <div class="input-wrap">
+                  <span class="icon lead" data-icon="calendar-days" data-icon-size="17"></span>
+                  <input class="input num" id="fDate" data-jdate="today">
+                  <button type="button" class="icon-btn trail" data-jdate-trigger data-tip="باز کردن تقویم" data-icon="chevron-down" data-icon-size="15"></button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="fReader">نوع کارتخوان</label>
+                <select class="select" id="fReader"></select>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> ثبت ورود</button>
+            <button type="button" class="btn" id="btnCancel"><span data-icon="eraser" data-icon-size="16"></span> انصراف</button>
+            <span class="spacer"></span>
+            <button type="button" class="btn btn-soft" id="btnSearch" data-tip="جستجو در ورودی‌ها بر اساس فیلدهای پرشده"><span data-icon="search" data-icon-size="16"></span> جستجو</button>
+          </div>
+        </form>
+
+        <!-- ============================ جدول ورودی‌ها ============================ -->
+        <div class="card" data-win="wh-in-table" data-win-title="ورودی‌های انبار" data-win-icon="table" data-win-size="1100x620">
+          <div class="card-head flex-wrap" style="gap:10px">
+            <div class="card-title" data-icon="table" data-icon-size="18"> ورودی‌های ثبت‌شده</div>
+            <div class="card-actions flex-wrap" style="gap:8px">
+              <div class="input-wrap" style="width:230px">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" placeholder="جستجو در جدول…" data-table-search="#tblIn" aria-label="جستجو">
+              </div>
+              <button class="btn btn-sm btn-soft" type="button" data-wh-export="warehouse-in"><span data-icon="file-spreadsheet" data-icon-size="15"></span> Excel</button>
+            </div>
+          </div>
+          <div class="alert alert-info d-none" id="filterBar" style="border-radius:0;border-inline:0">
+            <span data-icon="filter" data-icon-size="17"></span>
+            <div class="alert-title" id="filterText">فیلتر فعال</div>
+            <button class="btn btn-sm btn-soft ms-auto" type="button" id="btnClearFilter"><span data-icon="x" data-icon-size="14"></span> حذف فیلتر</button>
+          </div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table" id="tblIn">
+                <thead>
+                  <tr>
+                    <th style="width:56px">ردیف</th>
+                    <th class="sortable" data-sort><span class="th-in">محصول</span></th>
+                    <th>از شماره سریال</th>
+                    <th class="sortable num" data-sort><span class="th-in">تعداد</span></th>
+                    <th class="sortable" data-sort><span class="th-in">تاریخ</span></th>
+                    <th>نوع کارتخوان</th>
+                    <th>ثبت‌کننده</th>
+                    <th class="table-row-actions">حذف</th>
+                  </tr>
+                </thead>
+                <tbody id="inBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-foot">
+            <span id="inFoot">—</span>
+            <div class="pagination ms-auto"><button disabled data-icon="chevron-right" data-icon-size="15"></button><button class="is-active">۱</button><button data-icon="chevron-left" data-icon-size="15"></button></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/warehouse.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, WH = window.WH, D = CRM.data, $ = CRM.$, fa = CRM.fa, num = CRM.num, esc = CRM.esc;
+  var form = $('#inForm'), filter = null, dateTouched = false;
+  var F = { cat: $('#fCat'), product: $('#fProduct'), qty: $('#fQty'), chk: $('#chkSerial'), serial: $('#fSerial'), date: $('#fDate'), reader: $('#fReader') };
+
+  WH.linkCategoryProduct(F.cat, F.product);
+  WH.fillReaders(F.reader, 0);
+  WH.linkToggle(F.chk, F.serial, serialHint);
+  F.product.addEventListener('change', function () { var p = WH.product(F.product.value); $('#fUnit').textContent = p ? p.unit : 'عدد'; });
+
+  F.date.addEventListener('change', function () { dateTouched = true; });
+  function n(v) { return +String(CRM.en(v || '')).replace(/[^\d]/g, '') || 0; }
+
+  /* راهنمای بازه‌ی سریال: «از … تا …» */
+  function serialRange(start, qty) {
+    var m = String(start).match(/^(.*?)(\d+)$/);
+    if (!m || qty < 1) return null;
+    var end = String(+m[2] + qty - 1);
+    while (end.length < m[2].length) end = '0' + end;
+    return { from: start, to: m[1] + end };
+  }
+  function serialHint() {
+    var h = $('#serialHint'), r = serialRange(F.serial.value.trim(), n(F.qty.value));
+    if (!F.chk.checked) { h.innerHTML = CRM.icon('info', 13) + ' برای کالاهای بدون سریال، تیک را بردارید.'; return; }
+    h.innerHTML = r && n(F.qty.value) > 1
+      ? CRM.icon('scan-barcode', 13) + ' بازه سریال: <b class="ltr-cell">' + esc(r.from) + '</b> تا <b class="ltr-cell">' + esc(r.to) + '</b>'
+      : CRM.icon('info', 13) + ' سریال‌ها از این شماره به تعداد واردشده ثبت می‌شوند.';
+  }
+  [F.serial, F.qty].forEach(function (i) { i.addEventListener('input', serialHint); });
+
+  /* ------------------------------------------------ جدول */
+  function render() {
+    var rows = D.whIn.filter(function (r) {
+      if (!filter) return true;
+      var p = WH.product(r.product);
+      return (!filter.cat || p.cat === filter.cat) && (!filter.product || r.product === +filter.product) &&
+        (!filter.date || r.date === filter.date) && (filter.reader === '' || r.reader === +filter.reader);
+    });
+    $('#inBody').innerHTML = rows.length ? rows.map(function (r, i) {
+      var p = WH.product(r.product);
+      return '<tr>' +
+        '<td>' + WH.row(i) + '</td>' +
+        '<td>' + WH.productCell(p) + '</td>' +
+        '<td>' + (r.serial ? '<span class="ltr-cell fs-sm num">' + esc(r.serial) + '</span>' : '<span class="text-soft fs-sm">بدون سریال</span>') + '</td>' +
+        '<td class="num fw-700">' + num(r.qty) + ' <span class="fs-2xs text-muted fw-600">' + esc(p.unit) + '</span></td>' +
+        '<td class="num fs-sm">' + esc(r.date) + '</td>' +
+        '<td><span class="badge' + (r.reader ? ' badge-primary' : '') + '">' + esc(WH.reader(r.reader)) + '</span></td>' +
+        '<td class="fs-sm text-muted">' + esc(r.by) + '</td>' +
+        '<td><span class="table-actions"><button type="button" class="tb-icon" style="width:30px;height:30px" data-del="' + r.id + '" data-tip="حذف ردیف" data-icon="trash" data-icon-size="16"></button></span></td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="8"><div class="empty" style="padding:34px"><div class="empty-ic" data-icon="inbox" data-icon-size="28"></div><div class="empty-title">ورودی‌ای یافت نشد</div><div class="empty-desc">فیلتر را تغییر دهید یا ورود جدیدی ثبت کنید.</div></div></td></tr>';
+    CRM.renderIcons($('#inBody'));
+    $('#inFoot').textContent = 'نمایش ' + fa(rows.length) + ' رسید — جمع اقلام: ' + num(rows.reduce(function (s, r) { return s + r.qty; }, 0));
+    kpis();
+  }
+  function kpis() {
+    var today = CRM.jalali.format(CRM.jalali.toJalali(new Date()));
+    var month = today.slice(0, 7);
+    var inMonth = D.whIn.filter(function (r) { return r.date.slice(0, 7) === month; });
+    $('#kToday').textContent = num(D.whIn.filter(function (r) { return r.date === today; }).reduce(function (s, r) { return s + r.qty; }, 0));
+    $('#kCount').textContent = num(inMonth.length);
+    $('#kQty').textContent = num(inMonth.reduce(function (s, r) { return s + r.qty; }, 0));
+    $('#kLast').textContent = D.whIn[0] ? D.whIn[0].date : '—';
+  }
+  $('#inBody').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-del]'); if (!b) return;
+    var id = b.getAttribute('data-del');
+    CRM.modal.confirm({ title: 'حذف رسید ورود', msg: 'این ردیف از ورودی‌های انبار حذف شود؟ موجودی انبار به همان اندازه کم می‌شود.', danger: true, okText: 'بله، حذف کن', icon: 'trash' })
+      .then(function (ok) {
+        if (!ok) return;
+        D.whIn = D.whIn.filter(function (r) { return r.id !== id; });
+        render(); CRM.toast({ type: 'success', title: 'حذف شد', msg: 'رسید ورود حذف شد.' });
+      });
+  });
+
+  /* ------------------------------------------------ ثبت / انصراف / جستجو */
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var bad = [];
+    if (!F.product.value) bad.push(F.product);
+    if (n(F.qty.value) < 1) bad.push(F.qty);
+    if (F.chk.checked && !F.serial.value.trim()) bad.push(F.serial);
+    [F.product, F.qty, F.serial].forEach(function (x) { x.classList.toggle('is-invalid', bad.indexOf(x) > -1); });
+    if (bad.length) { bad[0].focus(); CRM.toast({ type: 'danger', title: 'اطلاعات ناقص است', msg: 'محصول، تعداد' + (F.chk.checked ? ' و شماره سریال' : '') + ' را وارد کنید.' }); return; }
+    var p = WH.product(F.product.value), qty = n(F.qty.value);
+    D.whIn.unshift({ id: 'IN-' + (3109 + D.whIn.length), product: p.code, serial: F.chk.checked ? F.serial.value.trim() : '', qty: qty, date: F.date.value, reader: +F.reader.value, store: 'main', by: 'مهدی کریمی' });
+    p.main += qty;
+    filter = null; $('#filterBar').classList.add('d-none');
+    render();
+    CRM.toast({ type: 'success', title: 'ورود کالا ثبت شد', msg: fa(qty) + ' ' + p.unit + ' «' + p.name + '» به انبار اصلی اضافه شد.' });
+    F.qty.value = ''; F.serial.value = ''; serialHint();
+  });
+  $('#btnCancel').addEventListener('click', function () {
+    form.reset(); dateTouched = false; F.date.value = CRM.jalali.format(CRM.jalali.toJalali(new Date()));
+    WH.fillProducts(F.product, ''); F.chk.dispatchEvent(new Event('change'));
+    form.querySelectorAll('.is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+  });
+  $('#btnSearch').addEventListener('click', function () {
+    filter = { cat: F.cat.value, product: F.product.value, date: dateTouched ? F.date.value : '', reader: F.reader.value === '0' ? '' : F.reader.value };
+    var parts = [];
+    if (filter.cat) parts.push('مجموعه: ' + WH.category(filter.cat).title);
+    if (filter.product) parts.push('محصول: ' + WH.product(filter.product).name);
+    if (filter.date) parts.push('تاریخ: ' + filter.date);
+    if (filter.reader) parts.push('کارتخوان: ' + WH.reader(filter.reader));
+    $('#filterText').textContent = 'فیلتر فعال — ' + (parts.join(' · ') || 'همه');
+    $('#filterBar').classList.remove('d-none');
+    render();
+  });
+  $('#btnClearFilter').addEventListener('click', function () { filter = null; $('#filterBar').classList.add('d-none'); render(); });
+  CRM.$$('[data-wh-export]').forEach(function (b) { b.addEventListener('click', function () { WH.exportToast(b.getAttribute('data-wh-export')); }); });
+
+  serialHint();
+  render();
+})();
+</script>
+</body>
+</html>

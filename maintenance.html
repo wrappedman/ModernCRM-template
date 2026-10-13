@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>در حال تعمیرات | مدرن‌CRM</title>
+<meta name="description" content="سامانه موقتاً در حال به‌روزرسانی است">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<style>
+  .maint-visual {
+    width: 100%; max-width: 520px; height: 210px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-md);
+    position: relative; overflow: hidden; margin: 0 auto;
+  }
+  .maint-visual .mv-bar { height: 38px; background: var(--surface-2); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 7px; padding: 0 14px; }
+  .maint-visual .mv-node { width: 10px; height: 10px; border-radius: 50%; }
+  .maint-gear { animation: spin 4s linear infinite; display: inline-block; }
+</style>
+</head>
+<body data-shell="none" data-page="maintenance" style="background:radial-gradient(circle at 20% 15%, var(--info-soft), transparent 42%), radial-gradient(circle at 82% 88%, var(--brand-soft), transparent 42%), var(--bg)" data-win-auto="off">
+
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 18px;text-align:center;position:relative">
+
+  <div class="d-flex items-center gap-3 mb-6">
+    <span class="brand-mark" data-icon="sparkles" data-icon-size="22"></span>
+    <span class="brand-name">مدرن‌CRM</span>
+  </div>
+
+  <!-- تصویرسازی سبک از پیشرفت به‌روزرسانی -->
+  <div class="maint-visual mb-6">
+    <div class="mv-bar">
+      <span class="mv-node" style="background:#e8695f"></span>
+      <span class="mv-node" style="background:#dfa43f"></span>
+      <span class="mv-node" style="background:#759deb"></span>
+      <span class="ms-auto fs-xs text-soft ltr">moderncrm.ir — deployment</span>
+    </div>
+    <div style="padding:20px">
+      <div class="d-flex items-center justify-between mb-2">
+        <span class="fw-600 fs-sm d-flex items-center gap-2">
+          <span class="maint-gear" data-icon="settings" data-icon-size="18"></span>
+          در حال به‌روزرسانی نسخه ۳٫۵٫۰
+        </span>
+        <span class="fs-sm fw-700 text-brand num" id="pct">۰٪</span>
+      </div>
+      <div class="progress lg"><i id="bar" style="width:0%"></i></div>
+      <div class="d-flex flex-wrap gap-3 mt-4 fs-xs text-muted">
+        <span class="d-flex items-center gap-2"><span data-icon="check-circle" data-icon-size="14" class="text-success"></span> پشتیبان‌گیری از داده‌ها</span>
+        <span class="d-flex items-center gap-2"><span data-icon="check-circle" data-icon-size="14" class="text-success"></span> به‌روزرسانی پایگاه داده</span>
+        <span class="d-flex items-center gap-2"><span class="spinner" style="width:14px;height:14px;border-width:2px"></span> انتقال فایل‌های جدید</span>
+      </div>
+    </div>
+  </div>
+
+  <h1 style="font-size:var(--fs-2xl)">سامانه موقتاً در حال تعمیرات است</h1>
+  <p class="page-desc mt-2" style="max-width:620px">
+    برای ارائه تجربه‌ای بهتر، در حال نصب نسخه جدید هستیم. زمان تقریبی بازگشت سرویس:
+    حداکثر ۱۵ دقیقه دیگر. ممنون از صبوری شما.
+  </p>
+
+  <div class="d-flex gap-4 mt-5 flex-wrap justify-center">
+    <div class="panel text-center" style="min-width:150px">
+      <div class="fs-xs text-muted mb-1">ساعت شروع</div>
+      <div class="fw-700 num">۰۲:۰۰</div>
+    </div>
+    <div class="panel text-center" style="min-width:150px">
+      <div class="fs-xs text-muted mb-1">زمان تقریبی پایان</div>
+      <div class="fw-700 num">۰۲:۳۰</div>
+    </div>
+    <div class="panel text-center" style="min-width:150px">
+      <div class="fs-xs text-muted mb-1">وضعیت فعلی</div>
+      <div class="fw-700 text-brand">در حال نصب</div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-3 mt-6 flex-wrap justify-center">
+    <button class="btn btn-primary btn-lg" id="retry"><span data-icon="refresh" data-icon-size="18"></span> بررسی مجدد وضعیت</button>
+    <a class="btn btn-lg" href="help.html"><span data-icon="headset" data-icon-size="18"></span> تماس با پشتیبانی</a>
+    <a class="btn btn-lg" href="dashboard.html"><span data-icon="dashboard" data-icon-size="18"></span> ورود به نسخه نمایشی</a>
+  </div>
+
+  <div class="alert alert-info mt-6" style="max-width:620px">
+    <span data-icon="clock" data-icon-size="18"></span>
+    <div>
+      <div class="alert-title">تعمیرات زمان‌بندی‌شده</div>
+      <div class="alert-desc">تعمیرات بعدی: پنج‌شنبه ۱۴۰۴/۰۸/۰۲ ساعت ۰۲:۰۰ تا ۰۲:۳۰</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var p = 0, bar = CRM.$('#bar'), pct = CRM.$('#pct');
+  setInterval(function () {
+    p = Math.min(94, p + Math.random() * 6);
+    bar.style.width = p + '%';
+    pct.textContent = CRM.fa(Math.round(p)) + '٪';
+  }, 1400);
+
+  CRM.$('#retry').addEventListener('click', function () {
+    CRM.toast({ type: 'info', title: 'بررسی وضعیت…', msg: 'سرویس هنوز در حال به‌روزرسانی است؛ لطفاً چند دقیقه دیگر تلاش کنید.' });
+  });
+})();
+</script>
+</body>
+</html>

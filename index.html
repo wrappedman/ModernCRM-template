@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدرن‌CRM — قالب رابط کاربری سامانه مدیریت ارتباط با مشتری</title>
+<meta name="description" content="قالب HTML/CSS/JS سامانه CRM فارسی و راست‌چین با تم روشن، فونت وزیرمتن، تولتیپ سراسری و پنجره‌های شناور شبیه ویندوز">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body data-shell="none" data-page="home">
+
+<!-- ============================== هدر ============================== -->
+<header style="position:sticky;top:0;z-index:30;background:var(--topbar-bg);backdrop-filter:var(--blur);border-bottom:1px solid var(--border)">
+  <div style="max-width:1180px;margin:0 auto;padding:0 20px;height:66px;display:flex;align-items:center;gap:12px">
+    <span class="brand-mark" data-icon="sparkles" data-icon-size="21"></span>
+    <div>
+      <div class="brand-name">مدرن‌CRM</div>
+      <div class="fs-2xs text-soft">قالب رابط کاربری CRM — نسخه ۱٫۰</div>
+    </div>
+    <nav class="d-flex gap-4 ms-auto fs-md d-none" style="display:none" id="navLinks">
+      <a href="#pages">صفحات</a>
+      <a href="#features">ویژگی‌ها</a>
+      <a href="#start">شروع سریع</a>
+    </nav>
+    <div class="d-flex gap-2 ms-auto">
+      <a class="btn btn-sm" href="design-system.html"><span data-icon="palette" data-icon-size="15"></span> راهنمای طراحی</a>
+      <a class="btn btn-primary btn-sm" href="login.html"><span data-icon="logout" data-icon-size="15"></span> ورود به برنامه</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== هیرو ============================== -->
+<section style="position:relative;overflow:hidden;background:linear-gradient(150deg,#f4f7fd 0%,#e8eefb 45%,#dde7fb 100%);color:var(--text-strong);padding:64px 20px 74px">
+  <div style="position:absolute;inset-inline-end:-140px;top:-160px;width:440px;height:440px;border-radius:50%;background:rgba(85,131,224,.10)"></div>
+  <div style="position:absolute;inset-inline-start:-120px;bottom:-180px;width:400px;height:400px;border-radius:50%;background:rgba(232,105,95,.08)"></div>
+
+  <div style="position:relative;max-width:1180px;margin:0 auto;display:flex;gap:40px;align-items:center;flex-wrap:wrap">
+    <div style="flex:1 1 460px;min-width:300px">
+      <span class="badge badge-lg" style="background:var(--surface);color:var(--brand-ink);border:1px solid var(--border)"><span data-icon="sparkles" data-icon-size="14"></span> فارسی · راست‌چین · بدون وابستگی خارجی</span>
+      <h1 style="color:var(--text-strong);font-size:clamp(26px,4vw,40px);line-height:1.5;margin-top:16px">
+        قالب کامل رابط کاربری<br>سامانه مدیریت ارتباط با مشتری
+      </h1>
+      <p style="color:var(--text);font-size:15px;line-height:2.1;margin-top:14px;max-width:620px">
+        بیش از ۳۰ صفحه‌ی آماده شامل داشبورد تحلیلی، مدیریت مشتریان، قیف فروش کانبانی، فاکتور و مالیات،
+        تیکتینگ، گفتگوی آنلاین، تقویم شمسی، صفحات ورود و ثبت‌نام، خطاها و راهنمای طراحی.
+        همه فقط با <b>HTML، CSS و JavaScript</b> خالص — آماده اتصال به هر بک‌اندی.
+      </p>
+      <div class="d-flex gap-3 mt-5 flex-wrap">
+        <a class="btn btn-lg btn-primary" href="dashboard.html">
+          <span data-icon="dashboard" data-icon-size="18"></span> مشاهده داشبورد
+        </a>
+        <a class="btn btn-lg" href="desktop.html">
+          <span data-icon="window" data-icon-size="18"></span> میزکار پنجره‌ای
+        </a>
+        <a class="btn btn-lg" href="login.html">
+          <span data-icon="lock" data-icon-size="18"></span> صفحه ورود
+        </a>
+      </div>
+      <div class="d-flex gap-5 mt-6 flex-wrap">
+        <div><div style="font-size:24px;font-weight:700" data-page-count>۳۶</div><div style="font-size:12px">صفحه آماده</div></div>
+        <div><div style="font-size:24px;font-weight:700" data-icon-count>۱۷۱</div><div style="font-size:12px">آیکون SVG</div></div>
+        <div><div style="font-size:24px;font-weight:700">۱</div><div style="font-size:12px">حالت روشن</div></div>
+        <div><div style="font-size:24px;font-weight:700">۰</div><div style="font-size:12px">کتابخانه خارجی</div></div>
+      </div>
+    </div>
+
+    <!-- پیش‌نمایش شبیه‌سازی‌شده -->
+    <div style="flex:1 1 420px;min-width:300px">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px;box-shadow:0 24px 60px -32px rgba(31,48,86,.45)">
+        <div class="d-flex items-center gap-2 mb-3" style="padding:0 4px">
+          <span style="width:10px;height:10px;border-radius:50%;background:#e8695f"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#dfa43f"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#759deb"></span>
+          <span class="ms-auto fs-2xs ltr text-muted">moderncrm — dashboard.html</span>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <div style="display:flex;min-height:280px">
+            <div style="width:150px;background:var(--sidebar-bg);border-inline-end:1px solid var(--border);padding:12px">
+              <div class="d-flex items-center gap-2 mb-4">
+                <span class="brand-mark" style="width:26px;height:26px" data-icon="sparkles" data-icon-size="14"></span>
+                <span style="font-size:11.5px;font-weight:700">مدرن‌CRM</span>
+              </div>
+              <div class="d-flex flex-col gap-2">
+                <span class="nav-item is-active" style="padding:6px 8px;font-size:11px"><span data-icon="dashboard" data-icon-size="14"></span> داشبورد</span>
+                <span class="nav-item" style="padding:6px 8px;font-size:11px"><span data-icon="users" data-icon-size="14"></span> مشتریان</span>
+                <span class="nav-item" style="padding:6px 8px;font-size:11px"><span data-icon="pipeline" data-icon-size="14"></span> قیف فروش</span>
+                <span class="nav-item" style="padding:6px 8px;font-size:11px"><span data-icon="invoice" data-icon-size="14"></span> فاکتورها</span>
+                <span class="nav-item" style="padding:6px 8px;font-size:11px"><span data-icon="tickets" data-icon-size="14"></span> تیکت‌ها</span>
+              </div>
+            </div>
+            <div style="flex:1;padding:14px;background:var(--bg)">
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+                <div class="card" style="padding:10px"><div class="fs-2xs text-muted">مشتریان فعال</div><div style="font-size:15px;font-weight:700">۱٫۲۴۸</div></div>
+                <div class="card" style="padding:10px"><div class="fs-2xs text-muted">درآمد ماه</div><div style="font-size:15px;font-weight:700">۴۸۶ م</div></div>
+                <div class="card" style="padding:10px"><div class="fs-2xs text-muted">نرخ تبدیل</div><div style="font-size:15px;font-weight:700">۳۲٪</div></div>
+              </div>
+              <div class="card" style="padding:12px">
+                <div class="fs-2xs text-muted mb-2">روند فروش ۹ ماه</div>
+                <div class="chart" style="height:110px" data-chart="line" data-values="310,342,298,415,388,452,441,506,486" data-labels="ف,ا,خ,ت,م,ش,م,آ,ذ"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+                <div class="card" style="padding:10px"><div class="fs-2xs text-muted mb-1">منابع جذب</div><div class="chart" style="height:60px" data-chart="bar" data-values="42,26,18,14"></div></div>
+                <div class="card" style="padding:10px;display:grid;place-items:center">
+                  <div class="donut-svg" style="width:74px;height:74px" data-chart="radial" data-values="86" data-label=""></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== ویژگی‌ها ============================== -->
+<section id="features" style="max-width:1180px;margin:0 auto;padding:56px 20px 10px">
+  <div class="text-center mb-5">
+    <span class="badge badge-primary badge-lg"><span data-icon="zap" data-icon-size="14"></span> ویژگی‌های کلیدی</span>
+    <h2 style="margin-top:14px">هر چیزی که یک پنل CRM مدرن نیاز دارد</h2>
+    <p class="page-desc">طراحی‌شده با دقت روی جزئیات، قابل شخصی‌سازی و آماده توسعه</p>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-hover"><div class="card-body">
+      <span class="stat-icon"><span data-icon="window" data-icon-size="22"></span></span>
+      <h3 style="font-size:var(--fs-lg);margin-top:12px">پنجره‌های شناور</h3>
+      <p class="fs-md text-muted" style="line-height:2">هر کارت را می‌توان به پنجره‌ای مستقل تبدیل کرد: درگ، تغییر اندازه از ۸ جهت، مینیمایز، ماکسیمایز، چسبیدن به لبه‌ها و چیدمان کاشی‌ای — همراه با نوار وظیفه و منوی شروع.</p>
+    </div></div>
+
+    <div class="card card-hover"><div class="card-body">
+      <span class="stat-icon sky"><span data-icon="palette" data-icon-size="22"></span></span>
+      <h3 style="font-size:var(--fs-lg);margin-top:12px">تولتیپ روی همه‌چیز</h3>
+      <p class="fs-md text-muted" style="line-height:2">همه‌ی منوها، دکمه‌ها و آیکون‌ها تولتیپ فارسی دارند؛ در یک لایه‌ی شناور روی صفحه که هرگز زیر پنل‌ها نمی‌رود و بریده نمی‌شود.</p>
+    </div></div>
+
+    <div class="card card-hover"><div class="card-body">
+      <span class="stat-icon violet"><span data-icon="chart-line" data-icon-size="22"></span></span>
+      <h3 style="font-size:var(--fs-lg);margin-top:12px">نمودارهای سبک SVG</h3>
+      <p class="fs-md text-muted" style="line-height:2">نمودار خطی، ستونی، حلقه‌ای، شعاعی و Sparkline بدون هیچ کتابخانه‌ای ساخته می‌شوند؛ فقط با یک ویژگی <b class="ltr">data-chart</b> روی عنصر.</p>
+    </div></div>
+
+    <div class="card card-hover"><div class="card-body">
+      <span class="stat-icon amber"><span data-icon="type" data-icon-size="22"></span></span>
+      <h3 style="font-size:var(--fs-lg);margin-top:12px">فارسی و راست‌چین</h3>
+      <p class="fs-md text-muted" style="line-height:2">فونت وزیرمتن به‌صورت متغیر (Variable) در قالب قرار دارد، تقویم شمسی با تاریخ‌های جلالی، اعداد فارسی و چینش کاملاً RTL.</p>
+    </div></div>
+
+    <div class="card card-hover"><div class="card-body">
+      <span class="stat-icon rose"><span data-icon="smartphone" data-icon-size="22"></span></span>
+      <h3 style="font-size:var(--fs-lg);margin-top:12px">ریسپانسیو کامل</h3>
+      <p class="fs-md text-muted" style="line-height:2">از موبایل ۳۶۰ پیکسلی تا مانیتورهای بزرگ؛ سایدبار کشویی، جدول‌های اسکرول‌شو و شبکه‌های تطبیقی در همه صفحات.</p>
+    </div></div>
+
+    <div class="card card-hover"><div class="card-body">
+      <span class="stat-icon"><span data-icon="code" data-icon-size="22"></span></span>
+      <h3 style="font-size:var(--fs-lg);margin-top:12px">بدون وابستگی</h3>
+      <p class="fs-md text-muted" style="line-height:2">هیچ CDN، فونت خارجی یا فریم‌ورکی لازم نیست. فایل‌ها را روی هر هاستی (حتی Apache یا Nginx ساده) قرار دهید و کار می‌کند.</p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================== فهرست صفحات ============================== -->
+<section id="pages" style="max-width:1180px;margin:0 auto;padding:56px 20px">
+  <div class="text-center mb-5">
+    <span class="badge badge-primary badge-lg"><span data-icon="files" data-icon-size="14"></span> فهرست کامل صفحات</span>
+    <h2 style="margin-top:14px"><span data-page-count>۳۶</span> صفحه آماده استفاده</h2>
+    <p class="page-desc">روی هر صفحه کلیک کنید تا پیش‌نمایش آن را ببینید</p>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-head tight"><div class="card-title" data-icon="layout-grid" data-icon-size="17"> میز کار</div></div>
+      <div class="card-body tight d-flex flex-col gap-1">
+        <a class="dropdown-item" href="dashboard.html"><span data-icon="dashboard" data-icon-size="16"></span> داشبورد مدیریتی</a>
+        <a class="dropdown-item" href="inbox.html"><span data-icon="inbox" data-icon-size="16"></span> پیغام‌های داخلی <span class="badge badge-primary ms-auto">جدید</span></a>
+        <a class="dropdown-item" href="desktop.html"><span data-icon="window" data-icon-size="16"></span> میزکار پنجره‌ای <span class="badge badge-primary ms-auto">ویژه</span></a>
+        <a class="dropdown-item" href="activity.html"><span data-icon="activity" data-icon-size="16"></span> جریان فعالیت‌ها</a>
+        <a class="dropdown-item" href="calendar.html"><span data-icon="calendar" data-icon-size="16"></span> تقویم شمسی</a>
+        <a class="dropdown-item" href="notifications.html"><span data-icon="bell" data-icon-size="16"></span> مرکز اعلان‌ها</a>
+        <a class="dropdown-item" href="search.html"><span data-icon="search" data-icon-size="16"></span> نتایج جستجوی سراسری</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head tight"><div class="card-title" data-icon="customers" data-icon-size="17"> مشتریان</div></div>
+      <div class="card-body tight d-flex flex-col gap-1">
+        <a class="dropdown-item" href="customers.html"><span data-icon="users" data-icon-size="16"></span> فهرست مشتریان</a>
+        <a class="dropdown-item" href="customer-new.html"><span data-icon="user-plus" data-icon-size="16"></span> ثبت مشتری (۴ گام)</a>
+        <a class="dropdown-item" href="customer-profile.html"><span data-icon="user-round" data-icon-size="16"></span> پرونده ۳۶۰ درجه مشتری</a>
+        <a class="dropdown-item" href="customer-details.html"><span data-icon="id-card" data-icon-size="16"></span> مشخصات مشتری و ابزارها</a>
+        <a class="dropdown-item" href="customer-search.html"><span data-icon="list-filter" data-icon-size="16"></span> اطلاعات مشتری (شرکت / افراد)</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head tight"><div class="card-title" data-icon="deals" data-icon-size="17"> فروش</div></div>
+      <div class="card-body tight d-flex flex-col gap-1">
+        <a class="dropdown-item" href="sales-followup.html"><span data-icon="phone" data-icon-size="16"></span> پیگیری فروش</a>
+        <a class="dropdown-item" href="pipeline.html"><span data-icon="pipeline" data-icon-size="16"></span> قیف فروش کانبانی</a>
+        <a class="dropdown-item" href="deals.html"><span data-icon="deals" data-icon-size="16"></span> فهرست معاملات</a>
+        <a class="dropdown-item" href="invoice-new.html"><span data-icon="plus" data-icon-size="16"></span> صدور فاکتور / پیش‌فاکتور</a>
+        <a class="dropdown-item" href="invoices.html"><span data-icon="invoice" data-icon-size="16"></span> مشاهده فاکتورها</a>
+        <a class="dropdown-item" href="invoice-settlement.html"><span data-icon="wallet" data-icon-size="16"></span> تسویه فاکتور</a>
+        <a class="dropdown-item" href="invoices-reserved.html"><span data-icon="bookmark" data-icon-size="16"></span> فاکتورهای رزرو شده</a>
+        <a class="dropdown-item" href="print-invoice.html"><span data-icon="printer" data-icon-size="16"></span> چاپ فاکتور و پیش‌فاکتور</a>
+        <a class="dropdown-item" href="letters.html"><span data-icon="mail" data-icon-size="16"></span> نامه و قرارداد</a>
+        <a class="dropdown-item" href="sms.html"><span data-icon="smartphone" data-icon-size="16"></span> پیامک گروهی و فردی</a>
+        <a class="dropdown-item" href="sales-performance.html"><span data-icon="gauge" data-icon-size="16"></span> گزارش عملکرد فروش</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head tight"><div class="card-title" data-icon="warehouse" data-icon-size="17"> انبار</div></div>
+      <div class="card-body tight d-flex flex-col gap-1">
+        <a class="dropdown-item" href="warehouse.html"><span data-icon="warehouse" data-icon-size="16"></span> نمای کلی انبار <span class="badge badge-primary ms-auto">جدید</span></a>
+        <a class="dropdown-item" href="warehouse-products.html"><span data-icon="package" data-icon-size="16"></span> تعریف محصولات</a>
+        <a class="dropdown-item" href="products.html"><span data-icon="products" data-icon-size="16"></span> کاتالوگ کالا و خدمات</a>
+        <a class="dropdown-item" href="warehouse-in.html"><span data-icon="package-plus" data-icon-size="16"></span> ورود محصول به انبار</a>
+        <a class="dropdown-item" href="warehouse-out.html"><span data-icon="truck" data-icon-size="16"></span> خروج محصول (اصلی)</a>
+        <a class="dropdown-item" href="warehouse-out.html?store=sub"><span data-icon="package-minus" data-icon-size="16"></span> خروج محصول (فرعی)</a>
+        <a class="dropdown-item" href="warehouse-stock.html"><span data-icon="chart-column" data-icon-size="16"></span> گزارش موجودی</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head tight"><div class="card-title" data-icon="headset" data-icon-size="17"> پشتیبانی</div></div>
+      <div class="card-body tight d-flex flex-col gap-1">
+        <a class="dropdown-item" href="support.html"><span data-icon="layout-grid" data-icon-size="16"></span> نمای کلی پشتیبانی <span class="badge badge-primary ms-auto">جدید</span></a>
+        <a class="dropdown-item" href="support-workplan.html"><span data-icon="clipboard" data-icon-size="16"></span> برنامه کاری</a>
+        <a class="dropdown-item" href="support-planning.html"><span data-icon="calendar-range" data-icon-size="16"></span> برنامه‌ریزی و گردش فرم</a>
+        <a class="dropdown-item" href="support-formdata.html"><span data-icon="notebook" data-icon-size="16"></span> ثبت اطلاعات فرم</a>
+        <a class="dropdown-item" href="support-desk.html"><span data-icon="headset" data-icon-size="16"></span> پشتیبانی مشتریان و پرونده مشتری</a>
+        <a class="dropdown-item" href="support-userperf.html"><span data-icon="user-check" data-icon-size="16"></span> ثبت عملکرد کاربر</a>
+        <a class="dropdown-item" href="tickets.html"><span data-icon="tickets" data-icon-size="16"></span> فهرست تیکت‌ها</a>
+        <a class="dropdown-item" href="ticket-new.html"><span data-icon="plus" data-icon-size="16"></span> ثبت تیکت جدید</a>
+        <a class="dropdown-item" href="journey.html"><span data-icon="route" data-icon-size="16"></span> سفر مشتری <span class="badge badge-primary ms-auto">جدید</span></a>
+        <a class="dropdown-item" href="messages.html"><span data-icon="message" data-icon-size="16"></span> گفتگوی آنلاین</a>
+        <a class="dropdown-item" href="kb.html"><span data-icon="book" data-icon-size="16"></span> پایگاه دانش</a>
+        <a class="dropdown-item" href="help.html"><span data-icon="help" data-icon-size="16"></span> راهنما و پشتیبانی</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head tight"><div class="card-title" data-icon="list-tree" data-icon-size="17"> تعاریف</div></div>
+      <div class="card-body tight d-flex flex-col gap-1">
+        <a class="dropdown-item" href="defs.html"><span data-icon="layout-grid" data-icon-size="16"></span> نمای کلی تعاریف <span class="badge badge-primary ms-auto">جدید</span></a>
+        <a class="dropdown-item" href="defs-users.html"><span data-icon="users" data-icon-size="16"></span> تعریف کاربران و دسترسی</a>
+        <a class="dropdown-item" href="users.html"><span data-icon="user-cog" data-icon-size="16"></span> نقش‌ها و امنیت ورود</a>
+        <a class="dropdown-item" href="defs-fiscal.html"><span data-icon="calendar-range" data-icon-size="16"></span> تعریف دوره مالی</a>
+        <a class="dropdown-item" href="defs-basic.html"><span data-icon="list-tree" data-icon-size="16"></span> تعاریف اولیه</a>
+        <a class="dropdown-item" href="defs-settings.html"><span data-icon="sliders" data-icon-size="16"></span> تنظیمات فاکتور</a>
+        <a class="dropdown-item" href="settings.html"><span data-icon="settings" data-icon-size="16"></span> تنظیمات سیستم</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head tight"><div class="card-title" data-icon="wallet" data-icon-size="17"> حسابداری</div></div>
+      <div class="card-body tight d-flex flex-col gap-1">
+        <a class="dropdown-item" href="accounting.html"><span data-icon="wallet" data-icon-size="16"></span> ثبت سند و جستجوی اسناد <span class="badge badge-primary ms-auto">جدید</span></a>
+        <a class="dropdown-item" href="report.html?r=payments"><span data-icon="banknote" data-icon-size="16"></span> گزارش مالی پرداختی‌ها</a>
+        <a class="dropdown-item" href="report.html?r=expenses"><span data-icon="shield-alert" data-icon-size="16"></span> گزارش هزینه‌ها و خسارت</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head tight"><div class="card-title" data-icon="reports" data-icon-size="17"> گزارشات</div></div>
+      <div class="card-body tight d-flex flex-col gap-1">
+        <a class="dropdown-item" href="reports-hub.html"><span data-icon="layout-grid" data-icon-size="16"></span> همه‌ی گزارش‌ها <span class="badge badge-primary ms-auto">جدید</span></a>
+        <a class="dropdown-item" href="report.html?r=finance"><span data-icon="chart-column" data-icon-size="16"></span> گزارش مالی و آماری</a>
+        <a class="dropdown-item" href="report.html?r=sms"><span data-icon="smartphone" data-icon-size="16"></span> گزارش پیامک</a>
+        <a class="dropdown-item" href="report.html?r=agents"><span data-icon="id-card" data-icon-size="16"></span> لیست نماینده‌ها</a>
+        <a class="dropdown-item" href="report.html?r=companies"><span data-icon="building" data-icon-size="16"></span> مشخصات و آمار شرکت‌ها</a>
+        <a class="dropdown-item" href="report.html?r=owner-stats"><span data-icon="award" data-icon-size="16"></span> آمار مسئول فروش</a>
+        <a class="dropdown-item" href="report.html?r=devices"><span data-icon="fingerprint" data-icon-size="16"></span> ریز وضعیت دستگاه‌ها</a>
+        <a class="dropdown-item" href="reports.html"><span data-icon="chart-line" data-icon-size="16"></span> داشبورد تحلیلی</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head tight"><div class="card-title" data-icon="lock" data-icon-size="17"> احراز هویت</div></div>
+      <div class="card-body tight d-flex flex-col gap-1">
+        <a class="dropdown-item" href="login.html"><span data-icon="logout" data-icon-size="16"></span> ورود به حساب</a>
+        <a class="dropdown-item" href="register.html"><span data-icon="building" data-icon-size="16"></span> ثبت‌نام سازمانی</a>
+        <a class="dropdown-item" href="forgot-password.html"><span data-icon="key" data-icon-size="16"></span> فراموشی رمز عبور</a>
+        <a class="dropdown-item" href="reset-password.html"><span data-icon="key-round" data-icon-size="16"></span> تعیین رمز جدید</a>
+        <a class="dropdown-item" href="otp.html"><span data-icon="fingerprint" data-icon-size="16"></span> کد یکبار مصرف (OTP)</a>
+        <a class="dropdown-item" href="change-password.html"><span data-icon="shield" data-icon-size="16"></span> تغییر رمز عبور</a>
+        <a class="dropdown-item" href="lock.html"><span data-icon="lock" data-icon-size="16"></span> صفحه قفل</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head tight"><div class="card-title" data-icon="settings" data-icon-size="17"> حساب کاربری و خطاها</div></div>
+      <div class="card-body tight d-flex flex-col gap-1">
+        <a class="dropdown-item" href="profile.html"><span data-icon="user-round" data-icon-size="16"></span> پروفایل من</a>
+        <a class="dropdown-item" href="design-system.html"><span data-icon="palette" data-icon-size="16"></span> راهنمای طراحی</a>
+        <a class="dropdown-item" href="403.html"><span data-icon="shield-alert" data-icon-size="16"></span> خطای ۴۰۳ — عدم دسترسی</a>
+        <a class="dropdown-item" href="404.html"><span data-icon="search" data-icon-size="16"></span> خطای ۴۰۴ — یافت نشد</a>
+        <a class="dropdown-item" href="500.html"><span data-icon="alert" data-icon-size="16"></span> خطای ۵۰۰ — خطای سرور</a>
+        <a class="dropdown-item" href="maintenance.html"><span data-icon="timer" data-icon-size="16"></span> حالت تعمیرات</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== شروع سریع ============================== -->
+<section id="start" style="background:var(--surface-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 20px">
+  <div style="max-width:1180px;margin:0 auto">
+    <div class="text-center mb-5">
+      <span class="badge badge-primary badge-lg"><span data-icon="zap" data-icon-size="14"></span> شروع سریع</span>
+      <h2 style="margin-top:14px">در سه گام قالب را شخصی‌سازی کنید</h2>
+    </div>
+
+    <div class="grid-3">
+      <div class="card"><div class="card-body">
+        <span class="badge badge-primary badge-lg">گام ۱</span>
+        <h3 style="font-size:var(--fs-lg);margin-top:12px">رنگ و ظاهر</h3>
+        <p class="fs-md text-muted mb-3" style="line-height:2">فایل <b class="ltr">assets/css/tokens.css</b> را باز کنید و متغیرهای رنگ برند را تغییر دهید.</p>
+        <div class="code-box">--brand-600: #3f6bc9;
+--radius: 13px;</div>
+      </div></div>
+
+      <div class="card"><div class="card-body">
+        <span class="badge badge-primary badge-lg">گام ۲</span>
+        <h3 style="font-size:var(--fs-lg);margin-top:12px">منو و داده‌ها</h3>
+        <p class="fs-md text-muted mb-3" style="line-height:2">منوی سایدبار از آرایه <b class="ltr">CRM_DATA.nav</b> در فایل <b class="ltr">assets/js/data.js</b> ساخته می‌شود؛ کافی است آیتم‌ها را ویرایش کنید.</p>
+        <div class="code-box">CRM_DATA.nav → گروه‌ها و آیتم‌ها</div>
+      </div></div>
+
+      <div class="card"><div class="card-body">
+        <span class="badge badge-primary badge-lg">گام ۳</span>
+        <h3 style="font-size:var(--fs-lg);margin-top:12px">اتصال به بک‌اند</h3>
+        <p class="fs-md text-muted mb-3" style="line-height:2">داده‌های نمایشی در <b class="ltr">data.js</b> قرار دارند. آن‌ها را با فراخوانی API خود جایگزین کنید — ساختار HTML تغییری نمی‌کند.</p>
+        <div class="code-box">fetch('/api/customers')…</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== فوتر ============================== -->
+<footer style="padding:34px 20px;text-align:center">
+  <div class="d-flex items-center gap-3 justify-center mb-3">
+    <span class="brand-mark" style="width:32px;height:32px" data-icon="sparkles" data-icon-size="17"></span>
+    <span class="fw-700">مدرن‌CRM</span>
+  </div>
+  <p class="fs-sm text-muted mb-3">قالب رابط کاربری سامانه مدیریت ارتباط با مشتری — HTML، CSS و JavaScript خالص</p>
+  <div class="d-flex gap-4 justify-center flex-wrap fs-sm">
+    <a href="dashboard.html">داشبورد</a>
+    <a href="desktop.html">میزکار پنجره‌ای</a>
+    <a href="design-system.html">راهنمای طراحی</a>
+    <a href="help.html">راهنما</a>
+    <a href="README.md">README</a>
+    <a href="login.html">ورود</a>
+  </div>
+  <div class="fs-xs text-soft mt-4">فونت وزیرمتن (مجوز OFL) · آیکون‌ها بر پایه Lucide (مجوز ISC)</div>
+</footer>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+  /* شمارش صفحه‌های فهرست‌شده تا عدد هیرو هیچ‌وقت از فهرست عقب نماند */
+  var pageLinks = document.querySelectorAll('#pages a[href$=".html"]');
+  if (pageLinks.length) {
+    var uniq = {};
+    pageLinks.forEach(function (a) { uniq[a.getAttribute('href')] = 1; });
+    CRM.$$('[data-page-count]').forEach(function (el) { el.textContent = CRM.num(Object.keys(uniq).length); });
+  }
+  /* عدد آیکون‌ها از خود کتابخانه خوانده می‌شود */
+  if (window.Icons && Icons.keys) {
+    CRM.$$('[data-icon-count]').forEach(function (el) { el.textContent = CRM.num(Icons.keys().length); });
+  }
+</script>
+</body>
+</html>

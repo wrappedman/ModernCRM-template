@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مرکز اعلان‌ها | مدرن‌CRM</title>
+<meta name="description" content="مرکز اعلان‌ها و پیام‌های سیستمی">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="notifications">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">اعلان‌ها</span>
+            </div>
+            <h1 class="page-title">مرکز اعلان‌ها</h1>
+            <p class="page-desc">۳ اعلان خوانده‌نشده از ۸ اعلان اخیر</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" id="markAll"><span data-icon="check-check" data-icon-size="16"></span> علامت‌گذاری همه به‌عنوان خوانده‌شده</button>
+            <a class="btn btn-primary" href="settings.html#notifications"><span data-icon="settings" data-icon-size="16"></span> تنظیمات اعلان‌ها</a>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <div class="card" data-win="nt-list" data-win-title="اعلان‌ها" data-win-icon="bell" data-win-size="940x680" data-tabs-root>
+            <div class="tabs" data-tabs style="padding:0 8px">
+              <button class="tab is-active" data-tab="all">همه <span class="badge gray">۸</span></button>
+              <button class="tab" data-tab="unread">خوانده‌نشده <span class="badge badge-primary">۳</span></button>
+              <button class="tab" data-tab="mentions">منشن‌ها</button>
+              <button class="tab" data-tab="system">سیستمی</button>
+            </div>
+
+            <div class="card-body flush" data-tab-panel="all">
+              <div class="list" id="notifList"></div>
+            </div>
+            <div class="card-body d-none" data-tab-panel="unread">
+              <div class="list" id="notifUnread"></div>
+            </div>
+            <div class="card-body d-none" data-tab-panel="mentions">
+              <div class="empty">
+                <div class="empty-ic" data-icon="megaphone" data-icon-size="30"></div>
+                <div class="empty-title">منشنی وجود ندارد</div>
+                <div class="empty-desc">هر زمان همکاری شما را در یادداشت یا گفتگویی منشن کند، اینجا نمایش داده می‌شود.</div>
+              </div>
+            </div>
+            <div class="card-body d-none" data-tab-panel="system">
+              <div class="alert alert-info mb-3"><span data-icon="database" data-icon-size="18"></span>
+                <div><div class="alert-title">پشتیبان‌گیری خودکار انجام شد</div><div class="alert-desc">نسخه پشتیبان شبانه با حجم ۴۸ مگابایت ساخته شد. — امروز ۰۲:۰۰</div></div></div>
+              <div class="alert alert-warning mb-3"><span data-icon="alert" data-icon-size="18"></span>
+                <div><div class="alert-title">اعتبار اشتراک پیامک رو به اتمام است</div><div class="alert-desc">تنها ۱۲٪ از اعتبار پنل پیامک باقی مانده است. — دیروز</div></div></div>
+              <div class="alert alert-success"><span data-icon="shield-check" data-icon-size="18"></span>
+                <div><div class="alert-title">به‌روزرسانی امنیتی نصب شد</div><div class="alert-desc">نسخه ۳٫۴٫۱ با رفع آسیب‌پذیری‌های جزئی نصب شد. — ۳ روز پیش</div></div></div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-col gap-4">
+            <div class="card" data-win="nt-pref" data-win-title="خلاصه اعلان‌ها" data-win-icon="bell" data-win-size="760x620">
+              <div class="card-head tight"><div class="card-title" data-icon="bell" data-icon-size="17"> خلاصه</div></div>
+              <div class="card-body tight">
+                <div class="stat-inline"><span class="text-muted">امروز</span><span class="fw-600">۴ اعلان</span></div>
+                <div class="stat-inline"><span class="text-muted">این هفته</span><span class="fw-600">۱۸ اعلان</span></div>
+                <div class="stat-inline"><span class="text-muted">خوانده‌نشده</span><span class="fw-600 text-brand">۳ مورد</span></div>
+                <div class="stat-inline"><span class="text-muted">خروجی ایمیل</span><span class="badge badge-success">فعال</span></div>
+              </div>
+            </div>
+
+            <div class="card" data-win="nt-quick" data-win-title="دسترسی سریع" data-win-icon="zap" data-win-size="760x560">
+              <div class="card-head tight"><div class="card-title" data-icon="zap" data-icon-size="17"> دسترسی سریع</div></div>
+              <div class="card-body tight">
+                <a class="dropdown-item" href="tickets.html"><span data-icon="tickets" data-icon-size="17"></span> تیکت‌های باز <span class="badge badge-danger ms-auto">۵</span></a>
+                <a class="dropdown-item" href="invoices.html"><span data-icon="invoice" data-icon-size="17"></span> فاکتورهای معوق <span class="badge badge-warning ms-auto">۱</span></a>
+                <a class="dropdown-item" href="messages.html"><span data-icon="message" data-icon-size="17"></span> گفتگوهای نخوانده <span class="badge badge-primary ms-auto">۳</span></a>
+                <a class="dropdown-item" href="deals.html"><span data-icon="deals" data-icon-size="17"></span> معاملات سررسیدشده <span class="badge gray ms-auto">۲</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+
+  function item(n) {
+    return '<div class="list-item' + (n.unread ? ' is-unread' : '') + '">' +
+      '<span class="avatar avatar-sm avatar-sq"><span data-icon="' + n.icon + '" data-icon-size="16"></span></span>' +
+      '<span class="flex-1"><span class="li-title d-block' + (n.unread ? '' : ' fw-400 text-muted') + '">' + CRM.esc(n.title) + '</span>' +
+      '<span class="li-sub">' + CRM.esc(n.time) + '</span></span>' +
+      (n.unread ? '<span class="dot-status danger" style="width:8px;height:8px"></span>' : '') +
+      '<button class="tb-icon" style="width:30px;height:30px" data-tip="حذف اعلان" data-icon="trash" data-icon-size="15"></button>' +
+    '</div>';
+  }
+
+  CRM.$('#notifList').innerHTML = CRM.data.notifications.map(item).join('');
+  CRM.$('#notifUnread').innerHTML = CRM.data.notifications.filter(function (n) { return n.unread; }).map(item).join('');
+
+  CRM.$('#markAll').addEventListener('click', function () {
+    CRM.$('#notifUnread').innerHTML = '<div class="empty"><div class="empty-ic" data-icon="check-circle" data-icon-size="30"></div>' +
+      '<div class="empty-title">همه اعلان‌ها خوانده شده‌اند</div><div class="empty-desc">اعلان جدیدی برای نمایش وجود ندارد.</div></div>';
+    CRM.renderIcons(CRM.$('#notifUnread'));
+    CRM.toast({ type: 'success', title: 'همه اعلان‌ها خوانده شد' });
+  });
+
+  /* حذف اعلان (نمایشی) */
+  CRM.$('#notifList').addEventListener('click', function (e) {
+    var b = e.target.closest('.tb-icon');
+    if (!b) return;
+    var row = b.closest('.list-item');
+    row.style.transition = 'opacity .2s';
+    row.style.opacity = '0';
+    setTimeout(function () { row.remove(); }, 200);
+  });
+})();
+</script>
+</body>
+</html>

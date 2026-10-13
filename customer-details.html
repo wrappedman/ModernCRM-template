@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مشخصات مشتری | مدرن‌CRM</title>
+<meta name="description" content="ثبت و ویرایش مشخصات شرکت مشتری، مسئول خرید، افراد مرتبط، فعالیت‌ها و پرونده مشتری">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="customer-details">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="customers.html">مشتریان</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">مشخصات مشتری</span>
+            </div>
+            <h1 class="page-title">مشخصات مشتری <span class="badge badge-primary num" id="codeBadge" style="vertical-align:middle"></span></h1>
+            <p class="page-desc">اطلاعات شرکت، مسئول خرید و ابزارهای پرونده‌ی مشتری در یک صفحه</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" data-pick-customer="#cName"><span data-icon="search" data-icon-size="16"></span> جستجوی مشتری</button>
+            <button class="btn" id="btnNew"><span data-icon="plus" data-icon-size="16"></span> جدید</button>
+            <button class="btn btn-danger-soft" id="btnDelete"><span data-icon="trash" data-icon-size="16"></span> حذف</button>
+            <button class="btn btn-primary" id="btnSave"><span data-icon="check" data-icon-size="16"></span> ثبت</button>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <!-- ======================= ستون اصلی ======================= -->
+          <div class="d-flex flex-col gap-5" style="min-width:0">
+
+            <!-- اطلاعات شرکت -->
+            <div class="card" data-win-nobtn>
+              <div class="card-head">
+                <div class="card-title" data-icon="building" data-icon-size="18"> اطلاعات شرکت</div>
+                <div class="card-actions"><span class="badge badge-gray" id="kindBadge"></span></div>
+              </div>
+              <div class="card-body">
+                <div class="grid-3">
+                  <div class="form-group"><label class="form-label">مسئول فایل</label><select class="select" id="cOwner"></select></div>
+                  <div class="form-group"><label class="form-label">مرجع</label><select class="select" id="cRef"></select></div>
+                  <div class="form-group"><label class="form-label">نوع همکاری</label><select class="select" id="cCoop"></select></div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">نام شرکت / سازمان <span class="req">*</span></label>
+                  <div class="picker"><input class="input" id="cName" placeholder="نام کامل شرکت را وارد کنید"><button type="button" class="btn" data-pick-customer="#cName" data-tip="انتخاب از فهرست مشتریان" data-icon="more-h" data-icon-size="16"></button></div>
+                </div>
+                <div class="form-group"><label class="form-label">آدرس</label><input class="input" id="cAddress"></div>
+                <div class="grid-3">
+                  <div class="form-group"><label class="form-label">تلفن ۱</label><input class="input ltr num" id="cPhone1"></div>
+                  <div class="form-group"><label class="form-label">تلفن ۲</label><input class="input ltr num" id="cPhone2"></div>
+                  <div class="form-group"><label class="form-label">فکس</label><input class="input ltr num" id="cFax"></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group"><label class="form-label">ایمیل</label><input class="input ltr" id="cEmail" type="email"></div>
+                  <div class="form-group"><label class="form-label">استان</label><select class="select" id="cProvince"></select></div>
+                  <div class="form-group"><label class="form-label">شهر</label><input class="input" id="cCity"></div>
+                </div>
+                <div class="grid-2">
+                  <div class="form-group"><label class="form-label">نحوه آشنایی</label><select class="select" id="cSource"></select></div>
+                  <div class="form-group"><label class="form-label">وضعیت حساب</label><div class="option-row" id="cFlags"></div></div>
+                </div>
+                <div class="form-group" style="margin-bottom:0"><label class="form-label">توضیحات</label><textarea class="textarea" rows="2" id="cDesc" placeholder="یادداشت داخلی درباره‌ی این مشتری…"></textarea></div>
+              </div>
+            </div>
+
+            <!-- مسئول خرید -->
+            <div class="card" data-win-nobtn data-gender-root>
+              <div class="card-head">
+                <div class="card-title" data-icon="user" data-icon-size="18"> مسئول خرید</div>
+                <div class="card-actions">
+                  <select class="select select-sm" id="pSelect" style="width:240px" data-tip="انتخاب از افراد ثبت‌شده‌ی این شرکت"></select>
+                  <button class="btn btn-sm" data-modal-open="#mdlPeople"><span data-icon="users" data-icon-size="14"></span> افراد مرتبط</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="grid-3">
+                  <div class="form-group"><label class="form-label">جنسیت</label>
+                    <div class="option-row">
+                      <label class="check"><input type="radio" name="pGender" value="m" data-gender checked><span class="box round"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">آقا</span></label>
+                      <label class="check"><input type="radio" name="pGender" value="f" data-gender><span class="box round"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">خانم</span></label>
+                    </div>
+                  </div>
+                  <div class="form-group" style="grid-column:span 2"><label class="form-label">نام و نام خانوادگی <span class="req">*</span></label>
+                    <div class="prefix-field"><span class="prefix">جناب آقای</span><input class="input" id="pName"></div>
+                  </div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group"><label class="form-label">واحد</label><input class="input" id="pUnit"></div>
+                  <div class="form-group"><label class="form-label">سمت</label><input class="input" id="pRole"></div>
+                  <div class="form-group"><label class="form-label">موبایل</label><input class="input ltr num" id="pMobile"></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group"><label class="form-label">تلفن</label><input class="input ltr num" id="pPhone"></div>
+                  <div class="form-group" style="grid-column:span 2"><label class="form-label">ایمیل</label><input class="input ltr" id="pEmail" type="email"></div>
+                </div>
+                <div class="form-section-title mt-2"><span data-icon="bell" data-icon-size="16"></span> یادآوری و دعوت</div>
+                <div class="option-row">
+                  <label class="check"><input type="checkbox" id="pDue"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">یادآوری سررسید</span></label>
+                  <div class="d-flex items-center gap-2"><span class="fs-sm text-muted">تعداد</span><input class="input input-sm num text-center" id="pDueCount" style="width:64px" data-fa-mask></div>
+                  <label class="check"><input type="checkbox" id="pInvite"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">ارسال دعوتنامه رویدادها</span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================= ستون کناری ======================= -->
+          <div class="d-flex flex-col gap-5" style="min-width:0">
+            <div class="card">
+              <div class="card-head tight"><div class="card-title" data-icon="boxes" data-icon-size="18"> ابزارهای مشتری</div></div>
+              <div class="card-body">
+                <div class="tool-grid">
+                  <button class="tool-btn" data-pick-customer="#cName"><span class="tb-ic"><span data-icon="search" data-icon-size="18"></span></span><span class="tb-lbl">جستجو</span><span class="tb-sub">یافتن و بارگذاری مشتری</span></button>
+                  <button class="tool-btn" data-modal-open="#mdlPeople"><span class="tb-ic violet"><span data-icon="users" data-icon-size="18"></span></span><span class="tb-lbl">افراد مرتبط</span><span class="tb-sub">مسئولین خرید و فنی</span><span class="tag-counter num" id="peopleCount">۰</span></button>
+                  <button class="tool-btn" data-modal-open="#mdlAfter"><span class="tb-ic success"><span data-icon="shield-check" data-icon-size="18"></span></span><span class="tb-lbl">اطلاعات بعد از خرید</span><span class="tb-sub">کدها، رفتار و نوع فاکتور</span></button>
+                  <button class="tool-btn" data-modal-open="#mdlActivity"><span class="tb-ic amber"><span data-icon="activity" data-icon-size="18"></span></span><span class="tb-lbl">فعالیت</span><span class="tb-sub">ثبت فعالیت جدید</span></button>
+                  <button class="tool-btn" data-modal-open="#mdlDocs"><span class="tb-ic coral"><span data-icon="paperclip" data-icon-size="18"></span></span><span class="tb-lbl">مدارک پیوستی</span><span class="tb-sub">قرارداد، صورتجلسه، تصاویر</span></button>
+                  <button class="tool-btn" data-modal-open="#mdlFile"><span class="tb-ic ink"><span data-icon="archive" data-icon-size="18"></span></span><span class="tb-lbl">پرونده</span><span class="tb-sub">محصولات، فاکتورها، خدمات</span></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head tight">
+                <div class="card-title" data-icon="activity" data-icon-size="18"> فعالیت‌های جاری</div>
+                <div class="card-actions"><button class="btn btn-sm btn-ghost" data-modal-open="#mdlActivity"><span data-icon="plus" data-icon-size="14"></span> جدید</button></div>
+              </div>
+              <div class="card-body flush" id="actList"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-head tight"><div class="card-title" data-icon="invoice" data-icon-size="18"> آخرین فاکتورها</div>
+                <div class="card-actions"><a class="btn btn-sm btn-ghost" href="invoice-new.html"><span data-icon="plus" data-icon-size="14"></span> صدور</a></div></div>
+              <div class="card-body flush" id="invList"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===================== افراد مرتبط ===================== -->
+<div class="overlay" id="mdlPeople" style="display:none">
+  <div class="modal modal-xl" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <span class="stat-icon" style="width:40px;height:40px;background:rgba(139,92,246,.13);color:var(--violet-500)"><span data-icon="users" data-icon-size="19"></span></span>
+      <div><div class="modal-title">افراد مرتبط</div><div class="modal-sub" data-cname></div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlPeople" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="table-wrap" style="border:1px solid var(--border)">
+        <table class="table table-compact"><thead><tr><th>کد</th><th>نام</th><th>واحد</th><th>سمت</th><th>موبایل</th><th>تلفن</th><th>ایمیل</th><th>ماهیت</th><th></th></tr></thead><tbody id="peopleBody"></tbody></table>
+      </div>
+      <div class="form-section-title mt-5"><span data-icon="user-plus" data-icon-size="16"></span> افزودن شخص جدید</div>
+      <div class="grid-4" data-gender-root>
+        <div class="form-group"><label class="form-label">جنسیت</label><div class="segmented" data-segmented><button type="button" class="seg is-active">آقا</button><button type="button" class="seg">خانم</button></div></div>
+        <div class="form-group"><label class="form-label">نام</label><input class="input" id="npName"></div>
+        <div class="form-group"><label class="form-label">سمت</label><input class="input" id="npRole"></div>
+        <div class="form-group"><label class="form-label">موبایل</label><input class="input ltr num" id="npMobile"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" id="btnAddPerson"><span data-icon="plus" data-icon-size="16"></span> افزودن</button>
+      <button class="btn ms-auto" data-modal-close="#mdlPeople">بستن</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== اطلاعات بعد از خرید ===================== -->
+<div class="overlay" id="mdlAfter" style="display:none">
+  <div class="modal modal-lg" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <span class="stat-icon success" style="width:40px;height:40px"><span data-icon="shield-check" data-icon-size="19"></span></span>
+      <div><div class="modal-title">اطلاعات بعد از خرید</div><div class="modal-sub" data-cname></div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlAfter" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-section-title"><span data-icon="id-card" data-icon-size="16"></span> کدهای مالیاتی و ثبتی</div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">کد اقتصادی</label><input class="input num ltr" id="aEconomic" data-fa-mask></div>
+        <div class="form-group"><label class="form-label">شماره ثبت</label><input class="input num ltr" id="aReg" data-fa-mask></div>
+        <div class="form-group"><label class="form-label">کد پستی</label><input class="input num ltr" id="aPostal" data-fa-mask></div>
+        <div class="form-group"><label class="form-label">نوع فاکتور پیش‌فرض</label><select class="select" id="aKind"></select>
+          <div class="form-hint">ارزش افزوده فقط برای «رسمی» و «رسمی کامل» محاسبه می‌شود.</div></div>
+      </div>
+      <div class="form-section-title mt-2"><span data-icon="flag" data-icon-size="16"></span> رفتار مشتری و محدودیت‌ها</div>
+      <div class="option-row" id="aFlags"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" data-save-modal="#mdlAfter" data-msg="اطلاعات بعد از خرید ذخیره شد."><span data-icon="check" data-icon-size="16"></span> ثبت</button>
+      <button class="btn ms-auto" data-modal-close="#mdlAfter">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== فعالیت ===================== -->
+<div class="overlay" id="mdlActivity" style="display:none">
+  <div class="modal modal-xl" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <span class="stat-icon amber" style="width:40px;height:40px"><span data-icon="activity" data-icon-size="19"></span></span>
+      <div><div class="modal-title">فعالیت‌های مشتری</div><div class="modal-sub" data-cname></div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlActivity" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-4">
+        <div class="form-group"><label class="form-label">نوع فعالیت</label><select class="select" id="acType"></select></div>
+        <div class="form-group"><label class="form-label">وضعیت</label><select class="select" id="acStatus"></select></div>
+        <div class="form-group"><label class="form-label">مسئول</label><select class="select" id="acOwner"></select></div>
+        <div class="form-group"><label class="form-label">تاریخ پیگیری بعدی</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" value="۱۴۰۵/۰۷/۲۸" data-fa-mask></div></div>
+      </div>
+      <div class="form-group"><label class="form-label">شرح فعالیت</label><textarea class="textarea" rows="2" id="acDesc" placeholder="مثلاً: تماس جهت هماهنگی دمو نسخه سازمانی"></textarea></div>
+      <div class="table-wrap" style="border:1px solid var(--border)">
+        <table class="table table-compact"><thead><tr><th>تاریخ شروع</th><th>عنوان</th><th>شرح</th><th>مسئول</th><th>وضعیت</th></tr></thead><tbody id="actBody"></tbody></table>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" id="btnAddAct"><span data-icon="plus" data-icon-size="16"></span> ثبت فعالیت</button>
+      <button class="btn ms-auto" data-modal-close="#mdlActivity">بستن</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== مدارک پیوستی ===================== -->
+<div class="overlay" id="mdlDocs" style="display:none">
+  <div class="modal modal-lg" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <span class="stat-icon" style="width:40px;height:40px;background:var(--accent-soft);color:var(--accent)"><span data-icon="paperclip" data-icon-size="19"></span></span>
+      <div><div class="modal-title">مدارک پیوستی</div><div class="modal-sub" data-cname></div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlDocs" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="dropzone mb-4" id="dz">
+        <div class="dz-icon" data-icon="upload" data-icon-size="24"></div>
+        <div class="fw-600 text-strong">فایل‌ها را اینجا رها کنید یا کلیک کنید</div>
+        <div class="fs-sm text-muted mt-1">قرارداد، صورتجلسه، تصویر کارت ملی یا مجوز — PDF، JPG، PNG، XLSX تا ۱۰ مگابایت</div>
+      </div>
+      <div class="form-group"><label class="form-label">توضیح فایل</label><input class="input" placeholder="مثلاً: قرارداد پشتیبانی سالانه ۱۴۰۵"></div>
+      <div class="d-flex flex-col gap-2" id="docList"></div>
+    </div>
+    <div class="modal-foot"><button class="btn ms-auto" data-modal-close="#mdlDocs">بستن</button></div>
+  </div>
+</div>
+
+<!-- ===================== پرونده مشتری ===================== -->
+<div class="overlay" id="mdlFile" style="display:none">
+  <div class="modal modal-2xl" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <span class="stat-icon" style="width:40px;height:40px;background:var(--ink);color:var(--on-ink)"><span data-icon="archive" data-icon-size="19"></span></span>
+      <div><div class="modal-title">پرونده مشتری</div><div class="modal-sub" data-cname></div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlFile" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div data-tabs-root>
+      <div class="tabs" data-tabs style="padding:0 18px">
+        <button class="tab is-active" data-tab="f-prod"><span data-icon="package" data-icon-size="15"></span> محصولات تحویلی</button>
+        <button class="tab" data-tab="f-inv"><span data-icon="invoice" data-icon-size="15"></span> فاکتورها</button>
+        <button class="tab" data-tab="f-forms"><span data-icon="file" data-icon-size="15"></span> فرم‌ها</button>
+        <button class="tab" data-tab="f-svc"><span data-icon="life-buoy" data-icon-size="15"></span> خدمات</button>
+        <button class="tab" data-tab="f-files"><span data-icon="paperclip" data-icon-size="15"></span> فایل‌ها</button>
+      </div>
+      <div class="modal-body" style="min-height:340px">
+        <div data-tab-panel="f-prod"><div class="table-wrap" style="border:1px solid var(--border)"><table class="table table-compact table-wide"><thead><tr><th>محصول</th><th>فاکتور</th><th>سریال</th><th>تاریخ خروج</th><th>کارت‌خوان</th><th>نوع خروج</th><th>مسئول</th><th>اعتبار گارانتی</th></tr></thead><tbody id="fProd"></tbody></table></div></div>
+        <div data-tab-panel="f-inv" class="d-none"><div class="table-wrap" style="border:1px solid var(--border)"><table class="table table-compact"><thead><tr><th>شماره</th><th>نوع</th><th>تاریخ</th><th>مسئول</th><th class="num">مبلغ</th><th>وضعیت</th><th></th></tr></thead><tbody id="fInv"></tbody></table></div></div>
+        <div data-tab-panel="f-forms" class="d-none"><div class="table-wrap" style="border:1px solid var(--border)"><table class="table table-compact"><thead><tr><th>شماره فرم</th><th>نوع</th><th>نحوه ارسال</th><th>هماهنگ‌کننده</th></tr></thead><tbody id="fForms"></tbody></table></div></div>
+        <div data-tab-panel="f-svc" class="d-none"><div class="table-wrap" style="border:1px solid var(--border)"><table class="table table-compact table-wide"><thead><tr><th>نوع خدمت</th><th>وضعیت</th><th>تاریخ پیگیری</th><th>زمان صرف‌شده</th><th>کارشناس مشتری</th><th>کارشناس ما</th><th>شرح</th><th>زمان انجام</th></tr></thead><tbody id="fSvc"></tbody></table></div></div>
+        <div data-tab-panel="f-files" class="d-none"><div class="grid-2" id="fFiles"></div></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span class="fs-xs text-muted"><span data-icon="lock" data-icon-size="13"></span> پرونده فقط‌خواندنی است.</span>
+      <button class="btn ms-auto" data-modal-close="#mdlFile">بستن</button>
+    </div>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/sales.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, S = window.SALES, D = S.data;
+  var $ = CRM.$, $$ = CRM.$$, esc = CRM.esc, fa = CRM.fa, m = S.money;
+  var FLAGS = ['خوش‌حساب', 'بدحساب', 'بداخلاق', 'بدون گارانتی', 'بدون پشتیبانی'];
+  var FLAG_TONE = { 'خوش‌حساب': 'badge-success', 'بدحساب': 'badge-danger', 'بداخلاق': 'badge-warning', 'بدون گارانتی': 'badge-gray', 'بدون پشتیبانی': 'badge-gray' };
+
+  $('#cOwner').innerHTML = S.options(D.owners);
+  $('#cRef').innerHTML = S.options(['—'].concat(D.companies.map(function (c) { return c.name; })));
+  $('#cCoop').innerHTML = S.options(D.coopTypes);
+  $('#cProvince').innerHTML = S.options(D.provinces);
+  $('#cSource').innerHTML = S.options(D.sources);
+  $('#aKind').innerHTML = S.options(D.invoiceKinds);
+  $('#acType').innerHTML = S.options(D.activityTypes);
+  $('#acStatus').innerHTML = S.options(D.activityStatus);
+  $('#acOwner').innerHTML = S.options(D.owners);
+
+  function checks(flags, cls) {
+    return FLAGS.map(function (f) {
+      return '<label class="check"><input type="checkbox" class="' + cls + '" value="' + f + '"' + (flags.indexOf(f) > -1 ? ' checked' : '') + '><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">' + f + '</span></label>';
+    }).join('');
+  }
+  function empty(msg, ic) {
+    return '<div class="empty" style="padding:22px"><div class="empty-ic" data-icon="' + (ic || 'inbox') + '" data-icon-size="26"></div><div class="empty-desc">' + msg + '</div></div>';
+  }
+
+  var cur = null;
+  function people() { return cur ? D.contacts.filter(function (p) { return p.companyCode === cur.code; }) : []; }
+
+  function fillPerson(p) {
+    p = p || {};
+    $('#pName').value = p.name || ''; $('#pUnit').value = p.unit || ''; $('#pRole').value = p.role || '';
+    $('#pMobile').value = p.mobile || ''; $('#pPhone').value = p.phone1 || ''; $('#pEmail').value = p.email || '';
+    $('#pDue').checked = !!p.due; $('#pDueCount').value = p.dueCount ? fa(p.dueCount) : ''; $('#pInvite').checked = !!p.invite;
+    var g = p.gender === 'f' ? 'f' : 'm';
+    $$('[name=pGender]').forEach(function (r) { r.checked = r.value === g; });
+    $('.prefix').textContent = g === 'f' ? 'سرکار خانم' : 'جناب آقای';
+  }
+
+  function load(c) {
+    cur = c || null;
+    c = c || { flags: [] };
+    $('#codeBadge').textContent = cur ? 'کد ' + fa(c.code) : 'مشتری جدید';
+    $('#kindBadge').textContent = cur ? 'فاکتور ' + c.kind : 'ثبت نشده';
+    $('#cOwner').value = c.owner || D.owners[0];
+    $('#cRef').value = c.ref || '—';
+    $('#cCoop').value = c.coop || D.coopTypes[0];
+    $('#cName').value = c.name || '';
+    $('#cAddress').value = c.address || '';
+    $('#cPhone1').value = c.phone1 || ''; $('#cPhone2').value = c.phone2 || ''; $('#cFax').value = c.fax || '';
+    $('#cEmail').value = c.email || '';
+    $('#cProvince').value = c.province || D.provinces[0];
+    $('#cCity').value = c.city || '';
+    $('#cSource').value = c.source || D.sources[0];
+    $('#cDesc').value = '';
+    $('#cFlags').innerHTML = FLAGS.slice(0, 3).map(function (f) { return c.flags.indexOf(f) > -1 ? '<span class="badge ' + FLAG_TONE[f] + ' badge-dot">' + f + '</span>' : ''; }).join('') || '<span class="fs-sm text-soft">بدون برچسب — از «اطلاعات بعد از خرید» تنظیم کنید</span>';
+    $('#aEconomic').value = c.economic || ''; $('#aReg').value = c.reg || ''; $('#aPostal').value = c.postal || '';
+    $('#aKind').value = c.kind || 'رسمی';
+    $('#aFlags').innerHTML = checks(c.flags, 'af');
+    $$('[data-cname]').forEach(function (el) { el.textContent = cur ? c.name + ' — کد ' + fa(c.code) : 'مشتری جدید (ثبت نشده)'; });
+
+    var ps = people();
+    $('#peopleCount').textContent = fa(ps.length);
+    $('#pSelect').innerHTML = ps.length
+      ? ps.map(function (p) { return '<option value="' + p.code + '">' + (p.gender === 'f' ? 'سرکار خانم ' : 'جناب آقای ') + esc(p.name) + '</option>'; }).join('')
+      : '<option value="">— شخصی ثبت نشده —</option>';
+    fillPerson(ps[0]);
+    renderPeople(); renderActs(); renderSide(); renderFile();
+    if (d.readyState !== 'loading') CRM.init(d.body);
+  }
+  var d = document;
+
+  function renderPeople() {
+    var ps = people();
+    $('#peopleBody').innerHTML = ps.length ? ps.map(function (p) {
+      return '<tr><td class="num text-muted">' + fa(p.code) + '</td><td class="fw-600">' + (p.gender === 'f' ? 'سرکار خانم ' : 'جناب آقای ') + esc(p.name) + '</td><td>' + esc(p.unit) + '</td><td>' + esc(p.role) + '</td>' +
+        '<td class="num ltr">' + esc(p.mobile) + '</td><td class="num ltr">' + esc(p.phone1) + '</td><td class="ltr fs-xs">' + esc(p.email) + '</td><td><span class="badge badge-gray">' + esc(p.nature) + '</span></td>' +
+        '<td><button class="btn btn-sm btn-soft" data-use-person="' + p.code + '">انتخاب</button></td></tr>';
+    }).join('') : '<tr><td colspan="9">' + empty('برای این شرکت هنوز شخصی ثبت نشده است.', 'users') + '</td></tr>';
+  }
+  function actsOf() {
+    if (!cur) return [];
+    var own = cur.owner;
+    return D.activities.filter(function (a, i) { return a.owner === own || i % 3 === cur.code % 3; }).slice(0, 4);
+  }
+  function stTone(s) { return s === 'active' ? ['badge-info', 'در حال انجام'] : s === 'done' ? ['badge-success', 'انجام شده'] : ['badge-warning', 'در انتظار']; }
+  function renderActs() {
+    var as = actsOf();
+    $('#actBody').innerHTML = as.length ? as.map(function (a) {
+      var t = stTone(a.status);
+      return '<tr><td class="num">' + esc(a.start) + '</td><td class="fw-600">' + esc(a.title) + '</td><td style="white-space:normal">' + esc(a.desc) + '</td><td>' + esc(a.owner) + '</td><td><span class="badge ' + t[0] + '">' + t[1] + '</span></td></tr>';
+    }).join('') : '<tr><td colspan="5">' + empty('فعالیتی ثبت نشده است.', 'activity') + '</td></tr>';
+  }
+  function invsOf() { return cur ? D.invoices.filter(function (v) { return v.customer === cur.name; }) : []; }
+  function renderSide() {
+    var as = actsOf();
+    $('#actList').innerHTML = as.length ? as.map(function (a) {
+      var t = stTone(a.status);
+      return '<div class="list-item"><span class="avatar avatar-sm avatar-sq" style="background:var(--warning-soft);color:var(--warning)"><span data-icon="activity" data-icon-size="15"></span></span>' +
+        '<span class="flex-1" style="min-width:0"><span class="li-title d-block">' + esc(a.desc) + '</span><span class="li-sub">' + esc(a.title) + ' — ' + esc(a.owner) + ' — <span class="num">' + esc(a.start) + '</span></span></span>' +
+        '<span class="badge ' + t[0] + '">' + t[1] + '</span></div>';
+    }).join('') : empty('فعالیتی برای نمایش نیست.', 'activity');
+    var vs = invsOf();
+    $('#invList').innerHTML = vs.length ? vs.slice(0, 4).map(function (v) {
+      var st = S.settleState(v);
+      return '<a class="list-item" href="print-invoice.html?no=' + encodeURIComponent(v.no) + '" target="_blank"><span class="avatar avatar-sm avatar-sq"><span data-icon="invoice" data-icon-size="15"></span></span>' +
+        '<span class="flex-1"><span class="li-title d-block num">' + esc(v.no) + ' <span class="fs-xs text-soft">' + (v.type === 'proforma' ? 'پیش‌فاکتور' : 'فاکتور') + '</span></span><span class="li-sub num">' + esc(v.date) + ' — ' + m(v.amount) + ' تومان</span></span>' +
+        '<span class="badge ' + st.c + '">' + st.l + '</span></a>';
+    }).join('') : empty('فاکتوری برای این مشتری صادر نشده است.', 'invoice');
+  }
+  function renderFile() {
+    var name = cur ? cur.name : '';
+    var vs = invsOf(), nos = vs.map(function (v) { return v.no; });
+    var dl = D.deliveries.filter(function (x) { return nos.indexOf(x.invoice) > -1; });
+    if (!dl.length && cur) dl = D.deliveries.slice(0, 2);
+    function rows(list, fn, cols, msg) { return list.length ? list.map(fn).join('') : '<tr><td colspan="' + cols + '">' + empty(msg) + '</td></tr>'; }
+    $('#fProd').innerHTML = rows(dl, function (x) {
+      return '<tr><td class="fw-600">' + esc(x.product) + '</td><td class="num">' + esc(x.invoice) + '</td><td class="ltr fs-xs">' + esc(x.serial) + '</td><td class="num">' + esc(x.out) + '</td><td>' + esc(x.reader) + '</td><td>' + esc(x.outType) + '</td><td>' + esc(x.owner) + '</td><td class="num">' + esc(x.valid) + '</td></tr>';
+    }, 8, 'محصولی تحویل نشده است.');
+    $('#fInv').innerHTML = rows(vs, function (v) {
+      var st = S.settleState(v);
+      return '<tr><td class="num fw-600">' + esc(v.no) + '</td><td>' + (v.type === 'proforma' ? 'پیش‌فاکتور' : 'فاکتور') + ' ' + esc(v.kind) + '</td><td class="num">' + esc(v.date) + '</td><td>' + esc(v.owner) + '</td><td class="num">' + m(v.amount) + '</td><td><span class="badge ' + st.c + '">' + st.l + '</span></td>' +
+        '<td><a class="btn btn-sm btn-ghost" target="_blank" href="print-invoice.html?no=' + encodeURIComponent(v.no) + '"><span data-icon="printer" data-icon-size="14"></span> نمایش</a></td></tr>';
+    }, 7, 'فاکتوری ثبت نشده است.');
+    $('#fForms').innerHTML = rows(cur ? D.forms : [], function (f) { return '<tr><td class="num">' + esc(f.no) + '</td><td>' + esc(f.type) + '</td><td>' + esc(f.send) + '</td><td>' + esc(f.coord) + '</td></tr>'; }, 4, 'فرمی ثبت نشده است.');
+    $('#fSvc').innerHTML = rows(cur ? D.services : [], function (s) {
+      return '<tr><td class="fw-600">' + esc(s.type) + '</td><td><span class="badge ' + (s.status === 'انجام شده' ? 'badge-success' : 'badge-warning') + '">' + esc(s.status) + '</span></td><td class="num">' + esc(s.follow) + '</td><td>' + esc(s.spent) + '</td><td>' + esc(s.custExpert) + '</td><td>' + esc(s.ourExpert) + '</td><td style="white-space:normal">' + esc(s.desc) + '</td><td class="num fs-xs">' + esc(s.at) + '</td></tr>';
+    }, 8, 'خدمتی ثبت نشده است.');
+    var files = cur ? D.attachments : [];
+    var fileHTML = files.map(function (f) {
+      return '<div class="file-item"><span class="file-ic ' + esc(f.kind) + '"><span data-icon="' + (f.kind === 'img' ? 'image' : 'file') + '" data-icon-size="18"></span></span>' +
+        '<span class="flex-1" style="min-width:0"><span class="d-block fw-600 fs-sm text-strong ltr" style="text-align:right">' + esc(f.name) + '</span><span class="fs-xs text-muted">' + esc(f.desc) + ' — ' + esc(f.user) + ' — <span class="num">' + esc(f.date) + '</span></span></span>' +
+        '<button class="tb-icon icon-btn-sm" data-tip="دانلود" data-icon="download" data-icon-size="16"></button></div>';
+    }).join('');
+    $('#fFiles').innerHTML = fileHTML || empty('فایلی پیوست نشده است.', 'paperclip');
+    $('#docList').innerHTML = fileHTML ? fileHTML.replace(/data-tip="دانلود" data-icon="download"/g, 'data-tip="حذف فایل" data-del-file data-icon="trash"') : '';
+  }
+
+  /* ---------- رویدادها ---------- */
+  $('#cName').addEventListener('sales:customer', function (e) { load(e.detail); });
+  $('#pSelect').addEventListener('change', function () {
+    var code = Number(this.value);
+    fillPerson(D.contacts.filter(function (p) { return p.code === code; })[0]);
+  });
+  $('#btnNew').addEventListener('click', function () {
+    load(null);
+    $('#cName').focus();
+    CRM.toast({ type: 'info', title: 'فرم خالی شد', msg: 'اطلاعات مشتری جدید را وارد کنید.' });
+  });
+  $('#btnDelete').addEventListener('click', function () {
+    if (!cur) { CRM.toast({ type: 'warning', title: 'مشتری انتخاب نشده', msg: 'ابتدا یک مشتری را جستجو کنید.' }); return; }
+    CRM.modal.confirm({ title: 'حذف مشتری', msg: '«' + cur.name + '» و تمام افراد مرتبط آن حذف شوند؟', danger: true, tone: 'danger', icon: 'trash', okText: 'بله، حذف کن' })
+      .then(function (ok) { if (ok) { var n = cur.name; load(null); CRM.toast({ type: 'warning', title: 'مشتری حذف شد', msg: n }); } });
+  });
+  $('#btnSave').addEventListener('click', function (e) {
+    var nm = $('#cName');
+    if (!nm.value.trim()) {
+      nm.classList.add('is-invalid'); nm.focus();
+      CRM.toast({ type: 'danger', title: 'نام شرکت الزامی است', msg: 'لطفاً نام شرکت را وارد کنید.' });
+      return;
+    }
+    nm.classList.remove('is-invalid');
+    S.busy(e.currentTarget, function () {
+      if (!cur) $('#codeBadge').textContent = 'کد ' + fa(5701);
+      CRM.toast({ type: 'success', title: 'مشخصات مشتری ثبت شد', msg: nm.value.trim() });
+    }, 600);
+  });
+  $('#btnAddPerson').addEventListener('click', function () {
+    if (!$('#npName').value.trim()) { CRM.toast({ type: 'danger', title: 'نام الزامی است', msg: 'نام شخص را وارد کنید.' }); return; }
+    if (!cur) { CRM.toast({ type: 'warning', title: 'ابتدا مشتری را ثبت کنید' }); return; }
+    var fem = $('#mdlPeople .segmented .seg.is-active') === $$('#mdlPeople .segmented .seg')[1];
+    D.contacts.push({ code: 900 + D.contacts.length + 10, company: cur.name, companyCode: cur.code, gender: fem ? 'f' : 'm', name: $('#npName').value.trim(), unit: '—', role: $('#npRole').value || '—', phone1: '—', phone2: '—', mobile: $('#npMobile').value || '—', email: '—', nature: 'متفرقه' });
+    $('#npName').value = $('#npRole').value = $('#npMobile').value = '';
+    load(cur);
+    CRM.toast({ type: 'success', title: 'شخص جدید افزوده شد' });
+  });
+  $('#btnAddAct').addEventListener('click', function () {
+    if (!cur) { CRM.toast({ type: 'warning', title: 'مشتری انتخاب نشده' }); return; }
+    D.activities.unshift({ owner: $('#acOwner').value, title: $('#acType').value, desc: $('#acDesc').value.trim() || 'فعالیت ' + $('#acType').value + ' برای ' + cur.name, status: 'active', start: S.today() });
+    $('#acDesc').value = '';
+    renderActs(); renderSide(); CRM.init($('#actList')); CRM.init($('#actBody'));
+    CRM.toast({ type: 'success', title: 'فعالیت ثبت شد', msg: cur.name });
+  });
+  $('#dz').addEventListener('click', function () { CRM.toast({ type: 'info', title: 'نسخه نمایشی', msg: 'بارگذاری فایل در این قالب شبیه‌سازی می‌شود.' }); });
+  d.addEventListener('click', function (e) {
+    var b;
+    if ((b = e.target.closest('[data-use-person]'))) {
+      $('#pSelect').value = b.getAttribute('data-use-person');
+      $('#pSelect').dispatchEvent(new Event('change'));
+      CRM.modal.close('#mdlPeople');
+      return;
+    }
+    if ((b = e.target.closest('[data-save-modal]'))) {
+      if (cur) {
+        cur.flags = $$('.af:checked').map(function (x) { return x.value; });
+        cur.kind = $('#aKind').value;
+        load(cur);
+      }
+      CRM.modal.close(b.getAttribute('data-save-modal'));
+      CRM.toast({ type: 'success', title: 'ذخیره شد', msg: b.getAttribute('data-msg') });
+      return;
+    }
+    if ((b = e.target.closest('[data-del-file]'))) {
+      b.closest('.file-item').remove();
+      CRM.toast({ type: 'warning', title: 'فایل حذف شد' });
+    }
+  });
+
+  var q = new URLSearchParams(location.search).get('code');
+  load(S.company(q ? Number(q) : D.companies[0].code) || D.companies[0]);
+})();
+</script>
+</body>
+</html>

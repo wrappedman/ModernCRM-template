@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خطای داخلی سرور (۵۰۰) | مدرن‌CRM</title>
+<meta name="description" content="خطای داخلی سرور">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body data-shell="none" data-page="500" style="background:radial-gradient(circle at 25% 12%, var(--warning-soft), transparent 42%), radial-gradient(circle at 82% 88%, var(--danger-soft), transparent 42%), var(--bg)" data-win-auto="off">
+
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 18px;text-align:center;position:relative">
+
+  <div class="d-flex items-center gap-3 mb-6">
+    <span class="brand-mark" data-icon="sparkles" data-icon-size="22"></span>
+    <span class="brand-name">مدرن‌CRM</span>
+  </div>
+
+  <div class="modal-icon warn" style="width:74px;height:74px;margin-bottom:14px">
+    <span data-icon="wifi-off" data-icon-size="34"></span>
+  </div>
+
+  <div class="error-code">۵۰۰</div>
+
+  <h1 style="font-size:var(--fs-2xl)" class="mt-3">مشکلی در سرور رخ داده است</h1>
+  <p class="page-desc mt-2" style="max-width:620px">
+    تیم فنی ما از این خطا مطلع شد و در حال بررسی آن است. لطفاً چند لحظه بعد دوباره تلاش کنید.
+    اطلاعات شما محفوظ است و نگرانی‌ای وجود ندارد.
+  </p>
+
+  <div class="d-flex gap-3 mt-5 flex-wrap justify-center">
+    <a class="btn btn-primary btn-lg" href="dashboard.html"><span data-icon="refresh" data-icon-size="18"></span> تلاش مجدد</a>
+    <a class="btn btn-lg" href="help.html"><span data-icon="headset" data-icon-size="18"></span> گزارش به پشتیبانی</a>
+    <a class="btn btn-lg" href="maintenance.html"><span data-icon="timer" data-icon-size="18"></span> زمان‌بندی تعمیرات</a>
+  </div>
+
+  <div class="grid-3 mt-6" style="max-width:840px;width:100%;text-align:right">
+    <div class="card">
+      <div class="card-body tight">
+        <div class="d-flex items-center gap-3">
+          <span class="dot-status online"></span>
+          <div><div class="fw-600 fs-sm">پایگاه داده</div><div class="fs-xs text-muted">عملیاتی</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body tight">
+        <div class="d-flex items-center gap-3">
+          <span class="dot-status busy"></span>
+          <div><div class="fw-600 fs-sm">سرویس گزارش‌ها</div><div class="fs-xs text-muted">در حال بازیابی</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body tight">
+        <div class="d-flex items-center gap-3">
+          <span class="dot-status online"></span>
+          <div><div class="fw-600 fs-sm">درگاه پرداخت</div><div class="fs-xs text-muted">عملیاتی</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-4" style="max-width:840px;width:100%;text-align:right">
+    <div class="card-head tight"><div class="card-title" data-icon="file" data-icon-size="17"> جزئیات فنی خطا (برای ارسال به پشتیبانی)</div></div>
+    <div class="card-body tight">
+      <div class="code-box">Timestamp: <span id="errTime" class="ltr">—</span>
+Error: DATABASE_CONNECTION_TIMEOUT
+Service: reports-api
+Request-ID: <span class="ltr">req_9f2a74c1b8e3</span>
+Severity: High</div>
+      <button class="btn btn-soft btn-sm mt-3" data-copy="Request-ID: req_9f2a74c1b8e3 — DATABASE_CONNECTION_TIMEOUT">
+        <span data-icon="copy" data-icon-size="15"></span> کپی برای پشتیبانی
+      </button>
+    </div>
+  </div>
+
+  <div class="fs-sm text-soft mt-5">
+    کد خطا: <span class="num">۵۰۰ — INTERNAL_SERVER_ERROR</span> · آخرین به‌روزرسانی وضعیت: ۲ دقیقه پیش
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var t = new Date();
+  CRM.$('#errTime').textContent = t.toISOString() + ' — ' + CRM.jDate(t);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فاکتورهای رزرو شده | مدرن‌CRM</title>
+<meta name="description" content="فاکتورهایی که کالای آن‌ها رزرو شده ولی هنوز از انبار خارج نشده است">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="invoices-reserved">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="invoices.html">فاکتورها</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">فاکتورهای رزرو شده</span>
+            </div>
+            <h1 class="page-title">فاکتورهای رزرو شده</h1>
+            <p class="page-desc">کالاهای این فاکتورها برای مشتری کنار گذاشته شده و هنوز از انبار خارج نشده‌اند</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn btn-primary" href="invoice-new.html"><span data-icon="plus" data-icon-size="16"></span> صدور فاکتور</a>
+          </div>
+        </div>
+
+        <div class="card mb-5" data-win-nobtn>
+          <div class="card-head tight"><div class="card-title" data-icon="filter" data-icon-size="17"> جستجو</div></div>
+          <div class="card-body">
+            <div class="filter-grid">
+              <div class="form-group"><label class="form-label">مجموعه محصولات</label><select class="select" id="fGroup"></select></div>
+              <div class="form-group"><label class="form-label">محصول</label><select class="select" id="fProduct"></select></div>
+              <div class="form-group"><label class="form-label">مسئول فعالیت</label><select class="select" id="fOwner"></select></div>
+              <div class="form-group"><label class="form-label">از تاریخ</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="fFrom" placeholder="۱۴۰۵/۰۷/۰۱" data-fa-mask></div></div>
+              <div class="form-group"><label class="form-label">تا تاریخ</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="fTo" placeholder="۱۴۰۵/۰۷/۲۱" data-fa-mask></div></div>
+            </div>
+            <div class="filter-actions">
+              <span class="fs-sm text-muted"><span data-icon="info" data-icon-size="14"></span> رزروهای بیش از ۷ روز با رنگ زرد مشخص شده‌اند.</span>
+              <div class="end">
+                <button type="button" class="btn" id="btnReset"><span data-icon="x" data-icon-size="16"></span> پاک کردن</button>
+                <button type="button" class="btn btn-primary" id="btnSearch"><span data-icon="search" data-icon-size="16"></span> مشاهده</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-s-root data-win="rs-table" data-win-title="فاکتورهای رزرو شده" data-win-icon="bookmark" data-win-size="1080x640">
+          <div class="card-head flex-wrap" style="gap:10px">
+            <div class="card-title" data-icon="bookmark" data-icon-size="18"> رزروهای فعال <span class="badge badge-gray num" id="resultCount">۰</span></div>
+            <div class="card-actions flex-wrap" style="gap:12px">
+              <span class="legend-chip"><i></i> بیش از ۷ روز</span>
+              <button class="btn btn-sm" data-excel="فاکتورهای-رزرو"><span data-icon="download" data-icon-size="14"></span> Excel</button>
+            </div>
+          </div>
+          <div class="alert alert-info d-none" data-s-bulk style="border-radius:0;border-inline:0">
+            <span data-icon="check-check" data-icon-size="18"></span>
+            <div class="alert-title"><span data-s-count>۰</span> فاکتور انتخاب شده است</div>
+            <div class="d-flex gap-2 ms-auto flex-wrap">
+              <button class="btn btn-sm btn-soft" data-bulk="out"><span data-icon="truck" data-icon-size="14"></span> ثبت خروج از انبار</button>
+              <button class="btn btn-sm btn-danger-soft" data-bulk="free"><span data-icon="unlock" data-icon-size="14"></span> آزادسازی رزرو</button>
+            </div>
+          </div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table" id="tbl">
+                <thead><tr>
+                  <th style="width:40px"><label class="check"><input type="checkbox" data-s-all><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>
+                  <th style="width:36px"></th>
+                  <th>شماره فاکتور</th><th>تاریخ</th><th>نام مشتری</th><th>مسئول</th><th>مدت رزرو</th><th class="num">مبلغ (تومان)</th><th class="table-row-actions">نمایش</th>
+                </tr></thead>
+                <tbody id="tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/sales.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, S = window.SALES, D = S.data, d = document;
+  var $ = CRM.$, $$ = CRM.$$, esc = CRM.esc, fa = CRM.fa, m = S.money;
+
+  $('#fGroup').innerHTML = S.options(D.productGroups, '', 'همه مجموعه‌ها');
+  function fillProducts() {
+    var g = $('#fGroup').value;
+    $('#fProduct').innerHTML = S.options(D.catalog.filter(function (p) { return !g || p.group === g; }), '', 'همه محصولات');
+  }
+  fillProducts();
+  $('#fGroup').addEventListener('change', fillProducts);
+  $('#fOwner').innerHTML = S.options(D.owners, '', 'همه');
+
+  /* روزهای گذشته از تاریخ فاکتور تا امروز (۱۴۰۵/۰۷/۲۱) — تقریب نمایشی */
+  function days(date) {
+    var p = S.toInt(date.replace(/\//g, '')); var t = S.toInt(S.today().replace(/\//g, ''));
+    var dd = function (n) { return Math.floor(n / 10000) * 365 + Math.floor((n % 10000) / 100) * 30 + n % 100; };
+    return Math.max(0, dd(t) - dd(p));
+  }
+  /* اقلام رزرو هر فاکتور (نمایشی): از اقلام نمونه بر اساس شناسه چرخانده می‌شود */
+  function items(v) {
+    var s = D.sampleItems, k = v.id % s.length;
+    return s.slice(k).concat(s.slice(0, k)).slice(0, 2 + (v.id % 2));
+  }
+
+  function apply() {
+    var g = $('#fGroup').value, pid = $('#fProduct').value, own = $('#fOwner').value;
+    var a = S.toInt($('#fFrom').value.replace(/\//g, '')), b = S.toInt($('#fTo').value.replace(/\//g, ''));
+    var rows = D.invoices.filter(function (v) {
+      if (!v.reserved || v.out || v.cancelled) return false;
+      var k = S.toInt(v.date.replace(/\//g, ''));
+      var its = items(v);
+      return (!own || v.owner === own) && (!a || k >= a) && (!b || k <= b) &&
+        (!g || its.some(function (i) { var p = S.product(i.pid); return p && p.group === g; })) &&
+        (!pid || its.some(function (i) { return i.pid === pid; }));
+    });
+    $('#tbody').innerHTML = rows.length ? rows.map(function (v) {
+      var n = days(v.date), its = items(v);
+      return '<tr class="' + (n > 7 ? 'row-flag' : '') + '" data-id="' + v.id + '"><td>' + S.checkCell('data-s-row') + '</td>' +
+        '<td><button class="tb-icon icon-btn-sm row-toggle" data-row-toggle data-tip="اقلام رزرو" data-icon="chevron-down" data-icon-size="16"></button></td>' +
+        '<td class="num fw-700">' + esc(v.no) + '</td><td class="num">' + esc(v.date) + '</td>' +
+        '<td><a class="cell-main" href="customer-details.html?code=' + ((S.company(v.customer) || {}).code || '') + '">' + esc(v.customer) + '</a></td>' +
+        '<td class="fs-sm">' + esc(v.owner) + '</td>' +
+        '<td><span class="badge ' + (n > 7 ? 'badge-warning' : 'badge-gray') + ' num">' + fa(n) + ' روز</span></td>' +
+        '<td class="num fw-600">' + m(v.amount) + '</td>' +
+        '<td><a class="btn btn-sm btn-soft" target="_blank" href="print-invoice.html?no=' + encodeURIComponent(v.no) + '"><span data-icon="eye" data-icon-size="14"></span> نمایش</a></td></tr>' +
+        '<tr class="row-detail d-none"><td colspan="9"><div class="detail-chips">' + its.map(function (i) {
+          var p = S.product(i.pid) || {};
+          return '<span class="dchip"><span data-icon="package" data-icon-size="13"></span> ' + esc(p.name || i.pid) + ' <b>×</b> <span class="num">' + fa(i.qty) + ' ' + esc(p.unit || '') + '</span></span>';
+        }).join('') + '</div></td></tr>';
+    }).join('') : '<tr><td colspan="9"><div class="empty"><div class="empty-ic" data-icon="bookmark" data-icon-size="30"></div><div class="empty-title">رزرو فعالی وجود ندارد</div><div class="empty-desc">همه‌ی فاکتورهای رزرو شده از انبار خارج یا آزاد شده‌اند.</div></div></td></tr>';
+    $('#resultCount').textContent = fa(rows.length);
+    S.syncSelection($('[data-s-root]'));
+    if (d.readyState !== 'loading') CRM.init($('#tbl'));
+  }
+
+  $('#btnSearch').addEventListener('click', function (e) { S.busy(e.currentTarget, apply); });
+  $('#btnReset').addEventListener('click', function () { $('#fGroup').value = ''; fillProducts(); $('#fOwner').value = ''; $('#fFrom').value = $('#fTo').value = ''; apply(); });
+  ['#fProduct', '#fOwner'].forEach(function (s) { $(s).addEventListener('change', apply); });
+
+  d.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-bulk]'); if (!b) return;
+    var act = b.getAttribute('data-bulk');
+    var sel = $$('[data-s-row]:checked').map(function (c) { var id = Number(c.closest('tr').getAttribute('data-id')); return D.invoices.filter(function (v) { return v.id === id; })[0]; });
+    var doIt = function () {
+      sel.forEach(function (v) { if (act === 'out') v.out = true; else v.reserved = false; });
+      apply();
+      CRM.toast({ type: 'success', title: act === 'out' ? 'خروج از انبار ثبت شد' : 'رزرو آزاد شد', msg: fa(sel.length) + ' فاکتور' });
+    };
+    if (act === 'free') CRM.modal.confirm({ title: 'آزادسازی رزرو', msg: 'کالاهای ' + fa(sel.length) + ' فاکتور به موجودی انبار برگردد؟', danger: true, icon: 'unlock', okText: 'بله، آزاد شود' }).then(function (ok) { if (ok) doIt(); });
+    else doIt();
+  });
+
+  apply();
+})();
+</script>
+</body>
+</html>

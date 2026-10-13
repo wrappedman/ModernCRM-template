@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نمای کلی انبار | مدرن‌CRM</title>
+<meta name="description" content="نمای کلی انبار: موجودی، گردش کالا، هشدارها و دسترسی سریع به عملیات انبار">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="warehouse">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">انبار</span>
+            </div>
+            <h1 class="page-title">نمای کلی انبار</h1>
+            <p class="page-desc" id="whDesc">—</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="warehouse-stock.html"><span data-icon="chart-column" data-icon-size="16"></span> گزارش موجودی</a>
+            <a class="btn" href="warehouse-out.html"><span data-icon="package-minus" data-icon-size="16"></span> خروج کالا</a>
+            <a class="btn btn-primary" href="warehouse-in.html"><span data-icon="package-plus" data-icon-size="16"></span> ورود کالا</a>
+          </div>
+        </div>
+
+        <!-- ============================ شاخص‌ها ============================ -->
+        <div class="grid-4 mb-5">
+          <div class="card card-hover" data-win="wh-k1" data-win-title="محصولات تعریف‌شده" data-win-icon="package" data-win-size="640x420">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon"><span data-icon="package" data-icon-size="22"></span></span>
+              <div><div class="stat-label">محصولات تعریف‌شده</div><div class="stat-value" id="kProducts">—</div></div>
+              <span class="badge badge-info ms-auto" id="kCats">—</span>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="wh-k2" data-win-title="موجودی انبار اصلی" data-win-icon="boxes" data-win-size="640x420">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon sky"><span data-icon="boxes" data-icon-size="22"></span></span>
+              <div><div class="stat-label">موجودی انبار اصلی</div><div class="stat-value" id="kMain">—</div></div>
+              <span class="badge badge-success ms-auto">قلم</span>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="wh-k3" data-win-title="موجودی انبار فرعی" data-win-icon="archive" data-win-size="640x420">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon violet"><span data-icon="archive" data-icon-size="22"></span></span>
+              <div><div class="stat-label">موجودی انبار فرعی</div><div class="stat-value" id="kSub">—</div></div>
+              <span class="badge badge-violet ms-auto">قلم</span>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="wh-k4" data-win-title="هشدار موجودی" data-win-icon="alert" data-win-size="640x420">
+            <div class="card-body tight d-flex items-center gap-4">
+              <span class="stat-icon coral"><span data-icon="alert" data-icon-size="22"></span></span>
+              <div><div class="stat-label">کم‌موجود / ناموجود</div><div class="stat-value" id="kLow">—</div></div>
+              <a class="badge badge-danger ms-auto" href="warehouse-stock.html">بررسی</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================ عملیات انبار ============================ -->
+        <div class="section-title mb-3"><span data-icon="layout-grid" data-icon-size="18"></span> عملیات انبار</div>
+        <div class="tile-links mb-5">
+          <a class="tile-link" href="warehouse-products.html">
+            <span class="stat-icon"><span data-icon="package" data-icon-size="22"></span></span>
+            <div><div class="tl-title">تعریف محصولات</div><div class="tl-desc">مجموعه، نام‌ها در فاکتور، قیمت‌ها و تصویر هر محصول</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="warehouse-in.html">
+            <span class="stat-icon success"><span data-icon="package-plus" data-icon-size="22"></span></span>
+            <div><div class="tl-title">ورود محصول به انبار</div><div class="tl-desc">ثبت ورود کالا با شماره سریال، تعداد و نوع کارتخوان</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="warehouse-out.html">
+            <span class="stat-icon sky"><span data-icon="truck" data-icon-size="22"></span></span>
+            <div><div class="tl-title">خروج محصول (اصلی)</div><div class="tl-desc">فروش، دمو، پرزنت، خراب و پشتیبانی از انبار اصلی</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="warehouse-out.html?store=sub">
+            <span class="stat-icon violet"><span data-icon="package-minus" data-icon-size="22"></span></span>
+            <div><div class="tl-title">خروج محصول (فرعی)</div><div class="tl-desc">ثبت خروج کالا از انبار فرعی</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="warehouse-stock.html">
+            <span class="stat-icon amber"><span data-icon="chart-column" data-icon-size="22"></span></span>
+            <div><div class="tl-title">گزارش موجودی انبار</div><div class="tl-desc">انبار اصلی، فرعی، عمومی و گزارش مقایسه‌ای</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+        </div>
+
+        <div class="grid-2-1 mb-5">
+          <!-- ============================ گردش کالا ============================ -->
+          <div class="card" data-win="wh-moves" data-win-title="آخرین گردش کالا" data-win-icon="history" data-win-size="1000x560">
+            <div class="card-head">
+              <div class="card-title" data-icon="history" data-icon-size="18"> آخرین گردش کالا</div>
+              <div class="card-actions">
+                <div class="segmented" data-segmented id="moveFilter">
+                  <button class="seg is-active" data-f="all">همه</button>
+                  <button class="seg" data-f="in">ورود</button>
+                  <button class="seg" data-f="out">خروج</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>نوع</th>
+                      <th>محصول</th>
+                      <th>انبار</th>
+                      <th class="num">تعداد</th>
+                      <th>طرف حساب / ثبت‌کننده</th>
+                      <th>تاریخ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="movesBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-col gap-5">
+            <!-- ============================ هشدار موجودی ============================ -->
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title" data-icon="alert" data-icon-size="18"> هشدار موجودی</div>
+                <div class="card-actions"><a class="btn btn-sm btn-ghost" href="warehouse-stock.html">همه</a></div>
+              </div>
+              <div class="card-body flush"><div class="list" id="lowList"></div></div>
+            </div>
+            <!-- ============================ دموها ============================ -->
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title" data-icon="rotate-ccw" data-icon-size="18"> دموهای در انتظار بازگشت</div>
+              </div>
+              <div class="card-body flush"><div class="list" id="demoList"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================ توزیع مجموعه‌ها ============================ -->
+        <div class="grid-2">
+          <div class="card" data-win="wh-cats" data-win-title="موجودی به تفکیک مجموعه" data-win-icon="chart-pie" data-win-size="640x460">
+            <div class="card-head"><div class="card-title" data-icon="chart-pie" data-icon-size="18"> موجودی به تفکیک مجموعه</div></div>
+            <div class="card-body"><div class="donut-wrap"><div id="catDonut"></div></div></div>
+          </div>
+          <div class="card" data-win="wh-types" data-win-title="خروج کالا به تفکیک نوع" data-win-icon="chart-column" data-win-size="680x460">
+            <div class="card-head">
+              <div class="card-title" data-icon="chart-column" data-icon-size="18"> خروج کالا به تفکیک نوع</div>
+              <div class="card-actions"><span class="badge">مهر ۱۴۰۵</span></div>
+            </div>
+            <div class="card-body"><div class="chart h-240" id="typeBars"></div></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/warehouse.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, WH = window.WH, D = CRM.data, $ = CRM.$, fa = CRM.fa, num = CRM.num, esc = CRM.esc;
+  var t = WH.totals();
+
+  $('#whDesc').textContent = fa(D.whCategories.length) + ' مجموعه — ' + fa(t.products) + ' محصول — ارزش تقریبی موجودی: ' + CRM.moneyShort(t.value);
+  $('#kProducts').textContent = num(t.products);
+  $('#kCats').textContent = fa(D.whCategories.length) + ' مجموعه';
+  $('#kMain').textContent = num(t.main);
+  $('#kSub').textContent = num(t.sub);
+  $('#kLow').textContent = fa(t.low) + ' / ' + fa(t.out);
+
+  /* ---- گردش کالا (ورود + خروج) ---- */
+  var moves = D.whIn.map(function (r) { return { kind: 'in', date: r.date, p: WH.product(r.product), store: r.store, qty: r.qty, who: r.by }; })
+    .concat(D.whOut.map(function (r) { return { kind: 'out', type: r.type, date: r.date, p: WH.product(r.product), store: r.store, qty: r.qty, who: r.customer !== '—' ? r.customer : r.owner }; }))
+    .sort(function (a, b) { return CRM.en(b.date).localeCompare(CRM.en(a.date)); });
+
+  function renderMoves(f) {
+    $('#movesBody').innerHTML = moves.filter(function (m) { return f === 'all' || m.kind === f; }).slice(0, 9).map(function (m) {
+      var badge = m.kind === 'in'
+        ? '<span class="badge badge-success"><span data-icon="arrow-down-to-line" data-icon-size="12"></span> ورود</span>'
+        : (function () { var x = WH.exitType(m.type); return '<span class="badge badge-' + x.tone + '"><span data-icon="arrow-up-from-line" data-icon-size="12"></span> ' + x.title + '</span>'; })();
+      return '<tr><td>' + badge + '</td><td>' + WH.productCell(m.p) + '</td>' +
+        '<td><span class="badge badge-outline">' + (m.store === 'sub' ? 'فرعی' : 'اصلی') + '</span></td>' +
+        '<td class="num fw-600">' + num(m.qty) + '</td><td class="fs-sm">' + esc(m.who) + '</td><td class="num fs-sm text-muted">' + esc(m.date) + '</td></tr>';
+    }).join('');
+    CRM.renderIcons($('#movesBody'));
+  }
+  renderMoves('all');
+  $('#moveFilter').addEventListener('click', function (e) { var b = e.target.closest('[data-f]'); if (b) renderMoves(b.getAttribute('data-f')); });
+
+  /* ---- هشدار موجودی ---- */
+  var low = D.whProducts.filter(function (p) { var k = WH.stockState(p, 'main').key; return k === 'low' || k === 'out'; })
+    .sort(function (a, b) { return a.main - b.main; }).slice(0, 5);
+  $('#lowList').innerHTML = low.map(function (p) {
+    var s = WH.stockState(p, 'main'), pct = Math.min(100, Math.round(p.main / Math.max(1, p.min) * 100));
+    return '<div class="list-item">' +
+      '<span class="stat-icon ' + (s.key === 'out' ? 'rose' : 'amber') + '" style="width:36px;height:36px"><span data-icon="package" data-icon-size="17"></span></span>' +
+      '<div class="flex-1"><div class="li-title"><span class="ltr-cell">' + esc(p.name) + '</span></div>' +
+      '<div class="progress sm ' + (s.key === 'out' ? 'danger' : 'warn') + ' mt-1"><i style="width:' + Math.max(4, pct) + '%"></i></div></div>' +
+      '<div class="li-end"><div class="text-left"><div class="fw-700 num">' + fa(p.main) + '</div><div class="fs-2xs text-muted">حداقل ' + fa(p.min) + '</div></div></div></div>';
+  }).join('');
+
+  /* ---- دموها ---- */
+  var demos = D.whOut.filter(function (o) { return o.type === 'demo'; });
+  $('#demoList').innerHTML = demos.map(function (o) {
+    var p = WH.product(o.product);
+    return '<div class="list-item">' +
+      '<span class="stat-icon sky" style="width:36px;height:36px"><span data-icon="presentation" data-icon-size="17"></span></span>' +
+      '<div class="flex-1"><div class="li-title">' + esc(o.customer) + '</div><div class="li-sub"><span class="ltr-cell">' + esc(p.name) + '</span> · انبار ' + (o.store === 'sub' ? 'فرعی' : 'اصلی') + '</div></div>' +
+      '<div class="li-end"><div class="text-left"><div class="fs-2xs text-muted">بازگشت</div><div class="num fw-600 fs-sm">' + esc(o.returnDate) + '</div></div></div></div>';
+  }).join('');
+
+  /* ---- نمودارها ---- */
+  var catVals = D.whCategories.map(function (c) {
+    return D.whProducts.filter(function (p) { return p.cat === c.id; }).reduce(function (s, p) { return s + p.main + p.sub; }, 0);
+  });
+  var donut = $('#catDonut');
+  var keep = catVals.map(function (v, i) { return { v: v, l: D.whCategories[i].title }; }).filter(function (x) { return x.v > 0; });
+  donut.setAttribute('data-chart', 'donut');
+  donut.setAttribute('data-values', keep.map(function (x) { return x.v; }).join(','));
+  donut.setAttribute('data-labels', keep.map(function (x) { return x.l; }).join(','));
+  donut.setAttribute('data-colors', 'var(--c1),var(--c2),var(--c3),var(--c4),var(--c5),var(--c6),var(--c7),var(--c8)');
+  donut.setAttribute('data-center', num(t.main + t.sub));
+  donut.setAttribute('data-center-sub', 'قلم کالا');
+
+  var bars = $('#typeBars');
+  bars.setAttribute('data-chart', 'bar');
+  bars.setAttribute('data-values', D.whExitTypes.map(function (x) { return D.whOut.filter(function (o) { return o.type === x.id; }).reduce(function (s, o) { return s + o.qty; }, 0); }).join(','));
+  bars.setAttribute('data-labels', D.whExitTypes.map(function (x) { return x.title; }).join(','));
+  bars.setAttribute('data-colors', 'var(--success-500),var(--brand-500),var(--violet-500),var(--accent-500),var(--warning-500)');
+})();
+</script>
+</body>
+</html>

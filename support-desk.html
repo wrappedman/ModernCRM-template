@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پشتیبانی مشتریان | پشتیبانی | مدرن‌CRM</title>
+<meta name="description" content="جستجوی شرکت‌ها برای پشتیبانی: افراد مرتبط، ثبت خدمات، گزارش عملکرد و پرونده مشتری">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<!--
+  پشتیبانی مشتریان (منوی «پشتیبانی» در برنامه‌ی فعلی)
+    • فیلترها: شرکت، افراد، فاکتور، سریال دستگاه، فرم، محصول، تاریخ خروج، پیگیری، فیلتر آماده، روز مانده به اتمام اعتبار
+    • نوار الفبا: فیلتر بر اساس حرف اول نام شرکت
+    • ردیف زرد: اعتبار کمتر از «روز مانده» · ردیف قرمز کم‌رنگ: اعتبار منقضی
+    • «…» کنار نام ← افراد مرتبط | «اطلاعات» ← ثبت/مشاهده خدمات | «عملکرد» ← گزارش خدمات | «پرونده مشتری» ← مودال تب‌دار
+-->
+<body class="app" data-page="support-desk">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="support.html">پشتیبانی</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">پشتیبانی مشتریان</span>
+            </div>
+            <h1 class="page-title">پشتیبانی مشتریان</h1>
+            <p class="page-desc">شرکت را پیدا کنید؛ خدمات انجام‌شده را ثبت کنید، عملکرد را ببینید یا پرونده‌ی کامل مشتری را باز کنید.</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="report.html?r=support-perf"><span data-icon="chart-column" data-icon-size="16"></span> عملکرد پشتیبانی</a>
+            <button class="btn" type="button" id="btnExcelTop"><span data-icon="file-spreadsheet" data-icon-size="16"></span> Excel</button>
+          </div>
+        </div>
+
+        <!-- فیلترها -->
+        <form class="card mb-5" id="fForm" data-win-nobtn novalidate>
+          <div class="card-head">
+            <div class="card-title" data-icon="list-filter" data-icon-size="18"> جستجوی شرکت</div>
+            <div class="card-actions"><button type="button" class="btn btn-ghost btn-sm" id="btnMore"><span data-icon="sliders" data-icon-size="15"></span> <span>فیلترهای بیشتر</span></button></div>
+          </div>
+          <div class="card-body">
+            <div class="rf-grid">
+              <div class="rf">
+                <label class="form-label" for="fCompany">شرکت</label>
+                <div class="input-group"><input class="input" id="fCompany" readonly placeholder="انتخاب از فهرست"><button type="button" class="btn" id="btnPick"><span data-icon="more-h" data-icon-size="16"></span></button></div>
+              </div>
+              <div class="rf">
+                <label class="form-label" for="fName">نام شرکت</label>
+                <div class="input-wrap"><span class="icon lead" data-icon="search" data-icon-size="16"></span><input class="input" id="fName" placeholder="بخشی از نام یا کد"></div>
+              </div>
+              <div class="rf">
+                <label class="form-label" for="fPerson">افراد شرکت</label>
+                <div class="input-wrap"><span class="icon lead" data-icon="user" data-icon-size="16"></span><input class="input" id="fPerson" placeholder="نام فرد مرتبط"></div>
+              </div>
+              <div class="rf">
+                <label class="form-label" for="fFilter">انتخاب فیلتر</label>
+                <select class="select" id="fFilter"></select>
+              </div>
+              <div class="rf" data-more>
+                <label class="form-label" for="fInvoice">شماره فاکتور</label>
+                <input class="input num" id="fInvoice" data-fa-mask placeholder="مثلاً ۹۵/۰۹/۱۲۸">
+              </div>
+              <div class="rf" data-more>
+                <label class="form-label" for="fSerial">شماره سریال دستگاه</label>
+                <input class="input num" id="fSerial" data-fa-mask>
+              </div>
+              <div class="rf" data-more>
+                <label class="form-label" for="fForm">شماره فرم</label>
+                <input class="input num" id="fFormNo" data-fa-mask>
+              </div>
+              <div class="rf" data-more>
+                <label class="form-label" for="fProduct">نام محصول</label>
+                <select class="select" id="fProduct"></select>
+              </div>
+              <div class="rf" data-more style="grid-column:span 2">
+                <label class="form-label">تاریخ خروج</label>
+                <div class="rf-range">
+                  <div class="input-wrap"><input class="input num" id="fOutFrom" data-jdate placeholder="از"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar-days" data-icon-size="15"></button></div>
+                  <div class="input-wrap"><input class="input num" id="fOutTo" data-jdate placeholder="تا"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar-days" data-icon-size="15"></button></div>
+                </div>
+              </div>
+              <div class="rf" data-more>
+                <label class="form-label" for="fFollow">در حال پیگیری</label>
+                <select class="select" id="fFollow"></select>
+              </div>
+              <div class="rf" data-more>
+                <label class="form-label" for="fDays">روز مانده به اتمام تاریخ اعتبار</label>
+                <div class="input-wrap"><span class="icon lead" data-icon="hourglass" data-icon-size="16"></span><input class="input num" id="fDays" data-num-mask value="۳۰"><span class="unit">روز</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><span data-icon="search" data-icon-size="16"></span> جستجو</button>
+            <button type="button" class="btn" id="btnReset"><span data-icon="eraser" data-icon-size="16"></span> انصراف</button>
+            <span class="spacer"></span>
+            <button type="button" class="btn btn-soft" id="btnExcel"><span data-icon="file-spreadsheet" data-icon-size="16"></span> Excel</button>
+          </div>
+        </form>
+
+        <!-- جدول -->
+        <div class="card mb-5" data-win="sup-desk" data-win-title="پشتیبانی مشتریان" data-win-icon="headset" data-win-size="1200x640">
+          <div class="card-head">
+            <div class="card-title" data-icon="building" data-icon-size="18"> شرکت‌ها <span class="badge" id="count">—</span></div>
+          </div>
+          <div class="sup-info" id="info"></div>
+          <div class="sup-alpha" id="alpha" role="toolbar" aria-label="فیلتر حرف اول"></div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table table-compact">
+                <thead>
+                  <tr><th>کد شرکت</th><th>نام شرکت</th><th>نوع همکاری</th><th>تاریخ پیگیری</th><th>تاریخ اعتبار</th><th class="num">دستگاه</th><th></th></tr>
+                </thead>
+                <tbody id="body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- خدمات انجام شده (اطلاعات) -->
+<div class="overlay" id="svcModal" style="display:none">
+  <div class="modal modal-xl" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title" id="sTitle">خدمات انجام شده</div><div class="modal-sub" id="sSub">—</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#svcModal" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2-1" style="gap:20px">
+        <form id="sForm" novalidate style="min-width:0">
+          <div class="form-group">
+            <label class="form-label">نوع خدمات</label>
+            <div class="sup-checks boxed" id="sKinds"></div>
+          </div>
+          <div class="grid-3" style="gap:0 16px">
+            <div class="form-group">
+              <label class="form-label" for="sCust">کارشناس مشتری</label>
+              <select class="select" id="sCust"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sExpert">کارشناس شرکت</label>
+              <select class="select" id="sExpert"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">&nbsp;</label>
+              <label class="check" style="min-height:42px;align-items:center"><input type="checkbox" id="sOperator"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">اپراتور</span></label>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sStatus">وضعیت</label>
+              <select class="select" id="sStatus"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sFollow">تاریخ پیگیری</label>
+              <div class="input-wrap"><input class="input num" id="sFollow" data-jdate><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar-days" data-icon-size="15"></button></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">حوزه</label>
+              <div class="sup-checks">
+                <label class="check"><input type="checkbox" id="sHw"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">سخت افزار</span></label>
+                <label class="check"><input type="checkbox" id="sSw" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">نرم افزار</span></label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sMinutes">مدت زمان صرف شده</label>
+              <div class="input-wrap"><input class="input num" id="sMinutes" data-num-mask placeholder="۰"><span class="unit">دقیقه</span></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sAbbr">حرف اختصاری</label>
+              <input class="input" id="sAbbr" maxlength="6" placeholder="مثلاً T5">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sRepair">لیست تعمیرات</label>
+              <select class="select" id="sRepair" disabled></select>
+            </div>
+          </div>
+          <div class="d-flex items-center gap-4 flex-wrap mb-4 p-3" style="background:var(--surface-2);border:1px solid var(--border-muted);border-radius:var(--radius)">
+            <label class="check"><input type="checkbox" id="sRenew"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">تمدید اعتبار</span></label>
+            <div class="input-wrap" style="width:180px"><input class="input num" id="sRenewDate" data-jdate disabled placeholder="اعتبار جدید"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar-days" data-icon-size="15"></button></div>
+            <span class="fs-xs text-muted" id="sCredit">—</span>
+          </div>
+          <div class="form-group mb-0">
+            <label class="form-label" for="sNote">توضیحات</label>
+            <textarea class="textarea" id="sNote" rows="3" placeholder="شرح مشکل و اقدام انجام‌شده…"></textarea>
+          </div>
+        </form>
+        <div style="min-width:0">
+          <div class="d-flex items-center gap-2 mb-2"><span class="fw-700 fs-sm text-strong">سوابق خدمات</span><span class="badge" id="sCount">—</span><span style="flex:1"></span><button type="button" class="btn btn-ghost btn-sm" id="sNew"><span data-icon="plus" data-icon-size="14"></span> خدمت جدید</button></div>
+          <div class="sup-agenda" id="sHistory" style="border:1px solid var(--border-muted);border-radius:var(--radius);max-height:470px;overflow:auto"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-primary" id="sSave"><span data-icon="check" data-icon-size="16"></span> ثبت</button>
+      <button type="button" class="btn" data-modal-close="#svcModal">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/warehouse.js"></script>
+<script src="assets/js/support.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, esc = CRM.esc;
+  var LETTERS = 'ا ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ی'.split(' ');
+  var letter = '', svcCo = null, svcCur = null;
+
+  SUP.fill('#fFilter', D.supLists.deskFilters);
+  SUP.fill('#fFollow', D.supLists.following);
+  SUP.fill('#fProduct', [].concat.apply([], D.supCompanies.map(function (c) { return c.devices.map(function (x) { return x.product; }); })).filter(function (v, i, a) { return a.indexOf(v) === i; }).sort(), 'همه‌ی محصولات');
+  SUP.bindCompany('#fCompany', '#btnPick', function () { F = filters(); render(); });
+
+  /* فیلترهای بیشتر (باز/بسته) */
+  var more = true;
+  function toggleMore() { more = !more; $$('[data-more]').forEach(function (el) { el.classList.toggle('d-none', !more); }); $('#btnMore span:last-child').textContent = more ? 'فیلترهای کمتر' : 'فیلترهای بیشتر'; }
+  $('#btnMore').addEventListener('click', toggleMore);
+  toggleMore();
+
+  function first(name) {
+    var n = name.replace(/^(جناب آقای|سرکار خانم|شرکت|گروه صنعتی|گروه)\s+/, '').replace(/^[-\s]+/, '');
+    var ch = n.charAt(0); return ch === 'آ' ? 'ا' : ch === 'ك' ? 'ک' : ch === 'ي' ? 'ی' : ch;
+  }
+  function lastSvc(c) { return SUP.services(c.code)[0]; }
+  function filters() {
+    return {
+      code: +$('#fCompany').getAttribute('data-code') || 0, name: fa($('#fName').value.trim()), person: $('#fPerson').value.trim(), filter: $('#fFilter').selectedIndex,
+      invoice: fa($('#fInvoice').value.trim()), serial: fa($('#fSerial').value.trim()), form: fa($('#fFormNo').value.trim()), product: $('#fProduct').value,
+      outFrom: SUP.key($('#fOutFrom').value), outTo: SUP.key($('#fOutTo').value), follow: $('#fFollow').selectedIndex, days: +CRM.en($('#fDays').value).replace(/\D/g, '') || 30
+    };
+  }
+  var F = filters();
+  function creditState(c) { var n = SUP.daysLeft(c.credit); return n === null ? '' : n < 0 ? 'expired' : n <= F.days ? 'warn' : 'ok'; }
+  function base() {
+    return D.supCompanies.filter(function (c) {
+      if (F.code && c.code !== F.code) return false;
+      if (F.name && (c.name + ' ' + fa(c.code)).indexOf(F.name) === -1) return false;
+      if (F.person && !c.people.some(function (p) { return p.name.indexOf(F.person) > -1; })) return false;
+      if (F.invoice && !c.invoices.some(function (i) { return i.no.indexOf(F.invoice) > -1; }) && !c.devices.some(function (d) { return d.invoice.indexOf(F.invoice) > -1; })) return false;
+      if (F.serial && !c.devices.some(function (d) { return d.serial.indexOf(F.serial) > -1; })) return false;
+      if (F.form && !D.supPlans.some(function (p) { return p.company === c.code && p.no.indexOf(F.form) > -1; })) return false;
+      if (F.product && !c.devices.some(function (d) { return d.product === F.product; })) return false;
+      if ((F.outFrom || F.outTo) && !c.devices.some(function (d) { var k = SUP.key(d.out); return (!F.outFrom || k >= F.outFrom) && (!F.outTo || k <= F.outTo); })) return false;
+      var open = SUP.services(c.code).some(function (s) { return s.status && s.status !== 'اتمام پیگیری'; }) || !!c.follow;
+      if (F.follow === 1 && !open) return false; if (F.follow === 2 && open) return false;
+      var st = creditState(c);
+      if (F.filter === 1 && st !== 'warn') return false;
+      if (F.filter === 2 && st !== 'expired') return false;
+      if (F.filter === 3 && !open) return false;
+      if (F.filter === 4 && c.coop !== 'نماینده') return false;
+      return true;
+    });
+  }
+
+  function render() {
+    var all = base(), list = all.filter(function (c) { return !letter || first(c.name) === letter; });
+    var has = {}; all.forEach(function (c) { has[first(c.name)] = 1; });
+    $('#alpha').innerHTML = '<button type="button" data-l=""' + (!letter ? ' class="is-active"' : '') + '>همه</button>' +
+      LETTERS.map(function (l) { return '<button type="button" data-l="' + l + '"' + (letter === l ? ' class="is-active"' : '') + (has[l] ? '' : ' disabled') + '>' + l + '</button>'; }).join('');
+    var warn = all.filter(function (c) { return creditState(c) === 'warn'; }).length, exp = all.filter(function (c) { return creditState(c) === 'expired'; }).length;
+    $('#info').innerHTML = '<span><b>' + fa(list.length) + '</b> شرکت' + (letter ? ' با حرف «' + letter + '»' : '') + '</span>' +
+      '<span class="sup-legend"><i></i> اعتبار کمتر از <b>' + fa(F.days) + '</b> روز: <b>' + fa(warn) + '</b></span>' +
+      '<span class="sup-legend"><i class="x"></i> اعتبار منقضی: <b>' + fa(exp) + '</b></span>' +
+      '<span style="margin-inline-start:auto">برای مشاهده‌ی افراد مرتبط روی «…» کنار نام شرکت کلیک کنید.</span>';
+    $('#count').textContent = fa(list.length);
+    $('#body').innerHTML = list.length ? list.map(function (c) {
+      var st = creditState(c), n = SUP.daysLeft(c.credit);
+      return '<tr data-code="' + c.code + '"' + (st === 'warn' ? ' class="sup-warn"' : st === 'expired' ? ' class="sup-expired"' : '') + '>' +
+        '<td class="num fw-600">' + fa(c.code) + '</td>' +
+        '<td><div class="d-flex items-center gap-2" style="min-width:0"><span class="sup-co" style="max-width:220px" title="' + esc(c.name) + '">' + esc(c.name) + '</span>' +
+          '<button type="button" class="btn btn-sm" style="height:24px;padding:0 7px" data-act="people" data-tip="افراد مرتبط">' + CRM.icon('more-h', 14) + '</button></div></td>' +
+        '<td class="text-nowrap">' + esc(c.coop) + (c.flags.length ? ' ' + SUP.flagBadges(c) : '') + '</td>' +
+        '<td class="num">' + (c.follow ? esc(c.follow) : '—') + '</td>' +
+        '<td class="text-nowrap">' + (c.credit ? '<span class="num">' + esc(c.credit) + '</span> <span class="fs-xs ' + (st === 'expired' ? 'text-danger' : st === 'warn' ? 'text-warning fw-600' : 'text-muted') + '">' + (n < 0 ? 'منقضی' : fa(n) + ' روز') + '</span>' : '<span class="text-muted">—</span>') + '</td>' +
+        '<td class="num">' + fa(c.devices.length) + '</td>' +
+        '<td class="text-left"><span class="sup-acts">' +
+          '<button type="button" class="btn btn-soft" data-act="svc">' + CRM.icon('headset', 14) + ' اطلاعات</button>' +
+          '<button type="button" class="btn" data-act="perf">' + CRM.icon('chart-column', 14) + ' عملکرد</button>' +
+          '<button type="button" class="btn" data-act="file">' + CRM.icon('folder', 14) + ' پرونده مشتری</button>' +
+        '</span></td></tr>';
+    }).join('') : '<tr><td colspan="7">' + SUP.empty('شرکتی با این فیلترها پیدا نشد.', 'search') + '</td></tr>';
+  }
+  $('#alpha').addEventListener('click', function (e) { var b = e.target.closest('[data-l]'); if (b && !b.disabled) { letter = b.getAttribute('data-l'); render(); } });
+  $('#body').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act]'); if (!b) return;
+    var code = +b.closest('tr').getAttribute('data-code'), a = b.getAttribute('data-act');
+    if (a === 'people') SUP.people(code); else if (a === 'perf') SUP.perf(code); else if (a === 'file') SUP.file(code); else openSvc(code);
+  });
+  $('#fForm').addEventListener('submit', function (e) { e.preventDefault(); F = filters(); render(); });
+  $('#btnReset').addEventListener('click', function () { $('#fForm').reset(); $('#fCompany').setAttribute('data-code', ''); $('#fDays').value = '۳۰'; letter = ''; F = filters(); render(); });
+  ['#btnExcel', '#btnExcelTop'].forEach(function (s) { $(s).addEventListener('click', function () { CRM.toast({ type: 'success', title: 'خروجی Excel آماده شد', msg: 'فایل «support-customers.xlsx» (نمایشی) با ' + $('#count').textContent + ' شرکت ساخته شد.' }); }); });
+
+  /* ------------------------------------------------ مودال خدمات */
+  $('#sKinds').innerHTML = D.supLists.serviceKinds.map(function (k, i) {
+    return '<label class="check"><input type="radio" name="sKind" value="' + esc(k) + '"' + (i === 2 ? ' checked' : '') + '><span class="box round"></span><span class="lbl">' + esc(k) + '</span></label>';
+  }).join('');
+  SUP.fill('#sExpert', D.supExperts);
+  SUP.fill('#sStatus', D.supLists.serviceStatus);
+  SUP.fill('#sRepair', D.supLists.repairs, '—');
+  function syncRepair() { var on = (($$('[name=sKind]:checked')[0] || {}).value === 'تعمیرات'); $('#sRepair').disabled = !on; if (!on) $('#sRepair').value = ''; if (on) $('#sHw').checked = true; }
+  $('#sKinds').addEventListener('change', syncRepair);
+  $('#sRenew').addEventListener('change', function () { $('#sRenewDate').disabled = !this.checked; if (this.checked && !$('#sRenewDate').value) $('#sRenewDate').value = SUP.addDays(svcCo.credit || CRM.jDate(), 365); });
+
+  function fillSvc(s) {
+    svcCur = s || null; s = s || {};
+    $$('[name=sKind]').forEach(function (r) { r.checked = r.value === (s.kind || 'تلفنی'); });
+    $('#sCust').value = s.custExpert || ''; if (s.custExpert && $('#sCust').value !== s.custExpert) { $('#sCust').insertAdjacentHTML('beforeend', '<option>' + esc(s.custExpert) + '</option>'); $('#sCust').value = s.custExpert; }
+    $('#sExpert').value = s.expert || 'آقاجانپور'; $('#sOperator').checked = !!s.operator; $('#sStatus').value = s.status || 'اتمام پیگیری';
+    $('#sFollow').value = s.follow || ''; $('#sHw').checked = !!s.hw; $('#sSw').checked = s.sw !== false; $('#sMinutes').value = s.minutes ? fa(s.minutes) : '';
+    $('#sAbbr').value = s.abbr || ''; $('#sRenew').checked = false; $('#sRenewDate').disabled = true; $('#sRenewDate').value = ''; $('#sNote').value = s.note || '';
+    syncRepair(); $('#sRepair').value = s.repair || '';
+    $('#sTitle').innerHTML = 'خدمات انجام شده برای ' + esc(svcCo.name.length > 46 ? svcCo.name.slice(0, 46) + '…' : svcCo.name) + (svcCur ? ' <span class="badge badge-info" style="vertical-align:middle">ثبت کننده فرم ' + esc(svcCur.owner) + '</span>' : '');
+    $('#sSave').innerHTML = CRM.icon('check', 16) + (svcCur ? ' ثبت تغییرات' : ' ثبت');
+    $$('#sHistory .sup-ag').forEach(function (r) { r.style.background = svcCur && +r.getAttribute('data-sc') === svcCur.code ? 'var(--brand-soft)' : ''; });
+  }
+  function renderHistory() {
+    var l = SUP.services(svcCo.code);
+    $('#sCount').textContent = fa(l.length);
+    $('#sHistory').innerHTML = l.length ? l.map(function (s) {
+      var tone = s.kind === 'حضوری' ? '' : s.kind === 'ریموت' ? 'violet' : s.kind.indexOf('تعمیرات') > -1 ? 'danger' : 'info';
+      return '<div class="sup-ag" data-sc="' + s.code + '" style="grid-template-columns:4px minmax(0,1fr) auto"><span class="bar ' + tone + '"></span>' +
+        '<div style="min-width:0"><div class="fs-sm fw-600 text-strong">' + esc(s.kind) + ' · ' + esc(s.owner) + '</div><div class="fs-xs text-muted text-truncate">' + esc(s.note) + '</div></div>' +
+        '<div class="fs-2xs text-muted num text-left">' + esc(s.at.split(' ')[0]) + '<br>' + fa(s.minutes) + ' دقیقه</div></div>';
+    }).join('') : SUP.empty('خدمتی برای این شرکت ثبت نشده است.', 'headset');
+  }
+  function openSvc(code) {
+    svcCo = SUP.co(code);
+    SUP.fill('#sCust', svcCo.people.map(function (p) { return p.name; }), '—');
+    $('#sSub').innerHTML = 'کد <span class="num">' + fa(svcCo.code) + '</span> · ' + esc(svcCo.coop) + ' · <span class="num">' + esc(svcCo.phone) + '</span>';
+    $('#sCredit').innerHTML = svcCo.credit ? 'اعتبار فعلی: <span class="num fw-600">' + esc(svcCo.credit) + '</span>' : 'اعتباری ثبت نشده است';
+    renderHistory(); fillSvc(null);
+    CRM.modal.open('#svcModal');
+  }
+  $('#sHistory').addEventListener('click', function (e) { var r = e.target.closest('[data-sc]'); if (!r) return; fillSvc(D.supServices.filter(function (s) { return s.code === +r.getAttribute('data-sc'); })[0]); });
+  $('#sNew').addEventListener('click', function () { fillSvc(null); });
+  $('#sSave').addEventListener('click', function () {
+    var m = +CRM.en($('#sMinutes').value).replace(/\D/g, '');
+    if (!m) { CRM.toast({ type: 'warning', title: 'مدت زمان', msg: 'مدت زمان صرف‌شده را وارد کنید.' }); $('#sMinutes').focus(); return; }
+    if (!$('#sNote').value.trim()) { CRM.toast({ type: 'warning', title: 'توضیحات', msg: 'شرح خدمت را بنویسید.' }); $('#sNote').focus(); return; }
+    var kind = ($$('[name=sKind]:checked')[0] || {}).value;
+    if (kind === 'تعمیرات' && !$('#sRepair').value) { CRM.toast({ type: 'warning', title: 'لیست تعمیرات', msg: 'نوع تعمیر را انتخاب کنید.' }); return; }
+    var data = { kind: kind, custExpert: $('#sCust').value, expert: $('#sExpert').value, operator: $('#sOperator').checked, status: $('#sStatus').value, follow: $('#sFollow').value,
+      hw: $('#sHw').checked, sw: $('#sSw').checked, minutes: m, abbr: $('#sAbbr').value.trim(), repair: $('#sRepair').value, note: $('#sNote').value.trim() };
+    if (svcCur) Object.assign(svcCur, data);
+    else D.supServices.push(Object.assign({ code: 7000 + D.supServices.length, company: svcCo.code, owner: 'آقاجانپور', at: SUP.now().at.slice(0, 16), contract: svcCo.credit ? 'قرارداد پشتیبانی تا ' + svcCo.credit : '', form: '', renew: false }, data));
+    if ($('#sRenew').checked && CRM.jalali.parse($('#sRenewDate').value)) svcCo.credit = $('#sRenewDate').value;
+    if (data.status !== 'اتمام پیگیری' && data.follow) svcCo.follow = data.follow; else if (data.status === 'اتمام پیگیری') svcCo.follow = '';
+    CRM.modal.close('#svcModal'); render();
+    var tr = $('#body tr[data-code="' + svcCo.code + '"]'); if (tr) tr.classList.add('row-flash');
+    CRM.toast({ type: 'success', title: svcCur ? 'خدمت ویرایش شد' : 'خدمت ثبت شد', msg: kind + ' · ' + fa(m) + ' دقیقه · ' + svcCo.name.slice(0, 40) });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>داشبورد مدیریتی | مدرن‌CRM</title>
+<meta name="description" content="داشبورد مدیریتی قالب مدرن‌CRM — نمای کلی فروش، مشتریان، تیکت‌ها و فعالیت‌ها">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="dashboard">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <!-- ============================ سربرگ صفحه ============================ -->
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">داشبورد</span>
+            </div>
+            <h1 class="page-title">سلام مهدی، روز کاری خوبی داشته باشید 👋</h1>
+            <p class="page-desc" id="greetDate">امروز — خلاصه وضعیت کسب‌وکار شما در یک نگاه</p>
+          </div>
+          <div class="head-actions">
+            <span class="win-hint" data-icon="maximize" data-icon-size="12">
+              روی آیکون ⛶ هر کارت بزنید تا به پنجره شناور تبدیل شود
+            </span>
+            <div class="btn-group">
+              <button class="btn is-active" data-tip="نمای خلاصه">خلاصه</button>
+              <button class="btn" data-tip="نمای تحلیلی">تحلیلی</button>
+            </div>
+            <button class="btn" data-drawer-open="#drawerFilter">
+              <span data-icon="filter" data-icon-size="16"></span> فیلترها
+            </button>
+            <button class="btn btn-primary" data-modal-open="#modalQuickNote">
+              <span data-icon="plus" data-icon-size="16"></span> یادداشت سریع
+            </button>
+          </div>
+        </div>
+
+        <!-- ========================= بخش‌های سامانه ========================= -->
+        <div class="card mb-5" data-win="modules" data-win-title="بخش‌های سامانه" data-win-sub="دسترسی سریع به همه‌ی بخش‌ها" data-win-icon="layout-grid" data-win-size="1120x700">
+          <div class="card-head">
+            <div>
+              <div class="card-title"><span data-icon="layout-grid" data-icon-size="18"></span> بخش‌های سامانه</div>
+              <div class="card-sub">هر کارت یک بخش است؛ روی کارت بزنید یا مستقیم یکی از صفحه‌هایش را باز کنید.</div>
+            </div>
+            <div class="card-actions"><a class="btn btn-sm btn-ghost" href="index.html"><span data-icon="route" data-icon-size="15"></span> نقشه‌ی همه‌ی صفحه‌ها</a></div>
+          </div>
+          <div class="card-body"><div class="module-grid" id="moduleGrid"></div></div>
+        </div>
+
+        <!-- ============================== KPI ها ============================== -->
+        <div class="grid-4 mb-5">
+          <div class="card card-accent card-hover" data-win="kpi-customers" data-win-title="مشتریان فعال" data-win-sub="شاخص کلیدی عملکرد" data-win-icon="users" data-win-size="820x520">
+            <div class="card-head tight">
+              <span class="card-title" data-icon="users" data-icon-size="17"> مشتریان فعال</span>
+              <div class="card-actions">
+                <span class="badge badge-success badge-dot">رشد</span>
+              </div>
+            </div>
+            <div class="card-body tight">
+              <div class="stat">
+                <div class="stat-top">
+                  <div class="stat-icon"><span data-icon="users" data-icon-size="22"></span></div>
+                  <div class="flex-1">
+                    <div class="stat-label">کل مشتریان یکتا</div>
+                    <div class="stat-value" data-counter="1248">۰</div>
+                  </div>
+                  <div class="chart spark" data-chart="spark" data-values="4,9,7,12,10,16,14,19"></div>
+                </div>
+                <div class="stat-foot">
+                  <span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۱۲٪</span>
+                  <span>نسبت به ماه گذشته</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-accent card-hover" data-win="kpi-revenue" data-win-title="درآمد این ماه" data-win-sub="شاخص کلیدی عملکرد" data-win-icon="wallet" data-win-size="820x520">
+            <div class="card-head tight">
+              <span class="card-title" data-icon="wallet" data-icon-size="17"> درآمد این ماه</span>
+              <div class="card-actions"><span class="badge badge-info">تومان</span></div>
+            </div>
+            <div class="card-body tight">
+              <div class="stat">
+                <div class="stat-top">
+                  <div class="stat-icon sky"><span data-icon="wallet" data-icon-size="22"></span></div>
+                  <div class="flex-1">
+                    <div class="stat-label">مجموع فروش مهر</div>
+                    <div class="stat-value"><span data-counter="486.5" data-decimals="1">۰</span> <small>میلیون تومان</small></div>
+                  </div>
+                  <div class="chart spark" data-chart="spark" data-values="10,7,12,9,14,12,17,20" data-color="var(--c3)"></div>
+                </div>
+                <div class="stat-foot">
+                  <span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۸٫۴٪</span>
+                  <span>هدف ماه: ۵۵۰ میلیون</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-accent card-hover" data-win="kpi-deals" data-win-title="معاملات باز" data-win-sub="شاخص کلیدی عملکرد" data-win-icon="deals" data-win-size="820x520">
+            <div class="card-head tight">
+              <span class="card-title" data-icon="deals" data-icon-size="17"> معاملات باز</span>
+              <div class="card-actions"><span class="badge badge-violet">قیف فروش</span></div>
+            </div>
+            <div class="card-body tight">
+              <div class="stat">
+                <div class="stat-top">
+                  <div class="stat-icon violet"><span data-icon="deals" data-icon-size="22"></span></div>
+                  <div class="flex-1">
+                    <div class="stat-label">در حال پیگیری</div>
+                    <div class="stat-value"><span data-counter="63">۰</span> <small>مورد</small></div>
+                  </div>
+                  <div class="chart spark" data-chart="spark" data-values="18,14,15,11,13,9,10,8" data-color="var(--c4)"></div>
+                </div>
+                <div class="stat-foot">
+                  <span class="trend down"><span data-icon="arrow-down-right" data-icon-size="14"></span> ۳٪</span>
+                  <span>ارزش کل: ۱٫۲ میلیارد تومان</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-accent card-hover" data-win="kpi-conversion" data-win-title="نرخ تبدیل" data-win-sub="شاخص کلیدی عملکرد" data-win-icon="target" data-win-size="820x520">
+            <div class="card-head tight">
+              <span class="card-title" data-icon="target" data-icon-size="17"> نرخ تبدیل</span>
+              <div class="card-actions"><span class="badge badge-warning">فصلی</span></div>
+            </div>
+            <div class="card-body tight">
+              <div class="stat">
+                <div class="stat-top">
+                  <div class="stat-icon amber"><span data-icon="target" data-icon-size="22"></span></div>
+                  <div class="flex-1">
+                    <div class="stat-label">سرنخ به مشتری</div>
+                    <div class="stat-value"><span data-counter="32.4" data-decimals="1">۰</span> <small>٪</small></div>
+                  </div>
+                  <div class="chart spark" data-chart="spark" data-values="8,10,9,13,12,15,14,17" data-color="var(--c5)"></div>
+                </div>
+                <div class="stat-foot">
+                  <span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۲٫۱٪</span>
+                  <span>میانگین صنعت: ۲۴٪</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====================== نمودار فروش + منابع جذب ====================== -->
+        <div class="grid-2-1 mb-5">
+          <div class="card card-hover" data-win="chart-sales" data-win-title="روند فروش و هدف‌گذاری" data-win-sub="۹ ماه اخیر — میلیون تومان" data-win-icon="chart-line" data-win-size="1000x620">
+            <div class="card-head">
+              <div>
+                <div class="card-title" data-icon="chart-line" data-icon-size="18"> روند فروش و هدف‌گذاری</div>
+                <div class="card-sub">مقایسه فروش واقعی (خط سبز) با هدف ماهانه (خط‌چین آبی)</div>
+              </div>
+              <div class="card-actions">
+                <div class="segmented" data-segmented>
+                  <button class="seg is-active">۹ ماه</button>
+                  <button class="seg">۶ ماه</button>
+                  <button class="seg">۳ ماه</button>
+                </div>
+                <div class="dropdown">
+                  <button class="tb-icon" data-dropdown-toggle data-icon="more" data-icon-size="18"></button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="reports.html"><span data-icon="download" data-icon-size="16"></span> خروجی اکسل</a>
+                    <a class="dropdown-item" href="reports.html"><span data-icon="printer" data-icon-size="16"></span> چاپ گزارش</a>
+                    <div class="dropdown-sep"></div>
+                    <a class="dropdown-item" href="reports.html"><span data-icon="external" data-icon-size="16"></span> گزارش کامل</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="d-flex items-center gap-5 mb-3">
+                <div>
+                  <div class="fs-xs text-muted">فروش واقعی (۹ ماه)</div>
+                  <div class="fs-xl fw-700 text-strong num">۳٫۸۴ میلیارد تومان</div>
+                </div>
+                <div>
+                  <div class="fs-xs text-muted">تحقق هدف</div>
+                  <div class="fs-xl fw-700 text-brand num">۱۰۴٪</div>
+                </div>
+                <div class="ms-auto d-flex gap-3">
+                  <span class="d-flex items-center gap-2 fs-sm text-muted">
+                    <i style="width:14px;height:3px;border-radius:2px;background:var(--brand);display:block"></i> فروش
+                  </span>
+                  <span class="d-flex items-center gap-2 fs-sm text-muted">
+                    <i style="width:14px;height:0;border-top:2px dashed var(--c3);display:block"></i> هدف
+                  </span>
+                </div>
+              </div>
+              <div class="chart h-240" data-chart="line"
+                   data-values="310,342,298,415,388,452,441,506,486"
+                   data-values2="300,320,330,360,380,400,420,450,470"
+                   data-labels="فروردین,اردیبهشت,خرداد,تیر,مرداد,شهریور,مهر,آبان,آذر"></div>
+            </div>
+          </div>
+
+          <div class="card card-hover card-ink" data-win="chart-source" data-win-title="منابع جذب مشتری" data-win-sub="سهم هر کانال از مشتریان جدید" data-win-icon="chart-pie" data-win-size="760x560">
+            <div class="card-head">
+              <div class="card-title" data-icon="chart-pie" data-icon-size="18"> منابع جذب مشتری</div>
+            </div>
+            <div class="card-body">
+              <div class="donut-wrap">
+                <div data-chart="donut" data-values="42,26,18,14" data-center="۱۲۴" data-center-sub="مشتری جدید"
+                     data-labels="معرفی مشتریان, تبلیغات آنلاین, نمایشگاه و رویداد, تماس سرد"></div>
+              </div>
+            </div>
+            <div class="card-foot">
+              <span class="fs-sm text-muted">بیشترین بازده:</span>
+              <span class="badge badge-primary">معرفی مشتریان — ۴۲٪</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= قیف فروش + تسک‌ها + تیم ================= -->
+        <div class="grid-3 mb-5">
+          <div class="card card-hover" data-win="chart-pipeline" data-win-title="عملکرد مراحل فروش" data-win-sub="تعداد معاملات در هر مرحله" data-win-icon="pipeline" data-win-size="900x560">
+            <div class="card-head">
+              <div class="card-title" data-icon="pipeline" data-icon-size="18"> عملکرد مراحل فروش</div>
+              <div class="card-actions"><a class="btn btn-ghost btn-sm" href="pipeline.html">قیف فروش</a></div>
+            </div>
+            <div class="card-body">
+              <div class="chart h-200" data-chart="bar"
+                   data-values="48,36,27,19,12"
+                   data-colors="var(--c3),var(--c4),var(--c5),var(--c1),var(--brand)"
+                   data-labels="سرنخ,تماس,پیش‌فاکتور,مذاکره,برنده"></div>
+            </div>
+          </div>
+
+          <div class="card card-hover" data-win="tasks" data-win-title="کارهای امروز" data-win-sub="۵ تسک در فهرست" data-win-icon="check-check" data-win-size="760x600">
+            <div class="card-head">
+              <div class="card-title" data-icon="check-check" data-icon-size="18"> کارهای امروز</div>
+              <div class="card-actions">
+                <span class="badge badge-primary"><span data-tasks-left>۳</span> باقی‌مانده</span>
+                <button class="tb-icon" data-tip="افزودن کار" data-modal-open="#modalQuickNote" data-icon="plus" data-icon-size="17"></button>
+              </div>
+            </div>
+            <div class="card-body flush">
+              <div class="list">
+                <label class="list-item" style="cursor:pointer">
+                  <span class="check"><input type="checkbox" data-task-item><span class="box"><span data-icon="check" data-icon-size="13"></span></span></span>
+                  <span class="flex-1">
+                    <span class="li-title d-block">تماس پیگیری با گروه البرز</span>
+                    <span class="li-sub">امروز — ساعت ۱۱:۳۰</span>
+                  </span>
+                  <span class="priority urgent">فوری</span>
+                </label>
+                <label class="list-item" style="cursor:pointer">
+                  <span class="check"><input type="checkbox" data-task-item><span class="box"><span data-icon="check" data-icon-size="13"></span></span></span>
+                  <span class="flex-1">
+                    <span class="li-title d-block">ارسال پیش‌فاکتور به داده‌پرداز</span>
+                    <span class="li-sub">امروز — تا پایان وقت اداری</span>
+                  </span>
+                  <span class="priority high">بالا</span>
+                </label>
+                <label class="list-item" style="cursor:pointer">
+                  <span class="check"><input type="checkbox" data-task-item><span class="box"><span data-icon="check" data-icon-size="13"></span></span></span>
+                  <span class="flex-1">
+                    <span class="li-title d-block">به‌روزرسانی اطلاعات تماس مشتریان</span>
+                    <span class="li-sub">فردا</span>
+                  </span>
+                  <span class="priority normal">عادی</span>
+                </label>
+                <label class="list-item" style="cursor:pointer;opacity:.6">
+                  <span class="check"><input type="checkbox" data-task-item checked><span class="box"><span data-icon="check" data-icon-size="13"></span></span></span>
+                  <span class="flex-1">
+                    <span class="li-title d-block" style="text-decoration:line-through">آماده‌سازی گزارش هفتگی فروش</span>
+                    <span class="li-sub">انجام شد — ۰۹:۱۵</span>
+                  </span>
+                  <span class="priority low">پایین</span>
+                </label>
+              </div>
+            </div>
+            <div class="card-foot">
+              <div class="progress sm flex-1"><i style="width:66%" id="taskProgress"></i></div>
+              <span class="fs-xs text-muted num">۲ از ۴</span>
+            </div>
+          </div>
+
+          <div class="card card-hover" data-win="team" data-win-title="عملکرد تیم فروش" data-win-sub="بار کاری و تعداد معاملات" data-win-icon="users" data-win-size="860x620">
+            <div class="card-head">
+              <div class="card-title" data-icon="users" data-icon-size="18"> عملکرد تیم فروش</div>
+              <div class="card-actions"><a class="btn btn-ghost btn-sm" href="users.html">مدیریت کاربران</a></div>
+            </div>
+            <div class="card-body flush">
+              <div class="list" id="teamList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============== جدول مشتریان اخیر + خط زمانی فعالیت‌ها ============== -->
+        <div class="grid-2-1">
+          <div class="card card-hover" data-win="recent-customers" data-win-title="آخرین مشتریان" data-win-sub="۸ مشتری اخیر" data-win-icon="users" data-win-size="1100x640">
+            <div class="card-head">
+              <div class="card-title" data-icon="users" data-icon-size="18"> آخرین مشتریان</div>
+              <div class="card-actions">
+                <div class="input-wrap" style="width:210px">
+                  <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                  <input class="input input-sm" placeholder="جستجوی مشتری…" data-table-search="#tblRecent">
+                </div>
+                <a class="btn btn-soft btn-sm" href="customers.html">همه مشتریان</a>
+              </div>
+            </div>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table" id="tblRecent">
+                  <thead>
+                    <tr>
+                      <th class="sortable"><span class="th-in">مشتری</span></th>
+                      <th class="sortable"><span class="th-in">شهر</span></th>
+                      <th class="sortable"><span class="th-in">سطح</span></th>
+                      <th class="sortable num"><span class="th-in">ارزش خرید</span></th>
+                      <th class="sortable"><span class="th-in">وضعیت</span></th>
+                      <th>آخرین تعامل</th>
+                      <th class="table-row-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="d-flex items-center gap-3">
+                          <span class="avatar avatar-sm">مر</span>
+                          <span><span class="cell-main d-block">مریم رضایی</span><span class="cell-sub">پارس‌نیکان</span></span>
+                        </div>
+                      </td>
+                      <td>تهران</td>
+                      <td><span class="badge badge-warning">طلایی</span></td>
+                      <td class="num">۱۲۸٫۴۰۰٫۰۰۰</td>
+                      <td><span class="badge badge-success badge-dot">فعال</span></td>
+                      <td class="fs-sm text-muted">۱۴۰۴/۰۷/۱۸</td>
+                      <td>
+                        <span class="table-actions">
+                          <a class="tb-icon" style="width:30px;height:30px" data-tip="مشاهده پرونده" href="customer-profile.html" data-icon="eye" data-icon-size="16"></a>
+                          <button class="tb-icon" style="width:30px;height:30px" data-tip="ویرایش" data-modal-open="#modalEditCustomer" data-icon="pencil" data-icon-size="16"></button>
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex items-center gap-3">
+                          <span class="avatar avatar-sm">ام</span>
+                          <span><span class="cell-main d-block">امیر شریفی</span><span class="cell-sub">داده‌پرداز</span></span>
+                        </div>
+                      </td>
+                      <td>تهران</td>
+                      <td><span class="badge badge-warning">طلایی</span></td>
+                      <td class="num">۵۱۲٫۰۰۰٫۰۰۰</td>
+                      <td><span class="badge badge-success badge-dot">فعال</span></td>
+                      <td class="fs-sm text-muted">۱۴۰۴/۰۷/۱۷</td>
+                      <td>
+                        <span class="table-actions">
+                          <a class="tb-icon" style="width:30px;height:30px" data-tip="مشاهده پرونده" href="customer-profile.html" data-icon="eye" data-icon-size="16"></a>
+                          <button class="tb-icon" style="width:30px;height:30px" data-tip="ویرایش" data-icon="pencil" data-icon-size="16"></button>
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex items-center gap-3">
+                          <span class="avatar avatar-sm">عل</span>
+                          <span><span class="cell-main d-block">علی محمدی</span><span class="cell-sub">فناوران آبی</span></span>
+                        </div>
+                      </td>
+                      <td>اصفهان</td>
+                      <td><span class="badge badge-outline">نقره‌ای</span></td>
+                      <td class="num">۸۴٫۲۰۰٫۰۰۰</td>
+                      <td><span class="badge badge-success badge-dot">فعال</span></td>
+                      <td class="fs-sm text-muted">۱۴۰۴/۰۷/۱۶</td>
+                      <td>
+                        <span class="table-actions">
+                          <a class="tb-icon" style="width:30px;height:30px" data-tip="مشاهده پرونده" href="customer-profile.html" data-icon="eye" data-icon-size="16"></a>
+                          <button class="tb-icon" style="width:30px;height:30px" data-tip="ویرایش" data-icon="pencil" data-icon-size="16"></button>
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex items-center gap-3">
+                          <span class="avatar avatar-sm">زه</span>
+                          <span><span class="cell-main d-block">زهرا کریمی</span><span class="cell-sub">شخصی</span></span>
+                        </div>
+                      </td>
+                      <td>شیراز</td>
+                      <td><span class="badge badge-outline">برنزی</span></td>
+                      <td class="num">۱۲٫۹۰۰٫۰۰۰</td>
+                      <td><span class="badge badge-warning badge-dot">در انتظار تایید</span></td>
+                      <td class="fs-sm text-muted">۱۴۰۴/۰۷/۱۵</td>
+                      <td>
+                        <span class="table-actions">
+                          <a class="tb-icon" style="width:30px;height:30px" data-tip="مشاهده پرونده" href="customer-profile.html" data-icon="eye" data-icon-size="16"></a>
+                          <button class="tb-icon" style="width:30px;height:30px" data-tip="ویرایش" data-icon="pencil" data-icon-size="16"></button>
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex items-center gap-3">
+                          <span class="avatar avatar-sm">حس</span>
+                          <span><span class="cell-main d-block">حسین نوری</span><span class="cell-sub">گروه صنعتی البرز</span></span>
+                        </div>
+                      </td>
+                      <td>کرج</td>
+                      <td><span class="badge badge-warning">طلایی</span></td>
+                      <td class="num">۲۹۷٫۵۰۰٫۰۰۰</td>
+                      <td><span class="badge badge-success badge-dot">فعال</span></td>
+                      <td class="fs-sm text-muted">۱۴۰۴/۰۷/۱۲</td>
+                      <td>
+                        <span class="table-actions">
+                          <a class="tb-icon" style="width:30px;height:30px" data-tip="مشاهده پرونده" href="customer-profile.html" data-icon="eye" data-icon-size="16"></a>
+                          <button class="tb-icon" style="width:30px;height:30px" data-tip="ویرایش" data-icon="pencil" data-icon-size="16"></button>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="d-none" data-table-empty>
+                  <div class="empty">
+                    <div class="empty-ic" data-icon="search" data-icon-size="30"></div>
+                    <div class="empty-title">نتیجه‌ای یافت نشد</div>
+                    <div class="empty-desc">عبارت جستجو را تغییر دهید یا فیلترها را پاک کنید.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-foot">
+              <span class="text-muted fs-sm">نمایش ۵ مورد از ۱۲۴ مشتری</span>
+              <a class="btn btn-sm btn-soft ms-auto" href="customers.html">مشاهده فهرست کامل</a>
+            </div>
+          </div>
+
+          <div class="card card-hover" data-win="activity" data-win-title="آخرین فعالیت‌ها" data-win-sub="رویدادهای سیستم" data-win-icon="activity" data-win-size="720x700">
+            <div class="card-head">
+              <div class="card-title" data-icon="activity" data-icon-size="18"> آخرین فعالیت‌ها</div>
+              <div class="card-actions"><a class="btn btn-ghost btn-sm" href="activity.html">تاریخچه</a></div>
+            </div>
+            <div class="card-body scroll">
+              <div class="timeline" id="activityTimeline"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============================ مودال یادداشت ============================ -->
+<div class="overlay" id="modalQuickNote" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="qnTitle">
+    <div class="modal-head">
+      <span class="stat-icon" style="width:36px;height:36px"><span data-icon="note" data-icon-size="18"></span></span>
+      <div>
+        <div class="modal-title" id="qnTitle">یادداشت سریع</div>
+        <div class="modal-sub">یادداشت به پرونده مشتری و فهرست کارهای شما اضافه می‌شود.</div>
+      </div>
+      <button class="tb-icon modal-x" data-modal-close="#modalQuickNote" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="یادداشت در فهرست کارهای شما ثبت شد." data-close-modal="#modalQuickNote" data-reset-on-submit>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="qnTitleInput">عنوان <span class="req">*</span></label>
+          <input class="input" id="qnTitleInput" required placeholder="مثلاً تماس پیگیری با مشتری">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="qnCustomer">مشتری مرتبط</label>
+          <div class="input-wrap">
+            <span class="icon lead" data-icon="users" data-icon-size="17"></span>
+            <select class="select" id="qnCustomer">
+              <option>پارس‌نیکان — مریم رضایی</option>
+              <option>داده‌پرداز — امیر شریفی</option>
+              <option>گروه صنعتی البرز — حسین نوری</option>
+              <option>بدون مشتری مرتبط</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">اولویت</label>
+          <div class="d-flex gap-2 flex-wrap" data-chip-group>
+            <button type="button" class="chip">پایین</button>
+            <button type="button" class="chip is-active">عادی</button>
+            <button type="button" class="chip">بالا</button>
+            <button type="button" class="chip">فوری</button>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" for="qnBody">توضیحات</label>
+          <textarea class="textarea" id="qnBody" placeholder="جزئیات یادداشت…"></textarea>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> ثبت یادداشت</button>
+        <button type="button" class="btn" data-modal-close="#modalQuickNote">انصراف</button>
+        <span class="end fs-xs text-soft">با Ctrl + Enter نیز می‌توانید ذخیره کنید</span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========================== مودال ویرایش مشتری ========================== -->
+<div class="overlay" id="modalEditCustomer" style="display:none">
+  <div class="modal modal-lg" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">ویرایش اطلاعات مشتری</div>
+        <div class="modal-sub">C-1042 — مریم رضایی</div>
+      </div>
+      <button class="tb-icon modal-x" data-modal-close="#modalEditCustomer" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="اطلاعات مشتری ذخیره شد." data-close-modal="#modalEditCustomer">
+      <div class="modal-body">
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">نام و نام خانوادگی <span class="req">*</span></label>
+            <input class="input" value="مریم رضایی">
+          </div>
+          <div class="form-group">
+            <label class="form-label">نام شرکت / سازمان</label>
+            <input class="input" value="پارس‌نیکان">
+          </div>
+          <div class="form-group">
+            <label class="form-label">شماره تماس</label>
+            <input class="input ltr" value="09123456789" data-fa-mask>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ایمیل</label>
+            <input class="input ltr" value="m.rezaei@parsnikan.ir">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="check">
+            <input type="checkbox" checked>
+            <span class="box"><span data-icon="check" data-icon-size="13"></span></span>
+            <span class="lbl">ارسال پیامک اطلاع‌رسانی به این مشتری</span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+        <button type="button" class="btn" data-modal-close="#modalEditCustomer">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============================= دراور فیلتر ============================= -->
+<div class="drawer-overlay" id="drawerOverlay" style="display:none" data-drawer-close="#drawerFilter"></div>
+<aside class="drawer is-open" id="drawerFilter" style="display:none" role="dialog" aria-modal="true">
+  <div class="drawer-head">
+    <div>
+      <div class="modal-title">فیلترهای داشبورد</div>
+      <div class="modal-sub">بازه زمانی و شاخص‌های مورد نظر را انتخاب کنید.</div>
+    </div>
+    <button class="tb-icon modal-x" data-drawer-close="#drawerFilter" data-icon="x" data-icon-size="18"></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">بازه زمانی</label>
+      <div class="d-flex gap-2 flex-wrap" data-chip-group>
+        <button class="chip is-active">۷ روز اخیر</button>
+        <button class="chip">۳۰ روز اخیر</button>
+        <button class="chip">سه‌ماهه</button>
+        <button class="chip">سال جاری</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">کارشناس فروش</label>
+      <select class="select">
+        <option>همه کارشناسان</option>
+        <option>مهدی کریمی</option>
+        <option>نیما عباسی</option>
+        <option>سمیرا رحیمی</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">منابع جذب</label>
+      <label class="check mb-2"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="13"></span></span><span class="lbl">معرفی مشتریان</span></label>
+      <label class="check mb-2"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="13"></span></span><span class="lbl">تبلیغات آنلاین</span></label>
+      <label class="check mb-2"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="13"></span></span><span class="lbl">نمایشگاه و رویداد</span></label>
+      <label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="13"></span></span><span class="lbl">تماس سرد</span></label>
+    </div>
+    <div class="alert alert-info">
+      <span data-icon="info" data-icon-size="18"></span>
+      <div>
+        <div class="alert-title">نکته</div>
+        <div class="alert-desc">فیلترها به‌صورت زنده روی نمودارها اعمال می‌شوند (در نسخه نمایشی فقط ظاهر تغییر می‌کند).</div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-primary flex-1" data-drawer-close="#drawerFilter"><span data-icon="filter" data-icon-size="16"></span> اعمال فیلترها</button>
+    <button class="btn" data-drawer-close="#drawerFilter">پاک کردن</button>
+  </div>
+</aside>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+/* داده‌های اختصاصی داشبورد */
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+
+  /* تاریخ امروز در سربرگ */
+  CRM.$('#greetDate').textContent = CRM.jLong(new Date()) + ' — خلاصه وضعیت کسب‌وکار شما در یک نگاه';
+
+  /* ---------------------------------------------------------------
+   * پنل بخش‌های سامانه — کارت‌ها از CRM_DATA.modules (همان منبع منوی سایدبار)
+   * --------------------------------------------------------------- */
+  (function () {
+    var D = CRM.data, fa = CRM.fa, esc = CRM.esc;
+    function count(list, fn) { return (list || []).filter(fn).length; }
+    function stat(val, lbl, cls) { return { val: val, lbl: lbl, cls: cls || '' }; }
+    function fiscalYear() {
+      var J = CRM.jalali, t = new Date(), y = '—';
+      (D.fiscalPeriods || []).forEach(function (p) {
+        var a = J.parse(p.from), b = J.parse(p.to); if (!p.active || !a || !b) return;
+        if (J.toGregorian(a.jy, a.jm, a.jd) <= t && J.toGregorian(b.jy, b.jm, b.jd) >= t) y = fa(a.jy);
+      });
+      return y;
+    }
+    /* دو شاخص کوچک هر بخش (از داده‌های نمایشی؛ در اتصال واقعی از API) */
+    var STATS = {
+      'm-workspace': function () { return [stat(fa(count(D.tasks, function (t) { return !t.done; })), 'کار باز امروز'), stat(fa(count(D.msgs, function (m) { return m.to === D.msgMe && !m.seen; })), 'پیغام دیده‌نشده', 'warn')]; },
+      'm-customers': function () { return [stat(CRM.num(D.kpis[0].value), 'مشتری فعال'), stat(fa(D.kpis[0].delta), 'رشد این ماه')]; },
+      'm-sales': function () {
+        return [stat(fa(count(D.deals, function (x) { return x.stage !== 'won'; })), 'معامله در جریان'),
+                stat(fa(count(D.invoices, function (x) { return x.status === 'unpaid' || x.status === 'overdue'; })), 'فاکتور پرداخت‌نشده', 'warn')];
+      },
+      'm-warehouse': function () {
+        var stocked = (D.whProducts || []).filter(function (p) { return ['software', 'service'].indexOf(p.cat) === -1; });
+        var low = count(stocked, function (p) { return p.main <= p.min; });
+        return [stat(fa(stocked.length), 'محصول انباری'), stat(fa(low), 'کم‌موجود / ناموجود', low ? 'danger' : '')];
+      },
+      'm-support': function () {
+        var wait = count(D.supPlans, function (p) { return p.status === 'sent'; });
+        return [stat(fa(wait), 'فرم منتظر برنامه‌ریزی', wait ? 'warn' : ''),
+                stat(fa(count(D.tickets, function (x) { return x.status !== 'closed' && x.status !== 'answered'; })), 'تیکت باز')];
+      },
+      'm-accounting': function () {
+        var amt = function (x) { return Math.max(0, x.base * (x.qty || 1) - (x.discount || 0)); }, bal = 0;
+        (D.accDocs || []).forEach(function (x) { if (x.petty === 'in') bal += amt(x); if (x.petty === 'out') bal -= amt(x); });
+        var t = new Date(); t.setHours(0, 0, 0, 0);
+        var ch = count(D.accDocs, function (x) { var o = CRM.jalali.parse(x.chequeDate); return x.pay === 'cheque' && o && CRM.jalali.toGregorian(o.jy, o.jm, o.jd) >= t; });
+        return [stat(CRM.moneyShort(bal), 'موجودی تنخواه'), stat(fa(ch), 'چک در جریان', ch ? 'warn' : '')];
+      },
+      'm-reports': function () { var mr = D.modules.filter(function (m) { return m.id === 'm-reports'; })[0]; return [stat(fa(count(mr.children.concat(mr.links || []), function (c) { return c.href.indexOf('report.html?') === 0; })), 'گزارش آماده'), stat(fa(D.kpis[3].value) + '٪', 'نرخ تبدیل')]; },
+      'm-defs': function () { return [stat(fa(count(D.defUsers, function (u) { return u.active; })), 'کاربر فعال'), stat(fiscalYear(), 'دوره مالی جاری')]; }
+    };
+    var MAX_LINKS = 4;
+    CRM.$('#moduleGrid').innerHTML = (D.modules || []).map(function (m) {
+      var head = '<div class="mc-head"><span class="stat-icon ' + (m.tone || '') + '">' + CRM.icon(m.icon, 21) + '</span>' +
+        '<div style="min-width:0"><div class="mc-title">' + esc(m.label) + '</div><div class="mc-desc">' + esc(m.desc) + '</div></div>' +
+        (m.soon ? '<span class="badge">به‌زودی</span>' : m.badge ? '<span class="badge badge-primary">' + esc(m.badge) + '</span>' : '') + '</div>';
+      if (m.soon) {
+        return '<div class="module-card is-soon" aria-disabled="true">' + head +
+          '<div class="mc-soon">' + CRM.icon('clock', 14) + '<span>این بخش بعد از دریافت اسکرین‌شات‌های برنامه‌ی فعلی ساخته می‌شود.</span></div></div>';
+      }
+      var stats = (STATS[m.id] ? STATS[m.id]() : []).map(function (x) {
+        return '<div class="mc-stat"><div class="mc-val ' + x.cls + '">' + esc(x.val) + '</div><div class="mc-lbl">' + esc(x.lbl) + '</div></div>';
+      }).join('');
+      var links = m.children.concat(m.links || []);
+      var shown = links.slice(0, MAX_LINKS).map(function (c) { return '<a class="mc-link" href="' + c.href + '">' + esc(c.label) + '</a>'; }).join('') +
+        (links.length > MAX_LINKS ? '<a class="mc-link more" href="' + m.href + '" data-tip="' + esc(links.slice(MAX_LINKS).map(function (c) { return c.label; }).join('، ')) + '">' + fa(links.length - MAX_LINKS) + ' صفحه‌ی دیگر</a>' : '');
+      return '<div class="module-card" tabindex="0" role="link" data-href="' + m.href + '" aria-label="' + esc(m.label) + '">' + head +
+        (stats ? '<div class="mc-stats">' + stats + '</div>' : '') +
+        '<div class="mc-links">' + shown + '</div>' +
+        '<span class="mc-go">ورود به بخش ' + CRM.icon('arrow-left', 14) + '</span></div>';
+    }).join('');
+    /* کلیک/Enter روی خود کارت (نه پیوندهای داخلش) = ورود به بخش؛ واگذاری روی document تا در پنجره‌ی شناور هم کار کند */
+    function go(e) {
+      var c = e.target.closest && e.target.closest('.module-card[data-href]');
+      if (!c || e.target.closest('a')) return;
+      if (e.type === 'keydown' && e.key !== 'Enter') return;
+      location.href = c.getAttribute('data-href');
+    }
+    document.addEventListener('click', go);
+    document.addEventListener('keydown', go);
+  })();
+
+  /* تیم فروش */
+  CRM.$('#teamList').innerHTML = CRM.data.team.map(function (t) {
+    return '<div class="list-item">' +
+      CRM.avatar(t.name, 36) +
+      '<span class="flex-1"><span class="li-title d-block">' + CRM.esc(t.name) + '</span>' +
+      '<span class="li-sub">' + CRM.esc(t.role) + ' — ' + CRM.fa(t.deals) + ' معامله</span></span>' +
+      '<span style="width:110px"><span class="progress sm ' + (t.load > 85 ? 'danger' : t.load > 70 ? 'warn' : '') + '"><i style="width:' + t.load + '%"></i></span>' +
+      '<span class="fs-xs text-soft num">' + CRM.fa(t.load) + '٪ بار کاری</span></span>' +
+      '<span class="dot-status ' + (t.online ? 'online' : 'offline') + '"></span>' +
+    '</div>';
+  }).join('');
+
+  /* خط زمانی فعالیت‌ها */
+  var tones = { '': '', amber: 'muted' };
+  CRM.$('#activityTimeline').innerHTML = CRM.data.activities.map(function (a) {
+    return '<div class="tl-item ' + (tones[a.tone] || '') + '">' +
+      '<div class="d-flex items-center gap-2">' +
+        '<span class="fw-600 text-strong">' + CRM.esc(a.title) + '</span>' +
+        '<span class="tl-time ms-auto">' + CRM.esc(a.time) + '</span>' +
+      '</div>' +
+      '<div class="tl-body">' + CRM.esc(a.desc) + '</div>' +
+    '</div>';
+  }).join('');
+
+  /* تسک‌ها: به‌روزرسانی نوار پیشرفت */
+  var items = CRM.$$('[data-task-item]');
+  function refreshTasks() {
+    var done = items.filter(function (i) { return i.checked; }).length;
+    var bar = CRM.$('#taskProgress');
+    if (bar) bar.style.width = Math.round(done / items.length * 100) + '%';
+    var left = CRM.$('[data-tasks-left]');
+    if (left) left.textContent = CRM.fa(items.length - done);
+    items.forEach(function (i) {
+      var title = i.closest('.list-item').querySelector('.li-title');
+      title.style.textDecoration = i.checked ? 'line-through' : 'none';
+      i.closest('.list-item').style.opacity = i.checked ? .6 : 1;
+    });
+  }
+  items.forEach(function (i) { i.addEventListener('change', refreshTasks); });
+  refreshTasks();
+})();
+</script>
+</body>
+</html>

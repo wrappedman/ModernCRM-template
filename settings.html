@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تنظیمات | مدرن‌CRM</title>
+<meta name="description" content="تنظیمات عمومی، ظاهر، اعلان‌ها، مالی، امنیت و اتصال‌ها">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="settings">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="defs.html">تعاریف</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">تنظیمات سیستم</span>
+            </div>
+            <h1 class="page-title">تنظیمات سیستم</h1>
+            <p class="page-desc">پیکربندی اطلاعات سازمان، ظاهر برنامه، اعلان‌ها، مالی و امنیت</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" data-confirm="تنظیمات به مقادیر پیش‌فرض بازگردانده شود؟" data-confirm-title="بازگردانی تنظیمات" data-confirm-ok="بله، بازگردان"><span data-icon="refresh" data-icon-size="16"></span> بازگردانی پیش‌فرض</button>
+            <button class="btn btn-primary" data-demo-save><span data-icon="check" data-icon-size="16"></span> ذخیره تنظیمات</button>
+          </div>
+        </div>
+
+        <div class="d-flex gap-4 items-start flex-wrap">
+
+          <!-- ============================ منوی کنار ============================ -->
+          <aside class="card" style="width:250px;flex:0 0 auto" data-win="st-menu" data-win-title="دسته‌بندی تنظیمات" data-win-icon="settings" data-win-size="560x620">
+            <div class="card-body tight">
+              <div class="nav-group-title">تنظیمات</div>
+              <a class="nav-item is-active" href="#general"><span data-icon="settings" data-icon-size="18"></span><span class="nav-label">عمومی و سازمان</span></a>
+              <a class="nav-item" href="#appearance"><span data-icon="palette" data-icon-size="18"></span><span class="nav-label">ظاهر و تم</span></a>
+              <a class="nav-item" href="#notifications"><span data-icon="bell" data-icon-size="18"></span><span class="nav-label">اعلان‌ها</span></a>
+              <a class="nav-item" href="#finance"><span data-icon="receipt" data-icon-size="18"></span><span class="nav-label">مالی و فاکتور</span></a>
+              <a class="nav-item" href="#security"><span data-icon="shield" data-icon-size="18"></span><span class="nav-label">امنیت</span></a>
+              <a class="nav-item" href="#integrations"><span data-icon="link" data-icon-size="18"></span><span class="nav-label">اتصال‌ها و API</span></a>
+              <a class="nav-item" href="#backup"><span data-icon="database" data-icon-size="18"></span><span class="nav-label">پشتیبان‌گیری</span></a>
+            </div>
+          </aside>
+
+          <!-- ============================ بخش‌ها ============================ -->
+          <div class="flex-1 d-flex flex-col gap-4" style="min-width:320px">
+
+            <!-- ---------------------------- عمومی ---------------------------- -->
+            <div class="card" id="general" data-win="st-general" data-win-title="تنظیمات عمومی" data-win-icon="settings" data-win-size="960x700">
+              <div class="card-head">
+                <div class="card-title" data-icon="settings" data-icon-size="18"> عمومی و اطلاعات سازمان</div>
+              </div>
+              <div class="card-body">
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">نام سازمان <span class="req">*</span></label>
+                    <input class="input" value="مدرن‌CRM">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">شناسه ملی / کد اقتصادی</label>
+                    <input class="input ltr" value="14009876543">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">تلفن پشتیبانی</label>
+                    <input class="input ltr" value="02191001100" data-fa-mask>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">وب‌سایت</label>
+                    <input class="input ltr" value="https://moderncrm.ir">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">منطقه زمانی</label>
+                    <select class="select"><option>تهران (GMT+3:30)</option><option>UTC</option></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">تقویم پیش‌فرض</label>
+                    <select class="select"><option>شمسی (جلالی)</option><option>میلادی</option><option>قمری</option></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">واحد پول</label>
+                    <select class="select"><option>تومان</option><option>ریال</option><option>دلار</option></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">زبان پیش‌فرض</label>
+                    <select class="select"><option>فارسی</option><option>English</option></select>
+                  </div>
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                  <label class="form-label">نشانی سازمان</label>
+                  <textarea class="textarea">تهران، خیابان ولیعصر، برج نگین، طبقه ۱۲</textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- ---------------------------- ظاهر ---------------------------- -->
+            <div class="card" id="appearance" data-win="st-theme" data-win-title="ظاهر و تم" data-win-icon="palette" data-win-size="960x700">
+              <div class="card-head">
+                <div class="card-title" data-icon="palette" data-icon-size="18"> ظاهر و تم</div>
+                <div class="card-actions"><span class="badge badge-primary">آماده استفاده</span></div>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label class="form-label">حالت نمایش</label>
+                  <div class="d-flex items-center gap-3 p-3" id="themeCards"
+                       style="border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-2)">
+                    <span class="stat-ic" style="background:var(--brand-soft);color:var(--brand-ink)" data-icon="sun" data-icon-size="18"></span>
+                    <div class="flex-1">
+                      <div class="fw-600 fs-sm">حالت روشن (تنها حالت قالب)</div>
+                      <div class="fs-xs text-muted mt-1">قالب مدرن‌CRM فقط در حالت روشن ارائه می‌شود؛ حالت شب از برنامه حذف شده است.</div>
+                    </div>
+                    <span data-icon="check-circle" data-icon-size="18" style="color:var(--brand)"></span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">رنگ برند</label>
+                  <div class="d-flex gap-2 flex-wrap" data-chip-group>
+                    <button class="chip is-active"><i style="width:12px;height:12px;border-radius:50%;background:#5583e0;display:inline-block"></i> فیروزه‌ای (پیش‌فرض)</button>
+                    <button class="chip"><i style="width:12px;height:12px;border-radius:50%;background:#5583e0;display:inline-block"></i> آبی</button>
+                    <button class="chip"><i style="width:12px;height:12px;border-radius:50%;background:#8a7ee8;display:inline-block"></i> نیلی</button>
+                    <button class="chip"><i style="width:12px;height:12px;border-radius:50%;background:#dfa43f;display:inline-block"></i> کهربایی</button>
+                    <button class="chip"><i style="width:12px;height:12px;border-radius:50%;background:#e8695f;display:inline-block"></i> سرخ</button>
+                  </div>
+                </div>
+
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">اندازه فونت پایه</label>
+                    <select class="select"><option>کوچک (۱۳px)</option><option selected>متوسط (۱۴px)</option><option>بزرگ (۱۵px)</option><option>بسیار بزرگ (۱۶px)</option></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">چگالی نمایش جدول‌ها</label>
+                    <select class="select"><option>راحت</option><option selected>متعادل</option><option>فشرده</option></select>
+                  </div>
+                </div>
+
+                <div class="panel">
+                  <div class="panel-title">گزینه‌های نمایش</div>
+                  <label class="switch mb-3 w-100 justify-between"><span class="lbl">نمایش انیمیشن‌ها و افکت‌ها</span><input type="checkbox" checked><span class="track"></span></label>
+                  <label class="switch mb-3 w-100 justify-between"><span class="lbl">اعلان‌های شناور (Toast)</span><input type="checkbox" checked><span class="track"></span></label>
+                  <label class="switch mb-3 w-100 justify-between"><span class="lbl">قابلیت پنجره‌ای کردن کارت‌ها</span><input type="checkbox" checked><span class="track"></span></label>
+                  <label class="switch w-100 justify-between"><span class="lbl">نوار وظیفه همیشه نمایان باشد</span><input type="checkbox"><span class="track"></span></label>
+                </div>
+              </div>
+            </div>
+
+            <!-- ---------------------------- اعلان‌ها ---------------------------- -->
+            <div class="card" id="notifications" data-win="st-notify" data-win-title="اعلان‌ها" data-win-icon="bell" data-win-size="960x700">
+              <div class="card-head">
+                <div class="card-title" data-icon="bell" data-icon-size="18"> اعلان‌ها</div>
+              </div>
+              <div class="card-body flush">
+                <div class="table-wrap">
+                  <table class="table">
+                    <thead><tr><th>رویداد</th><th class="text-center">درون‌برنامه</th><th class="text-center">ایمیل</th><th class="text-center">پیامک</th></tr></thead>
+                    <tbody>
+                      <tr><td class="cell-main">ثبت مشتری جدید</td><td class="text-center"><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-center"><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-center"><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td></tr>
+                      <tr><td class="cell-main">تیکت با اولویت فوری</td><td class="text-center"><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-center"><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-center"><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td></tr>
+                      <tr><td class="cell-main">سررسید فاکتور</td><td class="text-center"><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-center"><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-center"><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td></tr>
+                      <tr><td class="cell-main">بسته شدن معامله</td><td class="text-center"><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-center"><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-center"><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td></tr>
+                      <tr><td class="cell-main">گزارش روزانه عملکرد</td><td class="text-center"><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-center"><label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="text-center"><label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- ---------------------------- مالی ---------------------------- -->
+            <div class="card" id="finance" data-win="st-finance" data-win-title="مالی و فاکتور" data-win-icon="receipt" data-win-size="960x700">
+              <div class="card-head">
+                <div class="card-title" data-icon="receipt" data-icon-size="18"> مالی و فاکتور</div>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-info mb-4">
+                  <span data-icon="info" data-icon-size="18"></span>
+                  <div>
+                    <div class="alert-title">نرخ‌ها و حرف فاکتور سالانه هستند</div>
+                    <div class="alert-desc">ارزش افزوده، مالیات، عوارض، حرف فاکتور و متن توضیحات هر سال در <a class="fw-600" href="defs-settings.html" style="text-decoration:underline">تعاریف ← تنظیمات فاکتور</a> ثبت می‌شوند.</div>
+                  </div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label">مهلت پرداخت (روز)</label>
+                    <input class="input num" value="۱۴">
+                  </div>
+                </div>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">درگاه پرداخت فعال</label>
+                    <select class="select"><option>زرین‌پال</option><option>آی‌دی‌پی</option><option>پرداخت دستی / کارت به کارت</option></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">نوع فاکتور پیش‌فرض</label>
+                    <select class="select"><option>رسمی (با مالیات)</option><option>ساده</option></select>
+                  </div>
+                </div>
+                <div class="panel">
+                  <div class="panel-title">شماره حساب بانکی (درج در فاکتور)</div>
+                  <div class="grid-2">
+                    <input class="input ltr" value="IR120570028780010000000000">
+                    <input class="input" value="بانک ملت — شعبه ولیعصر">
+                  </div>
+                </div>
+                <label class="switch mt-4 w-100 justify-between"><span class="lbl">محاسبه خودکار مالیات در فاکتورهای جدید</span><input type="checkbox" checked><span class="track"></span></label>
+              </div>
+            </div>
+
+            <!-- ---------------------------- امنیت ---------------------------- -->
+            <div class="card" id="security" data-win="st-security" data-win-title="امنیت" data-win-icon="shield" data-win-size="960x700">
+              <div class="card-head">
+                <div class="card-title" data-icon="shield" data-icon-size="18"> امنیت</div>
+                <div class="card-actions"><span class="badge badge-success">وضعیت: امن</span></div>
+              </div>
+              <div class="card-body">
+                <label class="switch mb-4 w-100 justify-between"><span class="lbl">الزام ورود دومرحله‌ای برای همه کاربران<small class="d-block fs-xs text-muted">توصیه می‌شود — امنیت حساب‌ها را به‌شدت افزایش می‌دهد</small></span><input type="checkbox" checked><span class="track"></span></label>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">حداقل طول رمز عبور</label>
+                    <select class="select"><option>۸ کاراکتر</option><option selected>۱۲ کاراکتر</option><option>۱۶ کاراکتر</option></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">قفل خودکار پس از چند تلاش ناموفق</label>
+                    <select class="select"><option>۳ تلاش</option><option selected>۵ تلاش</option><option>۱۰ تلاش</option></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">انقضای رمز عبور</label>
+                    <select class="select"><option>هر ۹۰ روز</option><option selected>هر ۱۸۰ روز</option><option>بدون انقضا</option></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">خروج خودکار پس از بی‌کاری</label>
+                    <select class="select"><option>۱۵ دقیقه</option><option selected>۳۰ دقیقه</option><option>۱ ساعت</option><option>هرگز</option></select>
+                  </div>
+                </div>
+                <div class="alert alert-warning">
+                  <span data-icon="alert" data-icon-size="18"></span>
+                  <div>
+                    <div class="alert-title">۲ کاربر بدون ورود دومرحله‌ای</div>
+                    <div class="alert-desc">برای امنیت بیشتر، الزام 2FA را برای کاربران «رضا پورمند» و «نیما عباسی» فعال کنید. <a href="users.html">مشاهده کاربران</a></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-foot">
+                <a class="btn btn-soft btn-sm" href="change-password.html"><span data-icon="key" data-icon-size="15"></span> تغییر رمز عبور من</a>
+                <button class="btn btn-sm" data-confirm="همه نشست‌های فعال بسته شوند؟" data-confirm-title="خروج از همه دستگاه‌ها" data-confirm-ok="بله، خارج شو"><span data-icon="logout" data-icon-size="15"></span> خروج از همه دستگاه‌ها</button>
+              </div>
+            </div>
+
+            <!-- ---------------------------- اتصال‌ها ---------------------------- -->
+            <div class="card" id="integrations" data-win="st-api" data-win-title="اتصال‌ها و API" data-win-icon="link" data-win-size="960x700">
+              <div class="card-head">
+                <div class="card-title" data-icon="link" data-icon-size="18"> اتصال‌ها و وب‌سرویس</div>
+              </div>
+              <div class="card-body">
+                <div class="grid-2 mb-4">
+                  <div class="file-item"><span class="file-ic" data-icon="message" data-icon-size="18"></span>
+                    <span class="flex-1"><span class="d-block fw-600 fs-sm">سامانه پیامک کاوه‌نگار</span><span class="fs-xs text-success">متصل</span></span>
+                    <label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+                  <div class="file-item"><span class="file-ic xls" data-icon="mail" data-icon-size="18"></span>
+                    <span class="flex-1"><span class="d-block fw-600 fs-sm">سرویس ایمیل تراکنشی</span><span class="fs-xs text-success">متصل</span></span>
+                    <label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+                  <div class="file-item"><span class="file-ic img" data-icon="cloud" data-icon-size="18"></span>
+                    <span class="flex-1"><span class="d-block fw-600 fs-sm">ذخیره‌سازی ابری فایل‌ها</span><span class="fs-xs text-muted">متصل نشده</span></span>
+                    <label class="switch"><input type="checkbox"><span class="track"></span></label></div>
+                  <div class="file-item"><span class="file-ic pdf" data-icon="banknote" data-icon-size="18"></span>
+                    <span class="flex-1"><span class="d-block fw-600 fs-sm">درگاه پرداخت زرین‌پال</span><span class="fs-xs text-success">متصل</span></span>
+                    <label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">کلید API سازمان</label>
+                  <div class="input-group">
+                    <input class="input ltr" id="apiKey" value="mc_live_9f2a74c1b8e34d5aa7c0e1f9b2d4e6a1" readonly>
+                    <button class="btn" data-copy="mc_live_9f2a74c1b8e34d5aa7c0e1f9b2d4e6a1"><span data-icon="copy" data-icon-size="16"></span> کپی</button>
+                  </div>
+                  <div class="form-hint"><span data-icon="shield-alert" data-icon-size="13"></span> این کلید را در جای امن نگه دارید؛ در اختیار افراد غیرمجاز قرار ندهید.</div>
+                </div>
+
+                <div class="form-group" style="margin-bottom:0">
+                  <label class="form-label">نمونه فراخوانی API</label>
+                  <div class="code-box">curl -X GET "https://api.moderncrm.ir/v1/customers?limit=20" \
+  -H "Authorization: Bearer mc_live_9f2a74c1b8e34d5aa7c0e1f9b2d4e6a1"</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ---------------------------- پشتیبان‌گیری ---------------------------- -->
+            <div class="card" id="backup" data-win="st-backup" data-win-title="پشتیبان‌گیری" data-win-icon="database" data-win-size="960x700">
+              <div class="card-head">
+                <div class="card-title" data-icon="database" data-icon-size="18"> پشتیبان‌گیری و بازیابی</div>
+              </div>
+              <div class="card-body">
+                <div class="grid-3 mb-4">
+                  <div class="panel text-center">
+                    <span class="stat-icon" style="margin:0 auto 8px"><span data-icon="download" data-icon-size="20"></span></span>
+                    <div class="fw-600">پشتیبان‌گیری دستی</div>
+                    <div class="fs-xs text-muted mb-3">دریافت فایل کامل داده‌ها</div>
+                    <button class="btn btn-sm btn-soft btn-block" data-demo-save>ساخت پشتیبان</button>
+                  </div>
+                  <div class="panel text-center">
+                    <span class="stat-icon sky" style="margin:0 auto 8px"><span data-icon="upload" data-icon-size="20"></span></span>
+                    <div class="fw-600">بازیابی از فایل</div>
+                    <div class="fs-xs text-muted mb-3">بازگردانی داده‌های پیشین</div>
+                    <button class="btn btn-sm btn-soft btn-block">انتخاب فایل</button>
+                  </div>
+                  <div class="panel text-center">
+                    <span class="stat-icon amber" style="margin:0 auto 8px"><span data-icon="clock" data-icon-size="20"></span></span>
+                    <div class="fw-600">پشتیبان‌گیری خودکار</div>
+                    <div class="fs-xs text-muted mb-3">هر شب ساعت ۰۲:۰۰</div>
+                    <label class="switch" style="justify-content:center"><input type="checkbox" checked><span class="track"></span></label>
+                  </div>
+                </div>
+                <div class="table-wrap" style="border:1px solid var(--border);border-radius:var(--radius)">
+                  <table class="table table-compact">
+                    <thead><tr><th>تاریخ</th><th>نوع</th><th>حجم</th><th>وضعیت</th><th></th></tr></thead>
+                    <tbody>
+                      <tr><td class="num">۱۴۰۴/۰۷/۱۹ — ۰۲:۰۰</td><td>خودکار</td><td class="num">۴۸ مگابایت</td><td><span class="badge badge-success badge-dot">موفق</span></td><td><button class="btn btn-ghost btn-sm">دانلود</button></td></tr>
+                      <tr><td class="num">۱۴۰۴/۰۷/۱۸ — ۰۲:۰۰</td><td>خودکار</td><td class="num">۴۷ مگابایت</td><td><span class="badge badge-success badge-dot">موفق</span></td><td><button class="btn btn-ghost btn-sm">دانلود</button></td></tr>
+                      <tr><td class="num">۱۴۰۴/۰۷/۱۷ — ۱۴:۲۲</td><td>دستی</td><td class="num">۴۷ مگابایت</td><td><span class="badge badge-success badge-dot">موفق</span></td><td><button class="btn btn-ghost btn-sm">دانلود</button></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+
+  /* دکمه‌های ذخیره نمایشی */
+  CRM.$$('[data-demo-save]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      CRM.toast({ type: 'success', title: 'تنظیمات ذخیره شد', msg: 'تغییرات بلافاصله اعمال می‌شوند.' });
+    });
+  });
+
+  /* اسکرول نرم به بخش‌ها و فعال‌سازی منو */
+  CRM.$$('aside .nav-item[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var t = document.querySelector(a.getAttribute('href'));
+      if (!t) return;
+      CRM.$$('aside .nav-item').forEach(function (x) { x.classList.remove('is-active'); });
+      a.classList.add('is-active');
+      window.scrollTo({ top: t.offsetTop - 90, behavior: 'smooth' });
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دسترسی غیرمجاز (۴۰۳) | مدرن‌CRM</title>
+<meta name="description" content="شما به این بخش دسترسی ندارید">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body data-shell="none" data-page="403" style="background:radial-gradient(circle at 78% 12%, var(--danger-soft), transparent 45%), radial-gradient(circle at 18% 85%, var(--brand-soft), transparent 45%), var(--bg)" data-win-auto="off">
+
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 18px;text-align:center;position:relative">
+
+  <div class="d-flex items-center gap-3 mb-6">
+    <span class="brand-mark" data-icon="sparkles" data-icon-size="22"></span>
+    <span class="brand-name">مدرن‌CRM</span>
+  </div>
+
+  <div class="modal-icon danger" style="width:74px;height:74px;margin-bottom:14px">
+    <span data-icon="shield-alert" data-icon-size="34"></span>
+  </div>
+
+  <div class="error-code">۴۰۳</div>
+
+  <h1 style="font-size:var(--fs-2xl)" class="mt-3">شما به این بخش دسترسی ندارید</h1>
+  <p class="page-desc mt-2" style="max-width:600px">
+    نقش کاربری فعلی شما («کارشناس فروش») اجازه مشاهده این صفحه را ندارد.
+    در صورت نیاز، از مدیر سیستم درخواست افزایش سطح دسترسی کنید.
+  </p>
+
+  <div class="d-flex gap-3 mt-5 flex-wrap justify-center">
+    <a class="btn btn-primary btn-lg" href="dashboard.html"><span data-icon="dashboard" data-icon-size="18"></span> بازگشت به داشبورد</a>
+    <button class="btn btn-lg" data-modal-open="#modalAccess"><span data-icon="shield-check" data-icon-size="18"></span> درخواست دسترسی</button>
+    <a class="btn btn-lg" href="help.html"><span data-icon="headset" data-icon-size="18"></span> پشتیبانی</a>
+  </div>
+
+  <div class="card mt-6" style="max-width:620px;width:100%;text-align:right">
+    <div class="card-head tight"><div class="card-title" data-icon="key" data-icon-size="17"> جزئیات درخواست</div></div>
+    <div class="card-body tight">
+      <dl class="kv">
+        <dt>صفحه درخواستی</dt><dd class="ltr">/admin/billing-reports</dd>
+        <dt>نقش فعلی شما</dt><dd><span class="badge badge-info">کارشناس فروش</span></dd>
+        <dt>دسترسی مورد نیاز</dt><dd><span class="badge badge-warning">گزارش‌های مالی — مشاهده</span></dd>
+        <dt>زمان درخواست</dt><dd class="num" id="reqTime">—</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="fs-sm text-soft mt-5">
+    کد خطا: <span class="num">۴۰۳ — FORBIDDEN</span> · شناسه پیگیری: <span class="num ltr">ERR-2B7C-90D1</span>
+  </div>
+</div>
+
+<div class="overlay" id="modalAccess" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">درخواست افزایش دسترسی</div><div class="modal-sub">درخواست شما برای مدیر سیستم ارسال می‌شود.</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#modalAccess" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="درخواست دسترسی ارسال شد." data-close-modal="#modalAccess">
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">بخش مورد نیاز</label>
+          <select class="select"><option>گزارش‌های مالی</option><option>تنظیمات سیستم</option><option>مدیریت کاربران</option><option>فاکتورها</option></select>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">دلیل درخواست</label>
+          <textarea class="textarea" placeholder="برای تهیه گزارش ماهانه فروش به این بخش نیاز دارم…"></textarea>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary">ارسال درخواست</button>
+        <button type="button" class="btn" data-modal-close="#modalAccess">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var el = CRM.$('#reqTime');
+  if (el) el.textContent = CRM.jLong(new Date());
+})();
+</script>
+</body>
+</html>

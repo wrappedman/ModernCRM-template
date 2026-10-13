@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تعریف محصولات | انبار | مدرن‌CRM</title>
+<meta name="description" content="تعریف و ویرایش محصولات انبار: مجموعه، نام‌ها در فاکتور، قیمت‌ها و تصویر">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="warehouse-products">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="warehouse.html">انبار</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">تعریف محصولات</span>
+            </div>
+            <h1 class="page-title">تعریف محصولات</h1>
+            <p class="page-desc">مشخصات پایه، نام در اسناد مالی، قیمت‌ها و تصویر هر محصول را ثبت کنید. برای ویرایش، محصول را از فهرست انتخاب کنید.</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" type="button" id="btnExport"><span data-icon="file-spreadsheet" data-icon-size="16"></span> خروجی Excel</button>
+            <button class="btn btn-primary" type="button" id="btnNew"><span data-icon="plus" data-icon-size="16"></span> محصول جدید</button>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <!-- ============================ فرم محصول ============================ -->
+          <form class="card" id="productForm" data-win-nobtn novalidate>
+            <div class="card-head">
+              <div class="card-title"><span data-icon="package" data-icon-size="18"></span> <span id="formTitle">محصول جدید</span></div>
+              <div class="card-actions"><span class="badge badge-info" id="formBadge">در حال تعریف</span></div>
+            </div>
+
+            <div class="card-body">
+              <!-- ۱) اطلاعات پایه -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="package" data-icon-size="17"></span>
+                  <div><div class="fs-title">اطلاعات پایه</div><div class="fs-desc">مجموعه، نام و ویژگی‌های محصول</div></div>
+                </div>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="fCat">مجموعه محصولات <span class="req">*</span></label>
+                    <select class="select" id="fCat" required></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fUnit">واحد</label>
+                    <select class="select" id="fUnit"></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fName">نام اصلی محصول <span class="req">*</span></label>
+                    <input class="input" id="fName" required placeholder="مثلاً HP - 510">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fCorp">نام شرکتی محصول</label>
+                    <input class="input" id="fCorp" placeholder="نام کامل تجاری محصول">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="fFeature">قابلیت محصول</label>
+                  <textarea class="textarea" id="fFeature" rows="3" placeholder="ویژگی‌ها و قابلیت‌های کلیدی محصول…"></textarea>
+                </div>
+              </section>
+
+              <!-- ۲) نام در اسناد -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="invoice" data-icon-size="17"></span>
+                  <div><div class="fs-title">نام در اسناد مالی</div><div class="fs-desc">متنی که در فاکتور و پیش‌فاکتور چاپ می‌شود</div></div>
+                  <button type="button" class="btn btn-sm btn-ghost fs-end" id="btnSameName"><span data-icon="copy" data-icon-size="14"></span> یکسان با نام اصلی</button>
+                </div>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="fInvName">نام داخل فاکتور</label>
+                    <textarea class="textarea" id="fInvName" rows="2" style="min-height:72px"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fProName">نام داخل پیش‌فاکتور</label>
+                    <textarea class="textarea" id="fProName" rows="2" style="min-height:72px"></textarea>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۳) قیمت‌گذاری -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="coins" data-icon-size="17"></span>
+                  <div><div class="fs-title">قیمت‌گذاری</div><div class="fs-desc">همه مبالغ به تومان</div></div>
+                  <span class="badge badge-success fs-end" id="marginBadge" data-tip="حاشیه سود قیمت مصرف‌کننده نسبت به هزینه ناخالصی">حاشیه سود: —</span>
+                </div>
+                <div class="grid-4">
+                  <div class="form-group">
+                    <label class="form-label" for="fConsumer">قیمت مصرف‌کننده</label>
+                    <div class="input-wrap"><input class="input num" id="fConsumer" data-num-mask placeholder="۰"><span class="unit">تومان</span></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fPartner">قیمت همکار</label>
+                    <div class="input-wrap"><input class="input num" id="fPartner" data-num-mask placeholder="۰"><span class="unit">تومان</span></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fAgent">قیمت نماینده</label>
+                    <div class="input-wrap"><input class="input num" id="fAgent" data-num-mask placeholder="۰"><span class="unit">تومان</span></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fCost">هزینه ناخالصی</label>
+                    <div class="input-wrap"><input class="input num" id="fCost" data-num-mask placeholder="۰"><span class="unit">تومان</span></div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۴) تصویر و نمایش -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="image" data-icon-size="17"></span>
+                  <div><div class="fs-title">تصویر و نمایش</div><div class="fs-desc">تصویر محصول و نمایش در انبار عمومی</div></div>
+                </div>
+                <div class="d-flex flex-wrap items-center gap-5">
+                  <div class="img-pick" id="imgPick">
+                    <div class="ip-thumb" id="imgThumb"><span data-icon="image-plus" data-icon-size="28"></span></div>
+                    <div>
+                      <div class="fw-600 text-strong mb-1">تصویر محصول</div>
+                      <div class="fs-xs text-muted mb-3" id="imgName">PNG یا JPG — حداکثر ۲ مگابایت</div>
+                      <div class="d-flex gap-2">
+                        <label class="btn btn-sm btn-soft" style="cursor:pointer"><span data-icon="upload" data-icon-size="14"></span> انتخاب عکس
+                          <input type="file" accept="image/*" id="imgInput" hidden>
+                        </label>
+                        <button type="button" class="btn btn-sm" id="imgRemove" disabled><span data-icon="trash" data-icon-size="14"></span> حذف عکس</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel ms-auto" style="min-width:250px">
+                    <label class="switch">
+                      <input type="checkbox" id="fPublic" checked>
+                      <span class="track"></span>
+                      <span class="lbl">مشاهده در انبار عمومی</span>
+                    </label>
+                    <div class="form-hint mt-2"><span data-icon="info" data-icon-size="13"></span> این محصول در گزارش «انبار عمومی» نمایش داده شود.</div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> <span id="btnSaveLbl">ثبت محصول</span></button>
+              <button type="button" class="btn" id="btnCancel"><span data-icon="eraser" data-icon-size="16"></span> انصراف</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-soft" id="btnSearch" data-tip="جستجوی فهرست بر اساس مجموعه و نام واردشده"><span data-icon="search" data-icon-size="16"></span> جستجو</button>
+              <button type="button" class="btn btn-danger-soft" id="btnDelete" disabled><span data-icon="trash" data-icon-size="16"></span> حذف</button>
+            </div>
+          </form>
+
+          <!-- ============================ فهرست محصولات ============================ -->
+          <div class="card" data-win-nobtn style="align-self:start;position:sticky;top:calc(var(--topbar-h) + 12px)">
+            <div class="card-head">
+              <div class="card-title" data-icon="list-checks" data-icon-size="18"> فهرست محصولات</div>
+              <div class="card-actions"><span class="badge" id="listCount">—</span></div>
+            </div>
+            <div class="card-body tight" style="border-bottom:1px solid var(--border-muted)">
+              <div class="input-wrap mb-2">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" id="listSearch" placeholder="جستجو در نام یا کد…" aria-label="جستجو در محصولات">
+              </div>
+              <select class="select select-sm" id="listCat" aria-label="فیلتر مجموعه"></select>
+            </div>
+            <div style="max-height:min(640px, calc(100vh - 300px));overflow:auto">
+              <div class="pick-list" id="productList"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/warehouse.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, WH = window.WH, D = CRM.data, $ = CRM.$, fa = CRM.fa, num = CRM.num, esc = CRM.esc;
+  var form = $('#productForm'), current = null, imgURL = null;
+
+  /* ------------------------------------------------ کنترل‌ها */
+  WH.fillCategories($('#fCat'), { placeholder: 'انتخاب مجموعه…' });
+  WH.fillCategories($('#listCat'), { placeholder: 'همه مجموعه‌ها' });
+  $('#fUnit').innerHTML = D.whUnits.map(function (u) { return '<option>' + esc(u) + '</option>'; }).join('');
+
+  var F = {
+    cat: $('#fCat'), unit: $('#fUnit'), name: $('#fName'), corp: $('#fCorp'), feature: $('#fFeature'),
+    invoiceName: $('#fInvName'), proformaName: $('#fProName'),
+    consumer: $('#fConsumer'), partner: $('#fPartner'), agent: $('#fAgent'), cost: $('#fCost'), public: $('#fPublic')
+  };
+  function n(v) { return +String(CRM.en(v || '')).replace(/[^\d]/g, '') || 0; }
+
+  /* ------------------------------------------------ فهرست */
+  function renderList() {
+    var q = $('#listSearch').value.trim().toLowerCase(), c = $('#listCat').value;
+    var rows = D.whProducts.filter(function (p) {
+      return (!c || p.cat === c) && (!q || (p.name + ' ' + p.corp + ' ' + p.code + ' ' + CRM.fa(p.code)).toLowerCase().indexOf(q) > -1);
+    });
+    $('#listCount').textContent = fa(rows.length) + ' محصول';
+    $('#productList').innerHTML = rows.length ? rows.map(function (p) {
+      return '<button type="button" class="pick-item' + (current && current.code === p.code ? ' is-selected' : '') + '" data-code="' + p.code + '">' +
+        WH.code(p) +
+        '<span class="pi-main"><span class="pi-title d-block">' + esc(p.name) + '</span><span class="pi-sub d-block">' + esc(WH.category(p.cat).title) + '</span></span>' +
+        (WH.isStocked(p) ? '<span class="num fs-xs text-muted">' + fa(p.main) + '</span>' : '') +
+      '</button>';
+    }).join('') : '<div class="empty" style="padding:30px 12px"><div class="empty-ic" data-icon="search" data-icon-size="26"></div><div class="empty-desc">محصولی پیدا نشد.</div></div>';
+    CRM.renderIcons($('#productList'));
+  }
+  $('#listSearch').addEventListener('input', CRM.debounce(renderList, 120));
+  $('#listCat').addEventListener('change', renderList);
+  $('#productList').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-code]'); if (b) load(WH.product(b.getAttribute('data-code')));
+  });
+
+  /* ------------------------------------------------ پرکردن فرم */
+  function setMode(p) {
+    current = p;
+    $('#formTitle').textContent = p ? 'ویرایش محصول' : 'محصول جدید';
+    var badge = $('#formBadge');
+    badge.className = 'badge ' + (p ? 'badge-violet' : 'badge-info');
+    badge.innerHTML = p ? 'کد ' + fa(p.code) + ' · <span class="ltr-cell">' + esc(p.name) + '</span>' : 'در حال تعریف';
+    $('#btnSaveLbl').textContent = p ? 'ثبت تغییرات' : 'ثبت محصول';
+    $('#btnDelete').disabled = !p;
+    renderList();
+  }
+  function load(p) {
+    F.cat.value = p.cat; F.unit.value = p.unit; F.name.value = p.name; F.corp.value = p.corp; F.feature.value = p.feature;
+    F.invoiceName.value = p.invoiceName; F.proformaName.value = p.proformaName;
+    F.consumer.value = p.consumer ? num(p.consumer) : ''; F.partner.value = p.partner ? num(p.partner) : '';
+    F.agent.value = p.agent ? num(p.agent) : ''; F.cost.value = p.cost ? num(p.cost) : '';
+    F.public.checked = !!p.public;
+    setImage(null);
+    setMode(p); margin();
+    if (window.innerWidth < 1024) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function clear() {
+    form.reset(); F.public.checked = true; setImage(null); setMode(null); margin();
+    form.querySelectorAll('.is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+  }
+
+  /* حاشیه سود */
+  function margin() {
+    var c = n(F.consumer.value), k = n(F.cost.value), b = $('#marginBadge');
+    if (!c || !k) { b.className = 'badge fs-end'; b.textContent = 'حاشیه سود: —'; return; }
+    var m = Math.round((c - k) / c * 100);
+    b.className = 'badge fs-end ' + (m >= 25 ? 'badge-success' : m >= 10 ? 'badge-warning' : 'badge-danger');
+    b.textContent = 'حاشیه سود: ' + fa(m) + '٪';
+  }
+  [F.consumer, F.cost].forEach(function (i) { i.addEventListener('input', margin); });
+
+  $('#btnSameName').addEventListener('click', function () {
+    var v = F.corp.value || F.name.value;
+    if (!v) { CRM.toast({ type: 'warning', title: 'نام محصول خالی است', msg: 'ابتدا نام اصلی یا نام شرکتی را وارد کنید.' }); return; }
+    F.invoiceName.value = v; F.proformaName.value = v;
+  });
+
+  /* ------------------------------------------------ تصویر */
+  function setImage(file) {
+    if (imgURL) { URL.revokeObjectURL(imgURL); imgURL = null; }
+    var th = $('#imgThumb');
+    if (file) {
+      imgURL = URL.createObjectURL(file);
+      th.innerHTML = '<img alt="" src="' + imgURL + '">';
+      $('#imgName').textContent = file.name;
+    } else {
+      th.innerHTML = CRM.icon('image-plus', 28);
+      $('#imgName').textContent = 'PNG یا JPG — حداکثر ۲ مگابایت';
+      $('#imgInput').value = '';
+    }
+    $('#imgPick').classList.toggle('has-img', !!file);
+    $('#imgRemove').disabled = !file;
+  }
+  $('#imgInput').addEventListener('change', function (e) { if (e.target.files[0]) setImage(e.target.files[0]); });
+  $('#imgRemove').addEventListener('click', function () { setImage(null); });
+
+  /* ------------------------------------------------ دکمه‌ها */
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var bad = [F.cat, F.name].filter(function (x) { return !x.value.trim(); });
+    [F.cat, F.name].forEach(function (x) { x.classList.toggle('is-invalid', bad.indexOf(x) > -1); });
+    if (bad.length) { bad[0].focus(); CRM.toast({ type: 'danger', title: 'فیلدهای الزامی', msg: 'مجموعه محصولات و نام اصلی محصول را وارد کنید.' }); return; }
+    var data = {
+      cat: F.cat.value, unit: F.unit.value, name: F.name.value.trim(), corp: F.corp.value.trim(), feature: F.feature.value.trim(),
+      invoiceName: F.invoiceName.value.trim() || F.name.value.trim(), proformaName: F.proformaName.value.trim() || F.name.value.trim(),
+      consumer: n(F.consumer.value), partner: n(F.partner.value), agent: n(F.agent.value), cost: n(F.cost.value), public: F.public.checked
+    };
+    /* فقط نمایشی: ذخیره در حافظه‌ی صفحه */
+    if (current) { Object.assign(current, data); CRM.toast({ type: 'success', title: 'تغییرات ثبت شد', msg: 'مشخصات «' + data.name + '» به‌روزرسانی شد.' }); setMode(current); }
+    else {
+      var code = Math.max.apply(null, D.whProducts.map(function (p) { return p.code; })) + 1;
+      var p = Object.assign({ code: code, main: 0, sub: 0, min: 5 }, data);
+      D.whProducts.push(p);
+      CRM.toast({ type: 'success', title: 'محصول ثبت شد', msg: '«' + data.name + '» با کد ' + fa(code) + ' به فهرست اضافه شد.' });
+      setMode(p);
+    }
+  });
+  $('#btnCancel').addEventListener('click', clear);
+  $('#btnNew').addEventListener('click', function () { clear(); F.cat.focus(); });
+  $('#btnSearch').addEventListener('click', function () {
+    $('#listCat').value = F.cat.value;
+    $('#listSearch').value = F.name.value.trim();
+    renderList();
+    CRM.toast({ type: 'info', title: 'جستجو', msg: 'فهرست بر اساس مجموعه و نام واردشده فیلتر شد.', duration: 2200 });
+  });
+  $('#btnDelete').addEventListener('click', function () {
+    if (!current) return;
+    CRM.modal.confirm({ title: 'حذف محصول', msg: 'محصول «' + current.name + '» حذف شود؟ سوابق ورود و خروج آن باقی می‌ماند.', danger: true, okText: 'بله، حذف کن', icon: 'trash' })
+      .then(function (ok) {
+        if (!ok) return;
+        D.whProducts.splice(D.whProducts.indexOf(current), 1);
+        CRM.toast({ type: 'success', title: 'حذف شد', msg: 'محصول از فهرست حذف شد.' });
+        clear();
+      });
+  });
+  $('#btnExport').addEventListener('click', function () { WH.exportToast('products'); });
+
+  clear();
+})();
+</script>
+</body>
+</html>

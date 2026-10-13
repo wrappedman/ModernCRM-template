@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>راهنمای طراحی و کامپوننت‌ها | مدرن‌CRM</title>
+<meta name="description" content="راهنمای کامل رنگ‌ها، تایپوگرافی، دکمه‌ها، فرم‌ها، جدول‌ها، نمودارها و پنجره‌های شناور">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="design-system">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">راهنمای طراحی</span>
+            </div>
+            <h1 class="page-title">راهنمای طراحی و کامپوننت‌ها</h1>
+            <p class="page-desc">همه اجزای قالب، متغیرهای رنگ و الگوهای آماده در یک صفحه</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn btn-primary" href="README.md"><span data-icon="book" data-icon-size="16"></span> مستندات قالب</a>
+          </div>
+        </div>
+
+        <div class="alert alert-info mb-5">
+          <span data-icon="palette" data-icon-size="18"></span>
+          <div>
+            <div class="alert-title">همه رنگ‌ها در یک فایل</div>
+            <div class="alert-desc">تمام رنگ‌ها، شعاع گوشه‌ها، سایه‌ها و اندازه‌ها در <b class="ltr">assets/css/tokens.css</b> تعریف شده‌اند.
+            برای تغییر هویت بصری، فقط متغیرها را ویرایش کنید — نیازی به تغییر سایر فایل‌ها نیست.</div>
+          </div>
+        </div>
+
+        <div class="alert alert-success mb-5">
+          <span data-icon="sparkles" data-icon-size="18"></span>
+          <div>
+            <div class="alert-title">هویت بصری برگرفته از تم مرجع</div>
+            <div class="alert-desc">
+              بوم خاکستری-آبی روشن، کارت‌های سفید با گوشه‌های بسیار گرد (تا ۳۴ پیکسل)، لهجه‌ی اصلی <b>آبی ملایم</b>،
+              لهجه‌ی دوم <b>مرجانی</b> و <b>مشکی جوهری</b> برای حالت‌های فعال. دکمه‌ها، تب‌ها، چیپ‌ها، نوار وظیفه و آیتم فعال سایدبار
+              همه از همین زبان بصری استفاده می‌کنند و رنگ‌ها از یک فایل توکن مشترک می‌آیند.
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================== رنگ‌ها ============================== -->
+        <div class="section-title"><span data-icon="palette" data-icon-size="18"></span> پالت رنگ برند</div>
+        <div class="card mb-5">
+          <div class="card-body">
+            <div class="d-flex flex-wrap gap-3 mb-4">
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--brand-50);border:1px solid var(--border)"></div><div class="fs-2xs text-muted mt-1">50</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--brand-100)"></div><div class="fs-2xs text-muted mt-1">100</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--brand-200)"></div><div class="fs-2xs text-muted mt-1">200</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--brand-300)"></div><div class="fs-2xs text-muted mt-1">300</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--brand-400)"></div><div class="fs-2xs text-muted mt-1">400</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--brand-500)"></div><div class="fs-2xs text-muted mt-1">500</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--brand-600)"></div><div class="fs-2xs text-muted mt-1">600 (برند)</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--brand-700)"></div><div class="fs-2xs text-muted mt-1">700</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--brand-800)"></div><div class="fs-2xs text-muted mt-1">800</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--brand-900)"></div><div class="fs-2xs text-muted mt-1">900</div></div>
+            </div>
+            <div class="d-flex flex-wrap gap-3">
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--success-500)"></div><div class="fs-2xs text-muted mt-1">موفق</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--warning-500)"></div><div class="fs-2xs text-muted mt-1">هشدار</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--danger-500)"></div><div class="fs-2xs text-muted mt-1">خطر</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--info-500)"></div><div class="fs-2xs text-muted mt-1">اطلاع</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--violet-500)"></div><div class="fs-2xs text-muted mt-1">بنفش</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--rose-500)"></div><div class="fs-2xs text-muted mt-1">سرخ</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--accent-500)"></div><div class="fs-2xs text-muted mt-1">مرجانی</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--ink)"></div><div class="fs-2xs text-muted mt-1">مشکی جوهری</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--bg)"></div><div class="fs-2xs text-muted mt-1">بوم صفحه</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--grad-brand)"></div><div class="fs-2xs text-muted mt-1">گرادیان برند</div></div>
+              <div class="text-center"><div style="width:74px;height:56px;border-radius:10px;background:var(--grad-coral)"></div><div class="fs-2xs text-muted mt-1">گرادیان مرجانی</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================== دکمه‌ها ============================== -->
+        <div class="section-title"><span data-icon="square" data-icon-size="18"></span> دکمه‌ها</div>
+        <div class="card mb-5">
+          <div class="card-body d-flex flex-wrap gap-3 items-center">
+            <button class="btn btn-primary">دکمه اصلی</button>
+            <button class="btn btn-gradient">گرادیانی</button>
+            <button class="btn">پیش‌فرض</button>
+            <button class="btn btn-soft">نرم</button>
+            <button class="btn btn-outline-brand">خطی برند</button>
+            <button class="btn btn-ghost">شبح</button>
+            <button class="btn btn-danger">حذف</button>
+            <button class="btn btn-danger-soft">حذف نرم</button>
+            <button class="btn btn-success">تایید</button>
+            <button class="btn btn-dark">تیره</button>
+            <button class="btn btn-ink">مشکی (فعال)</button>
+            <button class="btn btn-primary" disabled>غیرفعال</button>
+            <button class="btn btn-primary is-loading">در حال ذخیره</button>
+            <button class="btn btn-sm btn-soft"><span data-icon="plus" data-icon-size="15"></span> کوچک</button>
+            <button class="btn btn-icon" data-tip="دکمه آیکونی"><span data-icon="settings" data-icon-size="18"></span></button>
+            <div class="btn-group">
+              <button class="btn is-active">روز</button><button class="btn">هفته</button><button class="btn">ماه</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================== کارت‌ها ============================== -->
+        <div class="section-title"><span data-icon="layout-grid" data-icon-size="18"></span> کارت‌ها</div>
+        <div class="grid-3 mb-5">
+          <div class="card">
+            <div class="card-head tight"><span class="card-title">کارت پیش‌فرض</span>
+              <div class="card-actions"><span class="badge badge-primary">ویژه</span></div>
+            </div>
+            <div class="card-body tight">
+              <div class="stat">
+                <div class="stat-top">
+                  <div class="stat-icon"><span data-icon="users" data-icon-size="22"></span></div>
+                  <div class="flex-1">
+                    <div class="stat-label">مشتریان فعال</div>
+                    <div class="stat-value">۱٫۲۴۸</div>
+                  </div>
+                </div>
+                <div class="stat-foot"><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۱۲٪</span><span>رشد ماهانه</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-ink">
+            <div class="card-head tight"><span class="card-title">کارت مشکی (فعال)</span>
+              <div class="card-actions"><span class="badge badge-primary">در حال پردازش</span></div>
+            </div>
+            <div class="card-body tight">
+              <div class="stat">
+                <div class="stat-top">
+                  <div class="stat-icon"><span data-icon="loader" data-icon-size="22"></span></div>
+                  <div class="flex-1">
+                    <div class="stat-label">برآورد زمان حل</div>
+                    <div class="stat-value">۴۲ دقیقه</div>
+                  </div>
+                </div>
+                <div class="stat-foot"><span>در انتظار تأیید کارشناس فنی</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head tight"><span class="card-title">آیکون‌های آماری</span></div>
+            <div class="card-body tight d-flex flex-wrap gap-3 items-center">
+              <span class="stat-icon"><span data-icon="dashboard" data-icon-size="22"></span></span>
+              <span class="stat-icon coral"><span data-icon="alert" data-icon-size="22"></span></span>
+              <span class="stat-icon success"><span data-icon="check-circle" data-icon-size="22"></span></span>
+              <span class="stat-icon sky"><span data-icon="activity" data-icon-size="22"></span></span>
+              <span class="stat-icon violet"><span data-icon="sparkles" data-icon-size="22"></span></span>
+              <span class="stat-icon amber"><span data-icon="star" data-icon-size="22"></span></span>
+              <span class="stat-icon ink"><span data-icon="zap" data-icon-size="22"></span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================== برچسب‌ها ============================== -->
+        <div class="section-title"><span data-icon="tag" data-icon-size="18"></span> برچسب‌ها، چیپ‌ها و روندها</div>
+        <div class="card mb-5">
+          <div class="card-body d-flex flex-wrap gap-3 items-center">
+            <span class="badge">پیش‌فرض</span>
+            <span class="badge badge-primary">برند</span>
+            <span class="badge badge-success badge-dot">فعال</span>
+            <span class="badge badge-warning badge-dot">در انتظار</span>
+            <span class="badge badge-danger badge-dot">مسدود</span>
+            <span class="badge badge-info">اطلاع</span>
+            <span class="badge badge-violet">ویژه</span>
+            <span class="badge badge-outline">خطی</span>
+            <span class="badge badge-solid badge-lg">برجسته</span>
+            <span class="tag-counter">۱۲</span>
+            <span class="priority urgent">فوری</span>
+            <span class="priority high">بالا</span>
+            <span class="priority normal">عادی</span>
+            <span class="priority low">پایین</span>
+            <span class="trend up"><span data-icon="arrow-up-right" data-icon-size="15"></span> ۱۲٪</span>
+            <span class="trend down"><span data-icon="arrow-down-right" data-icon-size="15"></span> ۴٪</span>
+            <span class="stars">
+              <span data-icon="star" data-icon-size="15"></span><span data-icon="star" data-icon-size="15"></span>
+              <span data-icon="star" data-icon-size="15"></span><span data-icon="star" data-icon-size="15"></span>
+              <span data-icon="star" data-icon-size="15" class="off"></span>
+            </span>
+            <div class="d-flex gap-2" data-chip-group>
+              <button class="chip is-active">فیلتر فعال</button>
+              <button class="chip">فیلتر</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================== فرم‌ها ============================== -->
+        <div class="section-title"><span data-icon="sliders" data-icon-size="18"></span> اجزای فرم</div>
+        <div class="card mb-5">
+          <div class="card-body">
+            <div class="grid-3">
+              <div class="form-group">
+                <label class="form-label">ورودی متنی <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <span class="icon lead" data-icon="user-round" data-icon-size="17"></span>
+                  <input class="input" placeholder="نام و نام خانوادگی">
+                </div>
+                <div class="form-hint"><span data-icon="info" data-icon-size="13"></span> راهنمای فیلد</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">انتخابی</label>
+                <select class="select"><option>گزینه اول</option><option>گزینه دوم</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">ورودی نامعتبر</label>
+                <input class="input" value="مقدار نامعتبر" style="border-color:var(--danger)">
+                <div class="form-error"><span data-icon="alert" data-icon-size="13"></span> این مقدار معتبر نیست.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">رمز عبور</label>
+                <div class="input-wrap">
+                  <span class="icon lead" data-icon="lock" data-icon-size="17"></span>
+                  <input class="input ltr" id="ds-pw" type="password" value="ModernCRM1404">
+                  <button type="button" class="icon trail" data-password-toggle data-icon="eye" data-icon-size="18"></button>
+                </div>
+                <div class="strength mt-2" data-strength-for="#ds-pw"><i></i><i></i><i></i><i></i></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">چک‌باکس و سوییچ</label>
+                <label class="check mb-3"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">گزینه انتخاب‌شده</span></label>
+                <label class="switch"><span class="lbl">فعال‌سازی</span><input type="checkbox" checked><span class="track"></span></label>
+              </div>
+              <div class="form-group">
+                <label class="form-label">ورودی گروهی</label>
+                <div class="input-group">
+                  <input class="input" value="جستجو…">
+                  <button class="btn btn-primary"><span data-icon="search" data-icon-size="16"></span></button>
+                </div>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">متن بلند</label>
+                <textarea class="textarea" placeholder="توضیحات…"></textarea>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">بارگذاری فایل</label>
+                <div class="dropzone">
+                  <div class="dz-icon" data-icon="upload" data-icon-size="22"></div>
+                  <div class="fw-600 text-strong fs-sm">فایل را رها کنید یا کلیک کنید</div>
+                  <div class="fs-xs text-muted mt-1">PDF، JPG، PNG — حداکثر ۱۰ مگابایت</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================== پیام‌ها ============================== -->
+        <div class="section-title"><span data-icon="bell" data-icon-size="18"></span> پیام‌ها و بازخوردها</div>
+        <div class="grid-2 mb-5">
+          <div class="d-flex flex-col gap-3">
+            <div class="alert alert-info"><span data-icon="info" data-icon-size="18"></span><div><div class="alert-title">اطلاع‌رسانی</div><div class="alert-desc">این یک پیام اطلاع‌رسانی است.</div></div></div>
+            <div class="alert alert-success"><span data-icon="check-circle" data-icon-size="18"></span><div><div class="alert-title">عملیات موفق</div><div class="alert-desc">تغییرات با موفقیت ذخیره شد.</div></div></div>
+            <div class="alert alert-warning"><span data-icon="alert" data-icon-size="18"></span><div><div class="alert-title">هشدار</div><div class="alert-desc">اعتبار اشتراک شما رو به اتمام است.</div></div></div>
+            <div class="alert alert-danger"><span data-icon="x-circle" data-icon-size="18"></span><div><div class="alert-title">خطا</div><div class="alert-desc">اتصال به سرور برقرار نشد.</div></div></div>
+          </div>
+          <div class="d-flex flex-col gap-3">
+            <div class="d-flex gap-3 flex-wrap">
+              <button class="btn btn-soft btn-sm" data-toast="success">نمایش توست موفق</button>
+              <button class="btn btn-soft btn-sm" data-toast="warning">نمایش توست هشدار</button>
+              <button class="btn btn-soft btn-sm" data-toast="danger">نمایش توست خطا</button>
+            </div>
+            <div class="d-flex gap-3 flex-wrap">
+              <button class="btn btn-soft btn-sm" data-modal-open="#dsModal">نمایش مودال</button>
+              <button class="btn btn-soft btn-sm" data-drawer-open="#dsDrawer">نمایش دراور</button>
+              <button class="btn btn-soft btn-sm" data-confirm="این آیتم حذف شود؟">مودال تایید</button>
+              <button class="btn btn-soft btn-sm" data-palette-open>پالت فرمان (Ctrl+K)</button>
+            </div>
+            <div class="skeleton" style="height:14px;width:80%"></div>
+            <div class="skeleton" style="height:14px;width:60%"></div>
+            <div class="loading-block"><span class="spinner lg"></span><span class="fs-sm">در حال بارگذاری…</span></div>
+          </div>
+        </div>
+
+        <!-- ============================== نمودارها ============================== -->
+        <div class="section-title"><span data-icon="chart-line" data-icon-size="18"></span> نمودارها (SVG سبک، بدون کتابخانه)</div>
+        <div class="grid-2-1 mb-5">
+          <div class="card" data-win="ds-line" data-win-title="نمودار خطی" data-win-icon="chart-line" data-win-size="1000x600">
+            <div class="card-head tight"><div class="card-title" data-icon="chart-line" data-icon-size="17"> نمودار خطی / سطحی</div></div>
+            <div class="card-body"><div class="chart h-200" data-chart="line" data-values="120,168,140,210,190,240,228,268" data-values2="100,130,150,170,180,200,215,230" data-labels="فروردین,اردیبهشت,خرداد,تیر,مرداد,شهریور,مهر,آبان"></div></div>
+          </div>
+          <div class="card" data-win="ds-donut" data-win-title="نمودار حلقه‌ای" data-win-icon="chart-pie" data-win-size="780x560">
+            <div class="card-head tight"><div class="card-title" data-icon="chart-pie" data-icon-size="17"> نمودار حلقه‌ای</div></div>
+            <div class="card-body"><div class="donut-wrap"><div data-chart="donut" data-values="42,28,18,12" data-center="۱۰۰" data-center-sub="درصد" data-labels="کانال اول,کانال دوم,کانال سوم,سایر"></div></div></div>
+          </div>
+        </div>
+
+        <div class="grid-3 mb-5">
+          <div class="card" data-win="ds-bar" data-win-title="نمودار ستونی" data-win-icon="chart-column" data-win-size="820x560">
+            <div class="card-head tight"><div class="card-title" data-icon="chart-column" data-icon-size="17"> ستونی</div></div>
+            <div class="card-body"><div class="chart h-160" data-chart="bar" data-values="48,36,27,19,12" data-labels="سرنخ,تماس,پیش‌فاکتور,مذاکره,برنده"></div></div>
+          </div>
+          <div class="card" data-win="ds-radial" data-win-title="نمودار شعاعی" data-win-icon="target" data-win-size="700x520">
+            <div class="card-head tight"><div class="card-title" data-icon="target" data-icon-size="17"> شعاعی (درصدی)</div></div>
+            <div class="card-body d-flex justify-center"><div class="donut-svg" style="width:150px;height:150px" data-chart="radial" data-values="72" data-label="تحقق هدف"></div></div>
+          </div>
+          <div class="card" data-win="ds-spark" data-win-title="نمودار کوچک" data-win-icon="activity" data-win-size="700x480">
+            <div class="card-head tight"><div class="card-title" data-icon="activity" data-icon-size="17"> نمودار کوچک (Sparkline)</div></div>
+            <div class="card-body">
+              <div class="chart" style="height:38px" data-chart="spark" data-values="12,18,14,24,20,31,26,38"></div>
+              <div class="chart mt-3" style="height:38px" data-chart="spark" data-values="30,26,28,22,19,16,14,11" data-color="var(--c6)"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================== جدول و کانبان ============================== -->
+        <div class="section-title"><span data-icon="table" data-icon-size="18"></span> جدول و کانبان</div>
+        <div class="card mb-5" data-table-root>
+          <div class="card-head">
+            <div class="card-title" data-icon="table" data-icon-size="18"> جدول نمونه</div>
+            <div class="card-actions">
+              <div class="input-wrap" style="width:200px">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" placeholder="جستجو…" data-table-search="#dsTable">
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info d-none" data-bulk-bar style="border-radius:0;border-inline:0">
+            <span data-icon="check-check" data-icon-size="18"></span>
+            <div class="alert-title"><span data-bulk-count>۰</span> سطر انتخاب شده</div>
+          </div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table" id="dsTable">
+                <thead>
+                  <tr>
+                    <th style="width:40px"><label class="check"><input type="checkbox" data-select-all><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>
+                    <th class="sortable"><span class="th-in">نام</span></th>
+                    <th class="sortable num"><span class="th-in">مبلغ</span></th>
+                    <th class="sortable"><span class="th-in">وضعیت</span></th>
+                    <th>نمونه اجزا</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><label class="check"><input type="checkbox" data-row-check><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="cell-main">گروه صنعتی البرز</td><td class="num">۴۲۰٫۰۰۰٫۰۰۰</td><td><span class="badge badge-success badge-dot">فعال</span></td><td><div class="d-flex items-center gap-2"><span class="avatar avatar-sm">گ</span><div class="progress sm" style="width:70px"><i style="width:80%"></i></div><span class="kbd">Ctrl</span></div></td></tr>
+                  <tr><td><label class="check"><input type="checkbox" data-row-check><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="cell-main">پارس‌نیکان</td><td class="num">۱۸۰٫۰۰۰٫۰۰۰</td><td><span class="badge badge-warning badge-dot">در انتظار</span></td><td><span class="badge badge-info">برچسب</span></td></tr>
+                  <tr><td><label class="check"><input type="checkbox" data-row-check><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td><td class="cell-main">داده‌پرداز</td><td class="num">۹۶٫۰۰۰٫۰۰۰</td><td><span class="badge badge-danger badge-dot">معوق</span></td><td><span class="priority urgent">فوری</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-foot">
+            <span>نمایش ۳ سطر از ۳</span>
+            <div class="pagination ms-auto"><button disabled data-icon="chevron-right" data-icon-size="15"></button><button class="is-active">۱</button><button data-icon="chevron-left" data-icon-size="15"></button></div>
+          </div>
+        </div>
+
+        <!-- ============================== تب و آکاردئون ============================== -->
+        <div class="grid-2 mb-5">
+          <div class="card" data-tabs-root data-win="ds-tabs" data-win-title="تب‌ها" data-win-icon="panels" data-win-size="820x560">
+            <div class="tabs" data-tabs style="padding:0 8px">
+              <button class="tab is-active" data-tab="t1">تب اول</button>
+              <button class="tab" data-tab="t2">تب دوم <span class="badge gray">۳</span></button>
+              <button class="tab" data-tab="t3">تب سوم</button>
+            </div>
+            <div class="card-body">
+              <div data-tab-panel="t1">محتوای تب اول — پنل‌ها با ویژگی <b class="ltr">data-tab-panel</b> جابه‌جا می‌شوند.</div>
+              <div class="d-none" data-tab-panel="t2">محتوای تب دوم با نشانگر تعداد.</div>
+              <div class="d-none" data-tab-panel="t3">محتوای تب سوم.</div>
+            </div>
+          </div>
+
+          <div class="card" data-win="ds-acc" data-win-title="آکاردئون" data-win-icon="list-checks" data-win-size="820x560">
+            <div class="card-head tight"><div class="card-title" data-icon="list-checks" data-icon-size="17"> آکاردئون</div></div>
+            <div class="card-body">
+              <div class="accordion" data-accordion>
+                <div class="acc-item is-open"><button class="acc-head">آیا می‌توانم رنگ برند را تغییر دهم؟<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button><div class="acc-body">بله — فقط متغیرهای <b class="ltr">--brand-*</b> در فایل tokens.css را تغییر دهید.</div></div>
+                <div class="acc-item"><button class="acc-head">آیا قالب ریسپانسیو است؟<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button><div class="acc-body">تمام صفحات برای موبایل، تبلت و دسکتاپ بهینه شده‌اند و سایدبار در موبایل کشویی می‌شود.</div></div>
+                <div class="acc-item"><button class="acc-head">آیا حالت شب (تم تیره) دارد؟<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button><div class="acc-body">خیر. قالب مدرن‌CRM فقط در حالت روشن ارائه می‌شود و تمام رنگ‌ها از توکن‌های <b class="ltr">tokens.css</b> گرفته می‌شوند.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================== پنجره‌ها ============================== -->
+        <div class="section-title"><span data-icon="window" data-icon-size="18"></span> پنجره‌های شناور</div>
+        <div class="card mb-5">
+          <div class="card-body">
+            <p class="fs-md text-muted mb-4" style="line-height:2">
+              هر المانی که ویژگی <b class="ltr">data-win</b> داشته باشد، می‌تواند به پنجره شناور تبدیل شود.
+              کافی است ویژگی‌های زیر را اضافه کنید:
+            </p>
+            <div class="code-box mb-4" dir="ltr" style="text-align:left">
+&lt;div class="card" data-win="unique-id"
+     data-win-title="عنوان پنجره"
+     data-win-sub="زیرعنوان"
+     data-win-icon="users"
+     data-win-size="900x600"&gt;  ...  &lt;/div&gt;
+            </div>
+            <div class="alert alert-success mb-4">
+              <span data-icon="sparkles" data-icon-size="18"></span>
+              <div>
+                <div class="alert-title">پنجره‌سازی خودکار</div>
+                <div class="alert-desc">
+                  همه‌ی کارت‌های این صفحه دکمه ⛶ گرفته‌اند، چون هر کارتی که سربرگ (<b class="ltr">card-head</b>) داشته باشد
+                  به‌صورت خودکار پنجره‌شدنی می‌شود. کارت‌های خلاصه (KPI) هم یک دکمه ⛶ گوشه‌ی کارت دارند که در حالت هاور دیده می‌شود.
+                </div>
+              </div>
+            </div>
+
+            <div class="table-wrap mb-4">
+              <table class="table">
+                <thead>
+                  <tr><th style="width:230px">ویژگی</th><th>کاربرد</th></tr>
+                </thead>
+                <tbody class="fs-sm">
+                  <tr><td><b class="ltr">data-win="id"</b></td><td>تبدیل کارت به منبع پنجره (شناسه یکتا)</td></tr>
+                  <tr><td><b class="ltr">data-win-title / -sub / -icon</b></td><td>عنوان، زیرعنوان و آیکون نوار عنوان پنجره</td></tr>
+                  <tr><td><b class="ltr">data-win-size="900x600"</b></td><td>اندازه‌ی پیش‌فرض پنجره</td></tr>
+                  <tr><td><b class="ltr">data-win-content="#sel"</b></td><td>محتوای پنجره از عنصر دیگری خوانده شود</td></tr>
+                  <tr><td><b class="ltr">data-win-open="id"</b></td><td>بازکردن پنجره از هر دکمه‌ی دلخواه</td></tr>
+                  <tr><td><b class="ltr">data-win-close / -min / -max="id"</b></td><td>کنترل پنجره از بیرون</td></tr>
+                  <tr><td><b class="ltr">data-win-detach</b></td><td>پنهان‌کردن کارت اصلی تا وقتی پنجره باز است (میزکار)</td></tr>
+                  <tr><td><b class="ltr">data-win-autoopen="800"</b></td><td>بازشدن خودکار پنجره پس از ۸۰۰ میلی‌ثانیه</td></tr>
+                  <tr><td><b class="ltr">data-win-nobtn</b></td><td>دکمه ⛶ ساخته نشود</td></tr>
+                  <tr><td><b class="ltr">data-win-auto="off"</b> روی body</td><td>خاموش‌کردن پنجره‌سازی خودکار در کل صفحه (صفحه‌های ورود/خطا/چاپ)</td></tr>
+                  <tr><td><b class="ltr">data-win-min-all / -max-all / -tile / -close-all</b></td><td>فرمان‌های گروهی؛ آماده در منوی «پنجره‌ها» در نوار وظیفه</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="fs-md text-muted mb-4" style="line-height:2">
+              منوی نوار وظیفه (دکمه‌ی «پنجره» در سمت چپ نوار وظیفه) فهرست پنجره‌های باز و همین فرمان‌های گروهی را نشان می‌دهد.
+              جابه‌جایی با کشیدن نوار عنوان، تغییر اندازه از ۸ جهت، اسنپ به کناره‌ها، ماکسیمایز با دوبار کلیک روی نوار عنوان
+              و انتخاب چیدمان با نگه‌داشتن نشانگر روی دکمه‌ی ماکسیمایز انجام می‌شود.
+            </p>
+
+            <div class="d-flex flex-wrap gap-3">
+              <button class="btn btn-primary" data-win-open="window-demo"><span data-icon="maximize" data-icon-size="16"></span> بازکردن پنجره نمایشی</button>
+              <button class="btn" data-win-min-all><span data-icon="minus" data-icon-size="15"></span> مینیمایز همه</button>
+              <button class="btn" data-win-max-all><span data-icon="maximize" data-icon-size="15"></span> ماکسیمایز همه</button>
+              <button class="btn" data-win-tile><span data-icon="grid" data-icon-size="15"></span> چیدمان کاشی‌ای</button>
+              <button class="btn btn-danger-soft" data-win-close-all><span data-icon="x" data-icon-size="15"></span> بستن همه</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- داده نمایشی برای پنجره نمونه -->
+        <div class="d-none" id="demoWindowContent">
+          <div class="p-4">
+            <div class="alert alert-info mb-4">
+              <span data-icon="sparkles" data-icon-size="18"></span>
+              <div><div class="alert-title">این یک پنجره شناور است</div>
+              <div class="alert-desc">با نوار عنوان جابه‌جا کنید، از لبه‌ها تغییر اندازه دهید، به لبه‌های صفحه بچسبانید یا با دوبار کلیک ماکسیمایز کنید.</div></div>
+            </div>
+            <div class="grid-3 mb-4">
+              <div class="panel text-center"><div class="fs-xs text-muted">مشتریان</div><div class="fs-xl fw-700">۱٫۲۴۸</div></div>
+              <div class="panel text-center"><div class="fs-xs text-muted">معاملات باز</div><div class="fs-xl fw-700">۶۳</div></div>
+              <div class="panel text-center"><div class="fs-xs text-muted">درآمد ماه</div><div class="fs-xl fw-700">۴۸۶ م</div></div>
+            </div>
+            <div class="chart h-200" data-chart="line" data-values="30,45,38,52,48,61,57,72" data-labels="فروردین,اردیبهشت,خرداد,تیر,مرداد,شهریور,مهر,آبان"></div>
+          </div>
+        </div>
+        <div data-win="window-demo" data-win-title="پنجره نمایشی" data-win-sub="نمونه محتوای شناور" data-win-icon="window" data-win-size="900x620" data-win-content="#demoWindowContent" class="d-none"></div>
+
+        <!-- ============================== تایپوگرافی ============================== -->
+        <div class="section-title"><span data-icon="presentation" data-icon-size="18"></span> تایپوگرافی (فونت وزیرمتن)</div>
+        <div class="card mb-5">
+          <div class="card-body">
+            <div style="font-size:36px;font-weight:700">تیتر اصلی — ۳۶ پیکسل</div>
+            <div style="font-size:29px;font-weight:700">تیتر دوم — ۲۹ پیکسل</div>
+            <div style="font-size:23px;font-weight:600">تیتر سوم — ۲۳ پیکسل</div>
+            <div style="font-size:16px;font-weight:600">تیتر چهارم — ۱۶ پیکسل</div>
+            <p style="font-size:14px;margin-top:12px">
+              متن بدنه با اعداد فارسی: ۱۲۳۴۵۶۷۸۹۰ — و اعداد لاتین در جای لازم: <span class="ltr">INV-2025-000521</span>
+            </p>
+            <p class="text-muted" style="font-size:13px">متن کم‌رنگ برای توضیحات فرعی و راهنماها.</p>
+            <div class="fs-xs text-soft">متن بسیار ریز برای برچسب‌ها و فراداده‌ها (۱۱٫۵ پیکسل)</div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============================ مودال و دراور نمونه ============================ -->
+<div class="overlay" id="dsModal" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">مودال نمونه</div><div class="modal-sub">ساختار استاندارد مودال‌های قالب</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#dsModal" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">نمونه فیلد</label>
+        <input class="input" placeholder="مقدار…">
+      </div>
+      <div class="alert alert-info" style="margin-bottom:0"><span data-icon="info" data-icon-size="18"></span><div class="alert-desc">دکمه Esc یا کلیک بیرون مودال، آن را می‌بندد.</div></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" data-modal-close="#dsModal">تایید</button>
+      <button class="btn" data-modal-close="#dsModal">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<div class="drawer-overlay" id="drawerOverlay" style="display:none" data-drawer-close="#dsDrawer"></div>
+<aside class="drawer" id="dsDrawer" style="display:none" role="dialog" aria-modal="true">
+  <div class="drawer-head">
+    <div><div class="modal-title">دراور نمونه</div><div class="modal-sub">مناسب فیلترها و فرم‌های کناری</div></div>
+    <button class="tb-icon modal-x" data-drawer-close="#dsDrawer" data-icon="x" data-icon-size="18"></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">فیلتر نمونه</label>
+      <select class="select"><option>گزینه ۱</option><option>گزینه ۲</option></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">جستجو</label>
+      <input class="input" placeholder="بنویسید…">
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-primary flex-1" data-drawer-close="#dsDrawer">اعمال</button>
+    <button class="btn" data-drawer-close="#dsDrawer">انصراف</button>
+  </div>
+</aside>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+
+  /* دکمه‌های نمایش توست */
+  CRM.$$('[data-toast]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-toast');
+      var map = {
+        success: { title: 'عملیات با موفقیت انجام شد', msg: 'تغییرات ذخیره شد.' },
+        warning: { title: 'هشدار', msg: 'اعتبار اشتراک شما رو به اتمام است.' },
+        danger: { title: 'خطا', msg: 'اتصال به سرور برقرار نشد.' }
+      };
+      CRM.toast(Object.assign({ type: t }, map[t]));
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پایگاه دانش | مدرن‌CRM</title>
+<meta name="description" content="مقالات راهنما، آموزش‌ها و پاسخ پرسش‌های متداول">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="kb">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <!-- ============================= سربرگ ============================= -->
+        <div class="card card-accent mb-5" style="overflow:hidden">
+          <div class="card-body" style="padding:38px 28px;text-align:center;background:radial-gradient(circle at 15% 20%, var(--brand-soft), transparent 45%), radial-gradient(circle at 85% 80%, var(--info-soft), transparent 45%)">
+            <span class="stat-icon" style="margin:0 auto 14px;width:58px;height:58px"><span data-icon="book" data-icon-size="26"></span></span>
+            <h1 style="font-size:var(--fs-2xl)">چطور می‌توانیم کمکتان کنیم؟</h1>
+            <p class="page-desc mb-4">جستجو در ۱۲۴ مقاله آموزشی، راهنمای گام‌به‌گام و پرسش‌های متداول</p>
+            <div class="input-wrap" style="max-width:560px;margin:0 auto">
+              <span class="icon lead" data-icon="search" data-icon-size="18"></span>
+              <input class="input input-lg" placeholder="مثلاً: صدور فاکتور رسمی، افزودن کاربر، اتصال درگاه پرداخت…">
+            </div>
+            <div class="d-flex gap-2 justify-center flex-wrap mt-3">
+              <span class="fs-sm text-muted">جستجوهای پرتکرار:</span>
+              <a class="chip" href="#">صدور فاکتور</a>
+              <a class="chip" href="#">افزودن کاربر</a>
+              <a class="chip" href="#">خروجی اکسل</a>
+              <a class="chip" href="#">اتصال پیامک</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================ دسته‌بندی‌ها ============================ -->
+        <div class="grid-4 mb-5">
+          <div class="card card-hover" data-win="kb-1" data-win-title="شروع کار با مدرن‌CRM" data-win-icon="sparkles" data-win-size="900x640">
+            <div class="card-body">
+              <span class="stat-icon"><span data-icon="sparkles" data-icon-size="22"></span></span>
+              <div class="fw-700 mt-3">شروع کار با مدرن‌CRM</div>
+              <div class="fs-sm text-muted">۲۴ مقاله — نصب، راه‌اندازی و تنظیمات اولیه</div>
+              <div class="d-flex items-center gap-2 mt-3" style="font-size:var(--fs-2xs);color:var(--text-soft)">
+                <span class="progress sm flex-1"><i style="width:65%"></i></span> ۶۵٪ تکمیل‌شده
+              </div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="kb-2" data-win-title="مدیریت مشتریان" data-win-icon="users" data-win-size="900x640">
+            <div class="card-body">
+              <span class="stat-icon sky"><span data-icon="users" data-icon-size="22"></span></span>
+              <div class="fw-700 mt-3">مدیریت مشتریان</div>
+              <div class="fs-sm text-muted">۳۱ مقاله — پرونده مشتری، برچسب‌ها و سگمنت‌بندی</div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="kb-3" data-win-title="فروش و فاکتور" data-win-icon="invoice" data-win-size="900x640">
+            <div class="card-body">
+              <span class="stat-icon violet"><span data-icon="invoice" data-icon-size="22"></span></span>
+              <div class="fw-700 mt-3">فروش، قیف و فاکتور</div>
+              <div class="fs-sm text-muted">۲۸ مقاله — معاملات، پیش‌فاکتور و مالیات</div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="kb-4" data-win-title="پشتیبانی و SLA" data-win-icon="headset" data-win-size="900x640">
+            <div class="card-body">
+              <span class="stat-icon amber"><span data-icon="headset" data-icon-size="22"></span></span>
+              <div class="fw-700 mt-3">پشتیبانی و SLA</div>
+              <div class="fs-sm text-muted">۱۹ مقاله — تیکت‌ها، پاسخ‌های آماده و گزارش‌گیری</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <!-- ========================= پرسش‌های متداول ========================= -->
+          <div class="card" data-win="kb-faq" data-win-title="پرسش‌های متداول" data-win-icon="circle-help" data-win-size="960x680">
+            <div class="card-head">
+              <div class="card-title" data-icon="circle-help" data-icon-size="18"> پرسش‌های متداول</div>
+              <div class="card-actions"><span class="badge badge-primary">۵ پرسش</span></div>
+            </div>
+            <div class="card-body">
+              <div class="accordion" data-accordion id="faqBox"></div>
+            </div>
+            <div class="card-foot">
+              <span class="fs-sm text-muted">پاسخ سؤالتان را نیافتید؟</span>
+              <a class="btn btn-sm btn-soft ms-auto" href="ticket-new.html"><span data-icon="headset" data-icon-size="15"></span> ثبت تیکت پشتیبانی</a>
+            </div>
+          </div>
+
+          <!-- ============================ کنار ============================ -->
+          <div class="d-flex flex-col gap-4">
+            <div class="card" data-win="kb-popular" data-win-title="پربازدیدترین مقالات" data-win-icon="trending-up" data-win-size="820x620">
+              <div class="card-head tight"><div class="card-title" data-icon="trending-up" data-icon-size="17"> پربازدیدترین مقالات</div></div>
+              <div class="card-body tight">
+                <div class="list">
+                  <a class="list-item" href="#"><span class="badge gray">۱</span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">صدور فاکتور رسمی با مالیات ارزش افزوده</span><span class="li-sub">۲٫۴ هزار بازدید — دسته: مالی</span></span></a>
+                  <a class="list-item" href="#"><span class="badge gray">۲</span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">افزودن کاربر جدید و تعیین سطح دسترسی</span><span class="li-sub">۱٫۹ هزار بازدید — دسته: مدیریت</span></span></a>
+                  <a class="list-item" href="#"><span class="badge gray">۳</span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">اتصال سامانه پیامک به مدرن‌CRM</span><span class="li-sub">۱٫۵ هزار بازدید — دسته: تنظیمات</span></span></a>
+                  <a class="list-item" href="#"><span class="badge gray">۴</span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">خروجی گرفتن گزارش‌ها به اکسل</span><span class="li-sub">۱٫۲ هزار بازدید — دسته: گزارش</span></span></a>
+                  <a class="list-item" href="#"><span class="badge gray">۵</span>
+                    <span class="flex-1"><span class="li-title d-block fs-sm">پشتیبان‌گیری خودکار از داده‌ها</span><span class="li-sub">۹۸۰ بازدید — دسته: امنیت</span></span></a>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" data-win="kb-video" data-win-title="آموزش‌های ویدیویی" data-win-icon="presentation" data-win-size="860x640">
+              <div class="card-head tight"><div class="card-title" data-icon="presentation" data-icon-size="17"> آموزش‌های ویدیویی</div></div>
+              <div class="card-body tight">
+                <a class="file-item mb-2" href="#" style="text-decoration:none">
+                  <span class="file-ic" data-icon="eye" data-icon-size="18"></span>
+                  <span class="flex-1"><span class="d-block fw-600 fs-sm">تور آشنایی با داشبورد</span><span class="fs-xs text-muted">۴ دقیقه</span></span>
+                  <span data-icon="chevron-left" data-icon-size="16" class="text-soft"></span>
+                </a>
+                <a class="file-item mb-2" href="#" style="text-decoration:none">
+                  <span class="file-ic img" data-icon="eye" data-icon-size="18"></span>
+                  <span class="flex-1"><span class="d-block fw-600 fs-sm">ساخت قیف فروش اختصاصی</span><span class="fs-xs text-muted">۷ دقیقه</span></span>
+                  <span data-icon="chevron-left" data-icon-size="16" class="text-soft"></span>
+                </a>
+                <a class="file-item" href="#" style="text-decoration:none">
+                  <span class="file-ic xls" data-icon="eye" data-icon-size="18"></span>
+                  <span class="flex-1"><span class="d-block fw-600 fs-sm">گزارش‌گیری حرفه‌ای فروش</span><span class="fs-xs text-muted">۶ دقیقه</span></span>
+                  <span data-icon="chevron-left" data-icon-size="16" class="text-soft"></span>
+                </a>
+              </div>
+            </div>
+
+            <div class="card" data-win="kb-status" data-win-title="وضعیت سرویس‌ها" data-win-icon="activity" data-win-size="760x560">
+              <div class="card-head tight"><div class="card-title" data-icon="activity" data-icon-size="17"> وضعیت سرویس‌ها</div></div>
+              <div class="card-body tight">
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status online"></span> پنل کاربری</span><span class="fs-xs text-success">عملیاتی</span></div>
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status online"></span> درگاه پیامک</span><span class="fs-xs text-success">عملیاتی</span></div>
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status busy"></span> درگاه پرداخت</span><span class="fs-xs text-warning">کندی موقت</span></div>
+                <div class="stat-inline"><span class="d-flex items-center gap-2"><span class="dot-status online"></span> API عمومی</span><span class="fs-xs text-success">عملیاتی</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  CRM.$('#faqBox').innerHTML = CRM.data.faq.map(function (f, i) {
+    return '<div class="acc-item' + (i === 0 ? ' is-open' : '') + '">' +
+      '<button type="button" class="acc-head">' + CRM.esc(f.q) +
+      '<span class="acc-chev" data-icon="chevron-down" data-icon-size="16"></span></button>' +
+      '<div class="acc-body">' + CRM.esc(f.a) + '</div></div>';
+  }).join('');
+})();
+</script>
+</body>
+</html>

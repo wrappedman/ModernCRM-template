@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>معاملات | مدرن‌CRM</title>
+<meta name="description" content="مدیریت معاملات فروش با نمای جدولی و کانبانی">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="deals">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">معاملات</span>
+            </div>
+            <h1 class="page-title">مدیریت معاملات</h1>
+            <p class="page-desc">۷ معامله — ارزش کل ۸۸۳ میلیون تومان — ۲ معامله در آستانه بسته شدن</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="pipeline.html"><span data-icon="pipeline" data-icon-size="16"></span> نمای قیف</a>
+            <button class="btn" data-print><span data-icon="printer" data-icon-size="16"></span> چاپ</button>
+            <button class="btn btn-primary" data-modal-open="#modalNewDeal"><span data-icon="plus" data-icon-size="16"></span> معامله جدید</button>
+          </div>
+        </div>
+
+        <div class="grid-3 mb-5">
+          <div class="card card-hover" data-win="d-open" data-win-title="معاملات باز" data-win-icon="deals" data-win-size="760x520">
+            <div class="card-body tight">
+              <div class="d-flex items-center gap-3">
+                <span class="stat-icon"><span data-icon="deals" data-icon-size="22"></span></span>
+                <div><div class="stat-label">معاملات باز</div><div class="stat-value num">۵ معامله</div></div>
+                <div class="ms-auto text-left"><div class="fs-xs text-muted">ارزش</div><div class="fw-700 num">۷۸۳ میلیون</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="d-won" data-win-title="برنده‌شده این ماه" data-win-icon="award" data-win-size="760x520">
+            <div class="card-body tight">
+              <div class="d-flex items-center gap-3">
+                <span class="stat-icon sky"><span data-icon="award" data-icon-size="22"></span></span>
+                <div><div class="stat-label">برنده‌شده در مهر</div><div class="stat-value num">۲ معامله</div></div>
+                <div class="ms-auto text-left"><div class="fs-xs text-muted">ارزش</div><div class="fw-700 num">۵۱۶ میلیون</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="d-risk" data-win-title="ریسک از دست رفتن" data-win-icon="shield-alert" data-win-size="760x520">
+            <div class="card-body tight">
+              <div class="d-flex items-center gap-3">
+                <span class="stat-icon rose"><span data-icon="shield-alert" data-icon-size="22"></span></span>
+                <div><div class="stat-label">در معرض ریسک</div><div class="stat-value num">۲ معامله</div></div>
+                <div class="ms-auto text-left"><div class="fs-xs text-muted">بدون تعامل</div><div class="fw-700 text-danger num">+۷ روز</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-table-root>
+          <div class="card-head flex-wrap" style="gap:10px">
+            <div class="card-title" data-icon="deals" data-icon-size="18"> فهرست معاملات</div>
+            <div class="card-actions flex-wrap" style="gap:8px">
+              <div class="input-wrap" style="width:240px">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" placeholder="جستجوی معامله یا مشتری…" data-table-search="#tblDeals">
+              </div>
+              <select class="select select-sm" style="width:auto">
+                <option>همه مراحل</option>
+                <option>سرنخ جدید</option><option>تماس برقرار شد</option><option>ارسال پیش‌فاکتور</option><option>مذاکره</option><option>برنده شده</option>
+              </select>
+              <select class="select select-sm" style="width:auto">
+                <option>همه اولویت‌ها</option><option>فوری</option><option>بالا</option><option>عادی</option><option>پایین</option>
+              </select>
+              <div class="btn-group">
+                <button class="btn is-active" data-tip="نمای جدولی" data-icon="rows" data-icon-size="15"></button>
+                <a class="btn" href="pipeline.html" data-tip="نمای قیف" data-icon="columns" data-icon-size="15"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-none alert alert-info" data-bulk-bar style="border-radius:0;border-inline:0">
+            <span data-icon="check-check" data-icon-size="18"></span>
+            <div class="alert-title"><span data-bulk-count>۰</span> معامله انتخاب شده است</div>
+            <div class="d-flex gap-2 ms-auto">
+              <button class="btn btn-sm btn-soft"><span data-icon="send" data-icon-size="14"></span> ارسال پیام</button>
+              <button class="btn btn-sm btn-danger-soft" data-confirm="معاملات انتخاب‌شده حذف شوند؟"><span data-icon="trash" data-icon-size="14"></span> حذف</button>
+            </div>
+          </div>
+
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table" id="tblDeals">
+                <thead>
+                  <tr>
+                    <th style="width:40px"><label class="check"><input type="checkbox" data-select-all><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>
+                    <th class="sortable"><span class="th-in">عنوان معامله</span></th>
+                    <th class="sortable"><span class="th-in">مشتری</span></th>
+                    <th class="sortable num"><span class="th-in">ارزش</span></th>
+                    <th class="sortable"><span class="th-in">مرحله</span></th>
+                    <th class="sortable"><span class="th-in">پیشرفت</span></th>
+                    <th class="sortable"><span class="th-in">اولویت</span></th>
+                    <th class="sortable"><span class="th-in">سررسید</span></th>
+                    <th class="sortable"><span class="th-in">کارشناس</span></th>
+                    <th class="table-row-actions"></th>
+                  </tr>
+                </thead>
+                <tbody id="dealsBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-foot">
+            <span>نمایش ۷ معامله از ۷ مورد</span>
+            <div class="pagination ms-auto">
+              <button disabled data-icon="chevron-right" data-icon-size="15"></button>
+              <button class="is-active">۱</button>
+              <button data-icon="chevron-left" data-icon-size="15"></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="modalNewDeal" style="display:none">
+  <div class="modal modal-lg" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">ثبت معامله جدید</div><div class="modal-sub">اطلاعات معامله را وارد کنید</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#modalNewDeal" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="معامله جدید ثبت شد." data-close-modal="#modalNewDeal" data-reset-on-submit>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">عنوان معامله <span class="req">*</span></label>
+          <input class="input" required placeholder="مثلاً تمدید قرارداد پشتیبانی">
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">مشتری <span class="req">*</span></label>
+            <select class="select" required>
+              <option>پارس‌نیکان — مریم رضایی</option>
+              <option>داده‌پرداز — امیر شریفی</option>
+              <option>فناوران آبی — علی محمدی</option>
+              <option>گروه صنعتی البرز — حسین نوری</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ارزش (تومان)</label>
+            <input class="input num" placeholder="۱۸۰٫۰۰۰٫۰۰۰">
+          </div>
+          <div class="form-group">
+            <label class="form-label">کارشناس مسئول</label>
+            <select class="select"><option>مهدی کریمی</option><option>نیما عباسی</option><option>سمیرا رحیمی</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">تاریخ بسته شدن تخمینی</label>
+            <input class="input num" placeholder="۱۴۰۴/۰۸/۲۰">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">توضیحات</label>
+          <textarea class="textarea" placeholder="جزئیات مذاکره، نیازهای مشتری…"></textarea>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary">ثبت معامله</button>
+        <button type="button" class="btn" data-modal-close="#modalNewDeal">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+  var STAGE = {};
+  CRM.data.dealStages.forEach(function (s) { STAGE[s.id] = s; });
+
+  CRM.$('#dealsBody').innerHTML = CRM.data.deals.map(function (d) {
+    var s = STAGE[d.stage];
+    var prio = { urgent: 'فوری', high: 'بالا', normal: 'عادی', low: 'پایین' }[d.priority];
+    return '<tr>' +
+      '<td><label class="check"><input type="checkbox" data-row-check><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></td>' +
+      '<td><div class="d-flex items-center gap-3"><span class="avatar avatar-sm avatar-sq" style="background:var(--surface-3);color:' + s.color + '">' + CRM.icon('deals', 15) + '</span>' +
+        '<span><span class="cell-main d-block">' + CRM.esc(d.title) + '</span><span class="cell-sub">' + CRM.esc(d.id) + '</span></span></div></td>' +
+      '<td>' + CRM.esc(d.customer) + '</td>' +
+      '<td class="num fw-600">' + CRM.num(d.value) + '</td>' +
+      '<td><span class="badge">' + CRM.esc(s.title) + '</span></td>' +
+      '<td><div class="d-flex items-center gap-2"><div class="progress sm" style="width:80px"><i style="width:' + d.progress + '%"></i></div><span class="fs-xs num">' + CRM.fa(d.progress) + '٪</span></div></td>' +
+      '<td><span class="priority ' + d.priority + '">' + prio + '</span></td>' +
+      '<td class="num fs-sm">' + CRM.esc(d.due) + '</td>' +
+      '<td class="fs-sm">' + CRM.esc(d.owner) + '</td>' +
+      '<td><span class="table-actions">' +
+        '<button class="tb-icon" style="width:30px;height:30px" data-tip="ویرایش" data-modal-open="#modalNewDeal" data-icon="pencil" data-icon-size="16"></button>' +
+        '<button class="tb-icon" style="width:30px;height:30px" data-tip="حذف" data-confirm="معامله «' + CRM.esc(d.title) + '» حذف شود؟" data-icon="trash" data-icon-size="16"></button>' +
+      '</span></td>' +
+    '</tr>';
+  }).join('');
+})();
+</script>
+</body>
+</html>

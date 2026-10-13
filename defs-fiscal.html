@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تعریف دوره مالی | تعاریف | مدرن‌CRM</title>
+<meta name="description" content="تعریف دوره‌های مالی با تاریخ شروع و پایان شمسی">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="defs-fiscal">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="defs.html">تعاریف</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">تعریف دوره مالی</span>
+            </div>
+            <h1 class="page-title">تعریف دوره مالی</h1>
+            <p class="page-desc">بازه‌ی زمانی هر سال مالی را تعریف کنید. اسناد فروش، انبار و حسابداری بر اساس دوره‌ی جاری ثبت و گزارش می‌شوند.</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn btn-primary" type="button" id="btnNext"><span data-icon="plus" data-icon-size="16"></span> دوره‌ی بعدی</button>
+          </div>
+        </div>
+
+        <!-- ============================ دوره جاری ============================ -->
+        <div class="card mb-5" id="curCard">
+          <div class="card-body d-flex items-center flex-wrap gap-5">
+            <span class="stat-icon success" style="width:54px;height:54px"><span data-icon="calendar-range" data-icon-size="26"></span></span>
+            <div style="min-width:200px">
+              <div class="stat-label">دوره مالی جاری</div>
+              <div class="fs-xl fw-700 text-strong" id="curTitle">—</div>
+              <div class="fs-xs text-muted num" id="curRange">—</div>
+            </div>
+            <div style="flex:1;min-width:240px">
+              <div class="d-flex justify-between fs-xs text-muted mb-2"><span id="curPassed">—</span><span id="curLeft">—</span></div>
+              <div class="progress lg"><i id="curBar" style="width:0"></i></div>
+            </div>
+            <div class="d-flex gap-5">
+              <div class="kv-mini"><div class="stat-label">کل دوره‌ها</div><div class="fs-xl fw-700 text-strong" id="kAll">—</div></div>
+              <div class="kv-mini"><div class="stat-label">غیرفعال</div><div class="fs-xl fw-700 text-strong" id="kOff">—</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-1-2">
+          <!-- ============================ فرم ============================ -->
+          <form class="card" id="fForm" data-win-nobtn novalidate style="align-self:start">
+            <div class="card-head">
+              <div class="card-title"><span data-icon="calendar-range" data-icon-size="18"></span> <span id="formTitle">دوره مالی جدید</span></div>
+              <div class="card-actions"><span class="badge badge-info" id="formBadge">جدید</span></div>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label" for="fTitle">عنوان <span class="req">*</span></label>
+                <input class="input" id="fTitle" required placeholder="مثلاً دوره مالی ۱۴۰۷">
+              </div>
+              <div class="grid-2" style="gap:12px">
+                <div class="form-group">
+                  <label class="form-label" for="fFrom">از تاریخ <span class="req">*</span></label>
+                  <div class="input-wrap">
+                    <input class="input num" id="fFrom" data-jdate required placeholder="۱۴۰۶/۰۱/۰۱">
+                    <button type="button" class="icon-btn trail" data-jdate-trigger data-tip="باز کردن تقویم" data-icon="calendar" data-icon-size="15"></button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="fTo">تا تاریخ <span class="req">*</span></label>
+                  <div class="input-wrap">
+                    <input class="input num" id="fTo" data-jdate required placeholder="۱۴۰۶/۱۲/۲۹">
+                    <button type="button" class="icon-btn trail" data-jdate-trigger data-tip="باز کردن تقویم" data-icon="calendar" data-icon-size="15"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-hint mb-4 d-flex items-center gap-2" id="fDur"><span data-icon="info" data-icon-size="13"></span> <span>تاریخ شروع و پایان را انتخاب کنید.</span></div>
+              <label class="switch"><input type="checkbox" id="fInactive"><span class="track"></span><span class="lbl">غیرفعال <small class="text-muted">— در انتخاب دوره نمایش داده نمی‌شود</small></span></label>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> <span id="btnSaveLbl">ثبت</span></button>
+              <button type="button" class="btn" id="btnNew"><span data-icon="plus" data-icon-size="16"></span> جدید</button>
+            </div>
+          </form>
+
+          <!-- ============================ جدول ============================ -->
+          <div class="card" data-win="defs-fiscal-table" data-win-title="دوره‌های مالی" data-win-icon="calendar-range" data-win-size="900x600">
+            <div class="card-head">
+              <div class="card-title" data-icon="list-checks" data-icon-size="18"> دوره‌های مالی</div>
+              <div class="card-actions">
+                <div class="segmented" id="fFilter">
+                  <button class="seg is-active" data-f="">همه</button>
+                  <button class="seg" data-f="on">فعال</button>
+                  <button class="seg" data-f="off">غیرفعال</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table">
+                  <thead><tr><th style="width:60px">کد</th><th>عنوان</th><th>از تاریخ</th><th>تا تاریخ</th><th>مدت</th><th>وضعیت</th><th class="table-row-actions"></th></tr></thead>
+                  <tbody id="fBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="table-foot"><span id="fFoot">—</span></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, J = CRM.jalali, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, esc = CRM.esc;
+  var current = null, filter = '';
+  var F = { title: $('#fTitle'), from: $('#fFrom'), to: $('#fTo'), inactive: $('#fInactive') };
+  var DAY = 864e5;
+
+  function g(str) { var o = J.parse(str); return o ? J.toGregorian(o.jy, o.jm, o.jd) : null; }
+  function today() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
+  function days(a, b) { return Math.round((b - a) / DAY) + 1; }
+  function status(p) {
+    if (!p.active) return { key: 'off', html: '<span class="badge badge-danger badge-dot">غیرفعال</span>' };
+    var t = today(), a = g(p.from), b = g(p.to);
+    if (t >= a && t <= b) return { key: 'cur', html: '<span class="badge badge-success badge-dot">جاری</span>' };
+    if (t < a) return { key: 'next', html: '<span class="badge badge-info badge-dot">آینده</span>' };
+    return { key: 'closed', html: '<span class="badge">بسته‌شده</span>' };
+  }
+  function currentPeriod() { return D.fiscalPeriods.filter(function (p) { return status(p).key === 'cur'; })[0]; }
+
+  /* ------------------------------------------------ دوره جاری */
+  function renderCurrent() {
+    var p = currentPeriod();
+    $('#kAll').textContent = fa(D.fiscalPeriods.length);
+    $('#kOff').textContent = fa(D.fiscalPeriods.filter(function (x) { return !x.active; }).length);
+    if (!p) { $('#curTitle').textContent = 'دوره‌ی فعالی برای امروز تعریف نشده'; $('#curRange').textContent = ''; $('#curBar').style.width = '0'; $('#curPassed').textContent = ''; $('#curLeft').textContent = ''; return; }
+    var a = g(p.from), b = g(p.to), total = days(a, b), passed = days(a, today());
+    $('#curTitle').textContent = p.title;
+    $('#curRange').textContent = p.from + '  تا  ' + p.to;
+    $('#curBar').style.width = Math.round(passed / total * 100) + '%';
+    $('#curPassed').textContent = fa(passed) + ' روز گذشته (' + fa(Math.round(passed / total * 100)) + '٪)';
+    $('#curLeft').textContent = fa(total - passed) + ' روز تا پایان دوره';
+  }
+
+  /* ------------------------------------------------ جدول */
+  function render() {
+    var rows = D.fiscalPeriods.filter(function (p) { return !filter || (filter === 'on' ? p.active : !p.active); })
+      .sort(function (x, y) { return g(y.from) - g(x.from) || y.code - x.code; });
+    $('#fBody').innerHTML = rows.map(function (p) {
+      var s = status(p);
+      return '<tr class="' + (current === p ? 'is-selected' : '') + '" data-code="' + p.code + '" style="cursor:pointer">' +
+        '<td><span class="code-chip">' + fa(p.code) + '</span></td>' +
+        '<td><span class="cell-main' + (p.active ? '' : ' text-muted') + '">' + esc(p.title) + '</span></td>' +
+        '<td class="num">' + esc(p.from) + '</td>' +
+        '<td class="num">' + esc(p.to) + '</td>' +
+        '<td class="text-muted fs-sm">' + fa(days(g(p.from), g(p.to))) + ' روز</td>' +
+        '<td>' + s.html + '</td>' +
+        '<td><button type="button" class="btn btn-sm btn-ghost" data-edit="' + p.code + '">' + CRM.icon('pencil', 14) + ' ویرایش</button></td></tr>';
+    }).join('');
+    $('#fFoot').textContent = fa(rows.length) + ' دوره';
+    renderCurrent();
+  }
+  $('#fFilter').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-f]'); if (!b) return;
+    $$('#fFilter .seg').forEach(function (x) { x.classList.toggle('is-active', x === b); });
+    filter = b.getAttribute('data-f'); render();
+  });
+  $('#fBody').addEventListener('click', function (e) {
+    var tr = e.target.closest('tr[data-code]'); if (!tr) return;
+    var p = D.fiscalPeriods.filter(function (x) { return x.code === +tr.getAttribute('data-code'); })[0];
+    load(p);
+  });
+
+  /* ------------------------------------------------ فرم */
+  function updateDur() {
+    var a = g(F.from.value), b = g(F.to.value), el = $('#fDur');
+    if (a && b && b >= a) { el.className = 'form-hint mb-4 d-flex items-center gap-2'; el.innerHTML = CRM.icon('clock', 13) + ' <span>مدت دوره: <b class="text-strong">' + fa(days(a, b)) + ' روز</b></span>'; }
+    else if (a && b) { el.className = 'form-hint mb-4 d-flex items-center gap-2 text-danger'; el.innerHTML = CRM.icon('alert', 13) + ' <span>«تا تاریخ» باید بعد از «از تاریخ» باشد.</span>'; }
+    else { el.className = 'form-hint mb-4 d-flex items-center gap-2'; el.innerHTML = CRM.icon('info', 13) + ' <span>تاریخ شروع و پایان را انتخاب کنید.</span>'; }
+  }
+  ['input', 'change'].forEach(function (ev) { F.from.addEventListener(ev, updateDur); F.to.addEventListener(ev, updateDur); });
+  /* پیشنهاد عنوان و پایان دوره بر اساس تاریخ شروع */
+  F.from.addEventListener('change', function () {
+    var o = J.parse(F.from.value); if (!o || current) return;
+    if (!F.title.value.trim()) F.title.value = 'دوره مالی ' + fa(o.jy);
+    if (!F.to.value) {
+      var end = new Date(J.toGregorian(o.jy + 1, o.jm, Math.min(o.jd, J.monthLength(o.jy + 1, o.jm))).getTime() - DAY);
+      F.to.value = J.format(J.toJalali(end)); updateDur();
+    }
+  });
+
+  function setMode(p) {
+    current = p;
+    $('#formTitle').textContent = p ? 'ویرایش دوره مالی' : 'دوره مالی جدید';
+    $('#formBadge').className = 'badge ' + (p ? 'badge-violet' : 'badge-info');
+    $('#formBadge').textContent = p ? 'کد ' + fa(p.code) : 'جدید';
+    $('#btnSaveLbl').textContent = p ? 'ثبت تغییرات' : 'ثبت';
+    render();
+  }
+  function load(p) {
+    F.title.value = p.title; F.from.value = p.from; F.to.value = p.to; F.inactive.checked = !p.active;
+    $$('#fForm .is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+    updateDur(); setMode(p);
+  }
+  function clear(prefill) {
+    $('#fForm').reset();
+    $$('#fForm .is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+    setMode(null);
+    if (prefill) {
+      var last = D.fiscalPeriods.filter(function (p) { return p.active; }).sort(function (a, b) { return g(b.to) - g(a.to); })[0];
+      var start = new Date(g(last.to).getTime() + DAY), s = J.toJalali(start);
+      F.from.value = J.format(s);
+      F.from.dispatchEvent(new Event('change'));
+    }
+    updateDur(); F.title.focus();
+  }
+  $('#fForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var a = g(F.from.value), b = g(F.to.value), bad = [];
+    if (!F.title.value.trim()) bad.push(F.title);
+    if (!a) bad.push(F.from);
+    if (!b || (a && b < a)) bad.push(F.to);
+    [F.title, F.from, F.to].forEach(function (x) { x.classList.toggle('is-invalid', bad.indexOf(x) > -1); });
+    if (bad.length) { bad[0].focus(); CRM.toast({ type: 'danger', title: 'اطلاعات ناقص یا نامعتبر', msg: 'عنوان و بازه‌ی تاریخ معتبر را وارد کنید.' }); return; }
+    var active = !F.inactive.checked;
+    var clash = active && D.fiscalPeriods.filter(function (p) { return p !== current && p.active && g(p.from) <= b && g(p.to) >= a; })[0];
+    if (clash) { F.from.classList.add('is-invalid'); F.to.classList.add('is-invalid'); CRM.toast({ type: 'danger', title: 'تداخل دوره‌ها', msg: 'این بازه با «' + clash.title + '» (' + clash.from + ' تا ' + clash.to + ') هم‌پوشانی دارد.' }); return; }
+    var data = { title: F.title.value.trim(), from: J.format(J.parse(F.from.value)), to: J.format(J.parse(F.to.value)), active: active };
+    if (current) { Object.assign(current, data); CRM.toast({ type: 'success', title: 'دوره به‌روزرسانی شد', msg: '«' + data.title + '» ذخیره شد.' }); setMode(current); }
+    else {
+      var p = Object.assign({ code: Math.max.apply(null, D.fiscalPeriods.map(function (x) { return x.code; })) + 1 }, data);
+      D.fiscalPeriods.push(p);
+      CRM.toast({ type: 'success', title: 'دوره مالی ثبت شد', msg: '«' + p.title + '» با کد ' + fa(p.code) + ' ثبت شد.' });
+      setMode(p);
+    }
+  });
+  $('#btnNew').addEventListener('click', function () { clear(false); });
+  $('#btnNext').addEventListener('click', function () { clear(true); });
+
+  render(); updateDur();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>برنامه‌ریزی | پشتیبانی | مدرن‌CRM</title>
+<meta name="description" content="برنامه‌ریزی فرم‌های ارسال‌شده: تعیین تاریخ، ساعت و کارشناس شرکت، کنسلی/ناقصی و گردش فرم">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<!--
+  برنامه‌ریزی: صف فرم‌های «ارسال شده» از برنامه کاری.
+    • تأیید      → ردیف انتخاب و پنل پایین (زمان، ساعت، کارشناس) فعال می‌شود؛ ثبت = وضعیت «تأیید شده»
+    • ناقصی/کنسل → مودال با علت انجام نشدن
+    • گردش فرم   → گزارش مراحل فرم (SUP.flow)
+    • کلیک راست روی ستون «ایام هفته» (یا کلیک روی شماره فرم) → نمایش فرم
+  support-planning.html?all=1 → نمایش همه‌ی فرم‌ها (تیک «برنامه‌ریزی نشده» برداشته می‌شود)
+-->
+<body class="app" data-page="support-planning">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="support.html">پشتیبانی</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">برنامه‌ریزی</span>
+            </div>
+            <h1 class="page-title">برنامه‌ریزی</h1>
+            <p class="page-desc" id="pDesc">—</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="support-formdata.html"><span data-icon="clipboard" data-icon-size="16"></span> ثبت اطلاعات فرم</a>
+            <a class="btn btn-primary" href="support-workplan.html"><span data-icon="plus" data-icon-size="16"></span> برنامه کاری جدید</a>
+          </div>
+        </div>
+
+        <!-- فیلترها -->
+        <form class="card mb-5" id="fForm" data-win-nobtn novalidate>
+          <div class="card-head">
+            <div class="card-title" data-icon="list-filter" data-icon-size="18"> جستجوی فرم‌ها</div>
+            <div class="card-actions">
+              <label class="check"><input type="checkbox" id="fUnplanned" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">برنامه ریزی نشده</span></label>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="rf-grid">
+              <div class="rf">
+                <label class="form-label" for="fFrom">از تاریخ</label>
+                <div class="input-wrap"><input class="input num" id="fFrom" data-jdate placeholder="۱۴۰۵/۰۷/۰۱"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar-days" data-icon-size="15"></button></div>
+              </div>
+              <div class="rf">
+                <label class="form-label" for="fTo">تا تاریخ</label>
+                <div class="input-wrap"><input class="input num" id="fTo" data-jdate placeholder="تا امروز"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar-days" data-icon-size="15"></button></div>
+              </div>
+              <div class="rf">
+                <label class="form-label" for="fCompany">شرکت</label>
+                <div class="input-group"><input class="input" id="fCompany" readonly placeholder="همه‌ی شرکت‌ها"><button type="button" class="btn" id="btnPick"><span data-icon="more-h" data-icon-size="16"></span></button></div>
+              </div>
+              <div class="rf">
+                <label class="form-label" for="fPerson">افراد شرکت</label>
+                <select class="select" id="fPerson"><option value="">همه</option></select>
+              </div>
+              <div class="rf">
+                <label class="form-label" for="fNo">شماره فرم</label>
+                <div class="input-wrap"><span class="icon lead" data-icon="notebook" data-icon-size="16"></span><input class="input num" id="fNo" data-fa-mask placeholder="مثلاً ۰۵۷۵۱"></div>
+              </div>
+              <div class="rf">
+                <label class="form-label" for="fType">فیلتر نوع فرم</label>
+                <select class="select" id="fType"></select>
+              </div>
+              <div class="rf">
+                <label class="form-label" for="fStatus">وضعیت</label>
+                <select class="select" id="fStatus"></select>
+              </div>
+              <div class="rf d-flex gap-2" style="align-self:end">
+                <button type="submit" class="btn btn-primary" style="flex:1"><span data-icon="search" data-icon-size="16"></span> جستجو</button>
+                <button type="button" class="btn" id="btnReset"><span data-icon="eraser" data-icon-size="16"></span> انصراف</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- روزهای هفته -->
+        <div class="sup-days mb-4" id="days"></div>
+
+        <!-- جدول -->
+        <div class="card mb-5" data-win="sup-plan" data-win-title="برنامه‌ریزی فرم‌ها" data-win-icon="calendar-range" data-win-size="1200x640">
+          <div class="card-head">
+            <div class="card-title" data-icon="calendar-range" data-icon-size="18"> فرم‌ها <span class="badge" id="count">—</span></div>
+            <div class="card-actions"><span class="sup-hint"><span data-icon="info" data-icon-size="14"></span> با کلیک راست روی ستون نام هفته، فرم نمایش داده می‌شود</span></div>
+          </div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table table-compact" id="tbl">
+                <thead>
+                  <tr>
+                    <th>ایام هفته</th><th>تاریخ و ساعت</th><th>کارشناس شرکت</th><th>شرکت / شخص هماهنگ شده</th>
+                    <th>نحوه ارسال</th><th>نوع فرم</th><th>شماره فرم / وضعیت</th><th>هماهنگ کننده</th><th></th>
+                  </tr>
+                </thead>
+                <tbody id="body"></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- پنل تأیید -->
+          <form class="sup-confirm is-off" id="cForm" novalidate>
+            <div class="d-flex items-center gap-2 mb-3 fs-sm">
+              <span data-icon="calendar-check" data-icon-size="17" class="text-brand"></span>
+              <b class="text-strong">تأیید و زمان‌بندی</b>
+              <span class="text-muted" id="cTarget">— برای فعال شدن، روی «تأیید» یکی از ردیف‌ها کلیک کنید</span>
+            </div>
+            <div class="grid-4">
+              <div class="form-group mb-0">
+                <label class="form-label" for="cDate">زمان هماهنگ شده <span class="req">*</span></label>
+                <div class="input-wrap"><input class="input num" id="cDate" data-jdate><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar-days" data-icon-size="15"></button></div>
+              </div>
+              <div class="form-group mb-0">
+                <label class="form-label" for="cTime">ساعت هماهنگ شده <span class="req">*</span></label>
+                <div class="input-wrap"><span class="icon lead" data-icon="clock" data-icon-size="16"></span><input class="input num ltr" id="cTime" data-fa-mask placeholder="hh:mm" maxlength="5"></div>
+              </div>
+              <div class="form-group mb-0">
+                <label class="form-label" for="cExpert">کارشناس شرکت <span class="req">*</span></label>
+                <select class="select" id="cExpert"></select>
+              </div>
+              <div class="form-group mb-0">
+                <label class="form-label" for="cNote">توضیحات</label>
+                <input class="input" id="cNote" placeholder="اختیاری">
+              </div>
+            </div>
+            <div class="d-flex items-center gap-2 mt-3 flex-wrap">
+              <span class="fs-xs text-muted">ساعت‌های پرکاربرد:</span>
+              <span class="d-flex gap-2 flex-wrap" id="cQuick"></span>
+              <span style="flex:1"></span>
+              <button type="button" class="btn" id="cCancel">انصراف</button>
+              <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> ثبت</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- کنسلی / ناقصی -->
+<div class="overlay" id="cancelModal" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">کنسلی / ناقصی فرم <span class="num" id="xNo"></span></div><div class="modal-sub" id="xSub">—</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#cancelModal" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="opt-cards mb-4" style="grid-template-columns:1fr 1fr">
+        <label class="opt-card"><input type="radio" name="xKind" value="cancel" checked><span class="opt-body"><span class="opt-ic"><span data-icon="x-circle" data-icon-size="17"></span></span><span><span class="opt-title d-block">کنسلی</span><span class="opt-desc d-block">کار انجام نمی‌شود</span></span></span></label>
+        <label class="opt-card"><input type="radio" name="xKind" value="incomplete"><span class="opt-body"><span class="opt-ic"><span data-icon="alert" data-icon-size="17"></span></span><span><span class="opt-title d-block">ناقصی</span><span class="opt-desc d-block">کار نیمه‌کاره ماند</span></span></span></label>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="xReason">علت انجام نشدن <span class="req">*</span></label>
+        <select class="select" id="xReason"></select>
+      </div>
+      <div class="form-group mb-0">
+        <label class="form-label" for="xNote">توضیحات</label>
+        <textarea class="textarea" id="xNote" rows="3"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-danger" id="xSave"><span data-icon="check" data-icon-size="16"></span> ثبت</button>
+      <button type="button" class="btn" data-modal-close="#cancelModal">بستن</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/support.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, esc = CRM.esc;
+  var sel = null, xPlan = null, dayFilter = '';
+
+  SUP.fill('#fType', D.supFormTypes.map(function (t) { return { v: t.id, t: t.title }; }), 'همه‌ی انواع');
+  SUP.fill('#fStatus', D.supStatuses.filter(function (s) { return s.id !== 'draft'; }).map(function (s) { return { v: s.id, t: s.title }; }), 'همه');
+  SUP.fill('#cExpert', D.supExperts, 'انتخاب کارشناس…');
+  SUP.fill('#xReason', D.supLists.cancelReasons, 'انتخاب علت…');
+  $('#cQuick').innerHTML = ['۰۹:۰۰', '۱۰:۳۰', '۱۲:۰۰', '۱۴:۰۰', '۱۶:۰۰'].map(function (t) { return '<button type="button" class="chip num" data-t="' + t + '">' + t + '</button>'; }).join('');
+  if (/[?&]all=1/.test(location.search)) $('#fUnplanned').checked = false;
+
+  /* شرکت + افراد */
+  SUP.bindCompany('#fCompany', '#btnPick', function (c) { SUP.fill('#fPerson', c.people.map(function (p) { return p.name; }), 'همه'); });
+
+  function pDate(p) { return p.plan ? p.plan.date : ''; }
+  function filters() {
+    return { from: $('#fFrom').value, to: $('#fTo').value, code: +$('#fCompany').getAttribute('data-code') || 0, person: $('#fPerson').value,
+      no: fa($('#fNo').value.trim()), type: $('#fType').value, status: $('#fStatus').value, unplanned: $('#fUnplanned').checked };
+  }
+  var F = filters();
+  function rows() {
+    var a = SUP.key(F.from), b = SUP.key(F.to);
+    return D.supPlans.filter(function (p) {
+      if (p.status === 'draft') return false;
+      if (F.unplanned && p.status !== 'sent') return false;
+      var k = SUP.key(pDate(p) || p.created);
+      if (a && k < a) return false; if (b && k > b) return false;
+      if (dayFilter && pDate(p) !== dayFilter) return false;
+      return (!F.code || p.company === F.code) && (!F.person || p.person === F.person) && (!F.no || p.no.indexOf(F.no) > -1) &&
+        (!F.type || p.types.indexOf(F.type) > -1) && (!F.status || p.status === F.status);
+    }).sort(function (x, y) { return (SUP.key(pDate(x)) || 99999999) - (SUP.key(pDate(y)) || 99999999) || (x.plan ? x.plan.time : '').localeCompare(y.plan ? y.plan.time : '') || y.no.localeCompare(x.no); });
+  }
+
+  function render() {
+    var list = rows();
+    $('#count').textContent = fa(list.length);
+    $('#body').innerHTML = list.length ? list.map(function (p) {
+      var c = SUP.co(p.company) || {}, d = pDate(p), canConfirm = p.status === 'sent' || p.status === 'confirmed' || p.status === 'incomplete', canCancel = ['sent', 'confirmed', 'printed'].indexOf(p.status) > -1;
+      return '<tr data-no="' + esc(p.no) + '"' + (sel === p ? ' class="is-selected"' : '') + '>' +
+        '<td data-wd><span class="sup-wd">' + (d ? esc(SUP.weekday(d)) : '<span class="text-muted fw-400">—</span>') + '</span></td>' +
+        '<td class="num text-nowrap">' + (d ? esc(d) + '<span class="d-block fs-xs text-muted">ساعت <b class="text-strong">' + esc(p.plan.time) + '</b></span>' : '<span class="text-muted fs-xs">برنامه ریزی نشده</span>') + '</td>' +
+        '<td>' + (p.plan ? esc(p.plan.expert) : '—') + '</td>' +
+        '<td><span class="sup-co" style="max-width:200px" title="' + esc(c.name || '') + '">' + esc(c.name || '—') + '</span><span class="d-block fs-xs text-muted text-truncate" style="max-width:200px">' + (p.person ? esc(p.person) : 'شخص هماهنگ شده: —') + '</span></td>' +
+        '<td class="text-nowrap">' + esc(p.send || '—') + '</td>' +
+        '<td><span class="d-flex flex-wrap gap-1" style="max-width:130px">' + SUP.typeBadges(p.types) + '</span></td>' +
+        '<td class="text-nowrap"><button type="button" class="sup-link num fw-700" data-view>' + esc(p.no) + '</button><span class="d-block mt-1">' + SUP.statusBadge(p.status) + '</span></td>' +
+        '<td>' + esc(p.coord) + '</td>' +
+        '<td class="text-left"><span class="sup-acts">' +
+          '<button type="button" class="btn btn-soft" data-act="ok"' + (canConfirm ? '' : ' disabled') + ' data-tip="تأیید و زمان‌بندی">' + CRM.icon('calendar-check', 14) + ' تأیید</button>' +
+          '<button type="button" class="btn" data-act="cx"' + (canCancel ? '' : ' disabled') + ' data-tip="ناقصی / کنسل">' + CRM.icon('x-circle', 14) + '</button>' +
+          '<button type="button" class="btn btn-ghost" data-act="flow" data-tip="گردش فرم">' + CRM.icon('history', 14) + '</button>' +
+        '</span></td></tr>';
+    }).join('') : '<tr><td colspan="9">' + SUP.empty(F.unplanned ? 'فرم برنامه‌ریزی‌نشده‌ای با این فیلترها نیست.' : 'فرمی با این فیلترها پیدا نشد.', 'calendar-check') + '</td></tr>';
+    CRM.renderIcons($('#body'));
+    var wait = D.supPlans.filter(function (p) { return p.status === 'sent'; }).length;
+    $('#pDesc').innerHTML = '<b class="text-strong">' + fa(wait) + '</b> فرم در انتظار برنامه‌ریزی · برای تعیین زمان و کارشناس روی «تأیید» کلیک کنید.';
+    renderDays();
+  }
+
+  /* روزهای هفته‌ی جاری (از شنبه) با تعداد فرم برنامه‌ریزی‌شده */
+  function renderDays() {
+    var today = CRM.jDate(), o = CRM.jalali.parse(today), g = CRM.jalali.toGregorian(o.jy, o.jm, o.jd);
+    var start = SUP.addDays(today, -((g.getDay() + 1) % 7)), html = '<button type="button" class="sup-day' + (!dayFilter ? ' is-active' : '') + '" data-day=""><span class="dn">همه</span><span class="dd">روزها</span><span class="dc">&nbsp;</span></button>';
+    for (var i = 0; i < 7; i++) {
+      var dt = SUP.addDays(start, i), n = D.supPlans.filter(function (p) { return pDate(p) === dt && p.status !== 'cancel'; }).length;
+      html += '<button type="button" class="sup-day' + (dt === today ? ' is-today' : '') + (dayFilter === dt ? ' is-active' : '') + '" data-day="' + dt + '"><span class="dn">' + SUP.weekday(dt) + '</span><span class="dd num">' + dt.slice(5) + '</span><span class="dc">' + (n ? fa(n) + ' کار' : 'بدون کار') + '</span></button>';
+    }
+    $('#days').innerHTML = html;
+  }
+  $('#days').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-day]'); if (!b) return;
+    dayFilter = b.getAttribute('data-day');
+    if (dayFilter) $('#fUnplanned').checked = false, F = filters();
+    render();
+  });
+
+  /* انتخاب برای تأیید */
+  function select(p) {
+    sel = p;
+    $('#cForm').classList.toggle('is-off', !p);
+    if (p) {
+      var c = SUP.co(p.company) || {};
+      $('#cTarget').innerHTML = '— فرم <b class="num text-strong">' + esc(p.no) + '</b> · ' + esc(c.name || '') + ' · ' + p.types.map(function (t) { return SUP.type(t).title; }).join('، ');
+      $('#cDate').value = p.plan ? p.plan.date : CRM.jDate(); $('#cTime').value = p.plan ? p.plan.time : ''; $('#cExpert').value = p.plan ? p.plan.expert : ''; $('#cNote').value = p.plan ? p.plan.note : '';
+      $('#cForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function () { $('#cTime').focus(); }, 350);
+    } else $('#cTarget').textContent = '— برای فعال شدن، روی «تأیید» یکی از ردیف‌ها کلیک کنید';
+    $$('#body tr').forEach(function (tr) { tr.classList.toggle('is-selected', !!p && tr.getAttribute('data-no') === p.no); });
+  }
+  $('#cQuick').addEventListener('click', function (e) { var b = e.target.closest('[data-t]'); if (b) $('#cTime').value = b.getAttribute('data-t'); });
+  $('#cCancel').addEventListener('click', function () { select(null); });
+  $('#cForm').addEventListener('submit', function (e) {
+    e.preventDefault(); if (!sel) return;
+    var t = CRM.en($('#cTime').value.trim());
+    if (!CRM.jalali.parse($('#cDate').value)) { CRM.toast({ type: 'warning', title: 'تاریخ نامعتبر', msg: 'زمان هماهنگ شده را وارد کنید.' }); return; }
+    if (!/^([01]?\d|2[0-3]):[0-5]\d$/.test(t)) { CRM.toast({ type: 'warning', title: 'ساعت نامعتبر', msg: 'ساعت را به شکل hh:mm وارد کنید؛ مثلاً ۱۰:۳۰' }); $('#cTime').focus(); return; }
+    if (!$('#cExpert').value) { CRM.toast({ type: 'warning', title: 'کارشناس شرکت', msg: 'کارشناس اعزامی را انتخاب کنید.' }); return; }
+    var p = sel; t = fa(t.length === 4 ? '0' + t : t);
+    p.plan = { date: $('#cDate').value, time: t, expert: $('#cExpert').value, note: $('#cNote').value.trim() };
+    p.status = 'confirmed'; p.cancel = null;
+    p.flow.push({ st: 'confirmed', user: 'مهدی کریمی', at: SUP.now().at, date: p.plan.date, time: t, note: p.plan.note });
+    select(null); render();
+    var tr = $('#body tr[data-no="' + p.no + '"]'); if (tr) { tr.classList.add('row-flash'); tr.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+    CRM.toast({ type: 'success', title: 'فرم تأیید شد', msg: 'فرم ' + p.no + ' برای ' + SUP.weekday(p.plan.date) + ' ' + p.plan.date + ' ساعت ' + t + ' به ' + p.plan.expert + ' سپرده شد.' });
+  });
+
+  /* رویدادهای جدول */
+  $('#body').addEventListener('click', function (e) {
+    var tr = e.target.closest('tr[data-no]'); if (!tr) return;
+    var p = SUP.plan(tr.getAttribute('data-no'));
+    if (e.target.closest('[data-view]')) SUP.viewPlan(p);
+    else if (e.target.closest('[data-act=flow]')) SUP.flow(p);
+    else if (e.target.closest('[data-act=ok]')) select(p);
+    else if (e.target.closest('[data-act=cx]')) {
+      xPlan = p; var c = SUP.co(p.company) || {};
+      $('#xNo').textContent = p.no; $('#xSub').textContent = (c.name || '') + ' · ' + SUP.status(p.status).title;
+      $('#xReason').value = ''; $('#xNote').value = ''; $$('[name=xKind]')[0].checked = true;
+      CRM.modal.open('#cancelModal');
+    }
+  });
+  $('#body').addEventListener('contextmenu', function (e) {
+    var td = e.target.closest('td[data-wd]'); if (!td) return;
+    e.preventDefault(); SUP.viewPlan(td.parentNode.getAttribute('data-no'));
+  });
+  $('#xSave').addEventListener('click', function () {
+    if (!$('#xReason').value) { CRM.toast({ type: 'warning', title: 'علت انجام نشدن', msg: 'علت را انتخاب کنید.' }); $('#xReason').focus(); return; }
+    var kind = ($$('[name=xKind]:checked')[0] || {}).value;
+    xPlan.status = kind; xPlan.cancel = { kind: kind, reason: $('#xReason').value, note: $('#xNote').value.trim() };
+    xPlan.flow.push({ st: kind, user: 'مهدی کریمی', at: SUP.now().at, date: '', time: '', note: $('#xReason').value + ($('#xNote').value.trim() ? ' — ' + $('#xNote').value.trim() : '') });
+    CRM.modal.close('#cancelModal'); if (sel === xPlan) select(null); render();
+    CRM.toast({ type: kind === 'cancel' ? 'error' : 'warning', title: kind === 'cancel' ? 'فرم کنسل شد' : 'فرم ناقص ثبت شد', msg: 'فرم ' + xPlan.no + ' · ' + xPlan.cancel.reason });
+  });
+
+  /* فیلترها */
+  $('#fForm').addEventListener('submit', function (e) { e.preventDefault(); F = filters(); dayFilter = ''; render(); });
+  $('#fUnplanned').addEventListener('change', function () { F = filters(); render(); });
+  $('#btnReset').addEventListener('click', function () {
+    $('#fForm').reset(); $('#fUnplanned').checked = true; $('#fCompany').setAttribute('data-code', ''); SUP.fill('#fPerson', [], 'همه'); dayFilter = ''; F = filters(); render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

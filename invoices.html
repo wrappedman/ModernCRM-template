@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مشاهده فاکتورها | مدرن‌CRM</title>
+<meta name="description" content="جستجو، ویرایش، چاپ و مدیریت فاکتورها و پیش‌فاکتورهای فروش">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="invoices">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="invoices.html">فاکتورها</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">مشاهده فاکتورها</span>
+            </div>
+            <h1 class="page-title">فاکتورها و پیش‌فاکتورها</h1>
+            <p class="page-desc">جستجو، ویرایش، چاپ، کنسل و انتقال مسئول فعالیت فاکتورها</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="invoice-new.html?type=proforma"><span data-icon="file" data-icon-size="16"></span> پیش‌فاکتور جدید</a>
+            <a class="btn btn-primary" href="invoice-new.html"><span data-icon="plus" data-icon-size="16"></span> صدور فاکتور</a>
+          </div>
+        </div>
+
+        <!-- ========================== شاخص‌ها ========================== -->
+        <div class="grid-4 mb-5" id="kpis"></div>
+
+        <!-- ========================== فیلترها ========================== -->
+        <div class="card mb-5" data-filter-root data-win-nobtn>
+          <div class="card-head tight">
+            <div class="card-title" data-icon="filter" data-icon-size="17"> جستجوی فاکتورها</div>
+            <div class="card-actions">
+              <label class="check"><input type="checkbox" id="fInvoice" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">فاکتور</span></label>
+              <label class="check ms-3"><input type="checkbox" id="fProforma" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">پیش‌فاکتور</span></label>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="filter-grid">
+              <div class="form-group"><label class="form-label">نام مشتری</label>
+                <div class="picker"><input class="input" id="fCustomer" readonly data-pick-customer="#fCustomer" placeholder="همه مشتریان"><button type="button" class="btn" data-pick-customer="#fCustomer" data-icon="more-h" data-icon-size="16"></button></div>
+              </div>
+              <div class="form-group"><label class="form-label">نوع فاکتور</label><select class="select" id="fKind"></select></div>
+              <div class="form-group"><label class="form-label">مسئول فعالیت</label><select class="select" id="fOwner"></select></div>
+              <div class="form-group"><label class="form-label">وضعیت تسویه</label>
+                <select class="select" id="fSettle"><option value="">همه</option><option value="paid">تسویه‌شده</option><option value="open">تسویه‌نشده</option></select></div>
+              <div class="form-group"><label class="form-label">تاریخ فاکتور از</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="fFrom" placeholder="۱۴۰۵/۰۶/۰۱" data-fa-mask></div></div>
+              <div class="form-group"><label class="form-label">تا تاریخ</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="fTo" placeholder="۱۴۰۵/۰۷/۳۰" data-fa-mask></div></div>
+              <div class="form-group d-none" data-fkey="no"><label class="form-label">شماره فاکتور از</label><input class="input num" placeholder="۴۰۷۰۰" data-fa-mask></div>
+              <div class="form-group d-none" data-fkey="no"><label class="form-label">شماره فاکتور تا</label><input class="input num" placeholder="۴۰۸۰۰" data-fa-mask></div>
+              <div class="form-group d-none" data-fkey="flags"><label class="form-label">وضعیت‌های خاص</label>
+                <div class="option-row">
+                  <label class="check"><input type="checkbox" id="fCancelled"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">کنسل شده</span></label>
+                  <label class="check"><input type="checkbox" id="fOut"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">خارج شده</span></label>
+                </div>
+              </div>
+            </div>
+            <div class="filter-actions">
+              <div id="fpick"></div>
+              <div class="end">
+                <button type="button" class="btn" id="btnReset"><span data-icon="x" data-icon-size="16"></span> انصراف</button>
+                <button type="button" class="btn btn-primary" id="btnSearch"><span data-icon="search" data-icon-size="16"></span> مشاهده</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== جدول ========================== -->
+        <div class="card mb-5" data-s-root data-win="i-table" data-win-title="فهرست فاکتورها" data-win-icon="invoice" data-win-size="1240x680">
+          <div class="card-head flex-wrap" style="gap:10px">
+            <div class="card-title" data-icon="invoice" data-icon-size="18"> فهرست فاکتورها <span class="badge badge-gray num" id="resultCount">۰</span></div>
+            <div class="card-actions flex-wrap" style="gap:12px">
+              <span class="legend-chip"><i></i> پیش‌فاکتورِ تبدیل‌نشده به فاکتور</span>
+              <span class="legend-chip"><i class="danger"></i> هشدار تسویه</span>
+              <div class="input-wrap" style="width:210px">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" placeholder="جستجو در نتایج…" data-table-search="#tblInvoices">
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info d-none" data-s-bulk style="border-radius:0;border-inline:0">
+            <span data-icon="check-check" data-icon-size="18"></span>
+            <div class="alert-title"><span data-s-count>۰</span> فاکتور انتخاب شده است</div>
+            <div class="d-flex gap-2 ms-auto flex-wrap">
+              <button class="btn btn-sm btn-soft" data-modal-open="#mdlTransfer"><span data-icon="arrow-left-right" data-icon-size="14"></span> انتقال مسئول فعالیت</button>
+              <button class="btn btn-sm btn-soft" data-print><span data-icon="printer" data-icon-size="14"></span> چاپ گروهی</button>
+              <button class="btn btn-sm btn-danger-soft" data-confirm="فاکتورهای انتخاب‌شده کنسل شوند؟" data-confirm-title="کنسل گروهی" data-confirm-ok="بله، کنسل شود"><span data-icon="x-circle" data-icon-size="14"></span> کنسل</button>
+            </div>
+          </div>
+
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table table-wide" id="tblInvoices">
+                <thead>
+                  <tr>
+                    <th style="width:40px"><label class="check"><input type="checkbox" data-s-all><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>
+                    <th>شماره</th>
+                    <th>نوع</th>
+                    <th>نام مشتری</th>
+                    <th>نوع فاکتور</th>
+                    <th>تاریخ فاکتور</th>
+                    <th class="num">مبلغ (تومان)</th>
+                    <th>مسئول</th>
+                    <th>مسئول ثبت</th>
+                    <th>وضعیت</th>
+                    <th class="table-row-actions">عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="invoicesBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-foot">
+            <span id="footNote">—</span>
+            <div class="pagination ms-auto"><button disabled data-icon="chevron-right" data-icon-size="15"></button><button class="is-active">۱</button><button data-icon="chevron-left" data-icon-size="15"></button></div>
+          </div>
+        </div>
+
+        <!-- ========================== نمودارها ========================== -->
+        <div class="grid-3">
+          <div class="card" data-win="i-donut" data-win-title="ترکیب وضعیت تسویه" data-win-icon="chart-pie" data-win-size="720x600">
+            <div class="card-head tight"><div class="card-title" data-icon="chart-pie" data-icon-size="17"> ترکیب وضعیت تسویه</div></div>
+            <div class="card-body tight">
+              <div class="donut-wrap">
+                <div data-chart="donut" data-values="4,2,4,1" data-center="۱۱" data-center-sub="سند"
+                     data-colors="var(--c4),var(--c5),var(--c2),var(--c8)"
+                     data-labels="تسویه‌شده,جزئی,تسویه‌نشده,کنسل"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card" data-win="i-chart" data-win-title="روند صدور فاکتور" data-win-icon="chart-line" data-win-size="820x560">
+            <div class="card-head tight"><div class="card-title" data-icon="chart-line" data-icon-size="17"> روند صدور فاکتور (۶ ماه)</div></div>
+            <div class="card-body tight">
+              <div class="chart h-160" data-chart="line" data-values="18,22,19,27,31,29" data-values2="9,12,10,14,13,16"
+                   data-labels="اردیبهشت,خرداد,تیر,مرداد,شهریور,مهر"></div>
+            </div>
+          </div>
+          <div class="card" data-win="i-reminder" data-win-title="یادآوری پرداخت" data-win-icon="bell" data-win-size="720x520">
+            <div class="card-head tight"><div class="card-title" data-icon="bell" data-icon-size="17"> یادآوری‌های ارسال‌شده</div></div>
+            <div class="card-body tight">
+              <div class="list">
+                <div class="list-item" style="padding:10px 0"><span class="avatar avatar-sm avatar-sq"><span data-icon="smartphone" data-icon-size="15"></span></span>
+                  <span class="flex-1"><span class="li-title d-block fs-sm">فاکتور ۴۰۷۷۹-ل</span><span class="li-sub">پیامک — دیروز ۰۹:۳۰</span></span>
+                  <span class="badge badge-danger">بی‌پاسخ</span></div>
+                <div class="list-item" style="padding:10px 0"><span class="avatar avatar-sm avatar-sq"><span data-icon="smartphone" data-icon-size="15"></span></span>
+                  <span class="flex-1"><span class="li-title d-block fs-sm">فاکتور ۴۰۷۵۴-ل</span><span class="li-sub">پیامک — ۲ روز پیش</span></span>
+                  <span class="badge badge-warning">تسویه جزئی</span></div>
+                <div class="list-item" style="padding:10px 0"><span class="avatar avatar-sm avatar-sq"><span data-icon="mail" data-icon-size="15"></span></span>
+                  <span class="flex-1"><span class="li-title d-block fs-sm">فاکتور ۴۰۷۰۹-ل</span><span class="li-sub">ایمیل — ۴ روز پیش</span></span>
+                  <span class="badge badge-warning">تسویه جزئی</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===================== مودال ویرایش فاکتور ===================== -->
+<div class="overlay" id="mdlEdit" style="display:none" data-no-autofocus>
+  <div class="modal modal-2xl" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <span class="stat-icon" style="width:40px;height:40px"><span data-icon="pencil" data-icon-size="18"></span></span>
+      <div><div class="modal-title">ویرایش <span id="editWord">فاکتور</span> <span class="num" id="editNo"></span></div><div class="modal-sub" id="editSub"></div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlEdit" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body" style="background:var(--bg-soft)" id="editRoot"></div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-primary" id="btnEditSave"><span data-icon="check" data-icon-size="16"></span> ثبت تغییرات</button>
+      <a class="btn" id="btnEditPrint" href="print-invoice.html" target="_blank"><span data-icon="printer" data-icon-size="16"></span> چاپ</a>
+      <button type="button" class="btn ms-auto" data-modal-close="#mdlEdit">بستن</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== مودال انتقال مسئول فعالیت ===================== -->
+<div class="overlay" id="mdlTransfer" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">انتقال مسئول فعالیت</div><div class="modal-sub">فاکتورهای انتخاب‌شده به کارشناس دیگری سپرده می‌شوند</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlTransfer" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="مسئول فعالیت فاکتورها با موفقیت تغییر کرد." data-close-modal="#mdlTransfer">
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">مسئول فعالیت جدید <span class="req">*</span></label><select class="select" id="trOwner" required></select></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">علت انتقال</label><textarea class="textarea" placeholder="مثلاً: تغییر منطقه فروش کارشناس…"></textarea></div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary"><span data-icon="arrow-left-right" data-icon-size="16"></span> انتقال</button>
+        <button type="button" class="btn ms-auto" data-modal-close="#mdlTransfer">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/sales.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, S = window.SALES, D = S.data;
+  var $ = CRM.$, esc = CRM.esc, fa = CRM.fa;
+  var list = D.invoices;
+
+  /* ---------- شاخص‌ها ---------- */
+  var invCount = list.filter(function (v) { return v.type === 'invoice' && !v.cancelled; }).length;
+  var proOpen = list.filter(function (v) { return v.type === 'proforma' && !v.converted; }).length;
+  var openAmount = list.filter(function (v) { return v.type === 'invoice' && !v.cancelled; }).reduce(function (s, v) { return s + v.amount - v.paid; }, 0);
+  var paidAmount = list.filter(function (v) { return v.type === 'invoice' && !v.cancelled; }).reduce(function (s, v) { return s + v.paid; }, 0);
+  function kpi(label, val, unit, icon, tone, foot) {
+    return '<div class="card card-hover"><div class="card-body tight"><div class="stat-top">' +
+      '<span class="stat-icon ' + tone + '"><span data-icon="' + icon + '" data-icon-size="20"></span></span>' +
+      '<div><div class="stat-label">' + label + '</div><div class="stat-value num">' + val + ' <small>' + unit + '</small></div></div></div>' +
+      '<div class="stat-foot mt-2">' + foot + '</div></div></div>';
+  }
+  $('#kpis').innerHTML =
+    kpi('فاکتورهای فعال', fa(invCount), 'فاکتور', 'invoice', '', 'در ماه جاری') +
+    kpi('پیش‌فاکتور در انتظار', fa(proOpen), 'مورد', 'file', 'amber', '<span class="badge badge-warning">تبدیل‌نشده به فاکتور</span>') +
+    kpi('وصول‌شده', CRM.moneyShort(paidAmount), 'تومان', 'check-circle', 'success', '<span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۹٪</span> نسبت به ماه قبل') +
+    kpi('مانده مطالبات', CRM.moneyShort(openAmount), 'تومان', 'clock', 'coral', '<a class="text-brand fw-600" href="invoice-settlement.html">رفتن به تسویه فاکتور ←</a>');
+
+  /* ---------- فیلترها ---------- */
+  $('#fpick').innerHTML = S.fpickHTML([['no', 'بازه شماره فاکتور'], ['flags', 'کنسل شده / خارج شده']]);
+  $('#fKind').innerHTML = S.options(D.invoiceKinds, '', 'همه انواع');
+  $('#fOwner').innerHTML = S.options(D.owners, '', 'همه کارشناسان');
+  $('#trOwner').innerHTML = S.options(D.owners, '', 'انتخاب کنید…');
+
+  function row(v) {
+    var st = S.settleState(v);
+    var pro = v.type === 'proforma';
+    var flag = pro && !v.converted ? ' row-flag' : (v.warn ? ' row-danger' : '');
+    var typeBadge = pro
+      ? '<span class="badge badge-warning">پیش‌فاکتور</span>' + (v.converted ? ' <span class="badge badge-success" data-tip="به فاکتور تبدیل شده است"><span data-icon="check" data-icon-size="12"></span></span>' : '')
+      : '<span class="badge badge-primary">فاکتور</span>';
+    var status = v.cancelled ? '<span class="badge badge-gray badge-dot">کنسل شده</span>'
+      : v.out ? '<span class="badge badge-violet badge-dot">خارج شده</span>'
+      : pro ? '<span class="badge badge-dot">' + (v.converted ? 'تبدیل شده' : 'در انتظار تأیید') + '</span>'
+      : '<span class="badge ' + st.c + ' badge-dot">' + st.l + '</span>';
+    var printHref = 'print-invoice.html?' + (pro ? 'type=proforma&' : '') + 'no=' + encodeURIComponent(v.no);
+    return '<tr class="' + flag + (v.cancelled ? ' row-muted' : '') + '" data-id="' + v.id + '">' +
+      '<td>' + S.checkCell('data-s-row') + '</td>' +
+      '<td><span class="cell-main num">' + esc(v.no) + '</span></td>' +
+      '<td>' + typeBadge + '</td>' +
+      '<td><div class="cell-main">' + esc(v.customer) + '</div></td>' +
+      '<td class="fs-sm">' + esc(v.kind) + '</td>' +
+      '<td class="num fs-sm">' + esc(v.date) + '</td>' +
+      '<td class="num fw-600">' + S.money(v.amount) + '</td>' +
+      '<td class="fs-sm">' + esc(v.owner) + '</td>' +
+      '<td class="fs-sm text-muted">' + esc(v.registrar) + '</td>' +
+      '<td>' + status + '</td>' +
+      '<td><span class="table-actions">' +
+        '<a class="tb-icon icon-btn-sm" href="' + printHref + '" target="_blank" data-tip="چاپ" data-icon="printer" data-icon-size="16"></a>' +
+        '<button class="tb-icon icon-btn-sm" data-edit="' + v.id + '" data-tip="' + (v.editable ? 'ویرایش' : 'مشاهده (قفل — تسویه/رزرو شده)') + '" data-icon="' + (v.editable ? 'pencil' : 'eye') + '" data-icon-size="16"></button>' +
+        '<div class="dropdown">' +
+          '<button class="tb-icon icon-btn-sm" data-dropdown-toggle data-tip="عملیات بیشتر" data-icon="more" data-icon-size="16"></button>' +
+          '<div class="dropdown-menu">' +
+            (pro && !v.converted ? '<button class="dropdown-item" data-convert="' + v.id + '"><span data-icon="invoice" data-icon-size="16"></span> تبدیل به فاکتور</button>' : '') +
+            (!pro ? '<a class="dropdown-item" href="invoice-settlement.html"><span data-icon="wallet" data-icon-size="16"></span> ثبت پرداختی</a>' : '') +
+            '<button class="dropdown-item" data-replace="' + v.id + '"><span data-icon="refresh" data-icon-size="16"></span> جایگزینی فاکتور</button>' +
+            '<button class="dropdown-item" data-copy-inv="' + v.id + '"><span data-icon="copy" data-icon-size="16"></span> ایجاد فاکتور مشابه</button>' +
+            '<div class="dropdown-sep"></div>' +
+            (v.cancelled
+              ? '<button class="dropdown-item" data-uncancel="' + v.id + '"><span data-icon="check-circle" data-icon-size="16"></span> عدم کنسلی</button>'
+              : '<button class="dropdown-item danger" data-cancel="' + v.id + '"><span data-icon="x-circle" data-icon-size="16"></span> کنسل کردن</button>') +
+          '</div>' +
+        '</div>' +
+      '</span></td>' +
+    '</tr>';
+  }
+
+  function apply() {
+    var showInv = $('#fInvoice').checked, showPro = $('#fProforma').checked;
+    var cust = $('#fCustomer').value, kind = $('#fKind').value, owner = $('#fOwner').value, settle = $('#fSettle').value;
+    var onlyCancelled = $('#fCancelled').checked, onlyOut = $('#fOut').checked;
+    var rows = list.filter(function (v) {
+      if (v.type === 'invoice' && !showInv) return false;
+      if (v.type === 'proforma' && !showPro) return false;
+      if (cust && v.customer !== cust) return false;
+      if (kind && v.kind !== kind) return false;
+      if (owner && v.owner !== owner) return false;
+      var st = S.settleState(v).key;
+      if (settle === 'paid' && st !== 'paid') return false;
+      if (settle === 'open' && (st === 'paid' || st === 'cancel')) return false;
+      if (onlyCancelled && !v.cancelled) return false;
+      if (onlyOut && !v.out) return false;
+      return true;
+    });
+    var body = $('#invoicesBody');
+    body.innerHTML = rows.length ? rows.map(row).join('')
+      : '<tr><td colspan="11"><div class="empty"><div class="empty-ic" data-icon="invoice" data-icon-size="30"></div><div class="empty-title">فاکتوری با این مشخصات یافت نشد</div><div class="empty-desc">فیلترها را تغییر دهید یا «انصراف» را بزنید.</div></div></td></tr>';
+    $('#resultCount').textContent = fa(rows.length);
+    var total = rows.reduce(function (s, v) { return s + (v.cancelled ? 0 : v.amount); }, 0);
+    $('#footNote').innerHTML = 'نمایش ' + fa(rows.length) + ' سند — جمع مبالغ: <b class="num text-strong">' + S.money(total) + '</b> تومان';
+    S.syncSelection(body.closest('[data-s-root]'));
+    if (document.readyState !== 'loading') CRM.init(body);
+  }
+
+  $('#btnSearch').addEventListener('click', function (e) { S.busy(e.currentTarget, apply); });
+  $('#btnReset').addEventListener('click', function () {
+    ['#fCustomer', '#fFrom', '#fTo'].forEach(function (s) { $(s).value = ''; });
+    ['#fKind', '#fOwner', '#fSettle'].forEach(function (s) { $(s).value = ''; });
+    $('#fInvoice').checked = $('#fProforma').checked = true;
+    $('#fCancelled').checked = $('#fOut').checked = false;
+    apply();
+  });
+  ['#fInvoice', '#fProforma'].forEach(function (s) { $(s).addEventListener('change', apply); });
+  $('#fCustomer').addEventListener('sales:customer', apply);
+  apply();
+
+  /* ---------- ویرایش / تبدیل / کنسل ---------- */
+  var editApi = null;
+  function byId(id) { return list.filter(function (v) { return v.id === Number(id); })[0]; }
+  document.addEventListener('click', function (e) {
+    var b;
+    if ((b = e.target.closest('[data-edit]'))) {
+      var v = byId(b.getAttribute('data-edit'));
+      var pro = v.type === 'proforma';
+      $('#editWord').textContent = pro ? 'پیش‌فاکتور' : 'فاکتور';
+      $('#editNo').textContent = v.no;
+      $('#editSub').textContent = v.customer + ' — ' + v.date + (v.editable ? '' : ' — این سند قفل است و فقط قابل مشاهده است');
+      $('#btnEditSave').disabled = !v.editable;
+      $('#btnEditPrint').setAttribute('href', 'print-invoice.html?' + (pro ? 'type=proforma&' : '') + 'no=' + encodeURIComponent(v.no));
+      editApi = S.invoiceForm($('#editRoot'), { mode: 'edit', idp: 'ef', invoice: v });
+      CRM.modal.open('#mdlEdit');
+      $('#editRoot').scrollTop = 0;
+      return;
+    }
+    if ((b = e.target.closest('[data-convert]'))) {
+      var c = byId(b.getAttribute('data-convert'));
+      CRM.modal.confirm({ title: 'تبدیل به فاکتور', msg: 'پیش‌فاکتور ' + c.no + ' به فاکتور تبدیل شود؟ شماره فاکتور به‌صورت خودکار تخصیص می‌یابد.', okText: 'بله، تبدیل کن', icon: 'invoice', tone: 'info' })
+        .then(function (ok) { if (!ok) return; c.converted = true; apply(); CRM.toast({ type: 'success', title: 'تبدیل شد', msg: 'فاکتور ۴۰۷۹۱-ل برای ' + c.customer + ' صادر شد.' }); });
+      return;
+    }
+    if ((b = e.target.closest('[data-cancel]'))) {
+      var x = byId(b.getAttribute('data-cancel'));
+      CRM.modal.confirm({ title: 'کنسل کردن فاکتور', msg: 'فاکتور ' + x.no + ' کنسل شود؟ مبلغ آن از گزارش‌های فروش حذف می‌شود.', danger: true, okText: 'بله، کنسل شود', icon: 'x-circle' })
+        .then(function (ok) { if (!ok) return; x.cancelled = true; apply(); CRM.toast({ type: 'warning', title: 'کنسل شد', msg: x.no }); });
+      return;
+    }
+    if ((b = e.target.closest('[data-uncancel]'))) {
+      var y = byId(b.getAttribute('data-uncancel')); y.cancelled = false; apply();
+      CRM.toast({ type: 'success', title: 'از حالت کنسل خارج شد', msg: y.no });
+      return;
+    }
+    if ((b = e.target.closest('[data-replace]'))) {
+      var r = byId(b.getAttribute('data-replace'));
+      CRM.modal.confirm({ title: 'جایگزینی فاکتور', msg: 'یک نسخه‌ی جدید جایگزین ' + r.no + ' می‌شود و نسخه‌ی فعلی بایگانی خواهد شد.', okText: 'ایجاد نسخه جایگزین', icon: 'refresh', tone: 'info' })
+        .then(function (ok) { if (ok) location.href = 'invoice-new.html'; });
+      return;
+    }
+    if ((b = e.target.closest('[data-copy-inv]'))) {
+      CRM.toast({ type: 'info', title: 'فاکتور مشابه', msg: 'اقلام و مشتری در فرم صدور فاکتور کپی شد.' });
+      setTimeout(function () { location.href = 'invoice-new.html'; }, 700);
+    }
+  });
+  $('#btnEditSave').addEventListener('click', function (e) {
+    S.busy(e.currentTarget, function () {
+      CRM.modal.close('#mdlEdit');
+      CRM.toast({ type: 'success', title: 'تغییرات ثبت شد', msg: 'جمع نهایی: ' + S.money(editApi ? editApi.recalc() : 0) + ' تومان' });
+    }, 550);
+  });
+})();
+</script>
+</body>
+</html>

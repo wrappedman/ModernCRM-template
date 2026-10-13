@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پرونده مشتری — مریم رضایی | مدرن‌CRM</title>
+<meta name="description" content="پرونده ۳۶۰ درجه مشتری: اطلاعات، معاملات، فاکتورها، تیکت‌ها، فایل‌ها و گفتگوها">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="customer-profile">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <!-- ============================ سربرگ پرونده ============================ -->
+        <div class="card mb-5">
+          <div class="profile-cover"></div>
+          <div class="card-body">
+            <div class="d-flex gap-4 items-end flex-wrap" style="margin-top:-8px">
+              <div class="profile-avatar">مر</div>
+              <div class="flex-1" style="min-width:240px">
+                <div class="d-flex items-center gap-3 flex-wrap">
+                  <h1 style="font-size:var(--fs-2xl)">مریم رضایی</h1>
+                  <span class="badge badge-success badge-dot">فعال</span>
+                  <span class="badge badge-warning">طلایی</span>
+                  <span class="badge badge-outline">مشتری کلیدی</span>
+                </div>
+                <div class="fs-md text-muted mt-1">
+                  مدیرعامل — شرکت پارس‌نیکان · شناسه <span class="num">C-1042</span> · مشتری از <span class="num">۱۴۰۳/۰۲/۱۱</span>
+                </div>
+                <div class="d-flex gap-3 flex-wrap mt-3 fs-sm text-muted">
+                  <span class="d-flex items-center gap-2"><span data-icon="phone" data-icon-size="15"></span> <span class="num">۰۹۱۲۳۴۵۶۷۸۹</span></span>
+                  <span class="d-flex items-center gap-2"><span data-icon="mail" data-icon-size="15"></span> <span class="ltr">m.rezaei@parsnikan.ir</span></span>
+                  <span class="d-flex items-center gap-2"><span data-icon="map-pin" data-icon-size="15"></span> تهران، سعادت‌آباد</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2 flex-wrap">
+                <button class="btn" data-tip="تماس تلفنی"><span data-icon="phone" data-icon-size="16"></span> تماس</button>
+                <a class="btn" href="messages.html"><span data-icon="message" data-icon-size="16"></span> گفتگو</a>
+                <div class="dropdown">
+                  <button class="btn" data-dropdown-toggle><span data-icon="plus" data-icon-size="16"></span> ایجاد <span data-icon="chevron-down" data-icon-size="14"></span></button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="deals.html"><span data-icon="deals" data-icon-size="16"></span> معامله جدید</a>
+                    <a class="dropdown-item" href="invoice-new.html"><span data-icon="invoice" data-icon-size="16"></span> صدور فاکتور</a>
+                    <a class="dropdown-item" href="ticket-new.html"><span data-icon="ticket" data-icon-size="16"></span> ثبت تیکت</a>
+                    <button class="dropdown-item" data-modal-open="#modalNote"><span data-icon="note" data-icon-size="16"></span> یادداشت</button>
+                  </div>
+                </div>
+                <a class="btn btn-primary" href="customer-new.html"><span data-icon="pencil" data-icon-size="16"></span> ویرایش پرونده</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================ شاخص‌های مشتری ============================ -->
+        <div class="grid-4 mb-5">
+          <div class="card card-hover" data-win="cp-value" data-win-title="ارزش کل خرید" data-win-icon="wallet" data-win-size="700x480">
+            <div class="card-body tight">
+              <div class="stat-label">ارزش کل خرید (LTV)</div>
+              <div class="stat-value num">۱۲۸٫۴ <small>میلیون تومان</small></div>
+              <div class="stat-foot mt-2"><span class="trend up"><span data-icon="arrow-up-right" data-icon-size="14"></span> ۱۸٪</span> نسبت به سال گذشته</div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="cp-orders" data-win-title="سفارش‌ها" data-win-icon="package" data-win-size="700x480">
+            <div class="card-body tight">
+              <div class="stat-label">تعداد سفارش‌ها</div>
+              <div class="stat-value num">۱۷ <small>سفارش</small></div>
+              <div class="stat-foot mt-2">آخرین سفارش: <span class="num">۱۴۰۴/۰۷/۱۸</span></div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="cp-tickets" data-win-title="تیکت‌ها" data-win-icon="tickets" data-win-size="700x480">
+            <div class="card-body tight">
+              <div class="stat-label">تیکت‌های پشتیبانی</div>
+              <div class="stat-value num">۹ <small>تیکت</small></div>
+              <div class="stat-foot mt-2"><span class="badge badge-warning">۲ تیکت باز</span></div>
+            </div>
+          </div>
+          <div class="card card-hover" data-win="cp-satisfaction" data-win-title="رضایت مشتری" data-win-icon="star" data-win-size="700x480">
+            <div class="card-body tight">
+              <div class="stat-label">میانگین رضایت</div>
+              <div class="d-flex items-center gap-3">
+                <div class="stat-value num">۴٫۶</div>
+                <span class="stars">
+                  <span data-icon="star" data-icon-size="15"></span><span data-icon="star" data-icon-size="15"></span>
+                  <span data-icon="star" data-icon-size="15"></span><span data-icon="star" data-icon-size="15"></span>
+                  <span data-icon="star" data-icon-size="15" class="off"></span>
+                </span>
+              </div>
+              <div class="stat-foot mt-2">از ۱۲ نظرسنجی ثبت‌شده</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================ تب‌ها ============================ -->
+        <div data-tabs-root>
+          <div class="card">
+            <div class="tabs" data-tabs style="padding:0 8px">
+              <button class="tab is-active" data-tab="overview"><span data-icon="activity" data-icon-size="16"></span> نمای کلی</button>
+              <button class="tab" data-tab="deals"><span data-icon="deals" data-icon-size="16"></span> معاملات <span class="badge gray">۳</span></button>
+              <button class="tab" data-tab="invoices"><span data-icon="invoice" data-icon-size="16"></span> فاکتورها <span class="badge gray">۱۷</span></button>
+              <button class="tab" data-tab="tickets"><span data-icon="tickets" data-icon-size="16"></span> تیکت‌ها <span class="badge gray">۹</span></button>
+              <button class="tab" data-tab="files"><span data-icon="files" data-icon-size="16"></span> فایل‌ها <span class="badge gray">۵</span></button>
+              <button class="tab" data-tab="chat"><span data-icon="message" data-icon-size="16"></span> گفتگو</button>
+              <button class="tab" data-tab="notes"><span data-icon="note" data-icon-size="16"></span> یادداشت‌ها</button>
+            </div>
+
+            <!-- ------------------------- نمای کلی ------------------------- -->
+            <div class="card-body" data-tab-panel="overview">
+              <div class="grid-2-1">
+                <div>
+                  <div class="grid-2 mb-5">
+                    <div class="card card-flat">
+                      <div class="card-head tight"><div class="card-title" data-icon="user-round" data-icon-size="16"> اطلاعات هویتی</div>
+                        <div class="card-actions"><button class="tb-icon" style="width:30px;height:30px" data-icon="pencil" data-icon-size="15"></button></div>
+                      </div>
+                      <div class="card-body tight">
+                        <dl class="kv">
+                          <dt>نام و نام خانوادگی</dt><dd>مریم رضایی</dd>
+                          <dt>سمت</dt><dd>مدیرعامل</dd>
+                          <dt>شرکت</dt><dd>پارس‌نیکان</dd>
+                          <dt>کد ملی</dt><dd class="num">۰۰۱۲۳۴۵۶۷۸</dd>
+                          <dt>نوع مشتری</dt><dd>حقوقی</dd>
+                        </dl>
+                      </div>
+                    </div>
+                    <div class="card card-flat">
+                      <div class="card-head tight"><div class="card-title" data-icon="phone" data-icon-size="16"> راه‌های ارتباطی</div></div>
+                      <div class="card-body tight">
+                        <dl class="kv">
+                          <dt>تلفن همراه</dt><dd class="d-flex items-center gap-2"><span class="num">۰۹۱۲۳۴۵۶۷۸۹</span><button class="tb-icon" style="width:24px;height:24px" data-copy="09123456789" data-icon="copy" data-icon-size="13"></button></dd>
+                          <dt>تلفن ثابت</dt><dd class="num">۰۲۱۸۸۷۷۶۶۵۵</dd>
+                          <dt>ایمیل</dt><dd class="ltr">m.rezaei@parsnikan.ir</dd>
+                          <dt>وب‌سایت</dt><dd class="ltr">parsnikan.ir</dd>
+                          <dt>نشانی</dt><dd>تهران، سعادت‌آباد، بلوار دریا، پلاک ۱۲</dd>
+                        </dl>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="section-title"><span data-icon="activity" data-icon-size="18"></span> تاریخچه تعاملات</div>
+                  <div class="timeline mb-5">
+                    <div class="tl-item">
+                      <div class="d-flex items-center gap-2">
+                        <span class="fw-600 text-strong">تماس تلفنی — پیگیری پیش‌فاکتور</span>
+                        <span class="tl-time ms-auto">۱۴۰۴/۰۷/۱۸ — ۱۰:۲۴</span>
+                      </div>
+                      <div class="tl-body">مدت مکالمه ۶ دقیقه — نتیجه: مشتری خواستار بازنگری در تخفیف حجمی شد.</div>
+                    </div>
+                    <div class="tl-item">
+                      <div class="d-flex items-center gap-2">
+                        <span class="fw-600 text-strong">ارسال پیش‌فاکتور D-2210</span>
+                        <span class="tl-time ms-auto">۱۴۰۴/۰۷/۱۷ — ۱۶:۰۲</span>
+                      </div>
+                      <div class="tl-body">ارزش پیش‌فاکتور: ۱۸۰ میلیون تومان — وضعیت: در انتظار پاسخ.</div>
+                    </div>
+                    <div class="tl-item">
+                      <div class="d-flex items-center gap-2">
+                        <span class="fw-600 text-strong">افتتاح تیکت پشتیبانی TK-5521</span>
+                        <span class="tl-time ms-auto">۱۴۰۴/۰۷/۱۶ — ۰۹:۱۱</span>
+                      </div>
+                      <div class="tl-body">موضوع: خطا در ارسال فاکتور گروهی — اولویت فوری.</div>
+                    </div>
+                    <div class="tl-item muted">
+                      <div class="d-flex items-center gap-2">
+                        <span class="fw-600 text-strong">تمدید قرارداد پشتیبانی</span>
+                        <span class="tl-time ms-auto">۱۴۰۴/۰۶/۲۸</span>
+                      </div>
+                      <div class="tl-body">قرارداد یک‌ساله با ۸٪ افزایش مبلغ تمدید شد.</div>
+                    </div>
+                  </div>
+
+                  <div class="section-title"><span data-icon="chart-line" data-icon-size="18"></span> روند خرید ۱۲ ماه</div>
+                  <div class="chart h-200" data-chart="bar"
+                       data-values="12,8,15,22,18,26,31,24,35,42,38,48"
+                       data-labels="آبان,آذر,دی,بهمن,اسفند,فروردین,اردیبهشت,خرداد,تیر,مرداد,شهریور,مهر"></div>
+                </div>
+
+                <div class="d-flex flex-col gap-4">
+                  <div class="card card-flat">
+                    <div class="card-head tight"><div class="card-title" data-icon="user-cog" data-icon-size="16"> مسئول حساب</div></div>
+                    <div class="card-body tight">
+                      <div class="d-flex items-center gap-3">
+                        <span class="avatar">مه</span>
+                        <div>
+                          <div class="fw-600">مهدی کریمی</div>
+                          <div class="fs-xs text-muted">مدیر فروش</div>
+                        </div>
+                        <span class="dot-status online ms-auto"></span>
+                      </div>
+                      <button class="btn btn-soft btn-sm btn-block mt-3" data-modal-open="#modalReassign">تغییر مسئول</button>
+                    </div>
+                  </div>
+
+                  <div class="card card-flat">
+                    <div class="card-head tight"><div class="card-title" data-icon="tag" data-icon-size="16"> برچسب‌ها</div></div>
+                    <div class="card-body tight d-flex gap-2 flex-wrap">
+                      <span class="badge badge-primary">کلیدی</span>
+                      <span class="badge badge-info">حقوقی</span>
+                      <span class="badge badge-warning">پرداخت منظم</span>
+                      <span class="badge badge-outline">صنعت چاپ</span>
+                      <button class="chip"><span data-icon="plus" data-icon-size="13"></span> افزودن</button>
+                    </div>
+                  </div>
+
+                  <div class="card card-flat">
+                    <div class="card-head tight"><div class="card-title" data-icon="gauge" data-icon-size="16"> سلامت مشتری (Health Score)</div></div>
+                    <div class="card-body tight">
+                      <div class="d-flex items-center gap-4">
+                        <div class="donut-svg" style="width:120px;height:120px" data-chart="radial" data-values="82" data-label="امتیاز کل"></div>
+                        <div class="flex-1 fs-sm">
+                          <div class="stat-inline"><span class="text-muted">تعامل</span><span class="fw-600">عالی</span></div>
+                          <div class="stat-inline"><span class="text-muted">پرداخت</span><span class="fw-600">به‌موقع</span></div>
+                          <div class="stat-inline"><span class="text-muted">ریسک ریزش</span><span class="fw-600 text-success">کم</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="alert alert-success">
+                    <span data-icon="badge-check" data-icon-size="18"></span>
+                    <div>
+                      <div class="alert-title">مشتری وفادار</div>
+                      <div class="alert-desc">این مشتری بیش از ۲ سال است که با شما همکاری می‌کند و ۱۷ سفارش موفق داشته است.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- -------------------------- معاملات -------------------------- -->
+            <div class="card-body d-none" data-tab-panel="deals">
+              <div class="d-flex items-center mb-4">
+                <div class="section-title" style="margin:0"><span data-icon="deals" data-icon-size="18"></span> معاملات این مشتری</div>
+                <a class="btn btn-primary btn-sm ms-auto" href="deals.html"><span data-icon="plus" data-icon-size="15"></span> معامله جدید</a>
+              </div>
+              <div class="table-wrap">
+                <table class="table">
+                  <thead>
+                    <tr><th>کد معامله</th><th>عنوان</th><th class="num">ارزش</th><th>مرحله</th><th>احتمال موفقیت</th><th>سررسید</th><th>اولویت</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="num">D-2210</td><td class="cell-main">خرید لایسنس سالانه CRM</td><td class="num">۱۸۰٫۰۰۰٫۰۰۰</td><td><span class="badge badge-info">مذاکره</span></td><td><div class="d-flex items-center gap-2"><div class="progress sm" style="width:70px"><i style="width:65%"></i></div><span class="fs-xs num">۶۵٪</span></div></td><td class="num">۱۴۰۴/۰۷/۲۹</td><td><span class="priority high">بالا</span></td></tr>
+                    <tr><td class="num">D-2184</td><td class="cell-main">تمدید قرارداد پشتیبانی</td><td class="num">۹۶٫۰۰۰٫۰۰۰</td><td><span class="badge badge-success">برنده</span></td><td><div class="d-flex items-center gap-2"><div class="progress sm" style="width:70px"><i style="width:100%"></i></div><span class="fs-xs num">۱۰۰٪</span></div></td><td class="num">۱۴۰۴/۰۶/۲۸</td><td><span class="priority normal">عادی</span></td></tr>
+                    <tr><td class="num">D-2150</td><td class="cell-main">آموزش تیم بازاریابی</td><td class="num">۲۴٫۰۰۰٫۰۰۰</td><td><span class="badge">منتفی</span></td><td><div class="d-flex items-center gap-2"><div class="progress sm danger" style="width:70px"><i style="width:100%"></i></div><span class="fs-xs num">۰٪</span></div></td><td class="num">۱۴۰۴/۰۴/۱۲</td><td><span class="priority low">پایین</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- -------------------------- فاکتورها -------------------------- -->
+            <div class="card-body d-none" data-tab-panel="invoices">
+              <div class="table-wrap">
+                <table class="table">
+                  <thead>
+                    <tr><th>شماره فاکتور</th><th>تاریخ</th><th class="num">مبلغ کل</th><th class="num">مالیات</th><th>وضعیت</th><th>سررسید</th><th></th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="num fw-600">۱۴۰۴-۰۵۲۰</td><td class="num">۱۴۰۴/۰۷/۱۶</td><td class="num">۱۸۰٫۰۰۰٫۰۰۰</td><td class="num">۱۶٫۲۰۰٫۰۰۰</td><td><span class="badge badge-warning badge-dot">پرداخت جزئی</span></td><td class="num">۱۴۰۴/۰۷/۳۰</td><td><a class="btn btn-ghost btn-sm" href="print-invoice.html" target="_blank">مشاهده</a></td></tr>
+                    <tr><td class="num fw-600">۱۴۰۴-۰۴۸۸</td><td class="num">۱۴۰۴/۰۶/۲۸</td><td class="num">۹۶٫۰۰۰٫۰۰۰</td><td class="num">۸٫۶۴۰٫۰۰۰</td><td><span class="badge badge-success badge-dot">پرداخت شده</span></td><td class="num">۱۴۰۴/۰۷/۱۲</td><td><a class="btn btn-ghost btn-sm" href="print-invoice.html" target="_blank">مشاهده</a></td></tr>
+                    <tr><td class="num fw-600">۱۴۰۴-۰۴۱۲</td><td class="num">۱۴۰۴/۰۵/۱۹</td><td class="num">۵۸٫۰۰۰٫۰۰۰</td><td class="num">۵٫۲۲۰٫۰۰۰</td><td><span class="badge badge-danger badge-dot">معوق</span></td><td class="num">۱۴۰۴/۰۶/۰۲</td><td><a class="btn btn-ghost btn-sm" href="print-invoice.html" target="_blank">مشاهده</a></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- -------------------------- تیکت‌ها -------------------------- -->
+            <div class="card-body d-none" data-tab-panel="tickets">
+              <div class="list">
+                <div class="list-item">
+                  <span class="avatar avatar-sm avatar-sq" style="background:var(--danger-soft);color:var(--danger)"><span data-icon="ticket" data-icon-size="16"></span></span>
+                  <span class="flex-1"><span class="li-title d-block">TK-5521 — خطا در ارسال فاکتور گروهی</span><span class="li-sub">به‌روزرسانی: ۱۰ دقیقه پیش — مسئول: مهدی ک.</span></span>
+                  <span class="badge badge-danger">فوری</span><span class="badge">باز</span>
+                </div>
+                <div class="list-item">
+                  <span class="avatar avatar-sm avatar-sq" style="background:var(--warning-soft);color:var(--warning)"><span data-icon="ticket" data-icon-size="16"></span></span>
+                  <span class="flex-1"><span class="li-title d-block">TK-5390 — درخواست گزارش مالیاتی سالانه</span><span class="li-sub">به‌روزرسانی: ۳ روز پیش — مسئول: سمیرا ر.</span></span>
+                  <span class="badge badge-success">پاسخ داده شد</span>
+                </div>
+                <div class="list-item">
+                  <span class="avatar avatar-sm avatar-sq"><span data-icon="ticket" data-icon-size="16"></span></span>
+                  <span class="flex-1"><span class="li-title d-block">TK-5211 — راهنمای افزودن کاربر جدید</span><span class="li-sub">به‌روزرسانی: ۱۲ روز پیش — بسته شده</span></span>
+                  <span class="badge badge-outline">بسته</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- -------------------------- فایل‌ها -------------------------- -->
+            <div class="card-body d-none" data-tab-panel="files">
+              <div class="d-flex items-center mb-4">
+                <div class="section-title" style="margin:0"><span data-icon="files" data-icon-size="18"></span> فایل‌های پرونده</div>
+                <button class="btn btn-soft btn-sm ms-auto"><span data-icon="upload" data-icon-size="15"></span> بارگذاری فایل</button>
+              </div>
+              <div class="grid-2">
+                <div class="file-item"><span class="file-ic pdf" data-icon="file" data-icon-size="18"></span><span class="flex-1"><span class="d-block fw-600 fs-sm">قرارداد-پشتیبانی-طلایی.pdf</span><span class="fs-xs text-muted">۱٫۲ مگابایت — ۱۴۰۴/۰۷/۱۶</span></span><button class="tb-icon" style="width:30px;height:30px" data-icon="download" data-icon-size="16"></button></div>
+                <div class="file-item"><span class="file-ic xls" data-icon="files" data-icon-size="18"></span><span class="flex-1"><span class="d-block fw-600 fs-sm">نمودار-فروش-مهر.xlsx</span><span class="fs-xs text-muted">۳۴۵ کیلوبایت — ۱۴۰۴/۰۷/۱۵</span></span><button class="tb-icon" style="width:30px;height:30px" data-icon="download" data-icon-size="16"></button></div>
+                <div class="file-item"><span class="file-ic img" data-icon="image" data-icon-size="18"></span><span class="flex-1"><span class="d-block fw-600 fs-sm">لوگو-شرکت.png</span><span class="fs-xs text-muted">۱۱۰ کیلوبایت — ۱۴۰۴/۰۷/۰۹</span></span><button class="tb-icon" style="width:30px;height:30px" data-icon="download" data-icon-size="16"></button></div>
+                <div class="file-item"><span class="file-ic zip" data-icon="files" data-icon-size="18"></span><span class="flex-1"><span class="d-block fw-600 fs-sm">پشتیبان-دیتابیس.zip</span><span class="fs-xs text-muted">۱۲٫۴ مگابایت — ۱۴۰۴/۰۷/۰۵</span></span><button class="tb-icon" style="width:30px;height:30px" data-icon="download" data-icon-size="16"></button></div>
+              </div>
+            </div>
+
+            <!-- -------------------------- گفتگو -------------------------- -->
+            <div class="card-body d-none flush" data-tab-panel="chat">
+              <div class="chat" style="max-height:480px" id="chatBox"></div>
+              <div class="composer">
+                <button class="tb-icon" data-tip="پیوست فایل" data-icon="paperclip" data-icon-size="18"></button>
+                <textarea class="textarea" placeholder="پیام خود را بنویسید… (Shift + Enter برای خط جدید)"></textarea>
+                <button class="btn btn-primary" id="sendMsg"><span data-icon="send" data-icon-size="16"></span> ارسال</button>
+              </div>
+            </div>
+
+            <!-- -------------------------- یادداشت‌ها -------------------------- -->
+            <div class="card-body d-none" data-tab-panel="notes">
+              <div class="d-flex items-center mb-4">
+                <div class="section-title" style="margin:0"><span data-icon="note" data-icon-size="18"></span> یادداشت‌های داخلی</div>
+                <button class="btn btn-primary btn-sm ms-auto" data-modal-open="#modalNote"><span data-icon="plus" data-icon-size="15"></span> یادداشت جدید</button>
+              </div>
+              <div class="grid-2">
+                <div class="card card-flat">
+                  <div class="card-body">
+                    <div class="d-flex items-center gap-2 mb-2">
+                      <span class="avatar avatar-sm">مه</span>
+                      <span class="fw-600 fs-sm">مهدی کریمی</span>
+                      <span class="fs-xs text-soft ms-auto">۱۴۰۴/۰۷/۱۸ — ۱۱:۰۵</span>
+                    </div>
+                    <p class="fs-md text-muted" style="line-height:1.9">مشتری روی تخفیف حجمی حساس است. پیشنهاد می‌کنم در تماس بعدی، بسته ترکیبی «لایسنس + آموزش» ارائه شود.</p>
+                    <div class="d-flex gap-2 mt-3"><span class="badge badge-primary">فروش</span><span class="badge badge-outline">پیگیری</span></div>
+                  </div>
+                </div>
+                <div class="card card-flat">
+                  <div class="card-body">
+                    <div class="d-flex items-center gap-2 mb-2">
+                      <span class="avatar avatar-sm">سم</span>
+                      <span class="fw-600 fs-sm">سمیرا رحیمی</span>
+                      <span class="fs-xs text-soft ms-auto">۱۴۰۴/۰۷/۱۶ — ۰۹:۴۰</span>
+                    </div>
+                    <p class="fs-md text-muted" style="line-height:1.9">تیکت مربوط به خطای فاکتور گروهی در حال بررسی توسط تیم فنی است؛ نتیجه تا پایان هفته اعلام می‌شود.</p>
+                    <div class="d-flex gap-2 mt-3"><span class="badge badge-info">پشتیبانی</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============================== مودال‌ها ============================== -->
+<div class="overlay" id="modalNote" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">یادداشت جدید</div><div class="modal-sub">مریم رضایی — پارس‌نیکان</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#modalNote" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="یادداشت به پرونده مشتری اضافه شد." data-close-modal="#modalNote" data-reset-on-submit>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">متن یادداشت <span class="req">*</span></label>
+          <textarea class="textarea" required placeholder="مشاهدات، توافق‌ها و نکات مهم…"></textarea>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="switch"><span class="lbl">نمایش برای تمام اعضای تیم</span><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary">ثبت یادداشت</button>
+        <button type="button" class="btn" data-modal-close="#modalNote">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="overlay" id="modalReassign" style="display:none">
+  <div class="modal modal-sm" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">تغییر مسئول پرونده</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#modalReassign" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="مسئول پرونده تغییر کرد." data-close-modal="#modalReassign">
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">کارشناس جدید</label>
+          <select class="select">
+            <option>نیما عباسی — کارشناس فروش</option>
+            <option>سمیرا رحیمی — پشتیبانی</option>
+            <option>رضا پورمند — توسعه‌دهنده</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary">تغییر مسئول</button>
+        <button type="button" class="btn" data-modal-close="#modalReassign">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+
+  /* گفتگوی پرونده مشتری */
+  var box = CRM.$('#chatBox');
+  function paintChat() {
+    box.innerHTML = CRM.data.messages.map(function (m) {
+      return '<div class="msg' + (m.me ? ' me' : '') + '">' +
+        CRM.avatar(m.author, 36) +
+        '<div><div class="msg-bubble">' + CRM.esc(m.text) +
+          (m.attach ? '<span class="msg-attach">' + CRM.icon('file', 15) + ' ' + CRM.esc(m.attach.name) +
+            ' <span class="ms-auto fs-xs" style="opacity:.8">' + CRM.esc(m.attach.size) + '</span></span>' : '') +
+        '</div><div class="msg-time">' + CRM.esc(m.time) + ' — ' + CRM.esc(m.author) + '</div></div>' +
+      '</div>';
+    }).join('');
+    box.scrollTop = box.scrollHeight;
+  }
+  paintChat();
+
+  CRM.$('#sendMsg').addEventListener('click', function () {
+    var ta = CRM.$('.composer .textarea');
+    var val = ta.value.trim();
+    if (!val) { CRM.toast({ type: 'warning', title: 'متن پیام خالی است' }); return; }
+    var now = new Date();
+    CRM.data.messages.push({
+      me: true, text: val, author: 'مهدی کریمی',
+      time: CRM.fa(('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2))
+    });
+    ta.value = '';
+    paintChat();
+    CRM.toast({ type: 'success', title: 'پیام ارسال شد', msg: 'مشتری از طریق ایمیل مطلع خواهد شد.' });
+  });
+})();
+</script>
+</body>
+</html>

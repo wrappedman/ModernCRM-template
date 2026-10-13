@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فعالیت‌ها و رویدادها | مدرن‌CRM</title>
+<meta name="description" content="تاریخچه فعالیت‌های تیم، مشتریان و سیستم">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="activity">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">فعالیت‌ها</span>
+            </div>
+            <h1 class="page-title">جریان فعالیت‌ها</h1>
+            <p class="page-desc">همه رویدادهای ثبت‌شده در سیستم — امروز تا یک هفته گذشته</p>
+          </div>
+          <div class="head-actions">
+            <div class="d-flex gap-2 flex-wrap" data-chip-group>
+              <button class="chip is-active">همه</button>
+              <button class="chip">فروش</button>
+              <button class="chip">پشتیبانی</button>
+              <button class="chip">مالی</button>
+              <button class="chip">سیستم</button>
+            </div>
+            <button class="btn"><span data-icon="download" data-icon-size="16"></span> خروجی</button>
+          </div>
+        </div>
+
+        <div class="grid-2-1">
+          <div class="card" data-win="act-feed" data-win-title="جریان فعالیت‌ها" data-win-icon="activity" data-win-size="1040x720">
+            <div class="card-head">
+              <div class="card-title" data-icon="activity" data-icon-size="18"> جریان فعالیت‌ها</div>
+              <div class="card-actions">
+                <div class="input-wrap" style="width:200px">
+                  <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                  <input class="input input-sm" placeholder="جستجو در فعالیت‌ها…">
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="timeline" id="feed"></div>
+              <div class="text-center mt-4">
+                <button class="btn btn-soft"><span data-icon="refresh" data-icon-size="16"></span> بارگذاری موارد بیشتر</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-col gap-4">
+            <div class="card" data-win="act-stats" data-win-title="خلاصه فعالیت امروز" data-win-icon="gauge" data-win-size="780x620">
+              <div class="card-head tight"><div class="card-title" data-icon="gauge" data-icon-size="17"> خلاصه فعالیت امروز</div></div>
+              <div class="card-body tight">
+                <div class="d-flex items-center gap-4 mb-4">
+                  <div class="donut-svg" style="width:130px;height:130px" data-chart="radial" data-values="74" data-label="فعالیت هدف"></div>
+                  <div class="flex-1">
+                    <div class="stat-inline"><span class="text-muted fs-sm">رویداد ثبت‌شده</span><span class="fw-700">۴۸</span></div>
+                    <div class="stat-inline"><span class="text-muted fs-sm">تماس تلفنی</span><span class="fw-700">۲۷</span></div>
+                    <div class="stat-inline"><span class="text-muted fs-sm">ایمیل ارسالی</span><span class="fw-700">۵۶</span></div>
+                    <div class="stat-inline"><span class="text-muted fs-sm">یادداشت</span><span class="fw-700">۱۲</span></div>
+                  </div>
+                </div>
+                <div class="chart h-160" data-chart="bar" data-values="18,26,22,34,28,41,36" data-labels="شنبه,یک‌شنبه,دوشنبه,سه‌شنبه,چهارشنبه,پنج‌شنبه,جمعه"></div>
+              </div>
+            </div>
+
+            <div class="card" data-win="act-team" data-win-title="فعال‌ترین اعضای تیم" data-win-icon="users" data-win-size="760x620">
+              <div class="card-head tight"><div class="card-title" data-icon="users" data-icon-size="17"> فعال‌ترین اعضای تیم</div></div>
+              <div class="card-body flush">
+                <div class="list" id="topTeam"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+
+  var extra = [
+    { icon: 'phone', tone: '', title: 'تماس خروجی با مشتری', desc: 'تماس با «مریم رضایی» — مدت ۶ دقیقه، نتیجه: پیگیری پیش‌فاکتور.', time: 'امروز ۱۰:۲۴' },
+    { icon: 'mail', tone: 'sky', title: 'ارسال ایمیل گروهی', desc: 'خبرنامه مهرماه برای ۳۴۲ مشتری ارسال شد.', time: 'امروز ۰۹:۱۵' },
+    { icon: 'pencil', tone: '', title: 'ویرایش پرونده مشتری', desc: 'اطلاعات تماس «علی محمدی» به‌روزرسانی شد.', time: 'امروز ۰۸:۴۰' },
+    { icon: 'database', tone: 'amber', title: 'پشتیبان‌گیری خودکار', desc: 'نسخه پشتیبان شبانه با حجم ۴۸ مگابایت ساخته شد.', time: 'امروز ۰۲:۰۰' },
+    { icon: 'user-cog', tone: '', title: 'تغییر دسترسی کاربر', desc: 'نقش «نیما عباسی» به کارشناس ارشد فروش تغییر کرد.', time: 'دیروز ۱۷:۴۰' },
+    { icon: 'trash', tone: 'amber', title: 'حذف رکورد', desc: '۳ سرنخ تکراری از فهرست حذف شد.', time: 'دیروز ۱۴:۱۰' }
+  ];
+
+  var all = CRM.data.activities.concat(extra);
+  CRM.$('#feed').innerHTML = all.map(function (a, i) {
+    return '<div class="tl-item ' + (a.tone === 'amber' ? 'muted' : '') + '">' +
+      '<div class="d-flex items-center gap-3">' +
+        '<span class="avatar avatar-sm avatar-sq"><span data-icon="' + (a.icon || 'circle-dot') + '" data-icon-size="15"></span></span>' +
+        '<span class="fw-600 text-strong flex-1">' + CRM.esc(a.title) + '</span>' +
+        '<span class="tl-time">' + CRM.esc(a.time) + '</span>' +
+      '</div>' +
+      '<div class="tl-body" style="margin-top:4px">' + CRM.esc(a.desc) + '</div>' +
+    '</div>';
+  }).join('');
+
+  CRM.$('#topTeam').innerHTML = CRM.data.team.map(function (t, i) {
+    var n = [86, 64, 52, 41][i] || 30;
+    return '<div class="list-item">' + CRM.avatar(t.name, 34) +
+      '<span class="flex-1"><span class="li-title d-block fs-sm">' + CRM.esc(t.name) + '</span>' +
+      '<span class="li-sub">' + CRM.esc(t.role) + '</span></span>' +
+      '<span style="width:120px"><span class="progress sm"><i style="width:' + n + '%"></i></span></span>' +
+      '<span class="fs-xs fw-600 num">' + CRM.fa(n) + ' رویداد</span></div>';
+  }).join('');
+})();
+</script>
+</body>
+</html>

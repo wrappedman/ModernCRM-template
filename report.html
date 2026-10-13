@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گزارش | مدرن‌CRM</title>
+<meta name="description" content="نمایشگر گزارش‌ها: فیلتر، صفحه‌بندی، یافتن، بزرگ‌نمایی، چاپ و خروجی">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="reports-hub">
+<!-- شناسه‌ی گزارش از ?r=… خوانده می‌شود تا زیرمنوی همان گزارش در سایدبار فعال شود -->
+<script>(function () { var m = location.search.match(/[?&]r=([\w-]+)/); if (m) document.body.setAttribute('data-page', 'rep-' + m[1]); })();</script>
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap" id="repRoot"></div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/reports.js"></script>
+<script>CRM_REPORTS.mount(document.getElementById('repRoot'));</script>
+</body>
+</html>

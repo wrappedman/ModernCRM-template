@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>میزکار پنجره‌ای | مدرن‌CRM</title>
+<meta name="description" content="میزکار پنجره‌ای مدرن‌CRM — هر کارت را به پنجره شناور با قابلیت درگ، تغییر اندازه، ماکسیمایز و اسنپ تبدیل کنید">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="desktop" data-taskbar>
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">میزکار پنجره‌ای</span>
+            </div>
+            <h1 class="page-title">میزکار پنجره‌ای</h1>
+            <p class="page-desc">
+              هر کارت را می‌توانید به پنجره‌ای مستقل تبدیل کنید: با نوار عنوان جابه‌جا کنید،
+              از لبه‌ها تغییر اندازه دهید، به لبه‌های صفحه بچسبانید یا ماکسیمایز کنید.
+            </p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" data-win-min-all><span data-icon="minus" data-icon-size="15"></span> مینیمایز همه</button>
+            <button class="btn" data-win-max-all><span data-icon="maximize" data-icon-size="15"></span> ماکسیمایز همه</button>
+            <button class="btn" data-win-tile><span data-icon="grid" data-icon-size="15"></span> چیدمان کاشی‌ای</button>
+            <button class="btn btn-danger-soft" data-win-close-all><span data-icon="x" data-icon-size="15"></span> بستن همه</button>
+          </div>
+        </div>
+
+        <div class="alert alert-info mb-5">
+          <span data-icon="info" data-icon-size="18"></span>
+          <div class="flex-1">
+            <div class="alert-title">راهنمای سریع پنجره‌ها</div>
+            <div class="alert-desc">
+              برای باز شدن پنجره، روی آیکون <span data-icon="maximize" data-icon-size="13" style="vertical-align:-2px"></span> در گوشه هر کارت بزنید.
+              با کشیدن پنجره به لبه راست/چپ صفحه به‌صورت نیمه‌صفحه می‌چسبد، با بردن به بالای صفحه ماکسیمایز می‌شود و با دوبار کلیک روی نوار عنوان
+              حالت ماکسیمایز/عادی تغییر می‌کند. نگه‌داشتن نشانگر روی دکمه ماکسیمایز نیز منوی چیدمان‌های آماده را نمایش می‌دهد.
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================ میزکار ============================ -->
+        <div class="desktop-area">
+
+          <div class="widget w-2" data-win="dt-summary" data-win-title="خلاصه عملکرد امروز" data-win-sub="سه شاخص کلیدی" data-win-icon="gauge" data-win-detach data-win-size="640x520">
+            <div class="card card-hover">
+              <div class="card-head tight">
+                <span class="card-title" data-icon="gauge" data-icon-size="17"> خلاصه عملکرد امروز</span>
+                <div class="card-actions"><span class="badge badge-primary badge-dot">زنده</span></div>
+              </div>
+              <div class="card-body tight">
+                <div class="d-flex gap-4 items-center">
+                  <div class="donut-svg" style="width:120px;height:120px" data-chart="radial" data-values="78" data-label="تحقق هدف روز"></div>
+                  <div class="flex-1">
+                    <div class="stat-inline">
+                      <span class="fs-sm text-muted">فروش امروز</span>
+                      <span class="fw-700 num">۱۸٫۴ میلیون</span>
+                    </div>
+                    <div class="stat-inline">
+                      <span class="fs-sm text-muted">تماس‌های انجام‌شده</span>
+                      <span class="fw-700 num">۲۷ تماس</span>
+                    </div>
+                    <div class="stat-inline">
+                      <span class="fs-sm text-muted">مشتری جدید</span>
+                      <span class="fw-700 num">۶ نفر</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="widget w-4" data-win="dt-chart" data-win-title="روند فروش هفته" data-win-sub="میلیون تومان — ۷ روز اخیر" data-win-icon="chart-line" data-win-detach data-win-size="980x600">
+            <div class="card card-hover">
+              <div class="card-head tight">
+                <span class="card-title" data-icon="chart-line" data-icon-size="17"> روند فروش هفته</span>
+                <div class="card-actions"><span class="badge badge-success">+۱۴٪</span></div>
+              </div>
+              <div class="card-body tight">
+                <div class="chart h-160" data-chart="bar"
+                     data-values="12,18,9,24,31,22,28"
+                     data-labels="شنبه,یک‌شنبه,دوشنبه,سه‌شنبه,چهارشنبه,پنج‌شنبه,جمعه"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="widget w-2" data-win="dt-tasks" data-win-title="کارهای امروز" data-win-sub="۴ تسک" data-win-icon="check-check" data-win-detach data-win-size="700x620">
+            <div class="card card-hover">
+              <div class="card-head tight">
+                <span class="card-title" data-icon="check-check" data-icon-size="17"> کارهای امروز</span>
+                <div class="card-actions"><span class="badge gray">۳ باقی‌مانده</span></div>
+              </div>
+              <div class="card-body flush">
+                <div class="list">
+                  <label class="list-item" style="cursor:pointer">
+                    <span class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="13"></span></span></span>
+                    <span class="flex-1 li-title">تماس با گروه البرز</span><span class="priority urgent">فوری</span>
+                  </label>
+                  <label class="list-item" style="cursor:pointer">
+                    <span class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="13"></span></span></span>
+                    <span class="flex-1 li-title">ارسال پیش‌فاکتور داده‌پرداز</span><span class="priority high">بالا</span>
+                  </label>
+                  <label class="list-item" style="cursor:pointer">
+                    <span class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="13"></span></span></span>
+                    <span class="flex-1 li-title">به‌روزرسانی اطلاعات تماس</span><span class="priority normal">عادی</span>
+                  </label>
+                  <label class="list-item" style="cursor:pointer">
+                    <span class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="13"></span></span></span>
+                    <span class="flex-1 li-title">گزارش هفتگی فروش</span><span class="priority low">پایین</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="widget w-2" data-win="dt-calendar" data-win-title="تقویم مهر ۱۴۰۴" data-win-sub="رویدادهای ماه" data-win-icon="calendar" data-win-detach data-win-size="760x640">
+            <div class="card card-hover">
+              <div class="card-head tight">
+                <span class="card-title" data-icon="calendar" data-icon-size="17"> تقویم ماه</span>
+                <div class="card-actions"><a class="btn btn-ghost btn-sm" href="calendar.html">تقویم کامل</a></div>
+              </div>
+              <div class="card-body tight">
+                <div class="d-flex items-center mb-3">
+                  <button class="tb-icon" style="width:28px;height:28px" data-icon="chevron-right" data-icon-size="16"></button>
+                  <span class="fw-600 mx-2" id="miniCalTitle" style="margin-inline:8px">—</span>
+                  <button class="tb-icon ms-auto" style="width:28px;height:28px" data-icon="chevron-left" data-icon-size="16"></button>
+                </div>
+                <div class="cal-head" style="grid-template-columns:repeat(7,1fr)">
+                  <span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span>
+                </div>
+                <div class="cal" id="miniCal" style="gap:1px"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="widget w-2" data-win="dt-tickets" data-win-title="تیکت‌های باز" data-win-sub="۵ تیکت نیازمند پاسخ" data-win-icon="tickets" data-win-detach data-win-size="720x600">
+            <div class="card card-hover">
+              <div class="card-head tight">
+                <span class="card-title" data-icon="tickets" data-icon-size="17"> تیکت‌های باز</span>
+                <div class="card-actions"><a class="btn btn-ghost btn-sm" href="tickets.html">همه</a></div>
+              </div>
+              <div class="card-body flush" id="dtTickets"></div>
+            </div>
+          </div>
+
+          <div class="widget w-3" data-win="dt-customers" data-win-title="آخرین مشتریان" data-win-sub="۵ مشتری اخیر" data-win-icon="users" data-win-detach data-win-size="1000x620">
+            <div class="card card-hover">
+              <div class="card-head tight">
+                <span class="card-title" data-icon="users" data-icon-size="17"> آخرین مشتریان</span>
+                <div class="card-actions"><a class="btn btn-ghost btn-sm" href="customers.html">فهرست کامل</a></div>
+              </div>
+              <div class="card-body flush">
+                <div class="table-wrap">
+                  <table class="table table-compact">
+                    <thead>
+                      <tr><th>مشتری</th><th>سطح</th><th class="num">ارزش خرید</th><th>وضعیت</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><div class="d-flex items-center gap-2"><span class="avatar avatar-sm">مر</span><span class="cell-main">مریم رضایی</span></div></td><td><span class="badge badge-warning">طلایی</span></td><td class="num">۱۲۸٫۴۰۰٫۰۰۰</td><td><span class="badge badge-success badge-dot">فعال</span></td></tr>
+                      <tr><td><div class="d-flex items-center gap-2"><span class="avatar avatar-sm">ام</span><span class="cell-main">امیر شریفی</span></div></td><td><span class="badge badge-warning">طلایی</span></td><td class="num">۵۱۲٫۰۰۰٫۰۰۰</td><td><span class="badge badge-success badge-dot">فعال</span></td></tr>
+                      <tr><td><div class="d-flex items-center gap-2"><span class="avatar avatar-sm">عل</span><span class="cell-main">علی محمدی</span></div></td><td><span class="badge badge-outline">نقره‌ای</span></td><td class="num">۸۴٫۲۰۰٫۰۰۰</td><td><span class="badge badge-success badge-dot">فعال</span></td></tr>
+                      <tr><td><div class="d-flex items-center gap-2"><span class="avatar avatar-sm">زه</span><span class="cell-main">زهرا کریمی</span></div></td><td><span class="badge badge-outline">برنزی</span></td><td class="num">۱۲٫۹۰۰٫۰۰۰</td><td><span class="badge badge-warning badge-dot">در انتظار</span></td></tr>
+                      <tr><td><div class="d-flex items-center gap-2"><span class="avatar avatar-sm">حس</span><span class="cell-main">حسین نوری</span></div></td><td><span class="badge badge-warning">طلایی</span></td><td class="num">۲۹۷٫۵۰۰٫۰۰۰</td><td><span class="badge badge-success badge-dot">فعال</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="widget w-3" data-win="dt-messages" data-win-title="گفتگوهای اخیر" data-win-sub="پشتیبانی آنلاین" data-win-icon="message" data-win-detach data-win-size="860x640">
+            <div class="card card-hover">
+              <div class="card-head tight">
+                <span class="card-title" data-icon="message" data-icon-size="17"> گفتگوهای اخیر</span>
+                <div class="card-actions"><a class="btn btn-ghost btn-sm" href="messages.html">صندوق گفتگو</a></div>
+              </div>
+              <div class="card-body flush" id="dtThreads"></div>
+            </div>
+          </div>
+
+          <div class="widget w-6" data-win="dt-weekly" data-win-title="گزارش عملکرد هفتگی تیم" data-win-sub="مقایسه فروش و پشتیبانی" data-win-icon="reports" data-win-detach data-win-size="1280x700">
+            <div class="card card-hover">
+              <div class="card-head tight">
+                <span class="card-title" data-icon="reports" data-icon-size="17"> گزارش عملکرد هفتگی تیم</span>
+                <div class="card-actions">
+                  <div class="segmented" data-segmented>
+                    <button class="seg is-active">فروش</button>
+                    <button class="seg">پشتیبانی</button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body tight">
+                <div class="chart h-200" data-chart="line"
+                     data-values="120,145,132,178,165,210,198,240,222,268"
+                     data-values2="90,110,125,118,140,155,148,170,182,190"
+                     data-labels="روز ۱,روز ۲,روز ۳,روز ۴,روز ۵,روز ۶,روز ۷,روز ۸,روز ۹,روز ۱۰"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM;
+
+  /* تقویم کوچک ماه جاری */
+  var today = CRM.todayJalali();
+  var grid = CRM.jalaliMonthGrid(today.year, today.month);
+  CRM.$('#miniCalTitle').textContent = CRM.JMonthNames[today.month - 1] + ' ' + CRM.fa(today.year);
+  var firstWeekday = grid.length ? grid[0].weekday : 0;
+  var html = '';
+  for (var i = 0; i < firstWeekday; i++) html += '<div class="cal-cell muted" data-no-tip style="min-height:34px"></div>';
+  grid.forEach(function (d) {
+    var ev = (d.day % 7 === 0) ? '<i class="cal-ev" style="display:block"></i>' : '';
+    html += '<div class="cal-cell' + (d.isToday ? ' today' : '') + '" style="min-height:34px;padding:4px">' +
+      '<span class="cal-daynum" style="width:22px;height:22px;font-size:11px">' + CRM.fa(d.day) + '</span>' + ev + '</div>';
+  });
+  CRM.$('#miniCal').innerHTML = html;
+
+  /* تیکت‌های باز */
+  CRM.$('#dtTickets').innerHTML = '<div class="list">' + CRM.data.tickets.slice(0, 4).map(function (t) {
+    var tone = { urgent: 'danger', high: 'warning', normal: 'info', low: '' }[t.priority];
+    var label = { urgent: 'فوری', high: 'بالا', normal: 'عادی', low: 'پایین' }[t.priority];
+    return '<a class="list-item" href="tickets.html">' +
+      '<span class="avatar avatar-sm avatar-sq">' + CRM.icon('ticket', 16) + '</span>' +
+      '<span class="flex-1" style="min-width:0"><span class="li-title d-block text-truncate">' + CRM.esc(t.subject) + '</span>' +
+      '<span class="li-sub">' + CRM.esc(t.customer) + ' — ' + CRM.esc(t.updated) + '</span></span>' +
+      '<span class="badge badge-' + (tone || 'gray') + '">' + label + '</span></a>';
+  }).join('') + '</div>';
+
+  /* گفتگوهای اخیر */
+  CRM.$('#dtThreads').innerHTML = '<div class="list">' + CRM.data.threads.slice(0, 5).map(function (t) {
+    return '<a class="list-item" href="messages.html">' + CRM.avatar(t.name, 38) +
+      '<span class="flex-1" style="min-width:0"><span class="li-title d-block">' + CRM.esc(t.name) +
+      (t.unread ? ' <span class="tag-counter">' + CRM.fa(t.unread) + '</span>' : '') + '</span>' +
+      '<span class="li-sub text-truncate d-block">' + CRM.esc(t.last) + '</span></span>' +
+      '<span class="fs-xs text-soft text-nowrap">' + CRM.esc(t.time) + '</span></a>';
+  }).join('') + '</div>';
+
+  /* پس از باز شدن پنجره، ارتفاع محتوای کارت اصلاح شود */
+  CRM.win.onOpen = function () { CRM.charts.render(document); };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+/*!
+ * ============================================================================
+ *  ModernCRM · tokens.css
+ *  تمام رنگ‌ها، شعاع‌ها، سایه‌ها و اندازه‌های قالب در همین فایل تعریف شده‌اند.
+ *  هویت بصری برگرفته از تم مرجع (theme.jpg):
+ *    بوم خاکستری-آبی روشن، کارت‌های سفید با گوشه‌های بسیار گرد،
+ *    لهجه اصلی آبی ملایم، لهجه دوم مرجانی و «مشکی» برای حالت‌های فعال.
+ *  تم برنامه: فقط روشن (حالت شب از قالب حذف شده است)
+ * ============================================================================
+ */
+
+:root {
+  /* ---------------------------------------------------------------- brand */
+  /* آبی ملایم (رنگ اصلی) */
+  --brand-50: #eff5fe;
+  --brand-100: #dfeafc;
+  --brand-200: #c6d9f9;
+  --brand-300: #9fbdf3;
+  --brand-400: #759deb;
+  --brand-500: #5583e0;
+  --brand-600: #3f6bc9;
+  --brand-700: #34559f;
+  --brand-800: #2d4780;
+  --brand-900: #283c66;
+  --brand-950: #1b2844;
+
+  /* ----------------------------------------------------------------- accent */
+  /* مرجانی (رنگ دوم تم؛ در نمودار، بج‌ها و هشدارها) */
+  --accent-50: #fdecea;
+  --accent-100: #fbdad6;
+  --accent-300: #f6a89e;
+  --accent-400: #f08b7f;
+  --accent-500: #e8695f;
+  --accent-600: #d2544a;
+  --accent-700: #b0443c;
+
+  /* ---------------------------------------------------- مشکی/جوهری تم */
+  --ink: #101114;
+  --ink-soft: #1c1e23;
+  --ink-hover: #26282e;
+  --on-ink: #ffffff;
+  --on-ink-muted: #b9bcc4;
+
+  /* ----------------------------------------------------------- neutrals */
+  --n-0: #ffffff;
+  --n-25: #fbfcfe;
+  --n-50: #f6f8fc;
+  --n-100: #eef1f8;
+  --n-200: #e3e8f2;
+  --n-300: #cfd6e4;
+  --n-400: #a6aebf;
+  --n-500: #7b8395;
+  --n-600: #5e6675;
+  --n-700: #454c59;
+  --n-800: #2c313b;
+  --n-900: #16191f;
+  --n-950: #0c0e12;
+
+  /* ---------------------------------------------------------- semantics */
+  --success-50: #e8f5ef;
+  --success-100: #d2ebe0;
+  --success-500: #35a06e;
+  --success-600: #2b8a5d;
+
+  --warning-50: #fdf4e4;
+  --warning-100: #fae9c8;
+  --warning-500: #dfa43f;
+  --warning-600: #a26a17;
+
+  --danger-50: #fdecea;
+  --danger-100: #fbdad6;
+  --danger-500: #e8695f;
+  --danger-600: #d2544a;
+
+  --info-50: var(--brand-50);
+  --info-100: var(--brand-100);
+  --info-500: var(--brand-500);
+  --info-600: var(--brand-600);
+
+  --violet-500: #8a7ee8;
+  --rose-500: #e8695f;
+  --sky-500: #5aa9e8;
+  --amber-500: #dfa43f;
+
+  /* ------------------------------------------------------------ layout */
+  --sidebar-w: 256px;
+  --sidebar-w-collapsed: 84px;
+  --topbar-h: 68px;
+  --taskbar-h: 58px;
+  --page-pad: 26px;
+  --radius-xs: 9px;
+  --radius-sm: 12px;
+  --radius: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-2xl: 34px;
+  --radius-full: 999px;
+
+  /* ------------------------------------------------------------ motion */
+  --t-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  --t: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --t-slow: 320ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* -------------------------------------------------------------- fonts */
+  --font: "Vazirmatn", "Segoe UI", Tahoma, system-ui, sans-serif;
+  --font-mono: "Vazirmatn", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --fs-2xs: 10.5px;
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 13.5px;
+  --fs-base: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 19px;
+  --fs-2xl: 24px;
+  --fs-3xl: 30px;
+  --fs-4xl: 38px;
+
+  /* ------------------------------------------------------------ z-index */
+  --z-snap: 55;
+  --z-window: 60;      /* پایه z-index پنجره‌ها، به‌صورت پویا افزایش می‌یابد */
+  --z-topbar: 30;
+  --z-sidebar: 40;
+  --z-dropdown: 900;
+  --z-drawer: 950;
+  --z-modal: 1000;
+  --z-taskbar: 300;
+  --z-startmenu: 310;
+  --z-cmdk: 1100;
+  --z-popover: 1150;   /* انتخابگر تاریخ و لایه‌های شناور فرم (بالای مودال) */
+  --z-toast: 1200;
+  --z-tip: 1300;       /* لایه تولتیپ سراسری — همیشه بالاترین لایه */
+
+  /* ----------------------------------------------------------- effects */
+  --blur: saturate(180%) blur(16px);
+}
+
+/* ==========================================================================
+ *  تم روشن
+ * ========================================================================== */
+:root {
+  color-scheme: light;
+
+  /* بوم خاکستری-آبی و لایه‌های روی آن */
+  --bg: #e9edf4;
+  --bg-soft: #f1f4f9;
+  --bg-grad: linear-gradient(180deg, #eff2f8 0%, #e6eaf3 100%);
+  --bg-sheen: radial-gradient(1100px 560px at 80% -12%, rgba(255, 255, 255, 0.62), transparent 62%);
+  --surface: #ffffff;
+  --surface-2: #f4f6fb;
+  --surface-3: #eceff7;
+  --surface-hover: #f2f5fa;
+  --surface-inset: #e9edf5;
+
+  --text: #16181d;
+  --text-strong: #0b0c10;
+  --text-muted: #6b7483;
+  --text-soft: #8b93a4;
+  --text-invert: #ffffff;
+  --text-on-brand: #ffffff;
+
+  --border: #e6eaf2;
+  --border-strong: #d5dbe7;
+  --border-muted: #eef1f8;
+
+  --brand: var(--brand-500);
+  --brand-hover: var(--brand-600);
+  --brand-soft: var(--brand-50);
+  --brand-soft-2: var(--brand-100);
+  --brand-ring: rgba(85, 131, 224, 0.22);
+  --brand-contrast: #ffffff;
+  --brand-ink: var(--brand-600);   /* متن/آیکون روی پس‌زمینه روشن */
+  --brand-btn: var(--brand-600);   /* پس‌زمینه دکمه اصلی (کنتراست بهتر با متن سفید) */
+  --brand-btn-hover: var(--brand-700);
+
+  --success: var(--success-600);
+  --success-soft: var(--success-50);
+  --success-ring: rgba(53, 160, 110, 0.2);
+  --warning: var(--warning-600);
+  --warning-soft: var(--warning-50);
+  --warning-ring: rgba(223, 164, 63, 0.24);
+  --danger: var(--danger-600);
+  --danger-soft: var(--danger-50);
+  --danger-ring: rgba(232, 105, 95, 0.2);
+  --info: var(--brand-600);
+  --info-soft: var(--brand-50);
+  --info-ring: rgba(85, 131, 224, 0.2);
+
+  --accent: var(--accent-500);
+  --accent-soft: var(--accent-50);
+  --accent-ring: rgba(232, 105, 95, 0.2);
+
+  --ring: var(--brand-ring);
+
+  /* سایدبار مثل تم مرجع: روی بوم، با آیتم‌های سفید و آیتم فعال مشکی */
+  --sidebar-bg: transparent;
+  --sidebar-text: #6b7483;
+  --sidebar-text-active: var(--on-ink);
+  --sidebar-item-hover: #f2f5fa;
+  --sidebar-item-active: var(--ink);
+  --sidebar-border: transparent;
+
+  --topbar-bg: rgba(236, 240, 246, 0.72);
+  --modal-bg: rgba(18, 24, 38, 0.42);
+  --dock-bg: rgba(255, 255, 255, 0.78);
+
+  --shadow-xs: 0 1px 2px rgba(19, 32, 64, 0.06);
+  --shadow-sm: 0 2px 10px -4px rgba(19, 32, 64, 0.12);
+  --shadow: 0 10px 26px -16px rgba(19, 32, 64, 0.2);
+  --shadow-md: 0 18px 42px -24px rgba(19, 32, 64, 0.26);
+  --shadow-lg: 0 34px 70px -30px rgba(19, 32, 64, 0.32);
+  --shadow-card: 0 18px 40px -30px rgba(19, 32, 64, 0.38), 0 2px 6px -3px rgba(19, 32, 64, 0.06);
+  --shadow-brand: 0 10px 24px -12px rgba(63, 107, 201, 0.5);
+  --shadow-ink: 0 12px 26px -12px rgba(16, 17, 20, 0.45);
+
+  --grad-brand: linear-gradient(135deg, #6f9ceb 0%, #3f6bc9 100%);
+  --grad-coral: linear-gradient(135deg, #f0907f 0%, #d2544a 100%);
+  --grad-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 100%);
+  --glass: rgba(255, 255, 255, 0.72);
+}
+
+/* ==========================================================================
+ *  رنگ‌بندی نمودارها (در هر دو تم یکسان است)
+ *  آبی ملایم و مرجانی، مطابق تم مرجع
+ * ========================================================================== */
+:root {
+  --c1: #6f9ceb;
+  --c2: #e8695f;
+  --c3: #8a7ee8;
+  --c4: #5fbfa5;
+  --c5: #e8b45f;
+  --c6: #5aa9e8;
+  --c7: #d98fb0;
+  --c8: #9aa4b5;
+}

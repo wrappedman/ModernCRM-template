@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ثبت اطلاعات فرم | پشتیبانی | مدرن‌CRM</title>
+<meta name="description" content="ثبت نتیجه‌ی انجام فرم: شماره بارنامه یا قبض، نحوه ارسال، مدت زمان صرف‌شده و توضیحات">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<!--
+  ثبت اطلاعات فرم: پس از انجام کار، با وارد کردن شماره فرم، مشخصات فرم (فقط‌خواندنی) نمایش داده می‌شود
+  و اطلاعات بارنامه/قبض، نحوه ارسال، مدت زمان و توضیحات ثبت می‌شود ← وضعیت فرم «انجام شد».
+  support-formdata.html?no=۰۵۷۴۹ → بارگذاری مستقیم فرم
+-->
+<body class="app" data-page="support-formdata">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="support.html">پشتیبانی</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">ثبت اطلاعات فرم</span>
+            </div>
+            <h1 class="page-title">ثبت اطلاعات فرم</h1>
+            <p class="page-desc">شماره فرم را وارد کنید تا مشخصات آن نمایش داده شود؛ سپس نتیجه‌ی انجام کار را ثبت کنید.</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="support-planning.html"><span data-icon="calendar-range" data-icon-size="16"></span> برنامه‌ریزی</a>
+            <a class="btn" href="support-userperf.html"><span data-icon="user-check" data-icon-size="16"></span> ثبت عملکرد کاربر</a>
+          </div>
+        </div>
+
+        <div class="grid-2-1 mb-5">
+          <form class="card" id="dForm" data-win-nobtn novalidate style="min-width:0">
+            <div class="card-head">
+              <div class="card-title" data-icon="clipboard" data-icon-size="18"> اطلاعات فرم</div>
+              <div class="card-actions" id="dState"><span class="badge badge-outline">فرمی انتخاب نشده</span></div>
+            </div>
+            <div class="card-body">
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="notebook" data-icon-size="17"></span>
+                  <div><div class="fs-title">مشخصات فرم</div><div class="fs-desc">با وارد کردن شماره فرم و Enter، اطلاعات فرم خوانده می‌شود</div></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="fNo">شماره فرم <span class="req">*</span></label>
+                    <div class="input-group">
+                      <input class="input num" id="fNo" data-fa-mask placeholder="مثلاً ۰۵۷۴۹" autocomplete="off">
+                      <button type="button" class="btn" id="btnLoad" data-tip="خواندن فرم"><span data-icon="corner-down-left" data-icon-size="16"></span></button>
+                    </div>
+                  </div>
+                  <div class="form-group" style="grid-column:span 2">
+                    <label class="form-label">نام شرکت</label>
+                    <input class="input" id="rCompany" readonly>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label">کارشناس شرکت</label>
+                    <input class="input" id="rExpert" readonly>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label">تاریخ هماهنگ شده</label>
+                    <input class="input num" id="rPlan" readonly>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label">تاریخ فرم</label>
+                    <input class="input num" id="rCreated" readonly>
+                  </div>
+                  <div class="form-group mb-0" style="grid-column:1 / -1">
+                    <label class="form-label">نوع فرم</label>
+                    <div class="sup-checks boxed" id="rTypes" style="min-height:44px"><span class="text-muted fs-sm">—</span></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="truck" data-icon-size="17"></span>
+                  <div><div class="fs-title">ارسال و انجام کار</div><div class="fs-desc">بارنامه یا قبض، نحوه ارسال و زمان صرف‌شده</div></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="fWaybill">ش بارنامه / قبض</label>
+                    <div class="input-wrap"><span class="icon lead" data-icon="receipt" data-icon-size="16"></span><input class="input num" id="fWaybill" data-fa-mask></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fDate">تاریخ</label>
+                    <div class="input-wrap"><input class="input num" id="fDate" data-jdate="today"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar-days" data-icon-size="15"></button></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="fSend">نحوه ارسال</label>
+                    <select class="select" id="fSend"></select>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="fMinutes">مدت زمان صرف شده <span class="req">*</span></label>
+                    <div class="input-wrap"><span class="icon lead" data-icon="timer" data-icon-size="16"></span><input class="input num" id="fMinutes" data-num-mask placeholder="۰"><span class="unit">دقیقه</span></div>
+                  </div>
+                  <div class="form-group mb-0" style="grid-column:span 2">
+                    <label class="form-label">زمان‌های پرکاربرد</label>
+                    <div class="d-flex flex-wrap gap-2" id="mQuick" style="min-height:42px;align-items:center"></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="form-section">
+                <div class="form-group mb-0">
+                  <label class="form-label" for="fNote">توضیحات</label>
+                  <textarea class="textarea" id="fNote" rows="3" placeholder="نتیجه‌ی کار، اقلام تحویل‌شده، نکات پیگیری…"></textarea>
+                </div>
+              </section>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> ثبت</button>
+              <button type="button" class="btn btn-soft" id="btnNew"><span data-icon="plus" data-icon-size="16"></span> ثبت جدید</button>
+              <button type="button" class="btn" id="btnCancel"><span data-icon="eraser" data-icon-size="16"></span> انصراف</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-ghost" id="btnView" disabled><span data-icon="eye" data-icon-size="16"></span> نمایش فرم</button>
+              <button type="button" class="btn btn-ghost" id="btnSearch"><span data-icon="search" data-icon-size="16"></span> جستجو</button>
+            </div>
+          </form>
+
+          <div style="align-self:start;position:sticky;top:calc(var(--topbar-h) + 12px);min-width:0" class="d-flex flex-col gap-5">
+            <div class="card" data-win-nobtn>
+              <div class="card-head">
+                <div class="card-title" data-icon="hourglass" data-icon-size="18"> منتظر ثبت اطلاعات</div>
+                <div class="card-actions"><span class="badge badge-warning" id="pendCount">—</span></div>
+              </div>
+              <div class="card-body flush"><div class="sup-agenda" id="pending"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- جستجو -->
+<div class="overlay" id="searchModal" style="display:none">
+  <div class="modal modal-xl" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">جستجوی فرم</div><div class="modal-sub">فرم موردنظر را برای ثبت یا ویرایش اطلاعات انتخاب کنید</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#searchModal" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body" style="padding-top:6px">
+      <div class="d-flex gap-3 items-center flex-wrap mb-3">
+        <div class="input-wrap" style="flex:1;min-width:220px"><span class="icon lead" data-icon="search" data-icon-size="16"></span><input class="input" id="sq" placeholder="شماره فرم، شرکت یا کارشناس…"></div>
+        <label class="check"><input type="checkbox" id="sPending" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">جستجوی فرم‌هایی که ثبت اطلاعات نشده‌اند</span></label>
+      </div>
+      <div class="table-wrap" style="max-height:380px;overflow:auto">
+        <table class="table table-compact">
+          <thead><tr><th>شماره فرم</th><th>شرکت</th><th>نوع فرم</th><th>تاریخ هماهنگ شده</th><th>کارشناس</th><th>وضعیت</th></tr></thead>
+          <tbody id="sBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn" data-modal-close="#searchModal">بستن</button></div>
+  </div>
+</div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/support.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, esc = CRM.esc;
+  var cur = null;
+  SUP.fill('#fSend', D.supLists.send, '—');
+  $('#mQuick').innerHTML = [15, 30, 45, 60, 90, 120].map(function (m) { return '<button type="button" class="chip" data-m="' + m + '">' + fa(m) + ' دقیقه</button>'; }).join('');
+  $('#mQuick').addEventListener('click', function (e) { var b = e.target.closest('[data-m]'); if (b) $('#fMinutes').value = fa(b.getAttribute('data-m')); });
+
+  function pendingList() { return D.supPlans.filter(function (p) { return (p.status === 'confirmed' || p.status === 'printed') && !p.data; }); }
+  function renderPending() {
+    var l = pendingList();
+    $('#pendCount').textContent = fa(l.length) + ' فرم';
+    $('#pending').innerHTML = l.length ? l.map(function (p) {
+      var c = SUP.co(p.company) || {};
+      return '<div class="sup-ag" data-no="' + esc(p.no) + '"><div class="t num">' + esc(p.no) + '<small>' + esc(p.plan.date.slice(5)) + '</small></div><span class="bar ' + SUP.type(p.types[0]).tone + '"></span>' +
+        '<div style="min-width:0"><div class="fw-600 text-strong text-truncate fs-sm">' + esc(c.name || '—') + '</div><div class="fs-xs text-muted text-truncate">' + p.types.map(function (x) { return SUP.type(x).title; }).join('، ') + ' · ' + esc(p.plan.expert) + '</div></div>' +
+        '<span data-icon="chevron-left" data-icon-size="16" class="text-muted"></span></div>';
+    }).join('') : SUP.empty('همه‌ی فرم‌های انجام‌شده ثبت اطلاعات شده‌اند.', 'check-check');
+    CRM.renderIcons($('#pending'));
+  }
+  $('#pending').addEventListener('click', function (e) { var r = e.target.closest('[data-no]'); if (r) load(SUP.plan(r.getAttribute('data-no'))); });
+
+  function clearRead() {
+    ['#rCompany', '#rExpert', '#rPlan', '#rCreated'].forEach(function (s) { $(s).value = ''; });
+    $('#rTypes').innerHTML = '<span class="text-muted fs-sm">—</span>';
+  }
+  function load(p) {
+    if (!p) { CRM.toast({ type: 'warning', title: 'فرم پیدا نشد', msg: 'شماره فرم را بررسی کنید یا از «جستجو» استفاده کنید.' }); return; }
+    if (p.status === 'draft' || p.status === 'sent') {
+      CRM.toast({ type: 'warning', title: 'فرم هنوز برنامه‌ریزی نشده', msg: 'فرم ' + p.no + ' در وضعیت «' + SUP.status(p.status).title + '» است؛ ابتدا در «برنامه‌ریزی» تأیید شود.' });
+    }
+    cur = p; var c = SUP.co(p.company) || {};
+    $('#fNo').value = p.no; $('#rCompany').value = c.name || ''; $('#rExpert').value = p.plan ? p.plan.expert : '';
+    $('#rPlan').value = p.plan ? SUP.weekday(p.plan.date) + ' ' + p.plan.date + ' · ' + p.plan.time : 'برنامه ریزی نشده'; $('#rCreated').value = p.created;
+    $('#rTypes').innerHTML = D.supFormTypes.map(function (t) {
+      var on = p.types.indexOf(t.id) > -1;
+      return '<span class="sup-ck' + (on ? ' on' : '') + '">' + CRM.icon(on ? 'check' : 'minus', 12) + esc(t.title) + '</span>';
+    }).join('');
+    var dt = p.data || {};
+    $('#fWaybill').value = dt.waybill || ''; $('#fDate').value = dt.date || (p.plan ? p.plan.date : CRM.jDate()); $('#fSend').value = dt.send || p.send || '';
+    $('#fMinutes').value = dt.minutes ? fa(dt.minutes) : ''; $('#fNote').value = dt.note || '';
+    $('#dState').innerHTML = SUP.statusBadge(p.status) + (p.data ? ' <span class="badge badge-success">اطلاعات ثبت شده</span>' : '');
+    $('#btnView').disabled = false;
+    $$('#pending .sup-ag').forEach(function (r) { r.style.background = r.getAttribute('data-no') === p.no ? 'var(--brand-soft)' : ''; });
+  }
+  function reset(keepNo) {
+    cur = null; var no = $('#fNo').value; $('#dForm').reset(); clearRead(); if (keepNo) $('#fNo').value = no;
+    $('#fDate').value = CRM.jDate();
+    $('#dState').innerHTML = '<span class="badge badge-outline">فرمی انتخاب نشده</span>'; $('#btnView').disabled = true;
+    $$('#pending .sup-ag').forEach(function (r) { r.style.background = ''; });
+  }
+  $('#fNo').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); load(SUP.plan($('#fNo').value)); } });
+  $('#btnLoad').addEventListener('click', function () { load(SUP.plan($('#fNo').value)); });
+
+  $('#dForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!cur) { CRM.toast({ type: 'warning', title: 'فرم انتخاب نشده', msg: 'ابتدا شماره فرم را وارد و Enter را بزنید.' }); $('#fNo').focus(); return; }
+    var m = +CRM.en($('#fMinutes').value).replace(/\D/g, '');
+    if (!m) { CRM.toast({ type: 'warning', title: 'مدت زمان', msg: 'مدت زمان صرف‌شده را به دقیقه وارد کنید.' }); $('#fMinutes').focus(); return; }
+    var first = !cur.data;
+    cur.data = { waybill: $('#fWaybill').value.trim(), date: $('#fDate').value, send: $('#fSend').value, minutes: m, note: $('#fNote').value.trim() };
+    if (cur.status !== 'cancel') { cur.status = 'done'; }
+    if (first) cur.flow.push({ st: 'done', user: 'مهدی کریمی', at: SUP.now().at, date: '', time: '', note: 'ثبت اطلاعات فرم' });
+    CRM.toast({ type: 'success', title: first ? 'اطلاعات فرم ثبت شد' : 'اطلاعات فرم ویرایش شد', msg: 'فرم ' + cur.no + ' · ' + fa(m) + ' دقیقه' });
+    load(cur); renderPending();
+  });
+  $('#btnNew').addEventListener('click', function () { reset(); $('#fNo').focus(); });
+  $('#btnCancel').addEventListener('click', function () { reset(); });
+  $('#btnView').addEventListener('click', function () { if (cur) SUP.viewPlan(cur); });
+
+  /* جستجو */
+  function renderSearch() {
+    var q = fa($('#sq').value.trim()), pend = $('#sPending').checked;
+    var rows = D.supPlans.filter(function (p) {
+      var c = SUP.co(p.company) || {};
+      if (p.status === 'draft') return false;
+      if (pend && (p.data || (p.status !== 'confirmed' && p.status !== 'printed'))) return false;
+      return !q || (p.no + ' ' + (c.name || '') + ' ' + (p.plan ? p.plan.expert : '')).indexOf(q) > -1;
+    });
+    $('#sBody').innerHTML = rows.length ? rows.map(function (p) {
+      var c = SUP.co(p.company) || {};
+      return '<tr data-no="' + esc(p.no) + '" style="cursor:pointer"><td class="num fw-700 text-brand">' + esc(p.no) + '</td><td><span class="d-inline-block text-truncate" style="max-width:220px">' + esc(c.name || '—') + '</span></td><td class="text-nowrap">' + SUP.typeBadges(p.types) + '</td>' +
+        '<td class="num">' + (p.plan ? esc(p.plan.date) : '—') + '</td><td>' + (p.plan ? esc(p.plan.expert) : '—') + '</td><td>' + SUP.statusBadge(p.status) + '</td></tr>';
+    }).join('') : '<tr><td colspan="6">' + SUP.empty('فرمی پیدا نشد.', 'search') + '</td></tr>';
+  }
+  $('#btnSearch').addEventListener('click', function () { renderSearch(); CRM.modal.open('#searchModal'); });
+  $('#sq').addEventListener('input', CRM.debounce(renderSearch, 120));
+  $('#sPending').addEventListener('change', renderSearch);
+  $('#sBody').addEventListener('click', function (e) { var r = e.target.closest('tr[data-no]'); if (r) { CRM.modal.close('#searchModal'); load(SUP.plan(r.getAttribute('data-no'))); } });
+
+  renderPending();
+  var q = location.search.match(/[?&]no=([^&]+)/);
+  if (q) load(SUP.plan(decodeURIComponent(q[1])));
+})();
+</script>
+</body>
+</html>
