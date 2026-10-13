@@ -1480,3 +1480,9 @@ body.no-float .win-hint { display: none; }
 }
 .inbox-grid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
 @media (max-width: 1180px) { .inbox-grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+ * 23) حسابداری (accounting.html)
+ * ========================================================================== */
+@keyframes rowFlash { from { background: var(--success-soft); } to { background: transparent; } }
+.table tbody tr.row-flash td { animation: rowFlash 2.2s ease-out; }

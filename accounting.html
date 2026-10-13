@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حسابداری | مدرن‌CRM</title>
+<meta name="description" content="ثبت اسناد پرداخت: خرید کالا، هزینه، خسارت، پرداخت به نماینده و تنخواه‌گردان">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="accounting">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">حسابداری</span>
+            </div>
+            <h1 class="page-title">حسابداری</h1>
+            <p class="page-desc">ثبت سند پرداخت برای خرید کالا، هزینه‌ها، خسارت، پرداخت به نماینده و تنخواه‌گردان.</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" type="button" id="btnSearch"><span data-icon="search" data-icon-size="16"></span> جستجوی اسناد</button>
+            <a class="btn" href="report.html?r=payments"><span data-icon="reports" data-icon-size="16"></span> گزارش پرداختی‌ها</a>
+          </div>
+        </div>
+
+        <!-- ============================ شاخص‌ها ============================ -->
+        <div class="grid-4 mb-5">
+          <div class="card"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon success"><span data-icon="wallet" data-icon-size="22"></span></span>
+            <div style="min-width:0"><div class="stat-label">موجودی تنخواه</div><div class="stat-value" id="kPetty">—</div><div class="fs-2xs text-muted" id="kPettySub">—</div></div>
+          </div></div>
+          <div class="card"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon coral"><span data-icon="banknote" data-icon-size="22"></span></span>
+            <div style="min-width:0"><div class="stat-label">پرداختی این ماه</div><div class="stat-value" id="kMonth">—</div><div class="fs-2xs text-muted" id="kMonthSub">—</div></div>
+          </div></div>
+          <div class="card"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon violet"><span data-icon="receipt" data-icon-size="22"></span></span>
+            <div style="min-width:0"><div class="stat-label">چک‌های در جریان</div><div class="stat-value" id="kCheque">—</div><div class="fs-2xs text-muted" id="kChequeSub">—</div></div>
+          </div></div>
+          <div class="card"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon"><span data-icon="files" data-icon-size="22"></span></span>
+            <div style="min-width:0"><div class="stat-label">اسناد دوره‌ی جاری</div><div class="stat-value" id="kDocs">—</div><div class="fs-2xs text-muted">دوره مالی ۱۴۰۵</div></div>
+          </div></div>
+        </div>
+
+        <div class="grid-2-1 mb-5">
+          <!-- ============================ فرم سند ============================ -->
+          <form class="card" id="accForm" data-win-nobtn novalidate style="min-width:0">
+            <div class="card-head">
+              <div class="card-title"><span data-icon="wallet" data-icon-size="18"></span> ثبت سند</div>
+              <div class="card-actions"><span class="badge badge-outline" id="formState">سند جدید</span></div>
+            </div>
+            <div class="card-body">
+
+              <!-- ۱) مشخصات سند -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="clipboard" data-icon-size="17"></span>
+                  <div><div class="fs-title">مشخصات سند</div><div class="fs-desc">دوره‌ی مالی، نوع و تاریخ سند و طرف حساب</div></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="aPeriod">دوره مالی <span class="req">*</span></label>
+                    <select class="select" id="aPeriod"></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="aType">نوع <span class="req">*</span></label>
+                    <select class="select" id="aType"></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="aDate">تاریخ <span class="req">*</span></label>
+                    <div class="input-wrap">
+                      <span class="icon lead" data-icon="calendar-days" data-icon-size="17"></span>
+                      <input class="input num" id="aDate" data-jdate="today">
+                      <button type="button" class="icon-btn trail" data-jdate-trigger data-tip="باز کردن تقویم" data-icon="chevron-down" data-icon-size="15"></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group mb-0">
+                  <div class="form-label-row">
+                    <label class="form-label" for="aCompany" id="aCompanyLbl">شرکت</label>
+                    <label class="check"><input type="checkbox" id="aAgent"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">پرداخت به نماینده</span></label>
+                  </div>
+                  <div class="input-group">
+                    <input class="input" id="aCompany" readonly placeholder="از فهرست شرکت‌ها انتخاب کنید (اختیاری)">
+                    <button type="button" class="btn" id="aCompanyX" data-tip="پاک کردن" style="border-radius:0;border-inline-start:0"><span data-icon="x" data-icon-size="15"></span></button>
+                    <button type="button" class="btn" id="aCompanyPick" data-tip="انتخاب از فهرست"><span data-icon="more-h" data-icon-size="16"></span></button>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۲) کالا / شرح -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="package" data-icon-size="17"></span>
+                  <div><div class="fs-title">کالا و مبلغ</div><div class="fs-desc">شرح پرداخت، قیمت پایه، تعداد و تخفیف — مبلغ خودکار محاسبه می‌شود</div></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="aItem">نام کالا / شرح <span class="req">*</span></label>
+                    <input class="input" id="aItem" placeholder="مثلاً آداپتور ۱۲ ولت">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="aConsumer">مصرف‌کننده</label>
+                    <input class="input" id="aConsumer" list="consumerList" placeholder="واحد یا شخص">
+                    <datalist id="consumerList"></datalist>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="aInvoice">شماره فاکتور</label>
+                    <select class="select" id="aInvoice"></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="aBase">قیمت پایه <span class="req">*</span></label>
+                    <div class="input-wrap"><input class="input num" id="aBase" data-num-mask placeholder="۰"><span class="unit">تومان</span></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="aQty">تعداد</label>
+                    <div class="input-wrap"><input class="input num" id="aQty" data-num-mask value="۱"><span class="unit">عدد</span></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="aDiscount">تخفیف</label>
+                    <div class="input-wrap"><input class="input num" id="aDiscount" data-num-mask placeholder="۰"><span class="unit">تومان</span></div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۳) فروشنده -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="building" data-icon-size="17"></span>
+                  <div><div class="fs-title">فروشنده</div><div class="fs-desc">مشخصات فروشنده یا دریافت‌کننده‌ی وجه (اختیاری)</div></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="aSeller">نام فروشنده</label>
+                    <input class="input" id="aSeller">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="aSellerPhone">تلفن فروشنده</label>
+                    <div class="input-wrap"><span class="icon lead" data-icon="phone" data-icon-size="16"></span><input class="input num ltr" id="aSellerPhone" inputmode="tel" placeholder="۰۲۱۰۰۰۰۰۰۰۰"></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="aSellerAddr">آدرس فروشنده</label>
+                    <div class="input-wrap"><span class="icon lead" data-icon="map-pin" data-icon-size="16"></span><input class="input" id="aSellerAddr"></div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۴) پرداخت -->
+              <section class="form-section">
+                <div class="form-section-head">
+                  <span class="fs-ic" data-icon="credit-card" data-icon-size="17"></span>
+                  <div><div class="fs-title">نحوه‌ی پرداخت</div><div class="fs-desc">فیلدهای چک یا حساب بر اساس روش پرداخت نمایش داده می‌شوند</div></div>
+                </div>
+                <div class="opt-cards mb-4" id="payTypes" role="radiogroup" aria-label="نحوه پرداخت" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+                  <label class="opt-card"><input type="radio" name="pay" value="cash" checked><span class="opt-body"><span class="opt-ic"><span data-icon="banknote" data-icon-size="17"></span></span><span><span class="opt-title d-block">نقدی</span><span class="opt-desc d-block">پرداخت وجه نقد</span></span></span></label>
+                  <label class="opt-card"><input type="radio" name="pay" value="cheque"><span class="opt-body"><span class="opt-ic"><span data-icon="receipt" data-icon-size="17"></span></span><span><span class="opt-title d-block">چک</span><span class="opt-desc d-block">تاریخ، شماره و بانک</span></span></span></label>
+                  <label class="opt-card"><input type="radio" name="pay" value="transfer"><span class="opt-body"><span class="opt-ic"><span data-icon="landmark" data-icon-size="17"></span></span><span><span class="opt-title d-block">واریز به حساب</span><span class="opt-desc d-block">شماره حساب و نام شخص</span></span></span></label>
+                </div>
+
+                <div class="panel reveal d-none mb-4" data-pay="cheque">
+                  <div class="grid-3">
+                    <div class="form-group mb-0">
+                      <label class="form-label" for="aChequeDate">تاریخ چک <span class="req">*</span></label>
+                      <div class="input-wrap"><input class="input num" id="aChequeDate" data-jdate><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar" data-icon-size="15"></button></div>
+                    </div>
+                    <div class="form-group mb-0">
+                      <label class="form-label" for="aChequeNo">شماره چک <span class="req">*</span></label>
+                      <input class="input num" id="aChequeNo" data-fa-mask placeholder="۰۰۰۰۰۰">
+                    </div>
+                    <div class="form-group mb-0">
+                      <label class="form-label" for="aBankC">بانک</label>
+                      <select class="select" id="aBankC" data-bank></select>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel reveal d-none mb-4" data-pay="transfer">
+                  <div class="grid-3">
+                    <div class="form-group mb-0">
+                      <label class="form-label" for="aAccount">شماره حساب / کارت <span class="req">*</span></label>
+                      <input class="input num ltr" id="aAccount" data-fa-mask placeholder="۶۰۳۷۹۹۷۵۰۰۰۰۰۰۰۰">
+                    </div>
+                    <div class="form-group mb-0">
+                      <label class="form-label" for="aPerson">نام شخص <span class="req">*</span></label>
+                      <input class="input" id="aPerson" placeholder="صاحب حساب">
+                    </div>
+                    <div class="form-group mb-0">
+                      <label class="form-label" for="aBankT">بانک</label>
+                      <select class="select" id="aBankT" data-bank></select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid-2" style="align-items:end">
+                  <div class="form-group mb-0">
+                    <label class="form-label" for="aAmount">مبلغ</label>
+                    <div class="input-wrap"><span class="icon lead" data-icon="calculator" data-icon-size="17"></span><input class="input num fw-700" id="aAmount" readonly tabindex="-1" style="background:var(--surface-2)"><span class="unit">تومان</span></div>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label">تنخواه</label>
+                    <div class="d-flex items-center gap-4 flex-wrap" style="min-height:42px">
+                      <label class="check"><input type="radio" name="petty" value="in"><span class="box round"></span><span class="lbl">واریز به تنخواه</span></label>
+                      <label class="check"><input type="radio" name="petty" value="out"><span class="box round"></span><span class="lbl">پرداخت از تنخواه</span></label>
+                      <button type="button" class="btn btn-sm btn-ghost" id="pettyClear" data-tip="بدون اثر بر تنخواه"><span data-icon="eraser" data-icon-size="14"></span> انصراف</button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ۵) توضیحات -->
+              <section class="form-section">
+                <div class="form-group mb-0">
+                  <label class="form-label" for="aNote">توضیحات</label>
+                  <textarea class="textarea" id="aNote" rows="2" style="min-height:72px" placeholder="توضیحات تکمیلی سند…"></textarea>
+                </div>
+              </section>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" data-keep="1" data-tip="سند ثبت می‌شود و اطلاعات فرم برای سند بعدی باقی می‌ماند"><span data-icon="copy" data-icon-size="16"></span> ثبت و نگهداری</button>
+              <button type="submit" class="btn btn-primary" data-keep="0"><span data-icon="check" data-icon-size="16"></span> <span id="btnSaveLbl">ثبت</span></button>
+              <span class="spacer"></span>
+              <button type="button" class="btn" id="btnCancel"><span data-icon="x" data-icon-size="16"></span> انصراف</button>
+            </div>
+          </form>
+
+          <!-- ============================ خلاصه ============================ -->
+          <div style="align-self:start;position:sticky;top:calc(var(--topbar-h) + 12px);min-width:0" class="d-flex flex-col gap-5">
+            <div class="card" data-win-nobtn>
+              <div class="card-head"><div class="card-title"><span data-icon="calculator" data-icon-size="18"></span> خلاصه‌ی سند</div><div class="card-actions" id="sumType"></div></div>
+              <div class="card-body" id="summary"></div>
+            </div>
+            <div class="card card-ink">
+              <div class="card-body">
+                <div class="d-flex items-center gap-3 mb-3">
+                  <span class="stat-icon ink" style="background:rgba(255,255,255,.12)"><span data-icon="wallet" data-icon-size="20"></span></span>
+                  <div><div class="stat-label">تنخواه‌گردان</div><div class="stat-value" id="pettyVal">—</div></div>
+                </div>
+                <div class="progress mb-2" style="background:rgba(255,255,255,.14)"><i id="pettyBar"></i></div>
+                <div class="fs-xs" style="color:var(--on-ink-muted);line-height:1.9" id="pettyNote">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================ آخرین اسناد ============================ -->
+        <div class="card" data-win="acc-docs" data-win-title="اسناد حسابداری" data-win-icon="table" data-win-size="1200x640">
+          <div class="card-head flex-wrap" style="gap:10px">
+            <div class="card-title"><span data-icon="table" data-icon-size="18"></span> آخرین اسناد ثبت‌شده</div>
+            <div class="card-actions flex-wrap" style="gap:8px">
+              <div class="input-wrap" style="width:220px">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" placeholder="جستجو در جدول…" data-table-search="#tblDocs" aria-label="جستجو">
+              </div>
+              <button class="btn btn-sm btn-soft" type="button" id="btnExport"><span data-icon="file-spreadsheet" data-icon-size="15"></span> Excel</button>
+            </div>
+          </div>
+          <div class="card-body tight d-flex gap-2 flex-wrap" id="typeChips" style="border-bottom:1px solid var(--border-muted)"></div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table" id="tblDocs">
+                <thead>
+                  <tr>
+                    <th style="width:70px">کد</th>
+                    <th>نوع</th>
+                    <th>تاریخ</th>
+                    <th>شرح</th>
+                    <th>طرف حساب</th>
+                    <th>نحوه پرداخت</th>
+                    <th class="num">مبلغ</th>
+                    <th>تنخواه</th>
+                    <th class="table-row-actions">عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="docBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-foot"><span id="docFoot">—</span><span id="docSum" class="fw-600 text-strong"></span></div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============================ جستجوی اسناد ============================ -->
+<div class="overlay" id="searchModal" style="display:none">
+  <div class="modal modal-xl" role="dialog" aria-modal="true" aria-labelledby="smTitle">
+    <div class="modal-head">
+      <div><div class="modal-title" id="smTitle">جستجوی اسناد</div><div class="modal-sub">روی هر سند کلیک کنید تا برای مشاهده یا ویرایش در فرم بارگذاری شود</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#searchModal" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body" style="padding-top:6px">
+      <div class="grid-4 mb-4" style="gap:10px">
+        <select class="select select-sm" id="sPeriod" aria-label="دوره مالی"></select>
+        <select class="select select-sm" id="sType" aria-label="نوع"></select>
+        <select class="select select-sm" id="sPay" aria-label="نحوه پرداخت">
+          <option value="">همه‌ی روش‌های پرداخت</option><option value="cash">نقدی</option><option value="cheque">چک</option><option value="transfer">واریز به حساب</option>
+        </select>
+        <div class="input-wrap"><span class="icon lead" data-icon="search" data-icon-size="15"></span><input class="input input-sm" id="sText" placeholder="شرح، فروشنده، شرکت…"></div>
+        <div class="input-wrap"><input class="input input-sm num" id="sFrom" data-jdate placeholder="از تاریخ"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar" data-icon-size="14"></button></div>
+        <div class="input-wrap"><input class="input input-sm num" id="sTo" data-jdate placeholder="تا تاریخ"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar" data-icon-size="14"></button></div>
+        <select class="select select-sm" id="sPetty" aria-label="تنخواه">
+          <option value="">تنخواه: همه</option><option value="in">واریز به تنخواه</option><option value="out">پرداخت از تنخواه</option>
+        </select>
+        <button type="button" class="btn btn-sm" id="sReset"><span data-icon="eraser" data-icon-size="14"></span> پاک کردن فیلترها</button>
+      </div>
+      <div class="table-wrap" style="max-height:380px;overflow:auto;border:1px solid var(--border-muted);border-radius:var(--radius)">
+        <table class="table table-compact">
+          <thead><tr><th>کد</th><th>نوع</th><th>تاریخ</th><th>شرح</th><th>طرف حساب</th><th>پرداخت</th><th class="num">مبلغ</th></tr></thead>
+          <tbody id="sBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-foot"><span class="fs-xs text-muted me-auto" id="sFoot"></span><button type="button" class="btn" data-modal-close="#searchModal">بستن</button></div>
+  </div>
+</div>
+
+<!-- انتخاب شرکت / نماینده -->
+<div class="overlay" id="partyModal" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title" id="pmTitle">انتخاب شرکت</div><div class="modal-sub" id="pmSub">از فهرست انتخاب کنید</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#partyModal" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body" style="padding-top:6px">
+      <div class="input-wrap mb-3"><span class="icon lead" data-icon="search" data-icon-size="16"></span><input class="input" id="pmSearch" placeholder="جستجو در نام، شهر یا مسئول…"></div>
+      <div class="pick-list" style="padding:0;max-height:340px;overflow:auto" id="pmList"></div>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn" data-modal-close="#partyModal">انصراف</button></div>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/warehouse.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, J = CRM.jalali, WH = window.WH, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, en = CRM.en, esc = CRM.esc;
+  var form = $('#accForm'), editing = null;
+  var TYPES = {}; D.accTypes.forEach(function (t) { TYPES[t.id] = t; });
+  var PAY = { cash: { t: 'نقدی', ic: 'banknote' }, cheque: { t: 'چک', ic: 'receipt' }, transfer: { t: 'واریز به حساب', ic: 'landmark' } };
+  var F = {
+    period: $('#aPeriod'), type: $('#aType'), date: $('#aDate'), agent: $('#aAgent'), company: $('#aCompany'),
+    item: $('#aItem'), consumer: $('#aConsumer'), invoice: $('#aInvoice'), base: $('#aBase'), qty: $('#aQty'), discount: $('#aDiscount'),
+    seller: $('#aSeller'), sellerPhone: $('#aSellerPhone'), sellerAddr: $('#aSellerAddr'),
+    chequeDate: $('#aChequeDate'), chequeNo: $('#aChequeNo'), bankC: $('#aBankC'), account: $('#aAccount'), person: $('#aPerson'), bankT: $('#aBankT'),
+    amount: $('#aAmount'), note: $('#aNote')
+  };
+
+  /* ------------------------------------------------ پر کردن انتخاب‌ها */
+  var periods = D.fiscalPeriods.slice().reverse();
+  F.period.innerHTML = periods.map(function (p) { return '<option value="' + p.code + '"' + (p.code === 14 ? ' selected' : '') + '>' + esc(p.title) + '</option>'; }).join('');
+  $('#sPeriod').innerHTML = '<option value="">همه‌ی دوره‌ها</option>' + periods.map(function (p) { return '<option value="' + p.code + '">' + esc(p.title) + '</option>'; }).join('');
+  F.type.innerHTML = '<option value="">انتخاب نوع…</option>' + D.accTypes.map(function (t) { return '<option value="' + t.id + '">' + t.title + '</option>'; }).join('');
+  $('#sType').innerHTML = '<option value="">همه‌ی انواع</option>' + D.accTypes.map(function (t) { return '<option value="' + t.id + '">' + t.title + '</option>'; }).join('');
+  $$('[data-bank]').forEach(function (s) { s.innerHTML = '<option value="">انتخاب بانک…</option>' + D.accBanks.map(function (b) { return '<option>' + b + '</option>'; }).join(''); });
+  WH.fillInvoices(F.invoice);
+  var consumers = {}; D.accDocs.forEach(function (d) { if (d.consumer) consumers[d.consumer] = 1; });
+  D.defUsers.filter(function (u) { return u.active; }).slice(0, 8).forEach(function (u) { consumers[u.first + ' ' + u.last] = 1; });
+  $('#consumerList').innerHTML = Object.keys(consumers).map(function (c) { return '<option value="' + esc(c) + '">'; }).join('');
+
+  /* ------------------------------------------------ کمکی‌ها */
+  function n(v) { return +String(en(v || '')).replace(/[^\d]/g, '') || 0; }
+  function amountOf(d) { return Math.max(0, d.base * (d.qty || 1) - (d.discount || 0)); }
+  function pay() { var r = form.querySelector('input[name="pay"]:checked'); return r ? r.value : 'cash'; }
+  function petty() { var r = form.querySelector('input[name="petty"]:checked'); return r ? r.value : ''; }
+  function g(s) { var o = J.parse(s); return o ? J.toGregorian(o.jy, o.jm, o.jd) : null; }
+  function party(d) { return d.company || d.seller || d.person || d.consumer || '—'; }
+  function typeBadge(id) { var t = TYPES[id]; return t ? '<span class="badge ' + t.tone + ' text-nowrap">' + t.title + '</span>' : ''; }
+  function payCell(d) {
+    var p = PAY[d.pay], extra = '';
+    if (d.pay === 'cheque') extra = '<div class="fs-2xs text-muted mt-1">' + esc(d.bank || '') + ' · سررسید <span class="num">' + fa(d.chequeDate) + '</span></div>';
+    if (d.pay === 'transfer') extra = '<div class="fs-2xs text-muted mt-1">' + esc(d.person || '') + (d.bank ? ' · ' + esc(d.bank) : '') + '</div>';
+    return '<span class="d-inline-flex items-center gap-1 text-nowrap">' + CRM.icon(p.ic, 14) + ' ' + p.t + '</span>' + extra;
+  }
+  function pettyCell(d) { return d.petty === 'in' ? '<span class="badge badge-success">واریز</span>' : d.petty === 'out' ? '<span class="badge badge-warning">پرداخت</span>' : '<span class="text-soft">—</span>'; }
+
+  /* ------------------------------------------------ شاخص‌ها و تنخواه */
+  function kpis() {
+    var docs = D.accDocs, t = J.toJalali(new Date()), today = new Date(); today.setHours(0, 0, 0, 0);
+    var pin = 0, pout = 0;
+    docs.forEach(function (d) { if (d.petty === 'in') pin += amountOf(d); if (d.petty === 'out') pout += amountOf(d); });
+    var bal = pin - pout;
+    $('#kPetty').textContent = CRM.moneyShort(bal);
+    $('#kPettySub').textContent = 'شارژ ' + CRM.moneyShort(pin) + ' · مصرف ' + CRM.moneyShort(pout);
+    var month = docs.filter(function (d) { var o = J.parse(d.date); return o && o.jy === t.jy && o.jm === t.jm && d.petty !== 'in'; });
+    $('#kMonth').textContent = CRM.moneyShort(month.reduce(function (s, d) { return s + amountOf(d); }, 0));
+    $('#kMonthSub').textContent = fa(month.length) + ' سند در ' + ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'][t.jm - 1];
+    var ch = docs.filter(function (d) { return d.pay === 'cheque' && g(d.chequeDate) >= today; });
+    $('#kCheque').textContent = fa(ch.length) + ' فقره';
+    $('#kChequeSub').textContent = 'جمع ' + CRM.moneyShort(ch.reduce(function (s, d) { return s + amountOf(d); }, 0));
+    $('#kDocs').textContent = fa(docs.filter(function (d) { return d.period === 14; }).length);
+    $('#pettyVal').textContent = CRM.money(bal);
+    $('#pettyBar').style.width = Math.max(3, Math.round(bal / Math.max(1, pin) * 100)) + '%';
+    $('#pettyNote').innerHTML = 'از <b>' + CRM.money(pin) + '</b> شارژ تنخواه، <b>' + CRM.money(pout) + '</b> مصرف شده است (' + fa(Math.round(pout / Math.max(1, pin) * 100)) + '٪).';
+  }
+
+  /* ------------------------------------------------ فرم: نمایش شرطی و محاسبه */
+  function syncPay() {
+    var p = pay();
+    $$('[data-pay]').forEach(function (x) { x.classList.toggle('d-none', x.getAttribute('data-pay') !== p); });
+  }
+  function syncAgent() {
+    var on = F.agent.checked;
+    $('#aCompanyLbl').textContent = on ? 'نماینده' : 'شرکت';
+    F.company.placeholder = on ? 'نماینده را از فهرست نمایندگان انتخاب کنید' : 'از فهرست شرکت‌ها انتخاب کنید (اختیاری)';
+  }
+  function calc() {
+    var a = Math.max(0, n(F.base.value) * (n(F.qty.value) || 1) - n(F.discount.value));
+    F.amount.value = a ? CRM.num(a) : '';
+    return a;
+  }
+  function summary() {
+    var a = calc(), base = n(F.base.value), qty = n(F.qty.value) || 1, disc = n(F.discount.value), p = pay(), pt = petty(), t = F.type.value;
+    $('#sumType').innerHTML = t ? typeBadge(t) : '';
+    var who = F.company.value || F.seller.value || F.person.value || F.consumer.value;
+    var html = '<div class="text-center mb-4"><div class="fs-xs text-muted mb-1">مبلغ سند</div>' +
+      '<div class="num fw-700 text-strong" style="font-size:28px;line-height:1.3">' + CRM.num(a) + ' <small class="fs-sm text-muted fw-500">تومان</small></div>' +
+      (a ? '<div class="fs-2xs text-muted mt-1">' + esc(CRM.moneyShort(a)) + ' تومان</div>' : '') + '</div>' +
+      '<div class="panel mb-4" style="padding:12px 14px"><dl class="kv" style="grid-template-columns:1fr auto;gap:8px 12px;font-size:var(--fs-sm)">' +
+        '<dt>قیمت پایه × تعداد</dt><dd class="num" style="text-align:left">' + CRM.num(base) + ' × ' + fa(qty) + '</dd>' +
+        '<dt>تخفیف</dt><dd class="num ' + (disc ? 'text-danger' : '') + '" style="text-align:left">' + CRM.num(disc) + '</dd>' +
+        '<dt class="fw-700 text-strong">مبلغ نهایی</dt><dd class="num fw-700 text-strong" style="text-align:left">' + CRM.num(a) + '</dd>' +
+      '</dl></div>' +
+      '<dl class="kv" style="grid-template-columns:96px 1fr;font-size:var(--fs-sm)">' +
+        '<dt>شرح</dt><dd>' + (F.item.value ? esc(F.item.value) : '<span class="text-soft">—</span>') + '</dd>' +
+        '<dt>' + (F.agent.checked ? 'نماینده' : 'طرف حساب') + '</dt><dd>' + (who ? esc(who) : '<span class="text-soft">—</span>') + '</dd>' +
+        '<dt>پرداخت</dt><dd><span class="d-inline-flex items-center gap-1">' + CRM.icon(PAY[p].ic, 14) + ' ' + PAY[p].t + '</span>' +
+          (p === 'cheque' && (F.chequeNo.value || F.chequeDate.value) ? '<div class="fs-xs text-muted mt-1">شماره <span class="num">' + esc(F.chequeNo.value || '—') + '</span> · سررسید <span class="num">' + esc(F.chequeDate.value || '—') + '</span></div>' : '') +
+          (p === 'transfer' && F.account.value ? '<div class="fs-xs text-muted mt-1"><span class="ltr-cell num">' + esc(F.account.value) + '</span></div>' : '') + '</dd>' +
+        '<dt>تنخواه</dt><dd>' + (pt === 'in' ? '<span class="badge badge-success">واریز به تنخواه</span>' : pt === 'out' ? '<span class="badge badge-warning">پرداخت از تنخواه</span>' : '<span class="text-soft">بدون اثر</span>') + '</dd>' +
+        (F.invoice.value ? '<dt>فاکتور</dt><dd class="num">' + esc(F.invoice.value) + '</dd>' : '') +
+      '</dl>';
+    $('#summary').innerHTML = html;
+  }
+  form.addEventListener('input', summary);
+  form.addEventListener('change', function (e) {
+    if (e.target.name === 'pay') syncPay();
+    if (e.target === F.agent) { syncAgent(); if (F.agent.checked && !F.type.value) F.type.value = 'agent'; F.company.value = ''; }
+    if (e.target === F.type && F.type.value === 'agent' && !F.agent.checked) { F.agent.checked = true; syncAgent(); }
+    if (e.target === F.type && F.type.value === 'petty' && !petty()) form.querySelector('input[name="petty"][value="in"]').checked = true;
+    summary();
+  });
+  $('#pettyClear').addEventListener('click', function () { $$('input[name="petty"]', form).forEach(function (r) { r.checked = false; }); summary(); });
+  $('#aCompanyX').addEventListener('click', function () { F.company.value = ''; summary(); });
+
+  /* ------------------------------------------------ انتخاب شرکت / نماینده */
+  function partyRows(q) {
+    if (F.agent.checked) return D.repAgents.filter(function (a) { return !q || (a.name + a.city + a.buyer + a.province).indexOf(q) > -1; })
+      .map(function (a) { return { name: a.name, sub: a.kind + ' · ' + a.province + '، ' + a.city + (a.buyer && a.buyer !== '-' ? ' · ' + a.buyer : ''), badge: a.kind }; });
+    return D.customers.filter(function (c) { return c.company !== 'شخصی' && (!q || (c.company + c.name + c.city).indexOf(q) > -1); })
+      .map(function (c) { return { name: c.company, sub: c.name + ' · ' + c.city, badge: c.level }; });
+  }
+  function renderParty() {
+    var rows = partyRows($('#pmSearch').value.trim());
+    $('#pmList').innerHTML = rows.length ? rows.map(function (r) {
+      return '<button type="button" class="pick-item" data-pick="' + esc(r.name) + '">' + CRM.avatar(r.name, 34) +
+        '<span class="pi-main"><span class="d-block fw-600 text-strong">' + esc(r.name) + '</span><span class="pi-sub d-block">' + esc(r.sub) + '</span></span><span class="badge">' + esc(r.badge) + '</span></button>';
+    }).join('') : '<div class="empty" style="padding:30px"><div class="empty-ic" data-icon="search" data-icon-size="26"></div><div class="empty-desc">موردی پیدا نشد.</div></div>';
+    CRM.renderIcons($('#pmList'));
+  }
+  $('#aCompanyPick').addEventListener('click', function () {
+    $('#pmTitle').textContent = F.agent.checked ? 'انتخاب نماینده' : 'انتخاب شرکت';
+    $('#pmSub').textContent = F.agent.checked ? 'نمایندگان و عاملان فروش (' + fa(D.repAgents.length) + ')' : 'شرکت‌های ثبت‌شده در CRM';
+    $('#pmSearch').value = ''; renderParty(); CRM.modal.open('#partyModal');
+    setTimeout(function () { $('#pmSearch').focus(); }, 60);
+  });
+  F.company.addEventListener('click', function () { $('#aCompanyPick').click(); });
+  $('#pmSearch').addEventListener('input', CRM.debounce(renderParty, 120));
+  $('#pmList').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-pick]'); if (!b) return;
+    F.company.value = b.getAttribute('data-pick'); CRM.modal.close('#partyModal'); summary();
+  });
+
+  /* ------------------------------------------------ ثبت / بارگذاری */
+  function clear() {
+    form.reset(); editing = null;
+    F.period.value = '14'; F.date.value = J.format(J.toJalali(new Date())); F.qty.value = '۱';
+    $$('.is-invalid', form).forEach(function (x) { x.classList.remove('is-invalid'); });
+    $('#formState').textContent = 'سند جدید'; $('#formState').className = 'badge badge-outline'; $('#btnSaveLbl').textContent = 'ثبت';
+    syncPay(); syncAgent(); summary(); renderDocs();
+  }
+  function load(d) {
+    clear(); editing = d;
+    F.period.value = d.period; F.type.value = d.type; F.date.value = d.date; F.agent.checked = d.agent; syncAgent(); F.company.value = d.company;
+    F.item.value = d.item; F.consumer.value = d.consumer; F.invoice.value = d.invoice;
+    F.base.value = CRM.num(d.base); F.qty.value = fa(d.qty); F.discount.value = d.discount ? CRM.num(d.discount) : '';
+    F.seller.value = d.seller; F.sellerPhone.value = d.sellerPhone; F.sellerAddr.value = d.sellerAddr;
+    form.querySelector('input[name="pay"][value="' + d.pay + '"]').checked = true;
+    F.chequeDate.value = d.chequeDate; F.chequeNo.value = d.chequeNo; F.account.value = d.account; F.person.value = d.person;
+    F.bankC.value = d.pay === 'cheque' ? d.bank : ''; F.bankT.value = d.pay === 'transfer' ? d.bank : '';
+    if (d.petty) form.querySelector('input[name="petty"][value="' + d.petty + '"]').checked = true;
+    F.note.value = d.note;
+    $('#formState').textContent = 'ویرایش سند ' + fa(d.code); $('#formState').className = 'badge badge-warning'; $('#btnSaveLbl').textContent = 'ذخیره تغییرات';
+    syncPay(); summary(); renderDocs();
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var keep = e.submitter && e.submitter.getAttribute('data-keep') === '1';
+    var p = pay(), bad = [];
+    if (!F.type.value) bad.push(F.type);
+    if (!J.parse(F.date.value)) bad.push(F.date);
+    if (F.agent.checked && !F.company.value) bad.push(F.company);
+    if (!F.item.value.trim()) bad.push(F.item);
+    if (!n(F.base.value)) bad.push(F.base);
+    if (p === 'cheque') { if (!J.parse(F.chequeDate.value)) bad.push(F.chequeDate); if (!F.chequeNo.value.trim()) bad.push(F.chequeNo); }
+    if (p === 'transfer') { if (!F.account.value.trim()) bad.push(F.account); if (!F.person.value.trim()) bad.push(F.person); }
+    var a = calc();
+    if (n(F.base.value) && !a) bad.push(F.discount);
+    $$('.is-invalid', form).forEach(function (x) { x.classList.remove('is-invalid'); });
+    bad.forEach(function (x) { x.classList.add('is-invalid'); });
+    if (bad.length) {
+      bad[0].focus();
+      CRM.toast({ type: 'danger', title: 'سند ثبت نشد', msg: bad.indexOf(F.discount) > -1 ? 'تخفیف نمی‌تواند از مبلغ کل بیشتر باشد.' : 'فیلدهای ستاره‌دار را تکمیل کنید' + (p !== 'cash' ? ' (اطلاعات ' + PAY[p].t + ' الزامی است).' : '.') });
+      return;
+    }
+    var doc = editing || { code: Math.max.apply(null, D.accDocs.map(function (d) { return d.code; })) + 1 };
+    Object.assign(doc, {
+      period: +F.period.value, type: F.type.value, date: J.format(J.parse(F.date.value)), agent: F.agent.checked, company: F.company.value,
+      item: F.item.value.trim(), consumer: F.consumer.value.trim(), invoice: F.invoice.value, base: n(F.base.value), qty: n(F.qty.value) || 1, discount: n(F.discount.value),
+      seller: F.seller.value.trim(), sellerPhone: F.sellerPhone.value.trim(), sellerAddr: F.sellerAddr.value.trim(), pay: p,
+      account: p === 'transfer' ? F.account.value.trim() : '', person: p === 'transfer' ? F.person.value.trim() : '',
+      chequeDate: p === 'cheque' ? F.chequeDate.value : '', chequeNo: p === 'cheque' ? F.chequeNo.value.trim() : '',
+      bank: p === 'cheque' ? F.bankC.value : p === 'transfer' ? F.bankT.value : '', petty: petty(), note: F.note.value.trim()
+    });
+    var wasEdit = !!editing;
+    if (!wasEdit) D.accDocs.unshift(doc);
+    CRM.toast({ type: 'success', title: wasEdit ? 'سند ' + fa(doc.code) + ' ویرایش شد' : 'سند ' + fa(doc.code) + ' ثبت شد', msg: TYPES[doc.type].title + ' — ' + CRM.money(amountOf(doc)) + (keep ? ' · اطلاعات فرم نگه داشته شد' : '') });
+    kpis();
+    if (keep) {
+      editing = null; $('#formState').textContent = 'سند جدید (از روی ' + fa(doc.code) + ')'; $('#formState').className = 'badge badge-info'; $('#btnSaveLbl').textContent = 'ثبت';
+      F.chequeNo.value = ''; renderDocs(doc.code); summary();
+    } else { clear(); renderDocs(doc.code); }
+  });
+  $('#btnCancel').addEventListener('click', clear);
+
+  /* ------------------------------------------------ جدول آخرین اسناد */
+  var chip = '';
+  function chips() {
+    var cnt = {}; D.accDocs.forEach(function (d) { cnt[d.type] = (cnt[d.type] || 0) + 1; });
+    $('#typeChips').innerHTML = '<button type="button" class="chip' + (!chip ? ' is-active' : '') + '" data-chip="">همه <span class="num">' + fa(D.accDocs.length) + '</span></button>' +
+      D.accTypes.map(function (t) { return '<button type="button" class="chip' + (chip === t.id ? ' is-active' : '') + '" data-chip="' + t.id + '">' + t.title + ' <span class="num">' + fa(cnt[t.id] || 0) + '</span></button>'; }).join('');
+  }
+  function renderDocs(flash) {
+    chips();
+    var list = D.accDocs.filter(function (d) { return !chip || d.type === chip; }).sort(function (a, b) { return b.code - a.code; });
+    $('#docBody').innerHTML = list.map(function (d) {
+      return '<tr class="' + (editing === d ? 'is-selected' : '') + (flash === d.code ? ' row-flash' : '') + '">' +
+        '<td><span class="code-chip">' + fa(d.code) + '</span></td><td>' + typeBadge(d.type) + '</td>' +
+        '<td class="num text-nowrap">' + fa(d.date) + '</td>' +
+        '<td style="max-width:260px"><div class="text-truncate fw-500 text-strong">' + esc(fa(d.item)) + '</div>' + (d.invoice ? '<div class="fs-2xs text-muted">فاکتور <span class="num">' + fa(d.invoice) + '</span></div>' : '') + '</td>' +
+        '<td style="max-width:200px"><div class="text-truncate">' + (d.agent ? '<span class="badge badge-violet" style="margin-inline-end:4px">نماینده</span>' : '') + esc(party(d)) + '</div></td>' +
+        '<td>' + payCell(d) + '</td>' +
+        '<td class="num fw-600 text-strong text-nowrap">' + CRM.num(amountOf(d)) + '</td>' +
+        '<td>' + pettyCell(d) + '</td>' +
+        '<td class="table-row-actions"><div class="table-actions">' +
+          '<button type="button" class="tb-icon" data-tip="ویرایش در فرم" data-edit="' + d.code + '">' + CRM.icon('pencil', 15) + '</button>' +
+          '<button type="button" class="tb-icon" data-tip="حذف" data-del="' + d.code + '">' + CRM.icon('trash', 15) + '</button></div></td></tr>';
+    }).join('') || '<tr><td colspan="9"><div class="empty" style="padding:30px"><div class="empty-desc">سندی از این نوع ثبت نشده است.</div></div></td></tr>';
+    $('#docFoot').textContent = fa(list.length) + ' سند';
+    $('#docSum').textContent = 'جمع مبالغ: ' + CRM.money(list.reduce(function (s, d) { return s + amountOf(d); }, 0));
+  }
+  function find(code) { return D.accDocs.filter(function (d) { return d.code === +code; })[0]; }
+  $('#typeChips').addEventListener('click', function (e) { var b = e.target.closest('[data-chip]'); if (!b) return; chip = b.getAttribute('data-chip'); renderDocs(); });
+  $('#docBody').addEventListener('click', function (e) {
+    var b;
+    if ((b = e.target.closest('[data-edit]'))) load(find(b.getAttribute('data-edit')));
+    if ((b = e.target.closest('[data-del]'))) {
+      var d = find(b.getAttribute('data-del'));
+      CRM.modal.confirm({ title: 'حذف سند ' + fa(d.code) + '؟', msg: '«' + d.item + '» به مبلغ ' + CRM.money(amountOf(d)) + ' حذف می‌شود.', okText: 'حذف سند', danger: true, tone: 'danger', icon: 'trash' }).then(function (ok) {
+        if (!ok) return; D.accDocs.splice(D.accDocs.indexOf(d), 1); if (editing === d) clear(); renderDocs(); kpis();
+        CRM.toast({ type: 'success', title: 'سند حذف شد' });
+      });
+    }
+  });
+  $('#btnExport').addEventListener('click', function () { WH.exportToast('اسناد-حسابداری'); });
+
+  /* ------------------------------------------------ مودال جستجو */
+  function searchRows() {
+    var per = $('#sPeriod').value, tp = $('#sType').value, py = $('#sPay').value, pt = $('#sPetty').value, q = $('#sText').value.trim(), a = g($('#sFrom').value), b = g($('#sTo').value);
+    return D.accDocs.filter(function (d) {
+      if (per && d.period !== +per) return false;
+      if (tp && d.type !== tp) return false;
+      if (py && d.pay !== py) return false;
+      if (pt && d.petty !== pt) return false;
+      var x = g(d.date); if (a && x < a) return false; if (b && x > b) return false;
+      return !q || [d.item, d.seller, d.company, d.consumer, d.person, d.note, fa(d.code)].join(' ').indexOf(q) > -1;
+    }).sort(function (x, y) { return y.code - x.code; });
+  }
+  function renderSearch() {
+    var rows = searchRows();
+    $('#sBody').innerHTML = rows.length ? rows.map(function (d) {
+      return '<tr data-load="' + d.code + '" style="cursor:pointer"><td><span class="code-chip">' + fa(d.code) + '</span></td><td>' + typeBadge(d.type) + '</td><td class="num text-nowrap">' + fa(d.date) + '</td>' +
+        '<td style="max-width:240px"><div class="text-truncate">' + esc(fa(d.item)) + '</div></td><td style="max-width:180px"><div class="text-truncate">' + esc(party(d)) + '</div></td>' +
+        '<td class="text-nowrap">' + PAY[d.pay].t + '</td><td class="num fw-600 text-nowrap">' + CRM.num(amountOf(d)) + '</td></tr>';
+    }).join('') : '<tr><td colspan="7"><div class="empty" style="padding:30px"><div class="empty-ic" data-icon="search" data-icon-size="26"></div><div class="empty-desc">سندی با این فیلترها پیدا نشد.</div></div></td></tr>';
+    CRM.renderIcons($('#sBody'));
+    $('#sFoot').textContent = fa(rows.length) + ' سند · جمع ' + CRM.money(rows.reduce(function (s, d) { return s + amountOf(d); }, 0));
+  }
+  ['#sPeriod', '#sType', '#sPay', '#sPetty', '#sFrom', '#sTo'].forEach(function (s) { $(s).addEventListener('change', renderSearch); $(s).addEventListener('input', renderSearch); });
+  $('#sText').addEventListener('input', CRM.debounce(renderSearch, 120));
+  $('#sReset').addEventListener('click', function () { ['#sPeriod', '#sType', '#sPay', '#sPetty', '#sFrom', '#sTo', '#sText'].forEach(function (s) { $(s).value = ''; }); renderSearch(); });
+  $('#btnSearch').addEventListener('click', function () { renderSearch(); CRM.modal.open('#searchModal'); });
+  $('#sBody').addEventListener('click', function (e) {
+    var r = e.target.closest('[data-load]'); if (!r) return;
+    CRM.modal.close('#searchModal'); load(find(r.getAttribute('data-load')));
+  });
+
+  syncPay(); syncAgent(); summary(); renderDocs(); kpis();
+})();
+</script>
+</body>
+</html>
