@@ -1677,3 +1677,209 @@ body.no-float .win-hint { display: none; }
 .sup-confirm .grid-4 { align-items: end; }
 .sup-confirm.is-off { opacity: .55; pointer-events: none; }
 .sup-file-panel { min-height: 260px; }
+
+/* ==========================================================================
+ * 26) ماژول فروش — فیلترها، جدول‌های عملیاتی، فاکتور و پرونده مشتری
+ *     (بازطراحی صفحه‌های بخش «فروش» برنامه قبلی با زبان بصری همین قالب)
+ * ========================================================================== */
+
+/* --- کارت فیلتر: شبکه‌ی خودچین فیلدها + نوار دکمه‌ها --- */
+.filter-grid {
+  display: grid; gap: 14px 16px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  align-items: end;
+}
+.filter-grid .form-group { margin: 0; min-width: 0; }
+.filter-grid .span-2 { grid-column: span 2; }
+.filter-grid .form-label { font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: 6px; }
+.filter-actions {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--border);
+}
+.filter-actions .end { margin-inline-start: auto; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+@media (max-width: 720px) { .filter-grid .span-2 { grid-column: auto; } }
+
+/* فیلدی که با «انتخاب فیلتر» اضافه شده است */
+[data-fkey] { animation: slide-up var(--t) both; }
+.fpick-menu { min-width: 230px; max-height: 320px; overflow: auto; }
+.fpick-menu .check { display: flex; width: 100%; padding: 7px 9px; border-radius: var(--radius-xs); font-size: var(--fs-sm); }
+.fpick-menu .check:hover { background: var(--surface-hover); }
+.fpick-count:empty { display: none; }
+
+/* فیلد تاریخ شمسی با آیکون تقویم */
+.date-field { position: relative; display: flex; align-items: center; }
+.date-field .input { padding-inline-start: 38px; direction: ltr; text-align: right; }
+.date-field > .icon, .date-field > [data-icon] {
+  position: absolute; inset-inline-start: 11px; color: var(--text-soft); pointer-events: none; display: inline-flex;
+}
+
+/* انتخابگر مشتری: فیلد فقط‌خواندنی + دکمه‌ی «…» */
+.picker { display: flex; align-items: stretch; }
+.picker .input { border-start-end-radius: 0; border-end-end-radius: 0; cursor: pointer; }
+.picker .btn { border-start-start-radius: 0; border-end-start-radius: 0; border-inline-start: 0; height: auto; }
+
+/* ورودی‌های فقط‌خواندنی (مقادیر پرشده از پرونده مشتری) */
+.input[readonly], .textarea[readonly] { background: var(--surface-2); color: var(--text-muted); }
+.input[readonly]:hover, .textarea[readonly]:hover { background: var(--surface-2); border-color: var(--border); }
+.picker .input[readonly] { color: var(--text); }
+
+/* پیشوند نام (جناب آقای / سرکار خانم) داخل فیلد */
+.prefix-field { position: relative; display: flex; align-items: center; }
+.prefix-field .prefix {
+  position: absolute; inset-inline-start: 6px; top: 50%; transform: translateY(-50%);
+  font-size: var(--fs-2xs); font-weight: 600; padding: 3px 8px; border-radius: var(--radius-full);
+  background: var(--brand-soft); color: var(--brand-ink); pointer-events: none;
+}
+.prefix-field .input { padding-inline-start: 92px; }
+
+/* --- نوار جمع‌ها (تسویه فاکتور، گزارش‌ها) --- */
+.sum-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+.sum-tile {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 13px 15px;
+  display: flex; flex-direction: column; gap: 4px; position: relative; overflow: hidden;
+}
+.sum-tile::before { content: ""; position: absolute; inset-inline-start: 0; top: 12px; bottom: 12px; width: 3px; border-radius: 3px; background: var(--brand); }
+.sum-tile .lbl { font-size: var(--fs-xs); color: var(--text-muted); }
+.sum-tile .val { font-size: var(--fs-lg); font-weight: 700; color: var(--text-strong); font-variant-numeric: tabular-nums; }
+.sum-tile .val small { font-size: var(--fs-2xs); color: var(--text-soft); font-weight: 500; }
+.sum-tile.success::before { background: var(--success-500); }
+.sum-tile.warning::before { background: var(--warning-500); }
+.sum-tile.danger::before { background: var(--accent-500); }
+.sum-tile.violet::before { background: var(--violet-500); }
+.sum-tile.sky::before { background: var(--sky-500); }
+
+/* --- ردیف‌های علامت‌دار جدول (جایگزین ردیف‌های زرد برنامه قبلی) --- */
+.table tbody tr.row-flag { background: var(--warning-50); }
+.table tbody tr.row-flag:hover { background: var(--warning-100); }
+.table tbody tr.row-flag > td:first-child { box-shadow: inset -3px 0 0 var(--warning-500); }
+html[dir="ltr"] .table tbody tr.row-flag > td:first-child { box-shadow: inset 3px 0 0 var(--warning-500); }
+.table tbody tr.row-danger > td:first-child { box-shadow: inset -3px 0 0 var(--accent-500); }
+.table tbody tr.row-muted td { color: var(--text-soft); }
+.table tbody tr.row-muted .cell-main { text-decoration: line-through; color: var(--text-soft); }
+.legend-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: var(--fs-xs); color: var(--text-muted);
+}
+.legend-chip i { width: 14px; height: 14px; border-radius: 4px; background: var(--warning-50); border: 1px solid var(--warning-500); display: inline-block; }
+.legend-chip i.danger { background: var(--danger-50); border-color: var(--accent-500); }
+
+/* ردیف جزئیات بازشونده زیر یک ردیف جدول */
+.table tbody tr.row-detail > td { background: var(--surface-2); padding: 12px 16px 14px; }
+.table tbody tr.row-detail:hover { background: transparent; }
+.detail-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.dchip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: var(--radius-full);
+  background: var(--surface); border: 1px solid var(--border);
+  font-size: var(--fs-xs); color: var(--text);
+}
+.dchip b { color: var(--text-soft); font-weight: 500; }
+.row-toggle .icon { transition: transform var(--t); }
+.row-toggle.is-open .icon { transform: rotate(180deg); }
+
+/* سلول‌های قابل ویرایش جدول (اقلام فاکتور) */
+.cell-input {
+  width: 100%; min-width: 70px; height: 32px; padding: 4px 9px;
+  font-family: var(--font); font-size: var(--fs-sm);
+  border: 1px solid var(--border); border-radius: var(--radius-xs);
+  background: var(--brand-50); color: var(--text-strong);
+  text-align: left; direction: ltr; font-variant-numeric: tabular-nums;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.cell-input:focus { outline: none; border-color: var(--brand); background: var(--surface); box-shadow: 0 0 0 3px var(--brand-ring); }
+.cell-input.wide { text-align: right; direction: rtl; }
+.table .cell-strong { font-weight: 700; color: var(--text-strong); }
+.table-wide th, .table-wide td { white-space: nowrap; }
+.table tfoot td {
+  padding: 12px 14px; border-top: 1px solid var(--border);
+  background: var(--surface-2); font-weight: 700; color: var(--text-strong);
+}
+.icon-btn-sm { width: 30px !important; height: 30px !important; }
+
+/* --- ابزارهای پرونده (مشخصات مشتری) --- */
+.tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.tool-btn {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  padding: 13px; border-radius: var(--radius);
+  background: var(--surface-2); border: 1px solid var(--border-muted);
+  text-align: right; transition: all var(--t-fast); position: relative;
+}
+.tool-btn:hover { background: var(--surface); border-color: var(--brand-200); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+.tool-btn .tb-ic {
+  width: 36px; height: 36px; border-radius: var(--radius-full);
+  display: grid; place-items: center; background: var(--brand-soft); color: var(--brand);
+}
+.tool-btn .tb-ic.coral { background: var(--accent-soft); color: var(--accent); }
+.tool-btn .tb-ic.violet { background: rgba(139, 92, 246, 0.13); color: var(--violet-500); }
+.tool-btn .tb-ic.amber { background: var(--warning-soft); color: var(--warning); }
+.tool-btn .tb-ic.success { background: var(--success-soft); color: var(--success); }
+.tool-btn .tb-ic.ink { background: var(--ink); color: var(--on-ink); }
+.tool-btn .tb-lbl { font-size: var(--fs-sm); font-weight: 600; color: var(--text-strong); }
+.tool-btn .tb-sub { font-size: var(--fs-2xs); color: var(--text-soft); margin-top: -4px; }
+.tool-btn .tag-counter { position: absolute; top: 12px; inset-inline-end: 12px; }
+
+/* سرتیتر بخش داخل یک کارت فرم */
+.form-section-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--fs-sm); font-weight: 700; color: var(--text-strong);
+  margin: 4px 0 14px; padding-bottom: 10px; border-bottom: 1px dashed var(--border);
+}
+.form-section-title .icon { color: var(--brand); }
+.form-section-title .badge { margin-inline-start: auto; }
+
+/* گروه گزینه‌های رادیویی/چک‌باکس افقی */
+.option-row { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; min-height: 40px; }
+
+/* فهرست انتخابی ستونی (افراد مرتبط، نتایج جستجو) */
+.sales-pick-list { border: 1px solid var(--border); border-radius: var(--radius); overflow: auto; background: var(--surface); }
+.sales-pick-list .list-item { cursor: pointer; padding: 10px 12px; }
+.sales-pick-list .code { font-size: var(--fs-2xs); color: var(--text-soft); font-variant-numeric: tabular-nums; min-width: 34px; }
+
+/* جمع فاکتور */
+.total-box {
+  background: var(--ink); color: var(--on-ink);
+  border-radius: var(--radius); padding: 14px 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  box-shadow: var(--shadow-ink);
+}
+.total-box .lbl { font-size: var(--fs-sm); color: var(--on-ink-muted); }
+.total-box .val { font-size: var(--fs-xl); font-weight: 800; font-variant-numeric: tabular-nums; }
+.total-box .val small { font-size: var(--fs-xs); font-weight: 500; color: var(--on-ink-muted); }
+
+/* نوار ابزار نمایشگر گزارش (جایگزین Report Viewer قدیمی) */
+.report-toolbar {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  padding: 10px 14px; border-bottom: 1px solid var(--border-muted); background: var(--surface-2);
+}
+.report-toolbar .sep { width: 1px; height: 22px; background: var(--border); margin-inline: 4px; }
+.report-sheet { padding: 22px; background: var(--surface); }
+.report-title { text-align: center; font-weight: 800; font-size: var(--fs-lg); color: var(--text-strong); margin-bottom: 14px; }
+.report-meta {
+  display: flex; flex-wrap: wrap; gap: 8px 22px; justify-content: space-between;
+  font-size: var(--fs-sm); padding: 10px 14px; margin-bottom: 14px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface-2);
+}
+.report-meta b { color: var(--text-muted); font-weight: 500; }
+.report-group-head td {
+  background: var(--brand-50) !important; color: var(--brand-ink) !important;
+  font-weight: 700; font-size: var(--fs-sm);
+}
+
+/* پیش‌نمایش پیامک */
+.sms-phone {
+  max-width: 300px; margin: 0 auto; border-radius: 34px; padding: 14px;
+  background: var(--ink); box-shadow: var(--shadow-lg);
+}
+.sms-screen { background: var(--bg-soft); border-radius: 24px; min-height: 340px; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px; }
+.sms-bubble {
+  align-self: flex-start; max-width: 85%;
+  background: var(--brand-btn); color: #fff; padding: 9px 12px;
+  border-radius: 16px 16px 16px 4px; font-size: var(--fs-sm); line-height: 1.9; white-space: pre-wrap; word-break: break-word;
+}
+.sms-bubble.empty { background: var(--surface); color: var(--text-soft); border: 1px dashed var(--border-strong); }
+.sms-meter { display: flex; gap: 14px; font-size: var(--fs-xs); color: var(--text-muted); }
+.sms-meter b { color: var(--text-strong); font-variant-numeric: tabular-nums; }
+
+/* مودال تمام‌عرض برای پرونده و فرم فاکتور */
+.modal-2xl { max-width: 1220px; }

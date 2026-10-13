@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اطلاعات مشتری | مدرن‌CRM</title>
+<meta name="description" content="جستجوی پیشرفته شرکت‌ها و افراد، انتقال اطلاعات و تغییر گروهی مسئول فایل">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="customer-search">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="customers.html">مشتریان</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">اطلاعات مشتری</span>
+            </div>
+            <h1 class="page-title">اطلاعات مشتری</h1>
+            <p class="page-desc">جستجوی پیشرفته در شرکت‌ها و افراد، با امکان انتقال اطلاعات، تغییر مسئول فایل و ارسال پیامک</p>
+          </div>
+          <div class="head-actions">
+            <div class="segmented" id="viewSwitch">
+              <button type="button" class="seg is-active" data-view="company"><span data-icon="building" data-icon-size="15"></span> شرکت‌ها</button>
+              <button type="button" class="seg" data-view="people"><span data-icon="users" data-icon-size="15"></span> افراد</button>
+            </div>
+            <a class="btn btn-primary" href="customer-details.html"><span data-icon="plus" data-icon-size="16"></span> مشتری جدید</a>
+          </div>
+        </div>
+
+        <!-- ========================== فیلترها ========================== -->
+        <div class="card mb-5" data-filter-root data-win-nobtn>
+          <div class="card-head tight">
+            <div class="card-title" data-icon="filter" data-icon-size="17"> <span id="filterTitle">جستجوی شرکت‌ها</span></div>
+            <div class="card-actions" data-only="people">
+              <label class="check"><input type="checkbox" id="fDue"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">دارای سررسید</span></label>
+              <label class="check ms-3"><input type="checkbox" id="fInvite"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">دعوتنامه</span></label>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="filter-grid">
+              <div class="form-group"><label class="form-label">نام شرکت</label><input class="input" id="fName" placeholder="بخشی از نام…"></div>
+              <div class="form-group" data-only="people"><label class="form-label">نام شخص</label><input class="input" id="fPerson" placeholder="نام یا نام خانوادگی…"></div>
+              <div class="form-group"><label class="form-label">مسئول فایل</label><select class="select" id="fOwner"></select></div>
+              <div class="form-group"><label class="form-label">نوع همکاری</label><select class="select" id="fCoop"></select></div>
+              <div class="form-group" data-only="company"><label class="form-label">نوع فاکتور</label><select class="select" id="fKind"></select></div>
+              <div class="form-group d-none" data-fkey="geo"><label class="form-label">استان</label><select class="select" id="fProvince"></select></div>
+              <div class="form-group d-none" data-fkey="geo"><label class="form-label">شهر</label><input class="input" id="fCity"></div>
+              <div class="form-group d-none" data-fkey="source"><label class="form-label">نحوه آشنایی</label><select class="select" id="fSource"></select></div>
+              <div class="form-group d-none" data-fkey="ref"><label class="form-label">شرکت مرجع</label><select class="select" id="fRef"></select></div>
+              <div class="form-group d-none" data-fkey="flag"><label class="form-label">وضعیت حساب</label><select class="select" id="fFlag"></select></div>
+              <div class="form-group d-none" data-fkey="contact"><label class="form-label">تلفن / موبایل</label><input class="input ltr num" id="fPhone"></div>
+            </div>
+            <div class="filter-actions">
+              <div id="fpick"></div>
+              <div class="end">
+                <button type="button" class="btn" id="btnReset"><span data-icon="x" data-icon-size="16"></span> پاک کردن</button>
+                <button type="button" class="btn btn-primary" id="btnSearch"><span data-icon="search" data-icon-size="16"></span> جستجو</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== جدول ========================== -->
+        <div class="card" data-s-root data-win="cs-table" data-win-title="نتایج اطلاعات مشتری" data-win-icon="customers" data-win-size="1180x680">
+          <div class="card-head flex-wrap" style="gap:10px">
+            <div class="card-title" data-icon="table" data-icon-size="18"> <span id="tableTitle">شرکت‌ها</span> <span class="badge badge-gray num" id="resultCount">۰</span></div>
+            <div class="card-actions flex-wrap" style="gap:8px">
+              <div class="input-wrap" style="width:210px">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" placeholder="جستجو در نتایج…" id="quick">
+              </div>
+              <button class="btn btn-sm" data-excel="اطلاعات-مشتری"><span data-icon="download" data-icon-size="14"></span> Excel</button>
+              <button class="btn btn-sm" data-only="people" data-s-need id="btnSms"><span data-icon="smartphone" data-icon-size="14"></span> ارسال پیامک</button>
+            </div>
+          </div>
+          <div class="alert alert-info d-none" data-s-bulk style="border-radius:0;border-inline:0">
+            <span data-icon="check-check" data-icon-size="18"></span>
+            <div class="alert-title"><span data-s-count>۰</span> ردیف انتخاب شده است</div>
+            <div class="d-flex gap-2 ms-auto flex-wrap">
+              <button class="btn btn-sm btn-soft" data-modal-open="#mdlMove"><span data-icon="arrow-left-right" data-icon-size="14"></span> انتقال اطلاعات به…</button>
+              <button class="btn btn-sm btn-soft" data-modal-open="#mdlOwner"><span data-icon="user-check" data-icon-size="14"></span> تغییر مسئول فایل</button>
+            </div>
+          </div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table table-compact table-wide" id="tbl">
+                <thead id="thead"></thead>
+                <tbody id="tbody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-foot">
+            <span><span data-icon="info" data-icon-size="14"></span> برای دیدن جزئیات روی فلش هر ردیف کلیک کنید.</span>
+            <div class="pagination ms-auto"><button disabled data-icon="chevron-right" data-icon-size="15"></button><button class="is-active">۱</button><button data-icon="chevron-left" data-icon-size="15"></button></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===================== انتقال اطلاعات ===================== -->
+<div class="overlay" id="mdlMove" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">انتقال اطلاعات</div><div class="modal-sub">ردیف‌های انتخاب‌شده به بخش دیگری منتقل می‌شوند</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlMove" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <form data-demo-form="اطلاعات انتخاب‌شده با موفقیت منتقل شد." data-close-modal="#mdlMove">
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">انتقال به <span class="req">*</span></label>
+          <select class="select" required>
+            <option value="">انتخاب کنید…</option>
+            <option>فهرست پیگیری فروش</option><option>کمپین بازاریابی پاییز ۱۴۰۵</option><option>فهرست پیامک گروهی</option><option>بایگانی (غیرفعال)</option>
+          </select></div>
+        <div class="form-group"><label class="form-label">کارشناس پیگیری</label><select class="select" id="mvOwner"></select></div>
+        <label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">افراد مرتبط هر شرکت هم منتقل شوند</span></label>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary"><span data-icon="arrow-left-right" data-icon-size="16"></span> انتقال</button>
+        <button type="button" class="btn ms-auto" data-modal-close="#mdlMove">انصراف</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== تغییر مسئول فایل ===================== -->
+<div class="overlay" id="mdlOwner" style="display:none">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><div class="modal-title">تغییر مسئول فایل</div><div class="modal-sub">مسئول فایل ردیف‌های انتخاب‌شده تغییر می‌کند</div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlOwner" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">مسئول فایل جدید</label><select class="select" id="newOwner"></select></div>
+      <div class="form-group" style="margin-bottom:0"><label class="form-label">توضیح</label><textarea class="textarea" rows="2" placeholder="علت تغییر مسئول…"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-primary" id="btnOwner"><span data-icon="user-check" data-icon-size="16"></span> اعمال تغییر</button>
+      <button type="button" class="btn ms-auto" data-modal-close="#mdlOwner">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/sales.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, S = window.SALES, D = S.data, d = document;
+  var $ = CRM.$, $$ = CRM.$$, esc = CRM.esc, fa = CRM.fa;
+  var view = new URLSearchParams(location.search).get('view') === 'people' ? 'people' : 'company';
+  var FLAG_TONE = { 'خوش‌حساب': 'badge-success', 'بدحساب': 'badge-danger', 'بداخلاق': 'badge-warning', 'بدون گارانتی': 'badge-gray', 'بدون پشتیبانی': 'badge-gray' };
+
+  $('#fpick').innerHTML = S.fpickHTML([['geo', 'استان و شهر'], ['source', 'نحوه آشنایی'], ['ref', 'شرکت مرجع'], ['flag', 'وضعیت حساب'], ['contact', 'تلفن / موبایل']]);
+  $('#fOwner').innerHTML = S.options(D.owners, '', 'همه');
+  $('#fCoop').innerHTML = S.options(D.coopTypes, '', 'همه');
+  $('#fKind').innerHTML = S.options(D.invoiceKinds, '', 'همه');
+  $('#fProvince').innerHTML = S.options(D.provinces, '', 'همه');
+  $('#fSource').innerHTML = S.options(D.sources, '', 'همه');
+  $('#fRef').innerHTML = S.options(D.companies.map(function (c) { return c.name; }), '', 'همه');
+  $('#fFlag').innerHTML = S.options(Object.keys(FLAG_TONE), '', 'همه');
+  $('#mvOwner').innerHTML = S.options(D.owners);
+  $('#newOwner').innerHTML = S.options(D.owners);
+
+  var chk = '<th style="width:40px"><label class="check"><input type="checkbox" data-s-all><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>';
+  var HEAD = {
+    company: '<tr>' + chk + '<th style="width:36px"></th><th>کد</th><th>نام شرکت</th><th>مسئول فایل</th><th>نوع همکاری</th><th>تلفن</th><th>استان / شهر</th><th>نحوه آشنایی</th><th>وضعیت</th><th class="table-row-actions"></th></tr>',
+    people: '<tr>' + chk + '<th style="width:36px"></th><th>کد</th><th>نام</th><th>شرکت</th><th>سمت</th><th>موبایل</th><th>ایمیل</th><th class="text-center">سررسید</th><th class="text-center">دعوتنامه</th><th class="table-row-actions"></th></tr>'
+  };
+  var toggle = '<td><button class="tb-icon icon-btn-sm row-toggle" data-row-toggle data-tip="جزئیات" data-icon="chevron-down" data-icon-size="16"></button></td>';
+  function dchip(k, v) { return '<span class="dchip"><b>' + k + ':</b> ' + v + '</span>'; }
+  function yes(b) { return b ? '<span class="text-success" data-icon="check-circle" data-icon-size="16"></span>' : '<span class="text-soft">—</span>'; }
+
+  function companyRow(c) {
+    var n = D.contacts.filter(function (p) { return p.companyCode === c.code; }).length;
+    return '<tr data-code="' + c.code + '"><td>' + S.checkCell('data-s-row') + '</td>' + toggle +
+      '<td class="num text-muted">' + fa(c.code) + '</td>' +
+      '<td><a class="cell-main" href="customer-details.html?code=' + c.code + '">' + esc(c.name) + '</a><div class="fs-2xs text-soft">' + fa(n) + ' نفر مرتبط</div></td>' +
+      '<td class="fs-sm" data-owner>' + esc(c.owner) + '</td><td><span class="badge badge-gray">' + esc(c.coop) + '</span></td>' +
+      '<td class="num ltr fs-sm">' + esc(c.phone1) + '</td><td class="fs-sm">' + esc(c.province) + ' / ' + esc(c.city) + '</td><td class="fs-sm">' + esc(c.source) + '</td>' +
+      '<td>' + (c.flags.length ? c.flags.map(function (f) { return '<span class="badge ' + FLAG_TONE[f] + '">' + f + '</span>'; }).join(' ') : '<span class="text-soft">—</span>') + '</td>' +
+      '<td><span class="d-inline-flex gap-1"><a class="tb-icon icon-btn-sm" href="customer-details.html?code=' + c.code + '" data-tip="مشخصات مشتری" data-icon="pencil" data-icon-size="15"></a>' +
+      '<a class="tb-icon icon-btn-sm" href="invoice-new.html" data-tip="صدور فاکتور" data-icon="invoice" data-icon-size="15"></a></span></td></tr>' +
+      '<tr class="row-detail d-none"><td colspan="11"><div class="detail-chips">' +
+        dchip('آدرس', esc(c.address)) + dchip('تلفن ۲', '<span class="num ltr">' + esc(c.phone2) + '</span>') + dchip('فکس', '<span class="num ltr">' + esc(c.fax) + '</span>') +
+        dchip('ایمیل', '<span class="ltr">' + esc(c.email) + '</span>') + dchip('مرجع', esc(c.ref)) + dchip('نوع فاکتور', esc(c.kind)) +
+        dchip('کد اقتصادی', '<span class="num">' + esc(c.economic) + '</span>') + dchip('کد پستی', '<span class="num">' + esc(c.postal) + '</span>') +
+      '</div></td></tr>';
+  }
+  function personRow(p) {
+    var c = S.company(p.companyCode) || {};
+    return '<tr data-code="' + p.code + '"><td>' + S.checkCell('data-s-row') + '</td>' + toggle +
+      '<td class="num text-muted">' + fa(p.code) + '</td>' +
+      '<td><span class="cell-main">' + (p.gender === 'f' ? 'سرکار خانم ' : 'جناب آقای ') + esc(p.name) + '</span><div class="fs-2xs text-soft">' + esc(p.unit) + '</div></td>' +
+      '<td><a href="customer-details.html?code=' + p.companyCode + '" class="fs-sm">' + esc(p.company) + '</a></td><td class="fs-sm">' + esc(p.role) + '</td>' +
+      '<td class="num ltr fs-sm">' + esc(p.mobile) + '</td><td class="ltr fs-xs">' + esc(p.email) + '</td>' +
+      '<td class="text-center">' + (p.due ? '<span class="badge badge-warning num">' + fa(p.dueCount) + ' بار</span>' : '<span class="text-soft">—</span>') + '</td>' +
+      '<td class="text-center">' + yes(p.invite) + '</td>' +
+      '<td><span class="d-inline-flex gap-1"><a class="tb-icon icon-btn-sm" href="sms.html?to=' + encodeURIComponent(p.mobile) + '" data-tip="ارسال پیامک" data-icon="smartphone" data-icon-size="15"></a>' +
+      '<a class="tb-icon icon-btn-sm" href="mailto:' + esc(p.email) + '" data-tip="ارسال ایمیل" data-icon="mail" data-icon-size="15"></a></span></td></tr>' +
+      '<tr class="row-detail d-none"><td colspan="11"><div class="detail-chips">' +
+        dchip('تلفن ۱', '<span class="num ltr">' + esc(p.phone1) + '</span>') + dchip('تلفن ۲', '<span class="num ltr">' + esc(p.phone2) + '</span>') +
+        dchip('ماهیت', esc(p.nature)) + dchip('نحوه آشنایی', esc(p.source)) + dchip('مسئول فایل شرکت', esc(c.owner || '—')) + dchip('شهر', esc(c.city || '—')) +
+      '</div></td></tr>';
+  }
+
+  function val(id) { return $(id).value.trim(); }
+  function apply() {
+    var name = val('#fName'), owner = val('#fOwner'), coop = val('#fCoop'), q = val('#quick');
+    var rows, html;
+    if (view === 'company') {
+      var kind = val('#fKind'), prov = val('#fProvince'), src = val('#fSource'), flag = val('#fFlag'), ph = val('#fPhone');
+      rows = D.companies.filter(function (c) {
+        return (!name || c.name.indexOf(name) > -1) && (!owner || c.owner === owner) && (!coop || c.coop === coop) && (!kind || c.kind === kind) &&
+          (!prov || c.province === prov) && (!src || c.source === src) && (!flag || c.flags.indexOf(flag) > -1) &&
+          (!ph || (c.phone1 + c.phone2).indexOf(ph) > -1) && (!q || JSON.stringify(c).indexOf(q) > -1);
+      });
+      html = rows.map(companyRow).join('');
+    } else {
+      var person = val('#fPerson'), due = $('#fDue').checked, inv = $('#fInvite').checked, ph2 = val('#fPhone');
+      rows = D.contacts.filter(function (p) {
+        var c = S.company(p.companyCode) || {};
+        return (!name || p.company.indexOf(name) > -1) && (!person || p.name.indexOf(person) > -1) && (!owner || c.owner === owner) && (!coop || c.coop === coop) &&
+          (!due || p.due) && (!inv || p.invite) && (!ph2 || (p.mobile + p.phone1).indexOf(ph2) > -1) && (!q || JSON.stringify(p).indexOf(q) > -1);
+      });
+      html = rows.map(personRow).join('');
+    }
+    $('#thead').innerHTML = HEAD[view];
+    $('#tbody').innerHTML = html || '<tr><td colspan="11"><div class="empty"><div class="empty-ic" data-icon="search" data-icon-size="30"></div><div class="empty-title">نتیجه‌ای یافت نشد</div><div class="empty-desc">عبارت جستجو یا فیلترها را تغییر دهید.</div></div></td></tr>';
+    $('#resultCount').textContent = fa(rows.length);
+    S.syncSelection($('[data-s-root]'));
+    if (d.readyState !== 'loading') CRM.init($('#tbl'));
+  }
+
+  function setView(v) {
+    view = v;
+    $$('#viewSwitch .seg').forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-view') === v); });
+    $$('[data-only]').forEach(function (el) { el.classList.toggle('d-none', el.getAttribute('data-only') !== v); });
+    $('#filterTitle').textContent = v === 'company' ? 'جستجوی شرکت‌ها' : 'جستجوی افراد';
+    $('#tableTitle').textContent = v === 'company' ? 'شرکت‌ها' : 'افراد';
+    apply();
+  }
+  $('#viewSwitch').addEventListener('click', function (e) { var b = e.target.closest('[data-view]'); if (b) setView(b.getAttribute('data-view')); });
+  $('#btnSearch').addEventListener('click', function (e) { S.busy(e.currentTarget, apply); });
+  $('#btnReset').addEventListener('click', function () {
+    $$('[data-filter-root] .input, [data-filter-root] .select').forEach(function (x) { x.value = ''; });
+    $('#fDue').checked = $('#fInvite').checked = false; $('#quick').value = ''; apply();
+  });
+  $('#quick').addEventListener('input', CRM.debounce(apply, 200));
+  ['#fDue', '#fInvite', '#fOwner', '#fCoop', '#fKind'].forEach(function (s) { $(s).addEventListener('change', apply); });
+  $$('[data-filter-root] .input').forEach(function (i) { i.addEventListener('keydown', function (e) { if (e.key === 'Enter') apply(); }); });
+
+  $('#btnOwner').addEventListener('click', function () {
+    var o = $('#newOwner').value, n = 0;
+    $$('[data-s-row]:checked').forEach(function (c) {
+      var code = Number(c.closest('tr').getAttribute('data-code'));
+      var target = view === 'company' ? S.company(code) : S.company((D.contacts.filter(function (p) { return p.code === code; })[0] || {}).companyCode);
+      if (target) { target.owner = o; n++; }
+    });
+    CRM.modal.close('#mdlOwner');
+    apply();
+    CRM.toast({ type: 'success', title: 'مسئول فایل تغییر کرد', msg: fa(n) + ' ردیف به «' + o + '» سپرده شد.' });
+  });
+  $('#btnSms').addEventListener('click', function () {
+    var nums = $$('[data-s-row]:checked').map(function (c) {
+      var code = Number(c.closest('tr').getAttribute('data-code'));
+      return (D.contacts.filter(function (p) { return p.code === code; })[0] || {}).mobile;
+    }).filter(Boolean);
+    location.href = 'sms.html?to=' + encodeURIComponent(nums.join(','));
+  });
+
+  setView(view);
+})();
+</script>
+</body>
+</html>

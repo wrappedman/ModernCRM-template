@@ -54,14 +54,29 @@
 .brand-name { font-size: var(--fs-lg); font-weight: 700; color: var(--text-strong); line-height: 1.2; }
 .brand-name small { display: block; font-size: var(--fs-2xs); font-weight: 500; color: var(--text-soft); letter-spacing: 0.04em; }
 
+/* کارت منو دو لایه دارد:
+   ‎.sidebar-scroll‎        قاب گرد (بدون اسکرول)
+   ‎.sidebar-scroll-inner‎  ناحیه‌ی اسکرول‌خور
+   فاصله‌ی بالا/پایین قاب (--side-scroll-gap) باعث می‌شود نوار اسکرول و
+   فلش‌های بالا/پایین آن کوتاه‌تر شوند و قبل از شروع انحنای گوشه‌ها بنشینند،
+   نه داخل قسمت گرد کارت. */
 .sidebar-scroll {
-  flex: 1; overflow-y: auto;
+  --side-scroll-gap: 16px;
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
+  overflow: hidden;
   margin-inline-start: 12px; margin-top: 12px;
-  padding: 14px 12px 18px;
+  padding: var(--side-scroll-gap) 0;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
+}
+.sidebar-scroll-inner {
+  flex: 1; min-height: 0;
+  overflow-y: auto; overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: 0 12px 4px;
 }
 .nav-group { margin-bottom: 18px; }
 .nav-group-title {
@@ -125,7 +140,9 @@
 
 /* حالت جمع‌شده سایدبار */
 .app-shell.sidebar-collapsed .sidebar { width: var(--sidebar-w-collapsed); flex-basis: var(--sidebar-w-collapsed); }
-.app-shell.sidebar-collapsed .sidebar-brand, .app-shell.sidebar-collapsed .sidebar-scroll { margin-inline-start: 10px; padding-inline: 8px; }
+.app-shell.sidebar-collapsed .sidebar-brand { margin-inline-start: 10px; padding-inline: 8px; }
+.app-shell.sidebar-collapsed .sidebar-scroll { margin-inline-start: 10px; }
+.app-shell.sidebar-collapsed .sidebar-scroll-inner { padding-inline: 8px; }
 .app-shell.sidebar-collapsed .sidebar-foot { margin-inline-start: 10px; }
 .app-shell.sidebar-collapsed .nav-label,
 .app-shell.sidebar-collapsed .nav-group-title,
@@ -143,7 +160,8 @@
 .app-shell.sidebar-collapsed .nav-item:hover { background: var(--surface); border-color: transparent; box-shadow: var(--shadow-sm); }
 .app-shell.sidebar-collapsed .nav-item.is-active { background: var(--ink); border-color: transparent; color: var(--on-ink); }
 .app-shell.sidebar-collapsed .nav-item .nav-badge { display: none; }
-.app-shell.sidebar-collapsed .sidebar-scroll { padding: 12px 8px; }
+.app-shell.sidebar-collapsed .sidebar-scroll { --side-scroll-gap: 14px; }
+.app-shell.sidebar-collapsed .sidebar-scroll-inner { padding: 0 8px; }
 /* در حالت جمع‌شده، نشان برند و دکمه بازکردن زیر هم و وسط‌چین می‌نشینند
    تا هیچ‌کدام به دیواره‌های سایدبار نچسبند. */
 .app-shell.sidebar-collapsed .sidebar-brand {
@@ -265,7 +283,8 @@ body.has-taskbar .page-wrap { padding-bottom: 6px; }
   }
   .app-shell.sidebar-collapsed .nav-item.is-active { background: var(--sidebar-item-active); color: var(--sidebar-text-active); }
   .app-shell.sidebar-collapsed .nav-sub { display: block; }
-  .app-shell.sidebar-collapsed .sidebar-scroll { padding: 14px 12px 18px; }
+  .app-shell.sidebar-collapsed .sidebar-scroll { --side-scroll-gap: 16px; }
+  .app-shell.sidebar-collapsed .sidebar-scroll-inner { padding: 0 12px 4px; }
   /* دکمه جمع‌کردن فقط برای دسکتاپ است */
   .sidebar-collapse-btn { display: none; }
   .topbar-mobile-btn { display: grid; }

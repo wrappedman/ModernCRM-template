@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گزارش عملکرد فروش | مدرن‌CRM</title>
+<meta name="description" content="گزارش عملکرد کارشناسان فروش به تفکیک مسئول، نوع فعالیت و بازه زمانی">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="sales-performance">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span>فروش و بازاریابی</span>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">گزارش عملکرد فروش</span>
+            </div>
+            <h1 class="page-title">گزارش عملکرد فروش</h1>
+            <p class="page-desc">فعالیت‌های ثبت‌شده‌ی کارشناسان را به تفکیک مسئول، نوع فعالیت و بازه‌ی زمانی بررسی کنید</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="sales-followup.html"><span data-icon="phone" data-icon-size="16"></span> پیگیری فروش</a>
+          </div>
+        </div>
+
+        <div class="grid-1-2 mb-5">
+          <!-- ======================= فیلتر گزارش ======================= -->
+          <div class="card" data-win-nobtn>
+            <div class="card-head tight"><div class="card-title" data-icon="sliders" data-icon-size="17"> تنظیمات گزارش</div></div>
+            <div class="card-body">
+              <div class="form-group">
+                <div class="d-flex items-center justify-between mb-1">
+                  <label class="form-label" style="margin:0">مسئولین</label>
+                  <label class="check"><input type="checkbox" id="ownAll" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl fs-sm">انتخاب همه</span></label>
+                </div>
+                <div class="sales-pick-list" style="max-height:214px" id="ownList"></div>
+              </div>
+              <div class="grid-2">
+                <div class="form-group"><label class="form-label">از تاریخ</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="fFrom" value="۱۴۰۵/۰۷/۰۱" data-fa-mask></div></div>
+                <div class="form-group"><label class="form-label">تا تاریخ</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="fTo" value="۱۴۰۵/۰۷/۲۱" data-fa-mask></div></div>
+              </div>
+              <div class="grid-2">
+                <div class="form-group"><label class="form-label">نوع فعالیت</label><select class="select" id="fType"></select></div>
+                <div class="form-group"><label class="form-label">وضعیت</label><select class="select" id="fStatus"></select></div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary flex-1" id="btnRun"><span data-icon="reports" data-icon-size="16"></span> مشاهده گزارش</button>
+                <button class="btn" id="btnReset" data-tip="بازنشانی"><span data-icon="refresh" data-icon-size="16"></span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ======================= خلاصه ======================= -->
+          <div class="d-flex flex-col gap-5" style="min-width:0">
+            <div class="grid-4" id="kpis"></div>
+            <div class="card flex-1">
+              <div class="card-head tight"><div class="card-title" data-icon="chart-column" data-icon-size="17"> تعداد فعالیت به تفکیک مسئول</div>
+                <div class="card-actions"><span class="fs-xs text-muted" id="rangeText"></span></div></div>
+              <div class="card-body tight"><div class="chart h-160" id="chart"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================= برگه گزارش ======================= -->
+        <div class="card" data-win="perf-report" data-win-title="گزارش عملکرد" data-win-icon="gauge" data-win-size="1180x700">
+          <div class="report-toolbar">
+            <button class="btn btn-sm" data-print><span data-icon="printer" data-icon-size="14"></span> چاپ</button>
+            <button class="btn btn-sm" data-excel="گزارش-عملکرد"><span data-icon="download" data-icon-size="14"></span> Excel</button>
+            <span class="sep"></span>
+            <button class="btn btn-sm btn-ghost" id="btnCollapse"><span data-icon="rows" data-icon-size="14"></span> جمع / باز کردن گروه‌ها</button>
+            <span class="ms-auto fs-xs text-muted">صفحه <b class="num">۱</b> از <b class="num">۱</b></span>
+          </div>
+          <div class="report-sheet">
+            <div class="report-title">گزارش عملکرد کارشناسان فروش</div>
+            <div class="report-meta" id="repMeta"></div>
+            <div class="table-wrap" style="border:1px solid var(--border)">
+              <table class="table table-compact table-wide" id="tbl">
+                <thead><tr><th>مسئول</th><th>نوع فعالیت</th><th>نام مشتری</th><th>وضعیت</th><th>تاریخ پیگیری</th><th>شرح عملکرد</th><th>ساعت</th><th>تاریخ ثبت</th></tr></thead>
+                <tbody id="tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/sales.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, S = window.SALES, D = S.data, d = document;
+  var $ = CRM.$, $$ = CRM.$$, esc = CRM.esc, fa = CRM.fa;
+  var STATUS_TONE = { 'در حال پیگیری': 'badge-info', 'فروخته شده': 'badge-success', 'در انتظار پاسخ': 'badge-warning', 'منصرف شده': 'badge-gray' };
+
+  $('#fType').innerHTML = S.options(D.activityTypes, '', 'همه');
+  $('#fStatus').innerHTML = S.options(D.activityStatus, '', 'همه');
+  $('#ownList').innerHTML = D.owners.map(function (o) {
+    var n = D.performance.filter(function (p) { return p.owner === o; }).length;
+    return '<label class="list-item check" style="display:flex;align-items:center"><input type="checkbox" class="own" value="' + esc(o) + '" checked>' +
+      '<span class="box" style="margin-top:0"><span data-icon="check" data-icon-size="12"></span></span>' +
+      CRM.avatar(o, 28) + '<span class="lbl flex-1">' + esc(o) + '</span><span class="badge badge-gray num">' + fa(n) + '</span></label>';
+  }).join('');
+
+  function key(s) { return S.toInt(String(s || '').replace(/\//g, '')) || 0; }
+  function syncAll() {
+    var all = $$('.own'), on = all.filter(function (c) { return c.checked; });
+    $('#ownAll').checked = on.length === all.length;
+    $('#ownAll').indeterminate = on.length > 0 && on.length < all.length;
+  }
+  $('#ownAll').addEventListener('change', function () { var v = this.checked; $$('.own').forEach(function (c) { c.checked = v; }); });
+  $('#ownList').addEventListener('change', syncAll);
+
+  function run() {
+    var owners = $$('.own:checked').map(function (c) { return c.value; });
+    var a = key($('#fFrom').value), b = key($('#fTo').value), tp = $('#fType').value, st = $('#fStatus').value;
+    var rows = D.performance.filter(function (p) {
+      var k = key(p.reg);
+      return owners.indexOf(p.owner) > -1 && (!a || k >= a) && (!b || k <= b) && (!tp || p.activity === tp) && (!st || p.status === st);
+    });
+
+    /* شاخص‌ها */
+    var sold = rows.filter(function (p) { return p.status === 'فروخته شده'; }).length;
+    var lost = rows.filter(function (p) { return p.status === 'منصرف شده'; }).length;
+    var custs = {}; rows.forEach(function (p) { custs[p.customer] = 1; });
+    var tiles = [
+      ['activity', 'کل فعالیت‌ها', rows.length, ''],
+      ['check-circle', 'فروخته شده', sold, 'success'],
+      ['x-circle', 'منصرف شده', lost, 'rose'],
+      ['building', 'مشتریان درگیر', Object.keys(custs).length, 'sky']
+    ];
+    $('#kpis').innerHTML = tiles.map(function (t) {
+      return '<div class="card"><div class="card-body tight"><div class="stat-top"><span class="stat-icon ' + t[3] + '"><span data-icon="' + t[0] + '" data-icon-size="19"></span></span>' +
+        '<div><div class="stat-label">' + t[1] + '</div><div class="stat-value num">' + fa(t[2]) + '</div></div></div></div></div>';
+    }).join('');
+
+    /* نمودار */
+    var by = owners.map(function (o) { return rows.filter(function (p) { return p.owner === o; }).length; });
+    var ch = $('#chart');
+    ch.removeAttribute('data-chart-done'); ch.innerHTML = '';
+    ch.setAttribute('data-chart', 'bar');
+    ch.setAttribute('data-values', by.join(',') || '0');
+    ch.setAttribute('data-labels', owners.map(function (o) { return o.split(' ').pop(); }).join(','));
+    $('#rangeText').textContent = $('#fFrom').value + ' تا ' + $('#fTo').value;
+
+    /* برگه گزارش — گروه‌بندی بر اساس مسئول */
+    $('#repMeta').innerHTML =
+      '<span><b>بازه:</b> <span class="num">' + esc($('#fFrom').value) + '</span> تا <span class="num">' + esc($('#fTo').value) + '</span></span>' +
+      '<span><b>نوع فعالیت:</b> ' + esc(tp || 'همه') + '</span><span><b>وضعیت:</b> ' + esc(st || 'همه') + '</span>' +
+      '<span><b>تعداد مسئولین:</b> <span class="num">' + fa(owners.length) + '</span></span><span><b>تاریخ تهیه:</b> <span class="num">' + S.today() + '</span></span>';
+    var html = '';
+    owners.forEach(function (o) {
+      var g = rows.filter(function (p) { return p.owner === o; });
+      if (!g.length) return;
+      html += '<tr class="report-group-head" data-grp="' + esc(o) + '" style="cursor:pointer"><td colspan="8"><span data-icon="chevron-down" data-icon-size="14"></span> ' + esc(o) +
+        ' <span class="fw-400 fs-xs">— ' + fa(g.length) + ' فعالیت، ' + fa(g.filter(function (p) { return p.status === 'فروخته شده'; }).length) + ' فروش</span></td></tr>';
+      html += g.map(function (p) {
+        return '<tr data-in="' + esc(o) + '"><td class="text-muted fs-sm">' + esc(p.owner) + '</td><td>' + esc(p.activity) + '</td><td class="fw-600">' + esc(p.customer) + '</td>' +
+          '<td><span class="badge ' + (STATUS_TONE[p.status] || 'badge-gray') + '">' + esc(p.status) + '</span></td><td class="num">' + esc(p.follow) + '</td>' +
+          '<td style="white-space:normal;min-width:260px" class="fs-sm">' + esc(p.desc) + '</td><td class="num">' + esc(p.time) + '</td><td class="num">' + esc(p.reg) + '</td></tr>';
+      }).join('');
+    });
+    $('#tbody').innerHTML = html || '<tr><td colspan="8"><div class="empty"><div class="empty-ic" data-icon="reports" data-icon-size="30"></div><div class="empty-title">داده‌ای برای این گزارش وجود ندارد</div><div class="empty-desc">مسئولین یا بازه‌ی تاریخ را تغییر دهید.</div></div></td></tr>';
+    if (d.readyState !== 'loading') { CRM.init($('#kpis')); CRM.init(ch.parentNode); CRM.init($('#tbl')); }
+  }
+
+  $('#btnRun').addEventListener('click', function (e) {
+    if (!$$('.own:checked').length) { CRM.toast({ type: 'warning', title: 'مسئولی انتخاب نشده', msg: 'حداقل یک مسئول را انتخاب کنید.' }); return; }
+    S.busy(e.currentTarget, run, 500);
+  });
+  $('#btnReset').addEventListener('click', function () {
+    $$('.own').forEach(function (c) { c.checked = true; }); syncAll();
+    $('#fFrom').value = '۱۴۰۵/۰۷/۰۱'; $('#fTo').value = '۱۴۰۵/۰۷/۲۱'; $('#fType').value = ''; $('#fStatus').value = '';
+    run();
+  });
+  var collapsed = false;
+  $('#btnCollapse').addEventListener('click', function () {
+    collapsed = !collapsed;
+    $$('#tbody tr[data-in]').forEach(function (r) { r.classList.toggle('d-none', collapsed); });
+  });
+  $('#tbody').addEventListener('click', function (e) {
+    var h = e.target.closest('[data-grp]'); if (!h) return;
+    var g = h.getAttribute('data-grp');
+    $$('#tbody tr[data-in]').forEach(function (r) { if (r.getAttribute('data-in') === g) r.classList.toggle('d-none'); });
+  });
+
+  run();
+})();
+</script>
+</body>
+</html>

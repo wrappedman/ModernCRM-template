@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صدور فاکتور | مدرن‌CRM</title>
+<meta name="description" content="صدور فاکتور و پیش‌فاکتور فروش با محاسبه زنده تخفیف، ارزش افزوده و هزینه نصب">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="invoice-new">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="invoices.html">فاکتورها</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">صدور فاکتور</span>
+            </div>
+            <h1 class="page-title">صدور <span data-inv-word>فاکتور</span> جدید</h1>
+            <p class="page-desc">مشتری را انتخاب کنید، اقلام را اضافه کنید و جمع نهایی را بلافاصله ببینید.</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="invoices.html"><span data-icon="list-filter" data-icon-size="16"></span> مشاهده فاکتورها</a>
+            <a class="btn" href="invoices-reserved.html"><span data-icon="bookmark" data-icon-size="16"></span> فاکتورهای رزرو شده</a>
+          </div>
+        </div>
+
+        <form id="invoiceForm" novalidate>
+          <div id="invoiceRoot"></div>
+
+          <!-- نوار دکمه‌های فرم (جدید / ثبت / ویرایش / چاپ) -->
+          <div class="card" data-win-nobtn style="position:sticky;bottom:12px;z-index:5">
+            <div class="card-body tight d-flex items-center gap-2 flex-wrap">
+              <span class="badge badge-warning badge-dot" id="saveState">ثبت نشده</span>
+              <span class="fs-xs text-muted d-none" id="saveHint">پس از ثبت، دکمه‌های «ویرایش» و «چاپ» فعال می‌شوند.</span>
+              <div class="d-flex gap-2 ms-auto flex-wrap">
+                <button type="button" class="btn" id="btnNew" data-tip="پاک کردن فرم و شروع فاکتور جدید"><span data-icon="plus" data-icon-size="16"></span> جدید</button>
+                <button type="button" class="btn" id="btnEdit" disabled><span data-icon="pencil" data-icon-size="16"></span> ویرایش</button>
+                <a class="btn is-disabled" id="btnPrint" href="print-invoice.html" target="_blank"><span data-icon="printer" data-icon-size="16"></span> چاپ</a>
+                <button type="submit" class="btn btn-primary" id="btnSave"><span data-icon="check" data-icon-size="16"></span> ثبت <span data-inv-word>فاکتور</span></button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/sales.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, S = window.SALES;
+  var root = CRM.$('#invoiceRoot');
+  var proforma = /type=proforma/.test(location.search);
+  var form = S.invoiceForm(root, { mode: 'new', idp: 'nf', invoice: { type: proforma ? 'proforma' : 'invoice' } });
+
+  function word(pro) {
+    CRM.$$('[data-inv-word]').forEach(function (x) { x.textContent = pro ? 'پیش‌فاکتور' : 'فاکتور'; });
+    CRM.$('#btnPrint').setAttribute('href', 'print-invoice.html' + (pro ? '?type=proforma' : ''));
+  }
+  word(proforma);
+  root.addEventListener('sales:type', function (e) { word(e.detail.proforma); });
+
+  var saved = false;
+  function setSaved(on) {
+    saved = on;
+    CRM.$('#btnEdit').disabled = !on;
+    CRM.$('#btnPrint').classList.toggle('is-disabled', !on);
+    CRM.$('#saveState').className = 'badge badge-dot ' + (on ? 'badge-success' : 'badge-warning');
+    CRM.$('#saveState').textContent = on ? 'ثبت شد — شماره ۴۰۷۹۰-ل' : 'ثبت نشده';
+    CRM.$('#saveHint').classList.toggle('d-none', on);
+    CRM.$('#nfNoBadge').textContent = on ? 'شماره: ۴۰۷۹۰-ل' : 'شماره: خودکار';
+  }
+
+  /* ثبت: به‌جای data-demo-form، اعتبارسنجی ساده‌ی نمایشی */
+  CRM.$('#invoiceForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!CRM.$('#nfCust').value) {
+      CRM.toast({ type: 'danger', title: 'مشتری انتخاب نشده است', msg: 'ابتدا «نمایندگی / مشتری» را انتخاب کنید.' });
+      CRM.$('#nfCust').closest('.picker').classList.add('anim-shake');
+      setTimeout(function () { CRM.$('#nfCust').closest('.picker').classList.remove('anim-shake'); }, 450);
+      return;
+    }
+    if (!form.rows.length) {
+      CRM.toast({ type: 'danger', title: 'فاکتور خالی است', msg: 'حداقل یک کالا یا خدمت اضافه کنید.' });
+      return;
+    }
+    S.busy(CRM.$('#btnSave'), function () {
+      setSaved(true);
+      CRM.toast({ type: 'success', title: 'با موفقیت ثبت شد', msg: 'اکنون می‌توانید آن را ویرایش یا چاپ کنید.' });
+    }, 600);
+  }, true);
+
+  CRM.$('#btnEdit').addEventListener('click', function () {
+    setSaved(false);
+    CRM.toast({ type: 'info', title: 'حالت ویرایش', msg: 'تغییرات را اعمال و دوباره «ثبت» کنید.' });
+  });
+  CRM.$('#btnNew').addEventListener('click', function () {
+    CRM.modal.confirm({ title: 'فاکتور جدید', msg: 'اطلاعات فعلی فرم پاک شود؟', okText: 'بله، فرم جدید', icon: 'plus', tone: 'info' })
+      .then(function (ok) {
+        if (!ok) return;
+        form = S.invoiceForm(root, { mode: 'new', idp: 'nf' });
+        setSaved(false); word(false);
+      });
+  });
+  setSaved(false);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پیگیری فروش | مدرن‌CRM</title>
+<meta name="description" content="فهرست پیگیری‌های فروش، ثبت عملکرد و برنامه‌ریزی پیگیری بعدی هر مشتری">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="sales-followup">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span>فروش و بازاریابی</span>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">پیگیری فروش</span>
+            </div>
+            <h1 class="page-title">پیگیری فروش</h1>
+            <p class="page-desc">پیگیری‌های امروز و عقب‌افتاده را ببینید، عملکرد ثبت کنید و پیگیری بعدی را برنامه‌ریزی کنید</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="sales-performance.html"><span data-icon="gauge" data-icon-size="16"></span> گزارش عملکرد</a>
+            <button class="btn btn-primary" data-pick-customer="#newFor"><span data-icon="plus" data-icon-size="16"></span> پیگیری جدید</button>
+            <input type="hidden" id="newFor">
+          </div>
+        </div>
+
+        <div class="grid-4 mb-5" id="kpis"></div>
+
+        <!-- ========================== فیلترها ========================== -->
+        <div class="card mb-5" data-filter-root data-win-nobtn>
+          <div class="card-head tight"><div class="card-title" data-icon="filter" data-icon-size="17"> جستجوی پیگیری‌ها</div></div>
+          <div class="card-body">
+            <div class="filter-grid">
+              <div class="form-group span-2"><label class="form-label">نام شرکت</label>
+                <div class="picker"><input class="input" id="fName" placeholder="همه شرکت‌ها"><button type="button" class="btn" data-pick-customer="#fName" data-icon="more-h" data-icon-size="16"></button></div></div>
+              <div class="form-group"><label class="form-label">آخرین پیگیری از</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="fLastFrom" placeholder="۱۴۰۵/۰۵/۰۱" data-fa-mask></div></div>
+              <div class="form-group"><label class="form-label">آخرین پیگیری تا</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="fLastTo" placeholder="۱۴۰۵/۰۷/۲۱" data-fa-mask></div></div>
+              <div class="form-group"><label class="form-label">پیگیری بعدی از</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="fNextFrom" placeholder="۱۴۰۵/۰۷/۰۱" data-fa-mask></div></div>
+              <div class="form-group"><label class="form-label">پیگیری بعدی تا</label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="fNextTo" placeholder="۱۴۰۵/۰۸/۳۰" data-fa-mask></div></div>
+              <div class="form-group d-none" data-fkey="expert"><label class="form-label">کارشناس</label><select class="select" id="fExpert"></select></div>
+              <div class="form-group d-none" data-fkey="type"><label class="form-label">نوع فعالیت</label><select class="select" id="fType"></select></div>
+            </div>
+            <div class="filter-actions">
+              <div class="d-flex gap-2 items-center flex-wrap">
+                <div id="fpick"></div>
+                <div class="segmented" id="dueSwitch">
+                  <button type="button" class="seg is-active" data-due="">همه</button>
+                  <button type="button" class="seg" data-due="today">امروز</button>
+                  <button type="button" class="seg" data-due="overdue">عقب‌افتاده</button>
+                  <button type="button" class="seg" data-due="soon">این هفته</button>
+                </div>
+              </div>
+              <div class="end">
+                <button type="button" class="btn" id="btnReset"><span data-icon="x" data-icon-size="16"></span> پاک کردن</button>
+                <button type="button" class="btn btn-primary" id="btnSearch"><span data-icon="search" data-icon-size="16"></span> مشاهده</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== جدول ========================== -->
+        <div class="card" data-win="fu-table" data-win-title="پیگیری فروش" data-win-icon="phone" data-win-size="1180x660">
+          <div class="card-head flex-wrap" style="gap:10px">
+            <div class="card-title" data-icon="phone" data-icon-size="18"> فهرست پیگیری‌ها <span class="badge badge-gray num" id="resultCount">۰</span></div>
+            <div class="card-actions flex-wrap" style="gap:12px">
+              <span class="legend-chip"><i></i> زمان پیگیری رسیده</span>
+              <span class="legend-chip"><i class="danger"></i> عقب‌افتاده</span>
+              <button class="btn btn-sm" data-excel="پیگیری-فروش"><span data-icon="download" data-icon-size="14"></span> Excel</button>
+            </div>
+          </div>
+          <div class="card-body flush">
+            <div class="table-wrap">
+              <table class="table table-compact table-wide" id="tbl">
+                <thead><tr>
+                  <th>کد</th><th>شرکت</th><th>کارشناس</th><th class="text-center">عملیات</th>
+                  <th>آخرین پیگیری</th><th>پیگیری بعدی</th><th>نوع فعالیت</th><th>توضیحات</th>
+                </tr></thead>
+                <tbody id="tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===================== ثبت پیگیری ===================== -->
+<div class="overlay" id="mdlLog" style="display:none">
+  <div class="modal modal-lg" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <span class="stat-icon" style="width:40px;height:40px"><span data-icon="phone" data-icon-size="19"></span></span>
+      <div><div class="modal-title">ثبت پیگیری</div><div class="modal-sub" id="logFor"></div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlLog" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-3">
+        <div class="form-group"><label class="form-label">نوع فعالیت</label><select class="select" id="lgType"></select></div>
+        <div class="form-group"><label class="form-label">نتیجه / وضعیت</label><select class="select" id="lgStatus"></select></div>
+        <div class="form-group"><label class="form-label">مسئول فعالیت</label><select class="select" id="lgOwner"></select></div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group"><label class="form-label">تاریخ پیگیری</label><input class="input num" id="lgDate" readonly></div>
+        <div class="form-group"><label class="form-label">ساعت</label><input class="input num ltr" id="lgTime" value="10:30"></div>
+        <div class="form-group"><label class="form-label">پیگیری بعدی <span class="req">*</span></label><div class="date-field"><span data-icon="calendar" data-icon-size="16"></span><input class="input num" id="lgNext" data-fa-mask></div></div>
+      </div>
+      <div class="form-group"><label class="form-label">شرح پیگیری <span class="req">*</span></label><textarea class="textarea" rows="3" id="lgDesc" placeholder="خلاصه گفتگو، درخواست مشتری و قدم بعدی…"></textarea></div>
+      <div class="option-row">
+        <span class="fs-sm text-muted">یادآوری پیگیری بعدی:</span>
+        <label class="check"><input type="checkbox" checked><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">اعلان داخل سامانه</span></label>
+        <label class="check"><input type="checkbox"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">پیامک به کارشناس</span></label>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" id="btnLog"><span data-icon="check" data-icon-size="16"></span> ثبت پیگیری</button>
+      <button class="btn ms-auto" data-modal-close="#mdlLog">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== سابقه عملکرد ===================== -->
+<div class="overlay" id="mdlHist" style="display:none">
+  <div class="modal modal-xl" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <span class="stat-icon amber" style="width:40px;height:40px"><span data-icon="history" data-icon-size="19"></span></span>
+      <div><div class="modal-title">سابقه عملکرد</div><div class="modal-sub" id="histFor"></div></div>
+      <button class="tb-icon modal-x" data-modal-close="#mdlHist" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="modal-body">
+      <div class="table-wrap" style="border:1px solid var(--border)">
+        <table class="table table-compact table-wide"><thead><tr><th>تاریخ ثبت</th><th>ساعت</th><th>مسئول</th><th>فعالیت</th><th>وضعیت</th><th>تاریخ پیگیری</th><th>شرح</th></tr></thead><tbody id="histBody"></tbody></table>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" data-excel="سابقه-عملکرد"><span data-icon="download" data-icon-size="16"></span> خروجی</button>
+      <button class="btn ms-auto" data-modal-close="#mdlHist">بستن</button>
+    </div>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/sales.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, S = window.SALES, D = S.data, d = document;
+  var $ = CRM.$, $$ = CRM.$$, esc = CRM.esc, fa = CRM.fa;
+  var due = '';
+  var STATUS_TONE = { 'در حال پیگیری': 'badge-info', 'فروخته شده': 'badge-success', 'در انتظار پاسخ': 'badge-warning', 'منصرف شده': 'badge-gray' };
+
+  $('#fpick').innerHTML = S.fpickHTML([['expert', 'کارشناس'], ['type', 'نوع فعالیت']]);
+  $('#fExpert').innerHTML = S.options(D.owners, '', 'همه');
+  $('#fType').innerHTML = S.options(D.activityTypes, '', 'همه');
+  $('#lgType').innerHTML = S.options(D.activityTypes, 'پیگیری');
+  $('#lgStatus').innerHTML = S.options(D.activityStatus);
+  $('#lgOwner').innerHTML = S.options(D.owners);
+
+  /* تاریخ‌های شمسی با ارقام فارسی به‌صورت رشته قابل مقایسه‌اند (هم‌طول). */
+  function key(s) { return S.toInt(String(s || '').replace(/\//g, '')) || 0; }
+  function inRange(v, a, b) { var k = key(v); if (!k) return !a && !b; return (!a || k >= key(a)) && (!b || k <= key(b)); }
+
+  function kpis() {
+    var c = function (k) { return D.followups.filter(function (f) { return f.due === k; }).length; };
+    var tiles = [
+      ['phone', 'پیگیری‌های امروز', c('today'), 'amber', 'today'],
+      ['alarm', 'عقب‌افتاده', c('overdue'), 'rose', 'overdue'],
+      ['calendar', 'تا پایان هفته', c('soon'), 'sky', 'soon'],
+      ['users', 'کل مشتریان در پیگیری', D.followups.length, '', '']
+    ];
+    $('#kpis').innerHTML = tiles.map(function (t) {
+      return '<button class="card card-hover text-start w-100" data-kpi="' + t[4] + '" style="cursor:pointer"><div class="card-body tight"><div class="stat-top">' +
+        '<span class="stat-icon ' + t[3] + '"><span data-icon="' + t[0] + '" data-icon-size="20"></span></span>' +
+        '<div><div class="stat-label">' + t[1] + '</div><div class="stat-value num">' + fa(t[2]) + '</div></div></div></div></button>';
+    }).join('');
+  }
+
+  function row(f) {
+    var cls = f.due === 'today' ? 'row-flag' : f.due === 'overdue' ? 'row-danger' : '';
+    var nextBadge = f.due === 'today' ? ' <span class="badge badge-warning">امروز</span>' : f.due === 'overdue' ? ' <span class="badge badge-danger">عقب‌افتاده</span>' : '';
+    return '<tr class="' + cls + '" data-code="' + f.code + '">' +
+      '<td class="num text-muted">' + fa(f.code) + '</td>' +
+      '<td><span class="cell-main">' + esc(f.company) + '</span></td>' +
+      '<td class="fs-sm">' + esc(f.expert) + '</td>' +
+      '<td class="text-center"><span class="d-inline-flex gap-1">' +
+        '<button class="btn btn-sm btn-soft" data-log="' + f.code + '"><span data-icon="plus" data-icon-size="13"></span> ثبت</button>' +
+        '<button class="btn btn-sm" data-hist="' + f.code + '"><span data-icon="history" data-icon-size="13"></span> عملکرد</button>' +
+        '<a class="btn btn-sm" href="customer-details.html?code=' + f.code + '"><span data-icon="info" data-icon-size="13"></span> اطلاعات</a>' +
+      '</span></td>' +
+      '<td class="num fs-sm">' + esc(f.last) + '</td>' +
+      '<td class="num fs-sm text-nowrap">' + esc(f.next) + nextBadge + '</td>' +
+      '<td><span class="badge badge-gray">' + esc(f.type || '—') + '</span></td>' +
+      '<td class="fs-sm" style="white-space:normal;min-width:240px">' + esc(f.desc || '—') + '</td></tr>';
+  }
+
+  function apply() {
+    var name = $('#fName').value.trim(), ex = $('#fExpert').value, tp = $('#fType').value;
+    var lf = $('#fLastFrom').value, lt = $('#fLastTo').value, nf = $('#fNextFrom').value, nt = $('#fNextTo').value;
+    var order = { overdue: 0, today: 1, soon: 2, '': 3 };
+    var rows = D.followups.filter(function (f) {
+      return (!name || f.company.indexOf(name) > -1) && (!ex || f.expert === ex) && (!tp || f.type === tp) && (!due || f.due === due) &&
+        inRange(f.last, lf, lt) && inRange(f.next, nf, nt);
+    }).sort(function (a, b) { return order[a.due] - order[b.due]; });
+    $('#tbody').innerHTML = rows.length ? rows.map(row).join('')
+      : '<tr><td colspan="8"><div class="empty"><div class="empty-ic" data-icon="phone" data-icon-size="30"></div><div class="empty-title">پیگیری‌ای یافت نشد</div><div class="empty-desc">بازه‌ی تاریخ یا فیلترها را تغییر دهید.</div></div></td></tr>';
+    $('#resultCount').textContent = fa(rows.length);
+    if (d.readyState !== 'loading') CRM.init($('#tbl'));
+  }
+
+  function setDue(v) {
+    due = v;
+    $$('#dueSwitch .seg').forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-due') === v); });
+    apply();
+  }
+  $('#dueSwitch').addEventListener('click', function (e) { var b = e.target.closest('[data-due]'); if (b) setDue(b.getAttribute('data-due')); });
+  $('#btnSearch').addEventListener('click', function (e) { S.busy(e.currentTarget, apply); });
+  $('#btnReset').addEventListener('click', function () {
+    $$('[data-filter-root] .input, [data-filter-root] .select').forEach(function (x) { x.value = ''; });
+    setDue('');
+  });
+  $('#fName').addEventListener('sales:customer', apply);
+  ['#fExpert', '#fType'].forEach(function (s) { $(s).addEventListener('change', apply); });
+
+  function fu(code) { return D.followups.filter(function (f) { return f.code === Number(code); })[0]; }
+  var cur = null;
+  function openLog(f) {
+    cur = f;
+    $('#logFor').textContent = f.company + ' — کد ' + fa(f.code) + ' — کارشناس: ' + f.expert;
+    $('#lgOwner').value = f.expert;
+    $('#lgType').value = f.type || 'پیگیری';
+    $('#lgDate').value = S.today();
+    $('#lgNext').value = '';
+    $('#lgDesc').value = '';
+    CRM.modal.open('#mdlLog');
+  }
+  $('#newFor').addEventListener('sales:customer', function (e) {
+    var c = e.detail, f = fu(c.code);
+    if (!f) { f = { code: c.code, company: c.name, expert: c.owner, last: '—', next: '—', type: 'پیگیری', desc: '', due: '' }; D.followups.push(f); }
+    setTimeout(function () { openLog(f); }, 220);
+  });
+  $('#btnLog').addEventListener('click', function (e) {
+    var next = $('#lgNext'), desc = $('#lgDesc');
+    next.classList.toggle('is-invalid', !next.value.trim());
+    desc.classList.toggle('is-invalid', !desc.value.trim());
+    if (!next.value.trim() || !desc.value.trim()) { CRM.toast({ type: 'danger', title: 'فیلدهای الزامی', msg: 'تاریخ پیگیری بعدی و شرح را وارد کنید.' }); return; }
+    S.busy(e.currentTarget, function () {
+      cur.last = S.today(); cur.next = next.value; cur.desc = desc.value.trim(); cur.type = $('#lgType').value; cur.expert = $('#lgOwner').value; cur.due = '';
+      D.performance.unshift({ owner: cur.expert, activity: cur.type, customer: cur.company, status: $('#lgStatus').value, follow: cur.next, desc: cur.desc, time: $('#lgTime').value, reg: S.today() });
+      CRM.modal.close('#mdlLog');
+      kpis(); apply(); CRM.init($('#kpis'));
+      CRM.toast({ type: 'success', title: 'پیگیری ثبت شد', msg: cur.company + ' — پیگیری بعدی ' + cur.next });
+    }, 500);
+  });
+
+  function openHist(f) {
+    var list = D.performance.filter(function (p) { return p.customer === f.company; });
+    $('#histFor').textContent = f.company + ' — ' + fa(list.length) + ' مورد ثبت‌شده';
+    $('#histBody').innerHTML = list.length ? list.map(function (p) {
+      return '<tr><td class="num">' + esc(p.reg) + '</td><td class="num">' + esc(p.time) + '</td><td>' + esc(p.owner) + '</td><td>' + esc(p.activity) + '</td>' +
+        '<td><span class="badge ' + (STATUS_TONE[p.status] || 'badge-gray') + '">' + esc(p.status) + '</span></td><td class="num">' + esc(p.follow) + '</td><td style="white-space:normal">' + esc(p.desc) + '</td></tr>';
+    }).join('') : '<tr><td colspan="7"><div class="empty" style="padding:22px"><div class="empty-ic" data-icon="history" data-icon-size="26"></div><div class="empty-desc">برای این مشتری هنوز عملکردی ثبت نشده است.</div></div></td></tr>';
+    CRM.modal.open('#mdlHist');
+  }
+
+  d.addEventListener('click', function (e) {
+    var b;
+    if ((b = e.target.closest('[data-log]'))) { openLog(fu(b.getAttribute('data-log'))); return; }
+    if ((b = e.target.closest('[data-hist]'))) { openHist(fu(b.getAttribute('data-hist'))); return; }
+    if ((b = e.target.closest('[data-kpi]'))) { setDue(b.getAttribute('data-kpi')); $('#tbl').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+
+  kpis();
+  setDue(new URLSearchParams(location.search).get('due') || '');
+})();
+</script>
+</body>
+</html>

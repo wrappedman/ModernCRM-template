@@ -34,16 +34,25 @@ window.CRM_DATA = (function () {
       children: [
         { id: 'customers', label: 'فهرست مشتریان', href: 'customers.html' },
         { id: 'customer-new', label: 'افزودن مشتری', href: 'customer-new.html' },
-        { id: 'customer-profile', label: 'پروفایل مشتری', href: 'customer-profile.html' }
+        { id: 'customer-profile', label: 'پروفایل مشتری', href: 'customer-profile.html' },
+        { id: 'customer-details', label: 'مشخصات مشتری', href: 'customer-details.html' },
+        { id: 'customer-search', label: 'اطلاعات مشتری', href: 'customer-search.html' }
       ]
     },
     {
       id: 'm-sales', label: 'فروش', icon: 'deals', tone: 'success', href: 'pipeline.html',
-      desc: 'قیف فروش، معاملات در جریان، صدور و پیگیری فاکتورها',
+      desc: 'پیگیری فروش، قیف و معاملات، صدور، تسویه و رزرو فاکتور، نامه، پیامک و گزارش عملکرد',
       children: [
+        { id: 'sales-followup', label: 'پیگیری فروش', href: 'sales-followup.html' },
         { id: 'pipeline', label: 'قیف فروش', href: 'pipeline.html' },
         { id: 'deals', label: 'معاملات', href: 'deals.html' },
-        { id: 'invoices', label: 'فاکتورها', href: 'invoices.html' }
+        { id: 'invoice-new', label: 'صدور فاکتور', href: 'invoice-new.html' },
+        { id: 'invoices', label: 'مشاهده فاکتورها', href: 'invoices.html' },
+        { id: 'invoice-settlement', label: 'تسویه فاکتور', href: 'invoice-settlement.html' },
+        { id: 'invoices-reserved', label: 'فاکتورهای رزرو شده', href: 'invoices-reserved.html' },
+        { id: 'letters', label: 'نامه و قرارداد', href: 'letters.html' },
+        { id: 'sms', label: 'پیامک', href: 'sms.html' },
+        { id: 'sales-performance', label: 'گزارش عملکرد فروش', href: 'sales-performance.html' }
       ]
     },
     {
@@ -904,6 +913,195 @@ window.CRM_DATA = (function () {
     { code: 4, user: 'درگزی', form: '۰۵۷۴۴', company: 1028, date: '۱۴۰۵/۰۷/۱۶', install: 'بدون نصب', support: 'بدون پشتیبانی', software: 'کنترل تردد', place: ['تهران'], delay: 'بدون تأخیر', devices: 0, prevDelivered: false, contForm: '', shared: false, onTime: true, defects: 'بدون نقص', incomplete: 'انجام کامل', remote: 'ریموت نشده', minutes: 90, satisfaction: 'عالی', cost: 0, damage: 0, note: 'جلسه‌ی موفق' }
   ];
 
+  /* ==========================================================================
+   *  ماژول فروش (برگرفته از برنامه قبلی: مشخصات مشتری، اطلاعات مشتری، پیگیری
+   *  فروش، گزارش عملکرد، فاکتور، مشاهده/تسویه فاکتور، نامه و قرارداد، پیامک،
+   *  فاکتورهای رزرو شده). همه‌ی مبالغ به تومان هستند.
+   * ========================================================================== */
+  var SALES = {
+    /* شرکت فروشنده (سربرگ فاکتورها) */
+    seller: {
+      name: 'شرکت نمونه فناوری اطلاعات پارس', brand: 'مدرن‌CRM',
+      economic: '۴۱۱۱۳۷۸۶۴۶۷۸', national: '۱۰۱۰۲۳۴۴۶۴۰', postal: '۱۴۶۴۶۹۳۸۳۳',
+      province: 'تهران', city: 'تهران', phone: '۰۲۱-۹۱۰۰۱۱۰۰', fax: '۰۲۱-۹۱۰۰۱۱۰۱',
+      address: 'تهران، خیابان ولیعصر، برج نگین، طبقه ۱۲، واحد ۱۰'
+    },
+
+    /* کارشناسان / مسئولین فایل و فعالیت */
+    owners: ['مهدی کریمی', 'نیما عباسی', 'میلاد فتاحی', 'سارا باصری', 'رضا لشکریان', 'داوود توکلی', 'لیلا مستوفی'],
+
+    provinces: ['تهران', 'البرز', 'اصفهان', 'فارس', 'خراسان رضوی', 'آذربایجان شرقی', 'گیلان', 'مازندران'],
+    coopTypes: ['مشتری نهایی', 'نماینده فروش', 'همکار تجاری', 'تأمین‌کننده'],
+    sources: ['معرفی مشتریان', 'نمایشگاه', 'وب‌سایت', 'تبلیغات آنلاین', 'تماس سرد', 'بازاریابی همکار'],
+    activityTypes: ['فروش', 'پیگیری', 'دمو', 'بازاریابی همکار', 'پشتیبانی', 'آموزش', 'مالی', 'سایر'],
+    activityStatus: ['در حال پیگیری', 'فروخته شده', 'منصرف شده', 'در انتظار پاسخ'],
+    invoiceKinds: ['رسمی', 'غیررسمی', 'رسمی کامل'],
+    settleTypes: ['نقدی', 'اقساطی', 'اعتباری', 'تهاتر'],
+    banks: ['ملت', 'ملی', 'سامان', 'پاسارگاد', 'تجارت', 'صادرات'],
+
+    /* گروه‌ها و فهرست کالا برای فرم فاکتور */
+    productGroups: [
+      { id: 'software', name: 'نرم‌افزار و لایسنس' },
+      { id: 'devices', name: 'دستگاه‌های اصلی' },
+      { id: 'parts', name: 'قطعات و لوازم جانبی' },
+      { id: 'services', name: 'خدمات' }
+    ],
+    catalog: [
+      { id: 'P-101', group: 'software', name: 'لایسنس سالانه CRM — نسخه سازمانی', unit: 'نسخه', price: 18000000, install: true },
+      { id: 'P-102', group: 'software', name: 'ماژول مدیریت انبار', unit: 'نسخه', price: 9600000, install: true },
+      { id: 'P-103', group: 'software', name: 'افزایش لایسنس — ۵۰ کاربر', unit: 'بسته', price: 4200000 },
+      { id: 'P-201', group: 'devices', name: 'دستگاه کارتخوان هوشمند HP-510', unit: 'دستگاه', price: 1850000, install: true },
+      { id: 'P-202', group: 'devices', name: 'نمایشگر لمسی ۱۵ اینچ', unit: 'دستگاه', price: 1455000 },
+      { id: 'P-203', group: 'devices', name: 'سنسور اثرانگشت', unit: 'عدد', price: 675000 },
+      { id: 'P-301', group: 'parts', name: 'کارت خام RFID', unit: 'عدد', price: 20000 },
+      { id: 'P-302', group: 'parts', name: 'برد اصلی کارتخوان', unit: 'عدد', price: 1100000 },
+      { id: 'P-303', group: 'parts', name: 'صفحه کلید دستگاه', unit: 'عدد', price: 350000 },
+      { id: 'P-401', group: 'services', name: 'بسته آموزش حضوری تیم فروش', unit: 'جلسه', price: 3400000 },
+      { id: 'P-402', group: 'services', name: 'پشتیبانی طلایی ۱۲ ماهه', unit: 'قرارداد', price: 9600000 }
+    ],
+
+    /* شرکت‌ها (مشخصات مشتری) */
+    companies: [
+      { code: 5623, name: 'پارس‌نیکان', ref: '—', owner: 'مهدی کریمی', coop: 'مشتری نهایی', phone1: '۰۲۱-۸۸۷۷۶۶۵۵', phone2: '۰۲۱-۸۸۷۷۶۶۵۶', fax: '۰۲۱-۸۸۷۷۶۶۵۷', email: 'info@parsnikan.ir', province: 'تهران', city: 'تهران', address: 'تهران، بزرگراه جلال آل احمد، پلاک ۲۷۹، واحد ۱۰', source: 'معرفی مشتریان', kind: 'رسمی کامل', economic: '۴۱۱۱۵۵۶۶۷۷۸۸', postal: '۱۴۶۴۶۹۳۸۳۳', reg: '۳۴۵۶۷۸', flags: ['خوش‌حساب'] },
+      { code: 5618, name: 'صنایع الکترونیک آریا گستر', ref: 'پارس‌نیکان', owner: 'میلاد فتاحی', coop: 'مشتری نهایی', phone1: '۰۲۶-۳۴۴۵۵۶۶۷', phone2: '—', fax: '—', email: 'sales@ariagostar.com', province: 'البرز', city: 'کرج', address: 'کرج، چهارراه ۷ تیر، مجتمع تجاری کیش، طبقه اول، واحد ۲۰۵', source: 'نمایشگاه', kind: 'رسمی', economic: '۶۱۰۴۱۲۹۶۲۲۹', postal: '۳۱۳۴۷۶۳۳۹۴', reg: '۱۲۷۴۴', flags: [] },
+      { code: 5602, name: 'گروه صنعتی البرز', ref: '—', owner: 'مهدی کریمی', coop: 'مشتری نهایی', phone1: '۰۲۶-۳۲۲۱۱۰۰۹', phone2: '۰۲۶-۳۲۲۱۱۰۱۰', fax: '۰۲۶-۳۲۲۱۱۰۱۱', email: 'h.nouri@alborz.co', province: 'البرز', city: 'کرج', address: 'کرج، شهرک صنعتی سیمین‌دشت، خیابان دوم', source: 'تماس سرد', kind: 'رسمی کامل', economic: '۴۱۱۹۸۷۶۵۴۳۲۱', postal: '۳۱۸۹۹۴۵۶۷۱', reg: '۹۸۷۶۵', flags: ['خوش‌حساب'] },
+      { code: 5597, name: 'هلدینگ داده‌پرداز', ref: 'گروه صنعتی البرز', owner: 'نیما عباسی', coop: 'همکار تجاری', phone1: '۰۲۱-۲۲۳۳۴۴۵۵', phone2: '—', fax: '۰۲۱-۲۲۳۳۴۴۵۶', email: 'amir@dadeh-pardaz.ir', province: 'تهران', city: 'تهران', address: 'تهران، خیابان شریعتی، بالاتر از میرداماد، پلاک ۱۲۰', source: 'وب‌سایت', kind: 'رسمی', economic: '۴۱۱۲۲۳۳۴۴۵۵۶', postal: '۱۹۱۵۶۷۸۹۰۱', reg: '۵۵۴۴۳', flags: ['بدحساب'] },
+      { code: 5581, name: 'فناوران آبی', ref: '—', owner: 'سارا باصری', coop: 'مشتری نهایی', phone1: '۰۳۱-۳۶۶۵۵۴۴۳', phone2: '—', fax: '—', email: 'ali@abitech.com', province: 'اصفهان', city: 'اصفهان', address: 'اصفهان، خیابان چهارباغ بالا، مجتمع پارک', source: 'تبلیغات آنلاین', kind: 'غیررسمی', economic: '—', postal: '۸۱۶۴۹۸۷۶۵۴', reg: '—', flags: [] },
+      { code: 5574, name: 'هتل ساری دریا', ref: '—', owner: 'رضا لشکریان', coop: 'مشتری نهایی', phone1: '۰۱۱-۳۳۲۲۱۱۰۰', phone2: '۰۱۱-۳۳۲۲۱۱۰۱', fax: '—', email: 'info@saridarya.ir', province: 'مازندران', city: 'ساری', address: 'ساری، بلوار طالقانی، جنب پارک ملت', source: 'بازاریابی همکار', kind: 'رسمی', economic: '۴۱۱۷۷۶۶۵۵۴۴۳', postal: '۴۸۱۵۶۳۴۵۶۷', reg: '۲۲۱۱۰', flags: ['بدون گارانتی'] },
+      { code: 5566, name: 'تجهیزات پزشکی رها', ref: 'فناوران آبی', owner: 'سارا باصری', coop: 'نماینده فروش', phone1: '۰۴۱-۳۵۵۴۴۳۳۲', phone2: '—', fax: '—', email: 'm.sadeghi@raha-med.ir', province: 'آذربایجان شرقی', city: 'تبریز', address: 'تبریز، خیابان امام، کوچه ارک، پلاک ۸', source: 'نمایشگاه', kind: 'رسمی کامل', economic: '۴۱۱۳۳۲۲۱۱۰۰۹', postal: '۵۱۳۶۷۸۹۰۱۲', reg: '۷۷۶۶۵', flags: [] },
+      { code: 5549, name: 'آتلیه طراحی نور', ref: '—', owner: 'داوود توکلی', coop: 'مشتری نهایی', phone1: '۰۵۱-۳۸۸۷۷۶۶۵', phone2: '—', fax: '—', email: 'sara@noor.studio', province: 'خراسان رضوی', city: 'مشهد', address: 'مشهد، بلوار سجاد، سجاد ۱۲', source: 'وب‌سایت', kind: 'غیررسمی', economic: '—', postal: '۹۱۸۷۶۵۴۳۲۱', reg: '—', flags: ['بدقول'] },
+      { code: 5531, name: 'بیمارستان امید شیراز', ref: '—', owner: 'رضا لشکریان', coop: 'مشتری نهایی', phone1: '۰۷۱-۳۶۲۲۱۱۰۰', phone2: '۰۷۱-۳۶۲۲۱۱۰۲', fax: '۰۷۱-۳۶۲۲۱۱۰۳', email: 'it@omidhospital.ir', province: 'فارس', city: 'شیراز', address: 'شیراز، بلوار زند، روبروی پارک آزادی', source: 'معرفی مشتریان', kind: 'رسمی کامل', economic: '۴۱۱۸۸۷۷۶۶۵۵۴', postal: '۷۱۳۴۵۶۷۸۹۰', reg: '۶۶۵۵۴', flags: ['خوش‌حساب'] },
+      { code: 5523, name: 'بوتیک ونوس', ref: '—', owner: 'داوود توکلی', coop: 'مشتری نهایی', phone1: '۰۱۳-۳۳۴۴۵۵۶۶', phone2: '—', fax: '—', email: 'negar@venus.shop', province: 'گیلان', city: 'رشت', address: 'رشت، خیابان گلسار، بلوار سمیه', source: 'تبلیغات آنلاین', kind: 'غیررسمی', economic: '—', postal: '۴۱۶۳۸۷۶۵۴۳', reg: '—', flags: ['بدون پشتیبانی'] }
+    ],
+
+    /* افراد مرتبط شرکت‌ها */
+    contacts: [
+      { code: 901, company: 'پارس‌نیکان', companyCode: 5623, gender: 'm', name: 'داوود توکلی', unit: 'مدیریت', role: 'مدیرعامل', phone1: '۰۲۱-۸۸۷۷۶۶۵۵', phone2: '—', mobile: '۰۹۳۵۷۸۹۶۱۷۱', email: 'tavakoli@parsnikan.ir', due: true, dueCount: 2, invite: true, nature: 'متفرقه', source: 'معرفی مشتریان' },
+      { code: 354, company: 'پارس‌نیکان', companyCode: 5623, gender: 'f', name: 'مریم رضایی', unit: 'خرید', role: 'مسئول خرید', phone1: '۰۲۱-۸۸۷۷۶۶۵۸', phone2: '—', mobile: '۰۹۱۲۳۴۵۶۷۸۹', email: 'm.rezaei@parsnikan.ir', due: false, dueCount: 0, invite: true, nature: 'خریدار', source: 'معرفی مشتریان' },
+      { code: 26, company: 'پارس‌نیکان', companyCode: 5623, gender: 'm', name: 'بهرام اردشیری', unit: 'فناوری اطلاعات', role: 'کارشناس IT', phone1: '۰۲۱-۸۸۷۷۶۶۶۰', phone2: '—', mobile: '۰۹۱۲۷۷۸۸۹۹۰', email: 'ardeshiri@parsnikan.ir', due: false, dueCount: 0, invite: false, nature: 'فنی', source: 'نمایشگاه' },
+      { code: 115, company: 'صنایع الکترونیک آریا گستر', companyCode: 5618, gender: 'm', name: 'مهدی عرب نجفی', unit: 'مدیریت', role: 'مدیرعامل', phone1: '۰۲۶-۳۴۴۵۵۶۶۷', phone2: '—', mobile: '۰۹۱۲۴۴۴۵۵۶۶', email: 'najafi@ariagostar.com', due: true, dueCount: 1, invite: true, nature: 'خریدار', source: 'نمایشگاه' },
+      { code: 814, company: 'گروه صنعتی البرز', companyCode: 5602, gender: 'm', name: 'حسین نوری', unit: 'خرید', role: 'مدیر خرید', phone1: '۰۲۶-۳۲۲۱۱۰۰۹', phone2: '—', mobile: '۰۹۱۲۴۴۴۵۵۶۶', email: 'h.nouri@alborz.co', due: false, dueCount: 0, invite: true, nature: 'خریدار', source: 'تماس سرد' },
+      { code: 28, company: 'هلدینگ داده‌پرداز', companyCode: 5597, gender: 'm', name: 'امیر شریفی', unit: 'مالی', role: 'مدیر مالی', phone1: '۰۲۱-۲۲۳۳۴۴۵۵', phone2: '—', mobile: '۰۹۱۲۵۵۵۶۶۷۷', email: 'amir@dadeh-pardaz.ir', due: true, dueCount: 3, invite: false, nature: 'مالی', source: 'وب‌سایت' },
+      { code: 17, company: 'فناوران آبی', companyCode: 5581, gender: 'm', name: 'علی محمدی', unit: 'مدیریت', role: 'مدیر فنی', phone1: '۰۳۱-۳۶۶۵۵۴۴۳', phone2: '—', mobile: '۰۹۳۵۱۱۲۲۳۳۴', email: 'ali@abitech.com', due: false, dueCount: 0, invite: false, nature: 'فنی', source: 'تبلیغات آنلاین' },
+      { code: 156, company: 'هتل ساری دریا', companyCode: 5574, gender: 'f', name: 'زهره جوشکار', unit: 'اداری', role: 'مسئول دفتر', phone1: '۰۱۱-۳۳۲۲۱۱۰۰', phone2: '—', mobile: '۰۹۱۱۳۳۴۴۵۵۶', email: 'office@saridarya.ir', due: false, dueCount: 0, invite: true, nature: 'متفرقه', source: 'بازاریابی همکار' },
+      { code: 27, company: 'بیمارستان امید شیراز', companyCode: 5531, gender: 'm', name: 'کامران شیرنظر', unit: 'فناوری اطلاعات', role: 'مدیر IT', phone1: '۰۷۱-۳۶۲۲۱۱۰۰', phone2: '—', mobile: '۰۹۱۷۱۲۳۴۵۶۷', email: 'it@omidhospital.ir', due: true, dueCount: 1, invite: true, nature: 'فنی', source: 'معرفی مشتریان' }
+    ],
+
+    /* پیگیری‌های فروش (صفحه «فروش» برنامه قبلی) */
+    followups: [
+      { code: 5623, company: 'پارس‌نیکان', expert: 'مهدی کریمی', last: '۱۴۰۵/۰۷/۱۶', next: '۱۴۰۵/۰۷/۲۱', type: 'فروش', desc: 'ارسال پیش‌فاکتور ارتقای لایسنس به ۱۵۰ کاربر', due: 'today' },
+      { code: 5618, company: 'صنایع الکترونیک آریا گستر', expert: 'میلاد فتاحی', last: '۱۴۰۵/۰۷/۱۲', next: '۱۴۰۵/۰۷/۱۸', type: 'پیگیری', desc: 'پیگیری واریز مانده‌ی صورتحساب ۴۰۷۵۴', due: 'overdue' },
+      { code: 5602, company: 'گروه صنعتی البرز', expert: 'مهدی کریمی', last: '۱۴۰۵/۰۷/۱۰', next: '۱۴۰۵/۰۷/۲۰', type: 'دمو', desc: 'جلسه دموی ماژول انبار با تیم فنی', due: 'overdue' },
+      { code: 5597, company: 'هلدینگ داده‌پرداز', expert: 'نیما عباسی', last: '۱۴۰۵/۰۷/۰۸', next: '۱۴۰۵/۰۷/۲۲', type: 'مالی', desc: 'تمدید قرارداد پشتیبانی طلایی', due: 'soon' },
+      { code: 5581, company: 'فناوران آبی', expert: 'سارا باصری', last: '۱۴۰۵/۰۷/۰۵', next: '۱۴۰۵/۰۷/۲۵', type: 'آموزش', desc: 'برنامه‌ریزی دوره آموزش CRM برای کارشناسان', due: 'soon' },
+      { code: 5574, company: 'هتل ساری دریا', expert: 'رضا لشکریان', last: '۱۴۰۵/۰۶/۲۸', next: '۱۴۰۵/۰۷/۲۱', type: 'فروش', desc: 'استعلام قیمت ۶ دستگاه کارتخوان برای شعب', due: 'today' },
+      { code: 5566, company: 'تجهیزات پزشکی رها', expert: 'سارا باصری', last: '۱۴۰۵/۰۶/۲۲', next: '۱۴۰۵/۰۸/۰۲', type: 'بازاریابی همکار', desc: 'معرفی نمایندگی استان آذربایجان شرقی', due: '' },
+      { code: 5549, company: 'آتلیه طراحی نور', expert: 'داوود توکلی', last: '۱۴۰۵/۰۶/۱۵', next: '—', type: 'سایر', desc: 'دریافت گواهی حسن انجام کار', due: '' },
+      { code: 5531, company: 'بیمارستان امید شیراز', expert: 'رضا لشکریان', last: '۱۴۰۵/۰۶/۱۰', next: '۱۴۰۵/۰۸/۱۰', type: 'پشتیبانی', desc: 'بررسی گزارش ماهانه دستگاه‌های بخش اداری', due: '' },
+      { code: 5523, company: 'بوتیک ونوس', expert: 'داوود توکلی', last: '۱۴۰۵/۰۵/۲۱', next: '—', type: 'فروش', desc: 'مشتری فعلاً منصرف شده است', due: '' }
+    ],
+
+    /* سوابق عملکرد / فعالیت‌های مشتری */
+    activities: [
+      { owner: 'میلاد فتاحی', title: 'فروش', desc: 'فروش ۵ دستگاه کارتخوان', status: 'active', start: '۱۴۰۵/۰۷/۱۲' },
+      { owner: 'مهدی کریمی', title: 'دمو', desc: 'دموی آنلاین ماژول انبار', status: 'active', start: '۱۴۰۵/۰۶/۲۶' },
+      { owner: 'میلاد فتاحی', title: 'بازاریابی همکار', desc: 'استان اصفهان', status: 'inactive', start: '۱۴۰۵/۰۶/۰۱' },
+      { owner: 'سارا باصری', title: 'آموزش', desc: 'آموزش CRM — سطح مقدماتی', status: 'inactive', start: '۱۴۰۵/۰۵/۱۸' },
+      { owner: 'رضا لشکریان', title: 'پشتیبانی', desc: 'به‌روزرسانی نسخه نرم‌افزار', status: 'active', start: '۱۴۰۵/۰۵/۰۳' },
+      { owner: 'داوود توکلی', title: 'سایر', desc: 'دریافت گواهی حسن انجام کار', status: 'active', start: '۱۴۰۵/۰۴/۱۶' },
+      { owner: 'نیما عباسی', title: 'فروش', desc: 'پروژه یکپارچه‌سازی با حسابداری', status: 'inactive', start: '۱۴۰۵/۰۳/۲۲' }
+    ],
+
+    /* گزارش عملکرد فروش */
+    performance: [
+      { owner: 'رضا لشکریان', activity: 'پیگیری', customer: 'صنایع الکترونیک آریا گستر', status: 'در حال پیگیری', follow: '۱۴۰۵/۰۷/۰۸', desc: 'پیگیری پیش‌فاکتور ۶۰۰ کارت خام', time: '۱۵:۲۵', reg: '۱۴۰۵/۰۷/۰۱' },
+      { owner: 'رضا لشکریان', activity: 'پیگیری', customer: 'صنایع الکترونیک آریا گستر', status: 'فروخته شده', follow: '۱۴۰۵/۰۷/۰۶', desc: 'گزارش واریز — فاکتور ۴۰۸۰۵ — مبلغ ۳۵٬۵۳۰٬۰۰۰ تومان — تسویه شد', time: '۱۳:۴۱', reg: '۱۴۰۵/۰۷/۰۶' },
+      { owner: 'رضا لشکریان', activity: 'فروش', customer: 'هتل ساری دریا', status: 'در حال پیگیری', follow: '۱۴۰۵/۰۷/۲۱', desc: 'ارسال پیش‌فاکتور برای ۱۲۰۰ کارت', time: '۱۵:۰۷', reg: '۱۴۰۵/۰۷/۱۱' },
+      { owner: 'رضا لشکریان', activity: 'پشتیبانی', customer: 'بیمارستان امید شیراز', status: 'در انتظار پاسخ', follow: '۱۴۰۵/۰۸/۱۰', desc: 'ارسال گزارش ماهانه دستگاه‌ها', time: '۱۰:۱۲', reg: '۱۴۰۵/۰۷/۱۰' },
+      { owner: 'میلاد فتاحی', activity: 'فروش', customer: 'صنایع الکترونیک آریا گستر', status: 'فروخته شده', follow: '۱۴۰۵/۰۷/۱۲', desc: 'صدور صورتحساب ۴۰۷۵۴ — ۵ دستگاه + نرم‌افزار', time: '۱۱:۳۰', reg: '۱۴۰۵/۰۷/۱۲' },
+      { owner: 'میلاد فتاحی', activity: 'بازاریابی همکار', customer: 'تجهیزات پزشکی رها', status: 'در حال پیگیری', follow: '۱۴۰۵/۰۸/۰۲', desc: 'مذاکره برای نمایندگی استان', time: '۰۹:۴۵', reg: '۱۴۰۵/۰۶/۲۲' },
+      { owner: 'مهدی کریمی', activity: 'دمو', customer: 'گروه صنعتی البرز', status: 'در حال پیگیری', follow: '۱۴۰۵/۰۷/۲۰', desc: 'دموی ماژول انبار', time: '۱۴:۰۰', reg: '۱۴۰۵/۰۷/۱۰' },
+      { owner: 'مهدی کریمی', activity: 'فروش', customer: 'پارس‌نیکان', status: 'فروخته شده', follow: '۱۴۰۵/۰۷/۱۶', desc: 'ارتقای لایسنس T5 از ۵۰ به ۱۵۰ پرسنل', time: '۱۲:۲۰', reg: '۱۴۰۵/۰۷/۱۶' },
+      { owner: 'سارا باصری', activity: 'آموزش', customer: 'فناوران آبی', status: 'در انتظار پاسخ', follow: '۱۴۰۵/۰۷/۲۵', desc: 'هماهنگی زمان دوره آموزشی', time: '۱۶:۱۰', reg: '۱۴۰۵/۰۷/۰۵' },
+      { owner: 'داوود توکلی', activity: 'فروش', customer: 'بوتیک ونوس', status: 'منصرف شده', follow: '—', desc: 'مشتری خرید را به سال بعد موکول کرد', time: '۱۱:۰۵', reg: '۱۴۰۵/۰۵/۲۱' }
+    ],
+
+    /* فاکتورها و پیش‌فاکتورها */
+    invoices: [
+      { id: 64994, no: '۴۰۷۸۲-ل', type: 'invoice', customer: 'پارس‌نیکان', kind: 'رسمی کامل', date: '۱۴۰۵/۰۷/۱۹', owner: 'سارا باصری', registrar: 'مهدی کریمی', amount: 33000000, vat: 3000000, install: 0, software: 30000000, paid: 33000000, cancelled: false, out: false, reserved: true, warn: false, editable: false },
+      { id: 64992, no: '۵۰۷۹۳-پ', type: 'proforma', converted: false, customer: 'صنایع الکترونیک آریا گستر', kind: 'رسمی', date: '۱۴۰۵/۰۷/۱۳', owner: 'میلاد فتاحی', registrar: 'میلاد فتاحی', amount: 19800000, vat: 1800000, install: 0, software: 0, paid: 0, cancelled: false, out: false, reserved: false, warn: false, editable: true },
+      { id: 64990, no: '۴۰۷۸۰-ل', type: 'invoice', customer: 'گروه صنعتی البرز', kind: 'رسمی کامل', date: '۱۴۰۵/۰۷/۱۸', owner: 'سارا باصری', registrar: 'مهدی کریمی', amount: 54890000, vat: 4990000, install: 0, software: 49900000, paid: 54890000, cancelled: false, out: false, reserved: true, warn: false, editable: false },
+      { id: 64984, no: '۴۰۷۷۹-ل', type: 'invoice', customer: 'هلدینگ داده‌پرداز', kind: 'رسمی', date: '۱۴۰۵/۰۷/۱۸', owner: 'سارا باصری', registrar: 'نیما عباسی', amount: 42900000, vat: 3900000, install: 0, software: 39000000, paid: 0, cancelled: false, out: false, reserved: false, warn: true, editable: true },
+      { id: 64976, no: '۵۰۷۸۳-پ', type: 'proforma', converted: false, customer: 'هتل ساری دریا', kind: 'غیررسمی', date: '۱۴۰۵/۰۷/۱۵', owner: 'رضا لشکریان', registrar: 'رضا لشکریان', amount: 26400000, vat: 2400000, install: 0, software: 0, paid: 0, cancelled: false, out: false, reserved: false, warn: false, editable: true },
+      { id: 64970, no: '۴۰۷۵۴-ل', type: 'invoice', customer: 'صنایع الکترونیک آریا گستر', kind: 'رسمی', date: '۱۴۰۵/۰۷/۱۲', owner: 'میلاد فتاحی', registrar: 'میلاد فتاحی', amount: 127325000, vat: 11575000, install: 0, software: 25375000, paid: 94325000, cancelled: false, out: false, reserved: true, warn: false, editable: false },
+      { id: 64962, no: '۵۰۷۷۱-پ', type: 'proforma', converted: true, customer: 'بیمارستان امید شیراز', kind: 'رسمی کامل', date: '۱۴۰۵/۰۷/۰۹', owner: 'رضا لشکریان', registrar: 'رضا لشکریان', amount: 46800000, vat: 4255000, install: 2000000, software: 0, paid: 0, cancelled: false, out: false, reserved: false, warn: false, editable: true },
+      { id: 64958, no: '۴۰۷۱۰-ل', type: 'invoice', customer: 'فناوران آبی', kind: 'غیررسمی', date: '۱۴۰۵/۰۷/۰۴', owner: 'سارا باصری', registrar: 'سارا باصری', amount: 13200000, vat: 1200000, install: 0, software: 12000000, paid: 13200000, cancelled: false, out: false, reserved: false, warn: false, editable: false },
+      { id: 64951, no: '۴۰۷۰۹-ل', type: 'invoice', customer: 'تجهیزات پزشکی رها', kind: 'رسمی کامل', date: '۱۴۰۵/۰۷/۰۱', owner: 'داوود توکلی', registrar: 'داوود توکلی', amount: 4400000, vat: 400000, install: 0, software: 4000000, paid: 2000000, cancelled: false, out: false, reserved: false, warn: true, editable: true },
+      { id: 64947, no: '۴۰۷۰۸-ل', type: 'invoice', customer: 'آتلیه طراحی نور', kind: 'غیررسمی', date: '۱۴۰۵/۰۷/۰۱', owner: 'داوود توکلی', registrar: 'لیلا مستوفی', amount: 11000000, vat: 1000000, install: 0, software: 10000000, paid: 0, cancelled: true, out: false, reserved: false, warn: false, editable: false },
+      { id: 64939, no: '۵۰۷۵۶-پ', type: 'proforma', converted: false, customer: 'بوتیک ونوس', kind: 'غیررسمی', date: '۱۴۰۵/۰۶/۲۸', owner: 'داوود توکلی', registrar: 'داوود توکلی', amount: 1980000, vat: 180000, install: 1000000, software: 0, paid: 0, cancelled: false, out: true, reserved: false, warn: false, editable: true }
+    ],
+
+    /* اقلام نمونه برای فرم/چاپ فاکتور */
+    sampleItems: [
+      { pid: 'P-201', qty: 5, price: 1850000, discount: 230000, install: true },
+      { pid: 'P-103', qty: 1, price: 4200000, discount: 420000, install: false },
+      { pid: 'P-301', qty: 50, price: 20000, discount: 5000, install: false }
+    ],
+
+    /* پرداخت‌های ثبت‌شده (گزارش پرداخت) */
+    payments: [
+      { invoice: '۴۰۷۵۴-ل', date: '۱۴۰۵/۰۷/۱۲', settle: 'نقدی', method: 'نقد', chequeDate: '—', bank: 'پایا ۱۴۰۵۰۷۱۸۰۵۶۲۸۵۳۴۱۹ — سامان', branch: '—', amount: 60000000, reg: '۱۴۰۵/۰۷/۱۲', desc: 'واریز مرحله اول' },
+      { invoice: '۴۰۷۵۴-ل', date: '۱۴۰۵/۰۷/۱۲', settle: 'اقساطی', method: 'چک', chequeDate: '۱۴۰۵/۰۸/۱۲', bank: 'ملت', branch: 'شعبه کرج مرکزی', amount: 34325000, reg: '۱۴۰۵/۰۷/۱۴', desc: 'چک شماره ۳۸۲۰۹۰' }
+    ],
+
+    /* نامه‌ها و قراردادها */
+    letters: [
+      { sys: 2428, type: 'نامه', no: '۳۱۲۱۹۰-ج', subject: 'نامه کتابخانه‌های عمومی', company: 'اداره کل کتابخانه‌های عمومی استان اصفهان', date: '۱۴۰۵/۰۷/۲۰', cancelled: false },
+      { sys: 2427, type: 'نامه', no: '۳۱۱۱۸۳-ج', subject: 'نامه بانک مهر', company: 'بانک قرض‌الحسنه مهر ایران', date: '۱۴۰۵/۰۷/۱۸', cancelled: false },
+      { sys: 2426, type: 'قرارداد', no: '۳۱۱۱۸۲-ق', subject: 'قرارداد پشتیبانی طلایی ۱۲ ماهه', company: 'هلدینگ داده‌پرداز', date: '۱۴۰۵/۰۷/۱۵', cancelled: false },
+      { sys: 2425, type: 'نامه', no: '۳۱۰۱۷۱-ج', subject: 'اعلام واریز وجه', company: 'صنایع الکترونیک آریا گستر', date: '۱۴۰۵/۰۷/۱۲', cancelled: false },
+      { sys: 2424, type: 'قرارداد', no: '۳۱۰۱۷۰-ق', subject: 'قرارداد نصب و راه‌اندازی', company: 'بیمارستان امید شیراز', date: '۱۴۰۵/۰۷/۰۹', cancelled: false },
+      { sys: 2423, type: 'نامه', no: '۳۰۸۱۵۳-ج', subject: 'معرفی نماینده فروش', company: 'تجهیزات پزشکی رها', date: '۱۴۰۵/۰۶/۲۲', cancelled: true },
+      { sys: 2422, type: 'نامه', no: '۳۰۷۱۶۷-ج', subject: 'درخواست گواهی حسن انجام کار', company: 'آتلیه طراحی نور', date: '۱۴۰۵/۰۶/۱۵', cancelled: false }
+    ],
+
+    /* مدارک پیوستی مشتری */
+    attachments: [
+      { name: 'صورتجلسه-تحویل.jpg', kind: 'img', user: 'لیلا مستوفی', desc: 'صورتجلسه تحویل دستگاه‌ها', date: '۱۴۰۵/۰۷/۱۴' },
+      { name: 'جلسه-صفحه۱.pdf', kind: 'pdf', user: 'لیلا مستوفی', desc: 'صورتجلسه کیک‌آف', date: '۱۴۰۵/۰۶/۰۶' },
+      { name: 'جلسه-صفحه۲.pdf', kind: 'pdf', user: 'لیلا مستوفی', desc: '', date: '۱۴۰۵/۰۶/۰۶' },
+      { name: 'فرم-فروش.xlsx', kind: 'xls', user: 'مهدی کریمی', desc: 'فرم اطلاعات فروش', date: '۱۴۰۵/۰۵/۳۱' },
+      { name: 'قرارداد-امضاشده.pdf', kind: 'pdf', user: 'نیما عباسی', desc: 'نسخه اسکن‌شده قرارداد', date: '۱۴۰۵/۰۵/۱۴' }
+    ],
+
+    /* پرونده مشتری: محصولات تحویلی، فرم‌ها و خدمات پشتیبانی */
+    deliveries: [
+      { product: 'کارتخوان هوشمند HP-510', invoice: '۴۰۷۵۴-ل', serial: 'A3S6173860016', out: '۱۴۰۵/۰۷/۱۴', reader: 'RFID', outType: 'فروش', owner: 'میلاد فتاحی', desc: '', valid: '۱۴۰۶/۰۷/۱۴' },
+      { product: 'کارتخوان هوشمند HP-510', invoice: '۴۰۷۵۴-ل', serial: 'A3S6192560135', out: '۱۴۰۵/۰۷/۱۴', reader: 'RFID', outType: 'فروش', owner: 'میلاد فتاحی', desc: '', valid: '۱۴۰۶/۰۷/۱۴' },
+      { product: 'افزایش لایسنس — ۵۰ کاربر', invoice: '۴۰۷۵۴-ل', serial: 'LIC-26-5618', out: '۱۴۰۵/۰۷/۱۴', reader: 'بدون کارتخوان', outType: 'فروش', owner: 'میلاد فتاحی', desc: 'لایسنس ۲۶ دستگاه', valid: '۱۴۰۶/۰۷/۱۴' }
+    ],
+    forms: [
+      { no: '۰۱۳۶۸', type: 'فروش', send: 'داخل شرکت', coord: 'میلاد فتاحی' },
+      { no: '۰۲۸۳۹', type: 'نصب', send: 'پیک', coord: 'رضا لشکریان' }
+    ],
+    services: [
+      { owner: 'رضا لشکریان', type: 'نصب و راه‌اندازی', status: 'انجام شده', follow: '۱۴۰۵/۰۷/۱۵', spent: '۲ ساعت', custExpert: 'مهدی عرب نجفی', ourExpert: 'رضا لشکریان', desc: 'نصب ۵ دستگاه در سالن تولید', at: '۱۴۰۵/۰۷/۱۵ — ۱۰:۳۰' },
+      { owner: 'رضا لشکریان', type: 'آموزش', status: 'در انتظار', follow: '۱۴۰۵/۰۷/۲۵', spent: '—', custExpert: 'مهدی عرب نجفی', ourExpert: 'سارا باصری', desc: 'آموزش کار با نرم‌افزار Link5', at: '—' }
+    ],
+
+    /* پیامک‌ها */
+    smsInbox: [
+      { from: '۰۹۱۲۴۴۴۵۵۶۶', name: 'مهدی عرب نجفی', text: 'سلام، پیش‌فاکتور دریافت شد. لطفاً برای هماهنگی نصب تماس بگیرید.', time: '۱۴۰۵/۰۷/۲۱ — ۰۹:۱۴' },
+      { from: '۰۹۳۵۷۸۹۶۱۷۱', name: 'داوود توکلی', text: 'مبلغ فاکتور ۴۰۷۸۲ واریز شد.', time: '۱۴۰۵/۰۷/۲۰ — ۱۸:۰۲' },
+      { from: '۰۹۱۷۱۲۳۴۵۶۷', name: 'کامران شیرنظر', text: 'دستگاه بخش اداری خطای ارتباط شبکه می‌دهد.', time: '۱۴۰۵/۰۷/۱۹ — ۱۱:۴۰' }
+    ],
+    smsOutbox: [
+      { to: 'گروهی — ۴۸ مخاطب', text: 'به مناسبت هفته‌ی ملی CRM، ۱۵٪ تخفیف ویژه روی تمدید لایسنس‌ها…', time: '۱۴۰۵/۰۷/۱۸ — ۱۰:۰۰', status: 'delivered' },
+      { to: '۰۹۱۲۴۴۴۵۵۶۶', text: 'صورتحساب ۴۰۷۵۴ صادر شد. مبلغ مانده: ۳۳٬۰۰۰٬۰۰۰ تومان', time: '۱۴۰۵/۰۷/۱۲ — ۱۲:۲۲', status: 'delivered' },
+      { to: '۰۹۱۱۳۳۴۴۵۵۶', text: 'پیش‌فاکتور ۵۰۷۸۳ برای شما ارسال شد.', time: '۱۴۰۵/۰۷/۱۵ — ۱۶:۴۸', status: 'failed' }
+    ]
+  };
+
   return {
     nav: NAV, modules: MODULES, kpis: KPIS, customers: CUSTOMERS, dealStages: DEAL_STAGES, deals: DEALS,
     tickets: TICKETS, invoices: INVOICES, products: PRODUCTS, threads: THREADS,
@@ -917,6 +1115,7 @@ window.CRM_DATA = (function () {
     msgMe: MSG_ME, msgTypes: MSG_TYPES, msgs: MSGS, accTypes: ACC_TYPES, accBanks: ACC_BANKS, accDocs: ACC_DOCS,
     repOwners: REP_OWNERS, repAgents: REP_AGENTS, repSms: REP_SMS, repCompanies: REP_COMPANIES, repDevices: REP_DEVICES, repInvoices: REP_INVOICES,
     supFormTypes: SUP_FORM_TYPES, supStatuses: SUP_STATUSES, supCoords: SUP_COORDS, supExperts: SUP_EXPERTS, supLists: SUP_LISTS,
-    supCompanies: SUP_COMPANIES, supPlans: SUP_PLANS, supServices: SUP_SERVICES, supUserPerf: SUP_USERPERF
+    supCompanies: SUP_COMPANIES, supPlans: SUP_PLANS, supServices: SUP_SERVICES, supUserPerf: SUP_USERPERF,
+    sales: SALES
   };
 })();
