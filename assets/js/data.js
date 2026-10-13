@@ -19,8 +19,9 @@ window.CRM_DATA = (function () {
   var MODULES = [
     {
       id: 'm-workspace', label: 'میز کار', icon: 'layout-grid', tone: 'ink', href: 'desktop.html', nav: false,
-      desc: 'تقویم، کارهای روزانه، جریان فعالیت‌ها و میزکار پنجره‌ای',
+      desc: 'پیغام‌های داخلی، تقویم، جریان فعالیت‌ها و میزکار پنجره‌ای',
       children: [
+        { id: 'inbox', label: 'پیغام‌ها', href: 'inbox.html' },
         { id: 'calendar', label: 'تقویم', href: 'calendar.html' },
         { id: 'activity', label: 'فعالیت‌ها', href: 'activity.html' },
         { id: 'desktop', label: 'میزکار پنجره‌ای', href: 'desktop.html' },
@@ -70,15 +71,31 @@ window.CRM_DATA = (function () {
       ]
     },
     {
-      id: 'm-accounting', label: 'حسابداری', icon: 'wallet', tone: 'coral', href: '#', soon: true,
-      desc: 'دریافت و پرداخت، تسویه‌ی فاکتورها و اسناد مالی',
-      children: []
+      id: 'm-accounting', label: 'حسابداری', icon: 'wallet', tone: 'coral', href: 'accounting.html',
+      desc: 'اسناد پرداخت و هزینه، چک‌ها، تنخواه و پرداخت به نمایندگان',
+      children: [
+        { id: 'accounting', label: 'حسابداری', href: 'accounting.html' }
+      ],
+      links: [
+        { label: 'مالی پرداختی‌ها', href: 'report.html?r=payments' },
+        { label: 'هزینه‌ها و خسارت', href: 'report.html?r=expenses' }
+      ]
     },
     {
-      id: 'm-reports', label: 'گزارشات', icon: 'reports', tone: 'rose', href: 'reports.html',
-      desc: 'گزارش‌های تحلیلی فروش، عملکرد تیم و منابع جذب',
+      id: 'm-reports', label: 'گزارشات', icon: 'reports', tone: 'rose', href: 'reports-hub.html',
+      desc: 'گزارش مالی و آماری، پیامک، نمایندگان، شرکت‌ها، دستگاه‌ها و پرداخت‌ها',
       children: [
-        { id: 'reports', label: 'گزارش‌های تحلیلی', href: 'reports.html' }
+        { id: 'reports-hub', label: 'همه‌ی گزارش‌ها', href: 'reports-hub.html' },
+        { id: 'rep-finance', label: 'گزارش مالی و آماری', href: 'report.html?r=finance' },
+        { id: 'rep-sms', label: 'گزارش پیامک', href: 'report.html?r=sms' },
+        { id: 'rep-agents', label: 'لیست نماینده‌ها', href: 'report.html?r=agents' },
+        { id: 'rep-companies', label: 'مشخصات شرکت‌ها', href: 'report.html?r=companies' },
+        { id: 'rep-company-stats', label: 'آمار شرکت‌ها', href: 'report.html?r=company-stats' },
+        { id: 'rep-owner-stats', label: 'آمار مسئول فروش', href: 'report.html?r=owner-stats' },
+        { id: 'rep-devices', label: 'ریز وضعیت دستگاه‌ها', href: 'report.html?r=devices' },
+        { id: 'rep-payments', label: 'مالی پرداختی‌ها', href: 'report.html?r=payments' },
+        { id: 'rep-expenses', label: 'هزینه‌ها و خسارت', href: 'report.html?r=expenses' },
+        { id: 'reports', label: 'داشبورد تحلیلی', href: 'reports.html' }
       ],
       links: [
         { label: 'گزارش موجودی انبار', href: 'warehouse-stock.html' }
@@ -105,6 +122,7 @@ window.CRM_DATA = (function () {
       group: 'میز کار',
       items: [
         { id: 'dashboard', label: 'داشبورد', icon: 'dashboard', href: 'dashboard.html' },
+        { id: 'inbox', label: 'پیغام‌ها', icon: 'inbox', href: 'inbox.html', badge: '۴' },
         { id: 'calendar', label: 'تقویم', icon: 'calendar', href: 'calendar.html' },
         { id: 'activity', label: 'فعالیت‌ها', icon: 'activity', href: 'activity.html' },
         { id: 'desktop', label: 'میزکار پنجره‌ای', icon: 'window', href: 'desktop.html', badge: 'پنجره‌ای', badgeStyle: 'solid' }
@@ -508,6 +526,157 @@ window.CRM_DATA = (function () {
     add('pro-note', 1405, 'اعتبار این پیش‌فاکتور ۵ روز کاری است. هزینه نصب و راه‌اندازی در تهران رایگان است.');
   })();
 
+  /* ==========================================================================
+   * پیغام‌ها (پیام‌رسان داخلی بین کاربران)
+   * from/to: نام کاربر؛ «مهدی کریمی» کاربر واردشده‌ی قالب است.
+   * ========================================================================== */
+  var MSG_ME = 'مهدی کریمی';
+  var MSG_TYPES = [
+    { id: 'msg', title: 'پیغام', tone: 'badge-info' },
+    { id: 'cancel', title: 'کنسلی برنامه کاری', tone: 'badge-danger' },
+    { id: 'pay', title: 'گزارش واریزی', tone: 'badge-success' },
+    { id: 'remind', title: 'یادآوری', tone: 'badge-warning' }
+  ];
+  var MSGS = [
+    { code: 115169, from: 'داوود توکلی', to: MSG_ME, type: 'cancel', text: 'کنسلی برنامه به شماره فرم ۰۵۷۵۱ برای مشتری شرکت سامانه‌های بعد پنجم. لطفاً زمان جدید نصب را با مشتری هماهنگ کنید.', date: '۱۴۰۵/۰۷/۲۰', time: '۱۱:۰۹', remind: null, wait: true, seen: false },
+    { code: 115168, from: 'امیر باصری', to: MSG_ME, type: 'msg', text: 'پیش‌فاکتور گروه صنعتی البرز آماده است؛ قبل از ارسال، تخفیف ۸٪ را تأیید می‌کنید؟', date: '۱۴۰۵/۰۷/۲۰', time: '۰۹:۴۲', remind: null, wait: true, seen: false },
+    { code: 115166, from: MSG_ME, to: 'تینا لشکریان', type: 'msg', text: 'جلسه‌ی دموی داده‌پرداز به شنبه ساعت ۱۰ منتقل شد. دستگاه EP-810 را از انبار تحویل بگیرید.', date: '۱۴۰۵/۰۷/۱۹', time: '۱۶:۲۰', remind: { date: '۱۴۰۵/۰۷/۲۶', time: '۰۹:۰۰' }, wait: false, seen: true },
+    { code: 115163, from: 'رضا دایجی', to: MSG_ME, type: 'remind', text: 'یادآوری: قرارداد پشتیبانی سالانه‌ی شهرداری خرم‌دره تا پایان ماه تمدید شود.', date: '۱۴۰۵/۰۷/۱۸', time: '۱۰:۰۵', remind: { date: '۱۴۰۵/۰۷/۲۸', time: '۱۰:۰۰' }, wait: false, seen: false },
+    { code: 115160, from: MSG_ME, to: 'داوود توکلی', type: 'msg', text: 'گزارش فروش مهرماه تا پایان هفته آماده می‌شود. اعداد دو نماینده‌ی تبریز هنوز نیامده است.', date: '۱۴۰۵/۰۷/۱۷', time: '۱۲:۳۰', remind: null, wait: true, seen: true },
+    { code: 115147, from: 'demo', to: MSG_ME, type: 'pay', text: 'گزارش واریزی --- فاکتور شماره ۹۰/۰۱/۰۲-الف مبلغ ۴۸٬۰۰۰٬۰۰۰ ریال به حساب ملت واریز شد.', date: '۱۴۰۵/۰۷/۱۵', time: '۱۵:۲۵', remind: null, wait: false, seen: false },
+    { code: 115145, from: 'demo', to: MSG_ME, type: 'pay', text: 'گزارش واریزی --- فاکتور شماره ۹۰/۰۱/۰۲-ب مبلغ ۱۲٬۵۰۰٬۰۰۰ ریال به حساب ملت واریز شد.', date: '۱۴۰۵/۰۷/۱۵', time: '۱۵:۲۵', remind: null, wait: false, seen: true },
+    { code: 115139, from: 'یاسمین معصومی', to: MSG_ME, type: 'msg', text: 'تیکت TK-5521 به واحد فنی ارجاع شد؛ مشتری درخواست تماس تلفنی دارد.', date: '۱۴۰۵/۰۷/۱۴', time: '۱۱:۱۲', remind: null, wait: false, seen: true },
+    { code: 115131, from: MSG_ME, to: 'امیر باصری', type: 'msg', text: 'فاکتور رزروشده‌ی پارس‌نیکان را تا فردا نهایی کنید؛ موجودی HP-510 رو به اتمام است.', date: '۱۴۰۵/۰۷/۱۲', time: '۰۸:۵۵', remind: null, wait: true, seen: false },
+    { code: 115124, from: 'علی سحرخیز', to: MSG_ME, type: 'cancel', text: 'کنسلی برنامه به شماره فرم ۰۵۷۳۸ — مشتری به‌دلیل تعطیلی اداره، نصب را به هفته‌ی بعد موکول کرد.', date: '۱۴۰۵/۰۷/۱۰', time: '۱۴:۰۰', remind: null, wait: false, seen: true },
+    { code: 115118, from: 'مریم صفری', to: MSG_ME, type: 'msg', text: 'لیست نمایندگان استان فارس به‌روزرسانی شد؛ لطفاً بررسی و تأیید کنید.', date: '۱۴۰۵/۰۷/۰۸', time: '۰۹:۳۰', remind: null, wait: true, seen: true },
+    { code: 115102, from: MSG_ME, to: 'یاسمین معصومی', type: 'remind', text: 'بازدید دوره‌ای دستگاه‌های شعبه‌ی کرج را در برنامه‌ی هفته‌ی بعد قرار دهید.', date: '۱۴۰۵/۰۷/۰۳', time: '۱۰:۴۵', remind: { date: '۱۴۰۵/۰۷/۲۲', time: '۰۸:۳۰' }, wait: false, seen: true }
+  ];
+
+  /* ==========================================================================
+   * حسابداری (سند پرداخت / هزینه)
+   * pay: cash نقدی | cheque چک | transfer واریز به حساب — petty: in واریز به تنخواه | out پرداخت از تنخواه
+   * ========================================================================== */
+  var ACC_TYPES = [
+    { id: 'buy', title: 'خرید کالا', tone: 'badge-primary' },
+    { id: 'expense', title: 'هزینه جاری', tone: 'badge-warning' },
+    { id: 'agent', title: 'پرداخت به نماینده', tone: 'badge-violet' },
+    { id: 'damage', title: 'خسارت', tone: 'badge-danger' },
+    { id: 'petty', title: 'تنخواه‌گردان', tone: 'badge-success' }
+  ];
+  var ACC_BANKS = ['ملت', 'ملی', 'صادرات', 'تجارت', 'پاسارگاد', 'سامان', 'رفاه کارگران'];
+  var ACC_DOCS = [
+    { code: 2041, period: 14, type: 'buy', date: '۱۴۰۵/۰۷/۲۰', agent: false, company: '', item: 'کارت RFID (بسته ۱۰۰ عددی)', consumer: 'انبار اصلی', invoice: '', base: 1450000, qty: 20, discount: 1000000, seller: 'بازرگانی رهام', sellerPhone: '۰۲۱۶۶۷۱۲۴۵۰', sellerAddr: 'تهران، خیابان جمهوری، پاساژ امجد', pay: 'cheque', account: '', person: '', chequeDate: '۱۴۰۵/۰۸/۲۰', chequeNo: '۷۴۲۱۱۸', bank: 'ملت', petty: '', note: 'خرید ماهانه‌ی کارت' },
+    { code: 2040, period: 14, type: 'expense', date: '۱۴۰۵/۰۷/۱۹', agent: false, company: '', item: 'ایاب و ذهاب نصب شهریار', consumer: 'علی سحرخیز', invoice: '۱۴۰۴-۰۵۲۱', base: 850000, qty: 1, discount: 0, seller: '', sellerPhone: '', sellerAddr: '', pay: 'cash', account: '', person: '', chequeDate: '', chequeNo: '', bank: '', petty: 'out', note: '' },
+    { code: 2039, period: 14, type: 'agent', date: '۱۴۰۵/۰۷/۱۸', agent: true, company: 'شرکت الکترونیک تلفن', item: 'پورسانت فروش شهریور', consumer: '', invoice: '', base: 18600000, qty: 1, discount: 0, seller: '', sellerPhone: '', sellerAddr: '', pay: 'transfer', account: '۶۲۱۹۸۶۱۰۳۴۵۶۷۸۹۰', person: 'جاهد اورنگ', chequeDate: '', chequeNo: '', bank: 'سامان', petty: '', note: 'طبق قرارداد ۱۲٪' },
+    { code: 2038, period: 14, type: 'petty', date: '۱۴۰۵/۰۷/۱۵', agent: false, company: '', item: 'شارژ تنخواه واحد پشتیبانی', consumer: 'یاسمین معصومی', invoice: '', base: 30000000, qty: 1, discount: 0, seller: '', sellerPhone: '', sellerAddr: '', pay: 'cash', account: '', person: '', chequeDate: '', chequeNo: '', bank: '', petty: 'in', note: '' },
+    { code: 2037, period: 14, type: 'damage', date: '۱۴۰۵/۰۷/۱۲', agent: false, company: '', item: 'تعویض برد دستگاه HB-630 A (سریال 630-23-00412)', consumer: 'واحد فنی', invoice: '', base: 6400000, qty: 1, discount: 0, seller: 'تعمیرات الکترونیک پویا', sellerPhone: '۰۲۱۳۳۹۱۴۲۰۸', sellerAddr: 'تهران، لاله‌زار جنوبی', pay: 'cash', account: '', person: '', chequeDate: '', chequeNo: '', bank: '', petty: 'out', note: 'آسیب در حمل' },
+    { code: 2036, period: 14, type: 'expense', date: '۱۴۰۵/۰۷/۱۰', agent: false, company: '', item: 'اجاره‌ی انبار فرعی', consumer: 'انبار فرعی', invoice: '', base: 42000000, qty: 1, discount: 0, seller: 'آقای محمدی (موجر)', sellerPhone: '۰۹۱۲۳۴۴۰۹۸۱', sellerAddr: '', pay: 'transfer', account: '۶۰۳۷۹۹۷۵۱۲۳۴۵۶۷۸', person: 'حسن محمدی', chequeDate: '', chequeNo: '', bank: 'ملی', petty: '', note: '' },
+    { code: 2035, period: 14, type: 'buy', date: '۱۴۰۵/۰۷/۰۶', agent: false, company: '', item: 'آداپتور ۱۲ ولت', consumer: 'انبار اصلی', invoice: '', base: 380000, qty: 50, discount: 500000, seller: 'پخش قطعات نوین', sellerPhone: '۰۲۱۶۶۷۴۸۸۱۰', sellerAddr: 'تهران، خیابان جمهوری', pay: 'cheque', account: '', person: '', chequeDate: '۱۴۰۵/۰۷/۳۰', chequeNo: '۷۴۲۱۰۹', bank: 'ملت', petty: '', note: '' },
+    { code: 2034, period: 14, type: 'agent', date: '۱۴۰۵/۰۷/۰۴', agent: true, company: 'شرکت حسابداران دقیق اسپادانا', item: 'پورسانت فروش مرداد و شهریور', consumer: '', invoice: '', base: 24300000, qty: 1, discount: 0, seller: '', sellerPhone: '', sellerAddr: '', pay: 'cheque', account: '', person: '', chequeDate: '۱۴۰۵/۰۸/۰۵', chequeNo: '۷۴۲۱۰۴', bank: 'ملت', petty: '', note: '' },
+    { code: 2033, period: 14, type: 'damage', date: '۱۴۰۵/۰۶/۲۸', agent: false, company: '', item: 'خسارت دستگاه دموی EP-810 (شکستگی صفحه)', consumer: 'تینا لشکریان', invoice: '', base: 3900000, qty: 1, discount: 0, seller: '', sellerPhone: '', sellerAddr: '', pay: 'cash', account: '', person: '', chequeDate: '', chequeNo: '', bank: '', petty: 'out', note: 'از دمو برگشت خورد' },
+    { code: 2032, period: 14, type: 'expense', date: '۱۴۰۵/۰۶/۲۵', agent: false, company: '', item: 'هزینه‌ی پیامک (بسته ۵۰ هزارتایی)', consumer: 'واحد فروش', invoice: '', base: 9500000, qty: 1, discount: 0, seller: 'سامانه پیامک آوا', sellerPhone: '۰۲۱۹۱۰۰۵۰۰۰', sellerAddr: '', pay: 'transfer', account: '۱۰۰۲۳۴۵۶۷۸۹', person: 'آوا پیام', chequeDate: '', chequeNo: '', bank: 'پاسارگاد', petty: '', note: '' },
+    { code: 2031, period: 14, type: 'expense', date: '۱۴۰۵/۰۶/۲۰', agent: false, company: '', item: 'پذیرایی نمایشگاه الکامپ', consumer: 'واحد بازاریابی', invoice: '', base: 7200000, qty: 1, discount: 200000, seller: 'کترینگ پارسه', sellerPhone: '۰۲۱۸۸۰۲۳۳۴۰', sellerAddr: '', pay: 'cash', account: '', person: '', chequeDate: '', chequeNo: '', bank: '', petty: 'out', note: '' },
+    { code: 2030, period: 14, type: 'petty', date: '۱۴۰۵/۰۶/۰۱', agent: false, company: '', item: 'شارژ تنخواه واحد نصب', consumer: 'علی سحرخیز', invoice: '', base: 20000000, qty: 1, discount: 0, seller: '', sellerPhone: '', sellerAddr: '', pay: 'cash', account: '', person: '', chequeDate: '', chequeNo: '', bank: '', petty: 'in', note: '' }
+  ];
+
+  /* ==========================================================================
+   * داده‌های گزارش‌ها
+   * ========================================================================== */
+  var REP_OWNERS = ['توکلی', 'عدالت', 'اصغری', 'حقی', 'میلاد فتاحی', 'محمودی', 'کاظمی', 'لشکریان', 'باصری', 'محصصی', 'فروش ۲'];
+
+  /* لیست نماینده‌ها (نوع: نماینده / عامل) */
+  var REP_AGENTS = [
+    ['نماینده', 'شرکت الکترونیک تلفن', 'آذربایجان شرقی', 'تبریز', 'جاهد اورنگ', '09144037720', '04135246410', 'تبریز، خیابان امام، مابین مسجد سالار و میدان قطب، روبه‌روی پوشاک منصور، کوچه سالار، درب اول سمت چپ، دیجیتال سانترال تلفن'],
+    ['نماینده', 'آسایش بنیان (رضا موصلی)', 'آذربایجان شرقی', 'تبریز', 'موصلی', '09145052760', '-', 'تبریز، مابین چهارراه بهار و آخونی، جنب تالار آذربایجان، ساختمان پاس ۶۴، طبقه اول'],
+    ['نماینده', 'جناب آقای حسین تقی‌زاده - آرین دیجیتال', 'آذربایجان شرقی', 'تبریز', 'تقی‌زاده', '09143116123', '-', 'تبریز، خیابان استاد جعفری، خیابان قطران جنوبی، پلاک ۲۲'],
+    ['نماینده', 'مینا انواری - تجارت هوشمند رایبون', 'آذربایجان شرقی', 'تبریز', 'افتخار', '-', '09900246924', 'تبریز، خیابان ارتش جنوبی، نرسیده به چهارراه باغشمال، ساختمان قائم، طبقه سوم'],
+    ['نماینده', 'مریم فرج‌زاده (دیجیتال سانترال)', 'آذربایجان شرقی', 'تبریز', 'اورنگ', '09146297720', '-', 'تبریز، خیابان امام، مابین مسجد سالار و میدان قطب، کوچه سالار، دیجیتال سانترال تلفن'],
+    ['نماینده', 'جناب آقای عبدالرحیم فتحی آذری بابره', 'آذربایجان غربی', 'ارومیه', 'سعید عباسی', '09358146997', '04433449989', 'ارومیه، بلوار نبوت، کوی ۳۱، آپارتمان پاس، واحد یک'],
+    ['عامل', 'شرکت مرکز گسترش ماشین‌های اداری', 'آذربایجان غربی', 'ارومیه', 'افشاری', '09143410334', '04432227871', 'ارومیه، خیابان امام، مجتمع اداری ماشین‌های اداری، طبقه زیرهمکف، پلاک ۳۰'],
+    ['نماینده', 'شرکت تراز پردازان ایده‌آل حساب آذربایجان', 'آذربایجان غربی', 'میاندوآب', 'علی ابراهیم‌نیا', '09142237411', '04445269200', 'میاندوآب، خیابان طالقانی، کوچه بهداری، ساختمان آناهیتا ۳'],
+    ['نماینده', 'سید الیاس قاسمی (آرتا شبکه یکتا)', 'اردبیل', 'اردبیل', 'الیاس آقامحمدی', '09143518129', '04533232062', 'اردبیل، ایستگاه سرعین، خیابان آب، بعد از کوچه بهار ۴۹، فروشگاه آرتا شبکه'],
+    ['نماینده', 'شرکت حسابداران دقیق اسپادانا', 'اصفهان', 'اصفهان', 'وحید تنگستانی', '09132270521', '03131320654', 'اصفهان، خیابان خلیفه سلطانی، کوچه ۸، پلاک ۲۲'],
+    ['نماینده', 'جناب آقای تنگستانی', 'اصفهان', 'اصفهان', 'وحید تنگستانی', '09132270521', '03131320654', 'اصفهان، خیابان هشت‌بهشت شرقی، کوچه ۲۰، بوستان ۱، پلاک ۱۱۳'],
+    ['نماینده', 'الناز رجبی رستمی (فروشگاه ارگ)', 'اصفهان', 'اصفهان', 'رستمی', '09133768353', '-', 'اصفهان، بزرگراه خرازی، حدفاصل صمدیه و کهندژ، ساختمان امام رضا، واحد ۳'],
+    ['عامل', 'فروشگاه درخشش', 'اصفهان', 'کاشان', 'حامد درخشش‌فر', '09133610449', '03155241050', 'کاشان، خیابان فاضل نراقی، روبه‌روی بانک صنعت و معدن'],
+    ['نماینده', 'جناب آقای مهدی عرب‌نجفی (صنایع الکترونیک آریا گستر)', 'البرز', 'کرج', '-', '09123632494', '-', 'کرج، چهارراه هفت‌تیر، مجتمع تجاری کیش، طبقه اول، واحد ۲۰۵'],
+    ['نماینده', 'شرکت دیده‌بان سیستم زاگرس', 'ایلام', 'ایلام', 'شهاب سهرابی‌پور', '09181413624', '08433339547', 'ایلام، خیابان خرمشهر، نبش کوچه شهید مظفری، طبقه اول'],
+    ['نماینده', 'جناب آقای سجاد جمالی (ماشین‌های اداری اطلس)', 'ایلام', 'ایلام', 'جمالی', '09375838100', '08433333784', 'ایلام، میدان شهید کشوری، ابتدای خیابان آیت‌الله حیدری'],
+    ['نماینده', 'فروشگاه پارسیان شبکه', 'بوشهر', 'بوشهر', 'دانش', '09177195003', '07733552220', 'بوشهر، خیابان انقلاب'],
+    ['نماینده', 'جناب آقای محمدامین دهباشی (دیجیتال سنتر)', 'بوشهر', 'بوشهر', 'دهباشی', '09179291281', '07733556182', 'بوشهر، خیابان شهید مطهری، ابتدای کارگر (هلالی)، نبش کوچه تلاش'],
+    ['نماینده', 'سما گستر بوشهر', 'بوشهر', 'بوشهر', 'زهرابی', '09171720488', '07733334453', 'بوشهر، خیابان مطهری، جنب بانک رفاه، ساختمان سما گستر'],
+    ['نماینده', 'ساتا ایده‌پرداز ویرا', 'تهران', 'تهران', 'نوید نوبخت', '09123252163', '02141135000', 'تهران، خیابان کریمخان زند، ایرانشهر شمالی، کوچه یگانه، پلاک ۲، واحد ۱'],
+    ['نماینده', 'نادین علم و صنعت مهراد', 'تهران', 'تهران', 'شعبانی', '-', '02156390703', 'تهران، میدان ولیعصر، خیابان شهید حسن عضدی، کوچه سپند، پلاک ۶۸'],
+    ['نماینده', 'آوا فرهنگ آریا', 'تهران', 'تهران', 'آبدری', '09163601361', '02188316000', 'تهران، ایرانشهر شمالی، کوچه دهقانی، پلاک ۹، واحد ۵'],
+    ['عامل', 'پیشگامان فناوری پارس', 'فارس', 'شیراز', 'کیانی', '09171234590', '07132345670', 'شیراز، خیابان زند، نبش کوچه ۲۲، ساختمان نگین'],
+    ['نماینده', 'رایان سامانه طوس', 'خراسان رضوی', 'مشهد', 'رضوانی', '09151112233', '05138456120', 'مشهد، بلوار سجاد، سجاد ۱۴، پلاک ۸'],
+    ['عامل', 'گیلان دیجیتال', 'گیلان', 'رشت', 'پورحسن', '09111345678', '01333223344', 'رشت، خیابان امام، کوچه بهار، پلاک ۱۲']
+  ].map(function (r, i) { return { code: 300 + i, kind: r[0], name: r[1], province: r[2], city: r[3], buyer: r[4], mobile: r[5], phone: r[6], address: r[7] }; });
+
+  /* گزارش پیامک (ارسالی / دریافتی) */
+  var REP_SMS = [];
+  (function () {
+    var texts = ['یادآوری نصب دستگاه حضور و غیاب فردا ساعت ۱۰', 'فاکتور شما صادر شد؛ شماره پیگیری در پیامک بعدی ارسال می‌شود', 'به سامانه پیامک ما خوش آمدید — نسخه جدید', 'کارشناس پشتیبانی تا ساعت ۱۴ با شما تماس می‌گیرد', 'تمدید قرارداد پشتیبانی سالانه شما تا پایان ماه مهلت دارد', 'دستگاه شما از تعمیرگاه تحویل شد', 'آدرس: شیراز، سه‌راه نمازی، به سمت شاه‌چراغ، کوچه کلانتری عباسیه، بعد از بی‌بی دختران', 'تست', 'سلام', 'پیش‌فاکتور درخواستی به ایمیل شما ارسال شد', 'دعوت به نمایشگاه الکامپ — غرفه ۳۱۲ سالن ۸'];
+    var inTexts = ['سلام، دستگاه بعد از قطعی برق روشن نمی‌شود', 'لطفاً پیش‌فاکتور را دوباره ارسال کنید', 'ممنون، دریافت شد', 'زمان نصب را به شنبه منتقل کنید', 'شماره حساب برای واریز را بفرستید'];
+    var senders = ['demo', 'توکلی', 'باصری', 'کاظمی', 'لشکریان'];
+    var receivers = ['', 'گروه صنعتی البرز', 'پارس‌نیکان', 'شهرداری خرم‌دره', 'داده‌پرداز', 'آریا جم', 'کیمیا شیمی دماوند', ''];
+    var seed = 7; function r(n) { seed = (seed * 9301 + 49297) % 233280; return Math.floor(seed / 233280 * n); }
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    var nums = ['09123127680', '09123342979', '09357896171', '09122307295', '09369017163', '09368797747', '09124452049', '09151112233', '09171720488'];
+    for (var i = 0; i < 64; i++) {
+      var y = 1405 - (i > 44 ? 1 : 0), m = 7 - Math.floor(i / 7) % 7, d = 20 - (i * 3) % 19;
+      if (m < 1) m += 12;
+      var dir = i % 5 === 3 ? 'in' : 'out';
+      REP_SMS.push({
+        code: 9000 - i, dir: dir, user: senders[r(senders.length)], name: receivers[r(receivers.length)], number: nums[r(nums.length)],
+        text: dir === 'in' ? inTexts[r(inTexts.length)] : texts[r(texts.length)],
+        date: y + '/' + p(m) + '/' + p(Math.max(1, d)), time: p(8 + r(10)) + ':' + p(r(60)), status: dir === 'in' ? 'دریافت شد' : (r(9) === 0 ? 'ناموفق' : 'تحویل شد')
+      });
+    }
+  })();
+
+  /* شرکت‌ها (مشتریان حقوقی) برای «مشخصات شرکت‌ها» و «آمار شرکت‌ها» */
+  var REP_COMPANIES = [];
+  (function () {
+    var names = ['گروه صنعتی البرز', 'پارس‌نیکان', 'داده‌پرداز', 'شهرداری خرم‌دره', 'آریا جم', 'کیمیا شیمی دماوند', 'رزستان سنگ', 'صندوق کار آفرین امید', 'ماشین‌های اداری امیتاک', 'راستین ارتباط سازان پاژ', 'فولاد سپاهان نوین', 'بیمارستان مهر', 'دانشگاه آزاد واحد کرج', 'هتل پارسیان شیراز', 'پخش البرز', 'کاشی سعدی', 'نساجی مازند', 'تعاونی مسکن فرهنگیان', 'شرکت ساختمانی آبادگران', 'پتروشیمی مارون', 'مدارس غیرانتفاعی نیکان', 'کارخانه قند نیشابور', 'سازمان آب منطقه‌ای گیلان', 'رستوران‌های زنجیره‌ای شاندیز', 'پوشاک هاکوپیان', 'لبنیات کاله', 'شیرین‌عسل', 'آسانسور آرین', 'داروسازی سبحان', 'پلیمر آریاساسول'];
+    var geo = [['تهران', 'تهران'], ['تهران', 'شهریار'], ['البرز', 'کرج'], ['اصفهان', 'اصفهان'], ['اصفهان', 'کاشان'], ['فارس', 'شیراز'], ['خراسان رضوی', 'مشهد'], ['خراسان رضوی', 'نیشابور'], ['آذربایجان شرقی', 'تبریز'], ['گیلان', 'رشت']];
+    var sources = ['اینترنت', 'معرفی مشتری', 'بازاریابی تلفنی', 'نمایشگاه', 'معرفی همکار', 'آشنایان', 'مناقصه', 'ایمیل مارکتینگ'];
+    var coops = ['مشتری نهایی', 'مشتری نهایی', 'مشتری نهایی', 'نماینده', 'همکار فروش', 'عمده‌فروش'];
+    var owners = ['باصری', 'کاظمی', 'لشکریان', 'میلاد فتاحی', 'توکلی', 'عدالت'];
+    var seed = 11; function r(n) { seed = (seed * 9301 + 49297) % 233280; return Math.floor(seed / 233280 * n); }
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    names.forEach(function (n, i) {
+      var g = geo[r(geo.length)];
+      REP_COMPANIES.push({
+        code: 1000 + i * 7, name: n, province: g[0], city: g[1], source: sources[r(sources.length)], coop: coops[r(coops.length)],
+        owner: owners[r(owners.length)], phone: '0' + (21 + r(70)) + (30000000 + r(60000000)), contact: ['آقای ', 'خانم '][r(2)] + ['رضایی', 'محمدی', 'کریمی', 'حسینی', 'احمدی', 'جعفری', 'نوری', 'صادقی'][r(8)],
+        devices: r(9), since: (1396 + r(10)) + '/' + p(1 + r(12)) + '/' + p(1 + r(28))
+      });
+    });
+  })();
+
+  /* ریز وضعیت دستگاه‌ها: سابقه‌ی هر سریال (ورود → خروج) */
+  var REP_DEVICES = [];
+  (function () {
+    var custs = ['شهرداری خرم‌دره', 'شرکت راستین ارتباط سازان پاژ', 'صندوق کار آفرین امید - ستاد مرکزی', 'رزستان سنگ', 'آریا جم', 'ماشین‌های اداری امیتاک', 'فواد بهرامی - ماشین‌های اداری ماد نوین', 'کیمیا شیمی دماوند', 'گروه صنعتی البرز', 'پارس‌نیکان', 'داده‌پرداز', 'بیمارستان مهر', 'هتل پارسیان شیراز'];
+    var statuses = ['sale', 'sale', 'sale', 'sale', 'demo', 'present', 'broken', 'support'];
+    var seed = 5; function r(n) { seed = (seed * 9301 + 49297) % 233280; return Math.floor(seed / 233280 * n); }
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    WH_PRODUCTS.filter(function (x) { return x.cat === 'main' || x.cat === 'security'; }).forEach(function (pr) {
+      var n = 3 + r(6);
+      for (var i = 0; i < n; i++) {
+        var iy = 1386 + r(19), im = 1 + r(12), id = 1 + r(28);
+        var oy = Math.min(1405, iy + r(3)), om = r(2) ? im : Math.min(12, im + 1 + r(3)), od = 1 + r(28);
+        if (oy === 1405 && om > 7) om = 7;
+        REP_DEVICES.push({
+          product: pr.code, name: pr.name, serial: String(2560000000000 + pr.code * 1000003 + i * 7919 + r(900)),
+          reader: ['ID', 'EM', 'Mifare', 'HID'][r(4)], inDate: iy + '/' + p(im) + '/' + p(id), status: statuses[r(statuses.length)],
+          customer: custs[r(custs.length)], outDate: oy + '/' + p(om) + '/' + p(od)
+        });
+      }
+    });
+  })();
+
   return {
     nav: NAV, modules: MODULES, kpis: KPIS, customers: CUSTOMERS, dealStages: DEAL_STAGES, deals: DEALS,
     tickets: TICKETS, invoices: INVOICES, products: PRODUCTS, threads: THREADS,
@@ -517,6 +686,8 @@ window.CRM_DATA = (function () {
     whExitTypes: WH_EXIT_TYPES, whStores: WH_STORES, whProducts: WH_PRODUCTS, whIn: WH_IN, whOut: WH_OUT,
     defUserTypes: DEF_USER_TYPES, defUserKinds: DEF_USER_KINDS, defUsers: DEF_USERS, permModules: PERM_MODULES,
     permPresets: PERM_PRESETS, defPerms: DEF_PERMS, fiscalPeriods: FISCAL_PERIODS, basicTypes: BASIC_TYPES,
-    basicItems: BASIC_ITEMS, settingTypes: SETTING_TYPES, settingValues: SETTING_VALUES
+    basicItems: BASIC_ITEMS, settingTypes: SETTING_TYPES, settingValues: SETTING_VALUES,
+    msgMe: MSG_ME, msgTypes: MSG_TYPES, msgs: MSGS, accTypes: ACC_TYPES, accBanks: ACC_BANKS, accDocs: ACC_DOCS,
+    repOwners: REP_OWNERS, repAgents: REP_AGENTS, repSms: REP_SMS, repCompanies: REP_COMPANIES, repDevices: REP_DEVICES
   };
 })();

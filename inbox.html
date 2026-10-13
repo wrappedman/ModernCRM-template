@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پیغام‌ها | مدرن‌CRM</title>
+<meta name="description" content="پیغام‌های داخلی بین کاربران با یادآوری، انتظار پاسخ و علامت دیده‌شد">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="inbox">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">پیغام‌ها</span>
+            </div>
+            <h1 class="page-title">پیغام‌ها</h1>
+            <p class="page-desc">پیغام‌های داخلی بین همکاران؛ با یادآوری زمان‌دار، درخواست پاسخ و علامت «دیده شد».</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn btn-primary" type="button" id="btnCompose"><span data-icon="send" data-icon-size="16"></span> پیغام جدید</button>
+          </div>
+        </div>
+
+        <!-- ============================ شاخص‌ها ============================ -->
+        <div class="grid-4 mb-5">
+          <button type="button" class="card card-hover text-start" data-quick="unread" style="cursor:pointer"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon amber"><span data-icon="mail" data-icon-size="22"></span></span>
+            <div><div class="stat-label">دیده‌نشده</div><div class="stat-value" id="kUnread">—</div></div>
+          </div></button>
+          <button type="button" class="card card-hover text-start" data-quick="wait" style="cursor:pointer"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon rose"><span data-icon="hourglass" data-icon-size="22"></span></span>
+            <div><div class="stat-label">منتظر پاسخ شما</div><div class="stat-value" id="kWait">—</div></div>
+          </div></button>
+          <button type="button" class="card card-hover text-start" data-quick="remind" style="cursor:pointer"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon violet"><span data-icon="alarm" data-icon-size="22"></span></span>
+            <div><div class="stat-label">یادآوری پیش‌رو</div><div class="stat-value" id="kRemind">—</div></div>
+          </div></button>
+          <button type="button" class="card card-hover text-start" data-quick="all" style="cursor:pointer"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon"><span data-icon="inbox" data-icon-size="22"></span></span>
+            <div><div class="stat-label">همه‌ی پیغام‌ها</div><div class="stat-value" id="kAll">—</div></div>
+          </div></button>
+        </div>
+
+        <div class="inbox-grid">
+          <!-- ============================ فهرست پیغام‌ها ============================ -->
+          <div class="card" style="align-self:start;min-width:0" data-win="inbox-list" data-win-title="فهرست پیغام‌ها" data-win-icon="inbox" data-win-size="1100x640">
+            <div class="card-head flex-wrap" style="gap:10px">
+              <div class="card-title"><span data-icon="inbox" data-icon-size="18"></span> فهرست پیغام‌ها</div>
+              <div class="card-actions">
+                <div class="segmented" id="fDir">
+                  <button class="seg is-active" data-d="in">دریافتی</button>
+                  <button class="seg" data-d="out">ارسالی</button>
+                  <button class="seg" data-d="all">همه</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body tight d-flex flex-wrap items-center gap-3" style="border-bottom:1px solid var(--border-muted)">
+              <div class="input-wrap" style="width:200px">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" id="fSearch" placeholder="جستجو در متن و نام…" aria-label="جستجو">
+              </div>
+              <div class="d-flex items-center gap-2">
+                <span class="fs-xs text-muted">از</span>
+                <div class="input-wrap" style="width:132px"><input class="input input-sm num" id="fFrom" data-jdate placeholder="از تاریخ" aria-label="از تاریخ"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar" data-icon-size="14"></button></div>
+                <span class="fs-xs text-muted">تا</span>
+                <div class="input-wrap" style="width:132px"><input class="input input-sm num" id="fTo" data-jdate placeholder="تا تاریخ" aria-label="تا تاریخ"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar" data-icon-size="14"></button></div>
+              </div>
+              <label class="switch ms-auto"><input type="checkbox" id="fSeen"><span class="track"></span><span class="lbl fs-sm">نمایش دیده‌شده‌ها</span></label>
+            </div>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table table-compact msg-table">
+                  <thead>
+                    <tr>
+                      <th style="width:60px">کد</th>
+                      <th>فرستنده / گیرنده</th>
+                      <th>نوع</th>
+                      <th>متن پیغام</th>
+                      <th>انتظار پاسخ</th>
+                      <th class="text-center" style="width:56px">
+                        <div class="d-flex flex-col items-center gap-1"><span>دیده شد</span><label class="check" data-tip="علامت دیده‌شد برای همه‌ی دریافتی‌های این فهرست"><input type="checkbox" id="seenAll" aria-label="انتخاب همه"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></div>
+                      </th>
+                      <th style="width:84px">تاریخ ثبت</th>
+                    </tr>
+                  </thead>
+                  <tbody id="mBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="table-foot"><span id="mFoot">—</span><span class="fs-2xs text-muted d-flex items-center gap-2"><span class="msg-dot"></span> دیده‌نشده</span></div>
+          </div>
+
+          <div class="d-flex flex-col gap-5" style="align-self:start;min-width:0">
+            <!-- ============================ متن کامل ============================ -->
+            <div class="card" id="readCard" data-win-nobtn>
+              <div class="card-head">
+                <div class="card-title"><span data-icon="mail-open" data-icon-size="18"></span> متن پیغام</div>
+                <div class="card-actions"><span id="readType"></span></div>
+              </div>
+              <div id="readEmpty" class="empty" style="padding:30px 20px">
+                <div class="empty-ic" data-icon="mail-open" data-icon-size="26"></div>
+                <div class="empty-desc">روی متن یک پیغام کلیک کنید تا متن کامل آن اینجا نمایش داده شود.</div>
+              </div>
+              <div id="readPane" class="d-none">
+                <div class="card-body">
+                  <div class="d-flex items-center gap-3 mb-4" id="readWho"></div>
+                  <div class="msg-full" id="readText"></div>
+                  <div class="d-flex flex-wrap gap-2 mt-4" id="readMeta"></div>
+                </div>
+                <div class="form-actions">
+                  <button type="button" class="btn btn-primary" id="btnReply"><span data-icon="corner-down-left" data-icon-size="16"></span> پاسخ</button>
+                  <button type="button" class="btn" id="btnSeen"><span data-icon="check-check" data-icon-size="16"></span> <span>علامت دیده‌شد</span></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================ پیغام جدید ============================ -->
+            <form class="card" id="cForm" data-win-nobtn novalidate>
+              <div class="card-head">
+                <div class="card-title"><span data-icon="send" data-icon-size="18"></span> ثبت پیغام جدید</div>
+              </div>
+              <div class="card-body">
+                <div class="chip d-none mb-3" id="replyChip" style="cursor:default"><span data-icon="corner-down-left" data-icon-size="14"></span> <span id="replyLbl"></span> <button type="button" class="tb-icon" style="width:22px;height:22px" id="replyX" data-tip="لغو پاسخ" data-icon="x" data-icon-size="13"></button></div>
+                <div class="form-group">
+                  <label class="form-label" for="cTo">مخاطب <span class="req">*</span></label>
+                  <select class="select" id="cTo"></select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="cText">متن پیغام <span class="req">*</span></label>
+                  <textarea class="textarea" id="cText" rows="4" maxlength="500" placeholder="متن پیغام…"></textarea>
+                  <div class="form-hint"><span id="cCount">۰</span> از ۵۰۰ کاراکتر</div>
+                </div>
+                <div class="grid-2" style="gap:12px">
+                  <div class="form-group">
+                    <label class="form-label" for="cDate">تاریخ یادآوری</label>
+                    <div class="input-wrap"><input class="input num" id="cDate" data-jdate placeholder="اختیاری"><button type="button" class="icon-btn trail" data-jdate-trigger data-icon="calendar" data-icon-size="15"></button></div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="cTime">ساعت یادآوری</label>
+                    <div class="input-wrap"><span class="icon lead" data-icon="clock" data-icon-size="16"></span><input class="input num" id="cTime" placeholder="۰۹:۳۰" maxlength="5" inputmode="numeric"></div>
+                  </div>
+                </div>
+                <label class="check"><input type="checkbox" id="cWait"><span class="box"><span data-icon="check" data-icon-size="12"></span></span><span class="lbl">انتظار پاسخ <small>گیرنده باید به این پیغام پاسخ دهد</small></span></label>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><span data-icon="send" data-icon-size="16"></span> ثبت</button>
+                <button type="button" class="btn" id="cNew"><span data-icon="plus" data-icon-size="16"></span> جدید</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, J = CRM.jalali, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, en = CRM.en, esc = CRM.esc;
+  var ME = D.msgMe, dir = 'in', quick = '', current = null, replyTo = null;
+  var TYPES = {}; D.msgTypes.forEach(function (t) { TYPES[t.id] = t; });
+  var CONTACTS = D.defUsers.filter(function (u) { return u.active; }).map(function (u) { return u.first + ' ' + u.last; });
+
+  $('#cTo').innerHTML = '<option value="">انتخاب مخاطب…</option>' + CONTACTS.map(function (n) { return '<option>' + esc(n) + '</option>'; }).join('');
+
+  function g(s) { var o = J.parse(s); return o ? J.toGregorian(o.jy, o.jm, o.jd) : null; }
+  function today() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
+  function isIn(m) { return m.to === ME; }
+  function find(code) { return D.msgs.filter(function (m) { return m.code === +code; })[0]; }
+
+  /* ------------------------------------------------ شاخص‌ها */
+  function kpis() {
+    var t = today();
+    $('#kUnread').textContent = fa(D.msgs.filter(function (m) { return isIn(m) && !m.seen; }).length);
+    $('#kWait').textContent = fa(D.msgs.filter(function (m) { return isIn(m) && m.wait && !m.replied; }).length);
+    $('#kRemind').textContent = fa(D.msgs.filter(function (m) { return m.remind && g(m.remind.date) >= t; }).length);
+    $('#kAll').textContent = fa(D.msgs.length);
+    var badge = $('.nav-item[href="inbox.html"] .nav-badge');
+    var n = D.msgs.filter(function (m) { return isIn(m) && !m.seen; }).length;
+    if (badge) { badge.textContent = fa(n); badge.style.display = n ? '' : 'none'; }
+  }
+
+  /* ------------------------------------------------ فهرست */
+  function rows() {
+    var q = $('#fSearch').value.trim(), a = g($('#fFrom').value), b = g($('#fTo').value), showSeen = $('#fSeen').checked, t = today();
+    return D.msgs.filter(function (m) {
+      if (quick === 'unread') return isIn(m) && !m.seen;
+      if (quick === 'wait') return isIn(m) && m.wait && !m.replied;
+      if (quick === 'remind') return m.remind && g(m.remind.date) >= t;
+      if (dir === 'in' && !isIn(m)) return false;
+      if (dir === 'out' && isIn(m)) return false;
+      if (!showSeen && isIn(m) && m.seen) return false;
+      var d = g(m.date);
+      if (a && d < a) return false;
+      if (b && d > b) return false;
+      return !q || (m.text + ' ' + m.from + ' ' + m.to + ' ' + fa(m.code)).indexOf(q) > -1;
+    }).sort(function (x, y) { return y.code - x.code; });
+  }
+  function who(m) {
+    return '<div class="d-flex items-center gap-2 text-nowrap">' + CRM.avatar(m.from, 28) +
+      '<div style="line-height:1.5"><div class="fs-sm text-strong">' + esc(m.from) + '</div><div class="fs-2xs text-muted">به ' + esc(m.to) + '</div></div></div>';
+  }
+  function render() {
+    var list = rows();
+    $('#mBody').innerHTML = list.length ? list.map(function (m) {
+      var inc = isIn(m), unread = inc && !m.seen, tp = TYPES[m.type];
+      var waitCell = !m.wait ? '<span class="text-soft fs-xs">—</span>'
+        : m.replied ? '<span class="badge badge-success">پاسخ داده شد</span>'
+        : inc ? '<button type="button" class="btn btn-sm btn-soft" data-reply="' + m.code + '">' + CRM.icon('corner-down-left', 13) + ' پاسخ</button>'
+        : '<span class="badge badge-warning">در انتظار</span>';
+      var seenCell = inc
+        ? '<label class="check" data-tip="دیده شد"><input type="checkbox" data-seen="' + m.code + '"' + (m.seen ? ' checked' : '') + '><span class="box">' + CRM.icon('check', 12) + '</span></label>'
+        : '<span data-tip="' + (m.seen ? 'گیرنده دیده است' : 'هنوز دیده نشده') + '" style="color:' + (m.seen ? 'var(--brand)' : 'var(--text-soft)') + '">' + CRM.icon(m.seen ? 'check-check' : 'check', 16) + '</span>';
+      return '<tr class="' + (unread ? 'is-unread ' : '') + (current === m ? 'is-selected' : '') + '" data-code="' + m.code + '">' +
+        '<td><span class="code-chip">' + fa(m.code) + '</span></td>' +
+        '<td>' + who(m) + '</td>' +
+        '<td><span class="badge text-nowrap ' + tp.tone + '">' + esc(tp.title) + '</span></td>' +
+        '<td><button type="button" class="msg-preview" data-open="' + m.code + '">' + esc(m.text) + '</button>' +
+          (m.remind ? '<div class="fs-2xs text-muted mt-1 d-flex items-center gap-1">' + CRM.icon('alarm', 12) + ' یادآوری ' + fa(m.remind.date) + ' ساعت ' + fa(m.remind.time) + '</div>' : '') + '</td>' +
+        '<td>' + waitCell + '</td>' +
+        '<td class="text-center">' + seenCell + '</td>' +
+        '<td class="fs-xs text-muted text-nowrap"><div class="num">' + fa(m.date) + '</div><div>' + fa(m.time) + '</div></td></tr>';
+    }).join('') : '<tr><td colspan="7"><div class="empty" style="padding:34px"><div class="empty-ic" data-icon="inbox" data-icon-size="26"></div><div class="empty-title">پیغامی نیست</div><div class="empty-desc">' + (!$('#fSeen').checked && dir !== 'out' && !quick ? 'همه‌ی پیغام‌های دریافتی دیده شده‌اند؛ «نمایش دیده‌شده‌ها» را روشن کنید.' : 'با فیلترهای فعلی پیغامی پیدا نشد.') + '</div></div></td></tr>';
+    CRM.renderIcons($('#mBody'));
+    var inc = list.filter(isIn);
+    var all = $('#seenAll'), n = inc.filter(function (m) { return m.seen; }).length;
+    all.checked = inc.length > 0 && n === inc.length; all.indeterminate = n > 0 && n < inc.length; all.disabled = !inc.length;
+    $('#mFoot').textContent = (quick ? { unread: 'دیده‌نشده‌ها', wait: 'منتظر پاسخ شما', remind: 'دارای یادآوری پیش‌رو' }[quick] + ' — ' : '') + fa(list.length) + ' پیغام';
+    kpis();
+  }
+  ['input', 'change'].forEach(function (ev) { $('#fFrom').addEventListener(ev, render); $('#fTo').addEventListener(ev, render); });
+  $('#fSearch').addEventListener('input', CRM.debounce(render, 120));
+  $('#fSeen').addEventListener('change', render);
+  $('#fDir').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-d]'); if (!b) return;
+    $$('#fDir .seg').forEach(function (x) { x.classList.toggle('is-active', x === b); });
+    dir = b.getAttribute('data-d'); quick = ''; render();
+  });
+  $$('[data-quick]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      quick = b.getAttribute('data-quick') === 'all' ? '' : b.getAttribute('data-quick');
+      if (!quick) { dir = 'all'; $('#fSeen').checked = true; $$('#fDir .seg').forEach(function (x) { x.classList.toggle('is-active', x.getAttribute('data-d') === 'all'); }); }
+      render();
+    });
+  });
+  $('#mBody').addEventListener('click', function (e) {
+    var b;
+    if ((b = e.target.closest('[data-open]'))) open(find(b.getAttribute('data-open')));
+    else if ((b = e.target.closest('[data-reply]'))) startReply(find(b.getAttribute('data-reply')));
+  });
+  $('#mBody').addEventListener('change', function (e) {
+    var i = e.target.closest('[data-seen]'); if (!i) return;
+    var m = find(i.getAttribute('data-seen')); m.seen = i.checked;
+    if (current === m) paintRead();
+    render();
+  });
+  $('#seenAll').addEventListener('change', function () {
+    var on = this.checked; rows().filter(isIn).forEach(function (m) { m.seen = on; });
+    render(); if (current) paintRead();
+    CRM.toast({ type: 'success', title: on ? 'همه دیده شدند' : 'علامت‌ها برداشته شد', duration: 1800 });
+  });
+
+  /* ------------------------------------------------ متن کامل */
+  function open(m) { current = m; paintRead(); render(); if (window.innerWidth < 1024) $('#readCard').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  function paintRead() {
+    var m = current;
+    $('#readEmpty').classList.toggle('d-none', !!m); $('#readPane').classList.toggle('d-none', !m);
+    if (!m) { $('#readType').innerHTML = ''; return; }
+    var tp = TYPES[m.type], inc = isIn(m);
+    $('#readType').innerHTML = '<span class="badge ' + tp.tone + '">' + esc(tp.title) + '</span>';
+    $('#readWho').innerHTML = CRM.avatar(m.from, 40) + '<div style="min-width:0"><div class="fw-700 text-strong">' + esc(m.from) + '</div><div class="fs-xs text-muted">به ' + esc(m.to) + ' · کد ' + fa(m.code) + '</div></div>' +
+      '<div class="ms-auto fs-xs text-muted text-nowrap" style="text-align:left"><div class="num">' + fa(m.date) + '</div><div>' + fa(m.time) + '</div></div>';
+    $('#readText').textContent = fa(m.text);
+    var meta = [];
+    if (m.remind) meta.push('<span class="badge badge-violet">' + CRM.icon('alarm', 12) + ' یادآوری ' + fa(m.remind.date) + ' — ' + fa(m.remind.time) + '</span>');
+    if (m.wait) meta.push(m.replied ? '<span class="badge badge-success">پاسخ داده شد</span>' : '<span class="badge badge-warning">' + CRM.icon('hourglass', 12) + ' انتظار پاسخ</span>');
+    if (m.replyTo) meta.push('<span class="badge">' + CRM.icon('corner-down-left', 12) + ' در پاسخ به ' + fa(m.replyTo) + '</span>');
+    meta.push(inc ? (m.seen ? '<span class="badge badge-success">دیده شد</span>' : '<span class="badge badge-danger badge-dot">دیده‌نشده</span>') : (m.seen ? '<span class="badge badge-info">گیرنده دیده است</span>' : '<span class="badge">هنوز دیده نشده</span>'));
+    $('#readMeta').innerHTML = meta.join('');
+    $('#btnReply').classList.toggle('d-none', !inc);
+    $('#btnSeen').classList.toggle('d-none', !inc);
+    $('#btnSeen').lastElementChild.textContent = m.seen ? 'علامت دیده‌نشده' : 'علامت دیده‌شد';
+  }
+  $('#btnSeen').addEventListener('click', function () { current.seen = !current.seen; paintRead(); render(); });
+  $('#btnReply').addEventListener('click', function () { startReply(current); });
+
+  /* ------------------------------------------------ ارسال */
+  function startReply(m) {
+    replyTo = m; $('#cTo').value = m.from;
+    if (!$('#cTo').value) { $('#cTo').insertAdjacentHTML('beforeend', '<option>' + esc(m.from) + '</option>'); $('#cTo').value = m.from; }
+    $('#replyLbl').textContent = 'پاسخ به پیغام ' + fa(m.code) + ' از ' + m.from;
+    $('#replyChip').classList.remove('d-none');
+    $('#cForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    $('#cText').focus({ preventScroll: true });
+  }
+  function clearForm() {
+    $('#cForm').reset(); replyTo = null; $('#replyChip').classList.add('d-none'); $('#cCount').textContent = '۰';
+    $$('#cForm .is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+  }
+  $('#replyX').addEventListener('click', function () { replyTo = null; $('#replyChip').classList.add('d-none'); });
+  $('#cText').addEventListener('input', function () { $('#cCount').textContent = fa(this.value.length); });
+  $('#cTime').addEventListener('input', function () {
+    var v = en(this.value).replace(/[^\d]/g, '').slice(0, 4);
+    this.value = fa(v.length > 2 ? v.slice(0, 2) + ':' + v.slice(2) : v);
+  });
+  $('#cForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var to = $('#cTo'), text = $('#cText'), date = $('#cDate'), time = $('#cTime'), bad = [];
+    if (!to.value) bad.push(to);
+    if (!text.value.trim()) bad.push(text);
+    var tm = en(time.value).match(/^(\d{1,2}):(\d{2})$/);
+    if (date.value && !J.parse(date.value)) bad.push(date);
+    if (time.value && (!tm || +tm[1] > 23 || +tm[2] > 59)) bad.push(time);
+    if (time.value && !date.value) bad.push(date);
+    [to, text, date, time].forEach(function (x) { x.classList.toggle('is-invalid', bad.indexOf(x) > -1); });
+    if (bad.length) { bad[0].focus(); CRM.toast({ type: 'danger', title: 'پیغام ثبت نشد', msg: time.value && !date.value ? 'برای ساعت یادآوری، تاریخ را هم انتخاب کنید.' : 'مخاطب و متن پیغام الزامی است؛ ساعت را به شکل ۰۹:۳۰ وارد کنید.' }); return; }
+    var now = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; };
+    var m = {
+      code: Math.max.apply(null, D.msgs.map(function (x) { return x.code; })) + 1, from: ME, to: to.value, type: 'msg', text: text.value.trim(),
+      date: J.format(J.toJalali(now)), time: fa(p(now.getHours()) + ':' + p(now.getMinutes())),
+      remind: date.value ? { date: J.format(J.parse(date.value)), time: time.value ? fa(p(+tm[1]) + ':' + tm[2]) : '۰۹:۰۰' } : null,
+      wait: $('#cWait').checked, seen: false, replyTo: replyTo ? replyTo.code : null
+    };
+    if (replyTo) { replyTo.replied = true; replyTo.seen = true; }
+    D.msgs.push(m);
+    CRM.toast({ type: 'success', title: 'پیغام ارسال شد', msg: 'به ' + m.to + (m.remind ? ' — یادآوری ' + m.remind.date + ' ساعت ' + m.remind.time : '') });
+    clearForm(); current = m; paintRead();
+    if (dir === 'in' && !quick) render(); else render();
+  });
+  $('#cNew').addEventListener('click', clearForm);
+  $('#btnCompose').addEventListener('click', function () { clearForm(); $('#cForm').scrollIntoView({ behavior: 'smooth', block: 'center' }); $('#cTo').focus({ preventScroll: true }); });
+
+  render();
+})();
+</script>
+</body>
+</html>
