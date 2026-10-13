@@ -71,6 +71,17 @@ window.CRM_DATA = (function () {
       ]
     },
     {
+      group: 'تعاریف',
+      key: 'definitions',
+      items: [
+        { id: 'defs', label: 'نمای کلی تعاریف', icon: 'layout-grid', href: 'defs.html' },
+        { id: 'defs-users', label: 'تعریف کاربران', icon: 'users', href: 'defs-users.html' },
+        { id: 'defs-fiscal', label: 'تعریف دوره مالی', icon: 'calendar-range', href: 'defs-fiscal.html' },
+        { id: 'defs-basic', label: 'تعاریف اولیه', icon: 'list-tree', href: 'defs-basic.html' },
+        { id: 'defs-settings', label: 'تنظیمات فاکتور', icon: 'sliders', href: 'defs-settings.html' }
+      ]
+    },
+    {
       group: 'مدیریت سیستم',
       items: [
         { id: 'users', label: 'کاربران و نقش‌ها', icon: 'user-cog', href: 'users.html' },
@@ -323,12 +334,158 @@ window.CRM_DATA = (function () {
     { form: '۵۲۱۱', store: 'sub', type: 'broken', customer: '—', product: 22, serial: '', reader: 0, inDate: '۱۴۰۵/۰۴/۰۱', qty: 2, date: '۱۴۰۵/۰۷/۰۳', owner: 'رضا پورمند' }
   ];
 
+
+  /* ==========================================================================
+   *  تعاریف — داده‌های نمایشی (کاربران، سطح دسترسی، دوره مالی، تعاریف اولیه، تنظیمات)
+   * ========================================================================== */
+  var DEF_USER_TYPES = ['مدیر سیستم', 'مدیر فروش', 'کارشناس فروش', 'کارشناس پشتیبانی', 'حسابدار', 'انباردار'];
+  var DEF_USER_KINDS = ['پرسنل داخلی', 'نماینده', 'همکار'];
+
+  function U(code, first, last, username, type, kind, gender, active, email) {
+    return { code: code, first: first, last: last, username: username, type: type, kind: kind, gender: gender, active: active, email: email || (username + '@bodpanjom.ir') };
+  }
+  var DEF_USERS = [
+    U(1, 'داوود', 'توکلی', 'd.tavakoli', 'مدیر سیستم', 'پرسنل داخلی', 'm', true),
+    U(85, 'مریم', 'صفری', 'm.safari', 'کارشناس فروش', 'پرسنل داخلی', 'f', true),
+    U(86, 'معصومه', 'مهدی‌پور', 'm.mahdipour', 'حسابدار', 'پرسنل داخلی', 'f', true),
+    U(87, 'پرهام', 'پناهی‌ها', 'p.panahiha', 'کارشناس پشتیبانی', 'پرسنل داخلی', 'm', true),
+    U(88, 'نیلوفر', 'شعبانی', 'n.shabani', 'کارشناس فروش', 'پرسنل داخلی', 'f', true),
+    U(89, 'متین', 'انصاری', 'm.ansari', 'انباردار', 'پرسنل داخلی', 'm', true),
+    U(90, 'داریوش', 'گل‌بو', 'd.golbou', 'کارشناس پشتیبانی', 'پرسنل داخلی', 'm', false),
+    U(91, 'علی', 'سحرخیز', 'a.saharkhiz', 'مدیر فروش', 'پرسنل داخلی', 'm', true),
+    U(92, 'تینا', 'لشکریان', 't.lashkarian', 'کارشناس فروش', 'پرسنل داخلی', 'f', true),
+    U(94, 'امیر', 'باصری', 'a.baseri', 'کارشناس فروش', 'پرسنل داخلی', 'm', true),
+    U(95, 'یاسمین', 'معصومی', 'y.masoumi', 'کارشناس پشتیبانی', 'پرسنل داخلی', 'f', false),
+    U(96, 'رضا', 'دایجی', 'r.dayeji', 'کارشناس فروش', 'نماینده', 'm', true),
+    U(97, 'کارشناس', 'فروش ۲', 'sales2', 'کارشناس فروش', 'همکار', 'm', true)
+  ];
+
+  /* فرم‌های سامانه برای سطح دسترسی (گروه‌بندی بر اساس منوی اصلی) */
+  var PERM_MODULES = [
+    { id: 'defs', title: 'تعاریف', icon: 'list-tree', forms: [
+      { id: 'f-users', title: 'تعریف کاربران' }, { id: 'f-fiscal', title: 'تعریف دوره مالی' },
+      { id: 'f-basic', title: 'تعاریف اولیه' }, { id: 'f-settings', title: 'تنظیمات' }] },
+    { id: 'sales', title: 'فروش', icon: 'deals', forms: [
+      { id: 'f-plan', title: 'برنامه کاری' }, { id: 'f-letter', title: 'نامه و قرارداد' }, { id: 'f-sms', title: 'پیامک' },
+      { id: 'f-cust', title: 'مشخصات مشتری' }, { id: 'f-cinfo', title: 'اطلاعات مشتری' }, { id: 'f-sale', title: 'فروش' },
+      { id: 'f-inv', title: 'فاکتور' }, { id: 'f-invview', title: 'مشاهده فاکتور' }, { id: 'f-perf', title: 'گزارش عملکرد' },
+      { id: 'f-settle', title: 'تسویه فاکتور' }, { id: 'f-reserved', title: 'فاکتورهای رزرو شده' }, { id: 'f-agents', title: 'لیست نماینده‌ها' }] },
+    { id: 'wh', title: 'انبار', icon: 'warehouse', forms: [
+      { id: 'f-whprod', title: 'تعریف محصولات' }, { id: 'f-whin', title: 'ورود محصول به انبار' },
+      { id: 'f-whout', title: 'خروج محصول (اصلی)' }, { id: 'f-whsub', title: 'خروج محصول (فرعی)' }, { id: 'f-whstock', title: 'گزارش موجودی انبار' }] },
+    { id: 'support', title: 'پشتیبانی', icon: 'headset', forms: [{ id: 'f-support', title: 'پشتیبانی' }] },
+    { id: 'acc', title: 'حسابداری', icon: 'wallet', forms: [{ id: 'f-acc', title: 'اسناد حسابداری' }] },
+    { id: 'rep', title: 'گزارشات', icon: 'reports', forms: [{ id: 'f-rep', title: 'گزارشات مدیریتی' }] }
+  ];
+
+  /* سطح دسترسی هر کاربر: { formId: 'v' دسترسی + 'c' ثبت + 'e' ویرایش + 'd' حذف } */
+  var PERM_PRESETS = {
+    'مدیر سیستم': '*',
+    'مدیر فروش': { 'f-plan': 'vced', 'f-letter': 'vced', 'f-sms': 'vce', 'f-cust': 'vced', 'f-cinfo': 'vce', 'f-sale': 'vced', 'f-inv': 'vced', 'f-invview': 'vce', 'f-perf': 'vce', 'f-settle': 'vce', 'f-reserved': 'vce', 'f-agents': 'vced', 'f-whstock': 'v', 'f-rep': 'v' },
+    'کارشناس فروش': { 'f-plan': 'vc', 'f-cust': 'vce', 'f-sale': 'vce', 'f-inv': 'vce', 'f-invview': 'vce', 'f-perf': 'vce', 'f-agents': 'vce', 'f-support': 'vce' },
+    'کارشناس پشتیبانی': { 'f-plan': 'vc', 'f-cust': 'v', 'f-cinfo': 'v', 'f-support': 'vced', 'f-whstock': 'v' },
+    'حسابدار': { 'f-inv': 'vce', 'f-invview': 'v', 'f-settle': 'vced', 'f-reserved': 'vce', 'f-acc': 'vced', 'f-rep': 'v', 'f-settings': 'vce' },
+    'انباردار': { 'f-whprod': 'vce', 'f-whin': 'vced', 'f-whout': 'vced', 'f-whsub': 'vced', 'f-whstock': 'v' }
+  };
+  var DEF_PERMS = {};
+  DEF_USERS.forEach(function (u) {
+    var preset = PERM_PRESETS[u.type] || {}, map = {};
+    PERM_MODULES.forEach(function (m) { m.forms.forEach(function (f) { map[f.id] = preset === '*' ? 'vced' : (preset[f.id] || ''); }); });
+    DEF_PERMS[u.code] = map;
+  });
+
+  /* دوره‌های مالی */
+  var FISCAL_PERIODS = [
+    { code: 2, title: 'دوره مالی ۹۳', from: '۱۳۹۳/۰۱/۰۱', to: '۱۳۹۳/۱۲/۲۹', active: true },
+    { code: 3, title: 'دوره مالی ۹۴', from: '۱۳۹۴/۰۱/۰۱', to: '۱۳۹۴/۱۲/۲۹', active: true },
+    { code: 4, title: 'دوره مالی ۹۵', from: '۱۳۹۵/۰۱/۰۱', to: '۱۳۹۵/۱۲/۳۰', active: true },
+    { code: 6, title: 'دوره مالی ۹۷', from: '۱۳۹۷/۰۱/۰۱', to: '۱۳۹۷/۱۲/۲۹', active: true },
+    { code: 7, title: 'دوره مالی ۹۸', from: '۱۳۹۸/۰۱/۰۱', to: '۱۳۹۸/۱۲/۲۹', active: true },
+    { code: 8, title: 'دوره مالی ۹۹', from: '۱۳۹۹/۰۱/۰۲', to: '۱۳۹۹/۱۲/۳۰', active: true },
+    { code: 10, title: 'دوره مالی ۱۴۰۱', from: '۱۴۰۱/۰۱/۰۱', to: '۱۴۰۱/۱۲/۲۹', active: true },
+    { code: 11, title: 'دوره مالی ۱۴۰۲', from: '۱۴۰۲/۰۱/۰۱', to: '۱۴۰۲/۱۲/۲۹', active: true },
+    { code: 12, title: 'دوره مالی ۱۴۰۳', from: '۱۴۰۳/۰۱/۰۱', to: '۱۴۰۳/۱۲/۳۰', active: true },
+    { code: 13, title: 'دوره مالی ۱۴۰۴', from: '۱۴۰۴/۰۱/۰۱', to: '۱۴۰۴/۱۲/۲۹', active: true },
+    { code: 9, title: 'دوره مالی ۱۴۰۵ (آزمایشی)', from: '۱۴۰۵/۰۱/۰۱', to: '۱۴۰۵/۱۲/۲۷', active: false },
+    { code: 14, title: 'دوره مالی ۱۴۰۵', from: '۱۴۰۵/۰۱/۰۱', to: '۱۴۰۵/۱۲/۲۹', active: true },
+    { code: 15, title: 'دوره مالی ۱۴۰۶', from: '۱۴۰۶/۰۱/۰۱', to: '۱۴۰۶/۱۲/۲۹', active: true }
+  ];
+
+  /* تعاریف اولیه: انواع + آیتم‌ها (آیتم با parent = زیرشاخه) */
+  var BASIC_TYPES = [
+    { id: 'install', title: 'نصب', icon: 'zap' },
+    { id: 'support', title: 'پشتیبانی', icon: 'headset' },
+    { id: 'software', title: 'نرم‌افزار', icon: 'monitor' },
+    { id: 'install-gap', title: 'نواقص نصب', icon: 'alert' },
+    { id: 'incomplete', title: 'علت کامل انجام نشدن', icon: 'x-circle' },
+    { id: 'remote', title: 'علت ریموت شدن', icon: 'wifi-off' },
+    { id: 'delay', title: 'علت تاخیر', icon: 'hourglass' },
+    { id: 'satisfaction', title: 'میزان رضایت مشتری', icon: 'star' },
+    { id: 'daily', title: 'برنامه روزانه', icon: 'calendar-check' },
+    { id: 'shipping', title: 'نحوه ارسال', icon: 'truck' },
+    { id: 'source', title: 'نحوه آشنایی', icon: 'megaphone' },
+    { id: 'coop', title: 'نوع همکاری', icon: 'briefcase' },
+    { id: 'province', title: 'استان', icon: 'map-pin' },
+    { id: 'product-group', title: 'گروه محصولات', icon: 'boxes' },
+    { id: 'cancel', title: 'توضیحات کنسلی فاکتور', icon: 'receipt' }
+  ];
+  var BASIC_ITEMS = [];
+  (function () {
+    var code = 1;
+    function add(type, title, parent) { var c = code++; BASIC_ITEMS.push({ code: c, type: type, title: title, parent: parent || null }); return c; }
+    function many(type, list) { list.forEach(function (t) { if (typeof t === 'string') add(type, t); else { var p = add(type, t[0]); t[1].forEach(function (x) { add(type, x, p); }); } }); }
+    many('source', ['روزنامه', 'اینترنت', 'معرفی مشتری', 'بازاریابی تلفنی', 'فایل قدیمی', 'آشنایان',
+      ['معرفی همکار', ['چارگون', 'کسری', 'رایان محاسب', 'رایور', 'همکاران سیستم', 'هلو', 'مروارید', 'تیمار', 'ZK']],
+      'مجله', 'مناقصه', ['نمایشگاه', ['نمایشگاه الکامپ', 'نمایشگاه امنیت']], 'ایمیل مارکتینگ', 'نمایندگان شرکت']);
+    many('install', ['نصب حضوری', 'نصب از راه دور', 'نصب توسط نماینده']);
+    many('support', ['پشتیبانی تلفنی', 'پشتیبانی حضوری', 'پشتیبانی از راه دور']);
+    many('software', ['نرم‌افزار حضور و غیاب تحت وب', 'نرم‌افزار ویندوزی', 'اپلیکیشن موبایل']);
+    many('install-gap', ['آماده نبودن بستر شبکه', 'نبود برق اضطراری', 'عدم حضور مسئول مشتری']);
+    many('incomplete', ['کمبود قطعه', 'عدم هماهنگی مشتری', 'مشکل فنی دستگاه']);
+    many('remote', ['درخواست مشتری', 'فاصله جغرافیایی', 'فوریت کار']);
+    many('delay', ['ترافیک', 'تأخیر در تأمین کالا', 'تغییر زمان توسط مشتری']);
+    many('satisfaction', ['عالی', 'خوب', 'متوسط', 'ضعیف']);
+    many('daily', ['تماس پیگیری', 'جلسه حضوری', 'دمو آنلاین', 'ارسال پیش‌فاکتور']);
+    many('shipping', ['پست پیشتاز', 'تیپاکس', 'پیک موتوری', 'باربری', 'تحویل حضوری']);
+    many('coop', ['نماینده', 'همکار فروش', 'عمده‌فروش']);
+    many('province', [['تهران', ['تهران', 'شهریار', 'ورامین']], ['اصفهان', ['اصفهان', 'کاشان']], ['خراسان رضوی', ['مشهد', 'نیشابور']], 'فارس', 'آذربایجان شرقی', 'البرز', 'گیلان']);
+    many('product-group', ['دستگاه‌های اصلی', 'قطعات جانبی', 'نرم‌افزار', 'خدمات پشتیبانی', 'دستگاه‌های حفاظتی', 'آنتن']);
+    many('cancel', ['انصراف مشتری', 'عدم تأمین موجودی', 'تکرار فاکتور', 'تغییر شرایط پرداخت']);
+  })();
+
+  /* تنظیمات سالانه‌ی فاکتور */
+  var SETTING_TYPES = [
+    { id: 'letter', title: 'حرف فاکتور', icon: 'type', input: 'text', unit: '', desc: 'پیشوند شماره فاکتورهای هر سال' },
+    { id: 'vat', title: 'ارزش افزوده', icon: 'percent', input: 'percent', unit: '٪', desc: 'نرخ کل مالیات بر ارزش افزوده' },
+    { id: 'tax', title: 'مالیات', icon: 'receipt', input: 'percent', unit: '٪', desc: 'سهم مالیات از ارزش افزوده' },
+    { id: 'toll', title: 'عوارض', icon: 'coins', input: 'percent', unit: '٪', desc: 'سهم عوارض از ارزش افزوده' },
+    { id: 'inv-note', title: 'توضیحات فاکتور', icon: 'invoice', input: 'textarea', unit: '', desc: 'متن پایین فاکتور رسمی' },
+    { id: 'pro-note', title: 'توضیحات پیش‌فاکتور', icon: 'file', input: 'textarea', unit: '', desc: 'متن پایین پیش‌فاکتور' }
+  ];
+  var SETTING_VALUES = [];
+  (function () {
+    var code = 1, letters = { 1392: 'ج', 1393: 'م', 1394: 'ن', 1395: 'و', 1396: 'پ', 1397: 'ت', 1398: 'ج', 1399: 'د', 1400: 'ر', 1401: 'ح', 1402: 'ط', 1403: 'ک', 1404: 'ل', 1405: 'س' };
+    function add(type, year, value) { SETTING_VALUES.push({ code: code++, type: type, year: year, value: String(value) }); }
+    Object.keys(letters).forEach(function (y) { add('letter', +y, letters[y]); });
+    for (var y = 1395; y <= 1405; y++) {
+      var vat = y < 1397 ? 8 : y < 1403 ? 9 : 10;
+      add('vat', y, vat); add('tax', y, y < 1397 ? 5 : y < 1403 ? 6 : 7); add('toll', y, 3);
+    }
+    add('inv-note', 1404, 'کالای فروخته‌شده تا ۷ روز پس از تحویل در صورت سالم بودن بسته‌بندی قابل مرجوع است. گارانتی دستگاه‌ها ۱۸ ماه از تاریخ فاکتور می‌باشد.');
+    add('inv-note', 1405, 'کالای فروخته‌شده تا ۷ روز پس از تحویل در صورت سالم بودن بسته‌بندی قابل مرجوع است. گارانتی دستگاه‌ها ۲۴ ماه از تاریخ فاکتور می‌باشد.');
+    add('pro-note', 1404, 'اعتبار این پیش‌فاکتور ۷ روز کاری است. قیمت‌ها با احتساب ارزش افزوده می‌باشد.');
+    add('pro-note', 1405, 'اعتبار این پیش‌فاکتور ۵ روز کاری است. هزینه نصب و راه‌اندازی در تهران رایگان است.');
+  })();
+
   return {
     nav: NAV, kpis: KPIS, customers: CUSTOMERS, dealStages: DEAL_STAGES, deals: DEALS,
     tickets: TICKETS, invoices: INVOICES, products: PRODUCTS, threads: THREADS,
     activities: ACTIVITIES, notifications: NOTIFICATIONS, tasks: TASKS, team: TEAM,
     users: USERS, messages: MESSAGES, files: FILES, faq: FAQ,
     whCategories: WH_CATEGORIES, whCardReaders: WH_CARD_READERS, whUnits: WH_UNITS,
-    whExitTypes: WH_EXIT_TYPES, whStores: WH_STORES, whProducts: WH_PRODUCTS, whIn: WH_IN, whOut: WH_OUT
+    whExitTypes: WH_EXIT_TYPES, whStores: WH_STORES, whProducts: WH_PRODUCTS, whIn: WH_IN, whOut: WH_OUT,
+    defUserTypes: DEF_USER_TYPES, defUserKinds: DEF_USER_KINDS, defUsers: DEF_USERS, permModules: PERM_MODULES,
+    permPresets: PERM_PRESETS, defPerms: DEF_PERMS, fiscalPeriods: FISCAL_PERIODS, basicTypes: BASIC_TYPES,
+    basicItems: BASIC_ITEMS, settingTypes: SETTING_TYPES, settingValues: SETTING_VALUES
   };
 })();

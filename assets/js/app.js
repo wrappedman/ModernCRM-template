@@ -180,6 +180,12 @@ window.CRM = (function (w, d) {
       if (el.getAttribute('data-icon-done') === '1') return;
       /* متن کنار آیکون (مثل <div class="card-title" data-icon="table"> عنوان</div>) حفظ می‌شود */
       var txt = el.getAttribute('data-icon-text');
+      /* عنصر دارای فرزند (مثل <div data-icon="x"> <span id="title">…</span></div>): آیکون به ابتدا اضافه و فرزندان حفظ می‌شوند */
+      if (txt === null && el.children.length && !el.querySelector('svg')) {
+        el.insertAdjacentHTML('afterbegin', icon(el.getAttribute('data-icon'), +(el.getAttribute('data-icon-size') || 18), el.getAttribute('data-icon-class') || ''));
+        el.setAttribute('data-icon-done', '1');
+        return;
+      }
       if (txt === null) { txt = el.children.length ? '' : el.textContent.trim(); if (txt) el.setAttribute('data-icon-text', txt); }
       el.innerHTML = icon(el.getAttribute('data-icon'), +(el.getAttribute('data-icon-size') || 18), el.getAttribute('data-icon-class') || '') +
         (txt ? '<span class="icon-text">' + esc(txt) + '</span>' : '');

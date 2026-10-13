@@ -72,6 +72,7 @@ ModernCRM-template/
 | مشتریان و فروش | `customers.html` `customer-new.html` `customer-profile.html` `pipeline.html` `deals.html` `products.html` |
 | مالی و گزارش | `invoices.html` `print-invoice.html` `reports.html` |
 | انبار | `warehouse.html` `warehouse-products.html` `warehouse-in.html` `warehouse-out.html` (اصلی) `warehouse-out.html?store=sub` (فرعی) `warehouse-stock.html` |
+| تعاریف | `defs.html` `defs-users.html` (با مودال سطح دسترسی) `defs-fiscal.html` `defs-basic.html` `defs-settings.html` |
 | پشتیبانی | `tickets.html` `ticket-new.html` `messages.html` `kb.html` `help.html` |
 | احراز هویت | `login.html` `register.html` `forgot-password.html` `reset-password.html` `otp.html` `change-password.html` `lock.html` |
 | مدیریت | `users.html` `settings.html` `profile.html` `design-system.html` |
@@ -338,6 +339,22 @@ ModernCRM-template/
 ```
 
 تبدیل دقیق تاریخ: `CRM.jalali.toJalali(date)`، `CRM.jalali.toGregorian(1405, 7, 20)`، `CRM.jalali.parse('۱۴۰۵/۰۷/۲۰')`، `CRM.jalali.format({jy, jm, jd})`.
+
+### ۴-ج) بخش تعاریف
+
+| صفحه | معادل در برنامه فعلی | نکات |
+| --- | --- | --- |
+| `defs.html` | صفحه‌ی خالی منوی تعاریف | شاخص‌ها (دوره جاری، کاربران فعال، تعداد تعاریف، ارزش افزوده و حرف فاکتور امسال)، کاشی بخش‌ها، تنظیمات امسال، ترکیب کاربران |
+| `defs-users.html` | تعریف کاربران + دیالوگ «سطح دسترسی» | جدول با جستجو / فیلتر نوع / وضعیت و نوار درصد دسترسی؛ فرم کنار جدول (کلیک ویرایش = بارگذاری، رمز در حالت ویرایش اختیاری)؛ **ماتریس دسترسی** در مودال |
+| `defs-fiscal.html` | تعریف دوره مالی | کارت دوره‌ی جاری با پیشرفت روزها؛ فرم با تاریخ شمسی، محاسبه‌ی مدت، پیشنهاد عنوان و پایان دوره، جلوگیری از تداخل دوره‌های فعال؛ دکمه‌ی «دوره‌ی بعدی» |
+| `defs-basic.html` | تعاریف اولیه | سه ستون: نوع ← آیتم‌ها ← زیرشاخه‌ها (`.grid-mdd`)؛ «جزئی» زیرشاخه‌ها را باز می‌کند؛ `?type=source` |
+| `defs-settings.html` | تنظیمات | زبانه برای هر نوع؛ ورودی متناسب با نوع (حرف / درصد / متن)؛ کارت مقدار سال جاری؛ `?type=vat` |
+
+**ماتریس سطح دسترسی:** دو فهرست قدیمی («انتخاب فرم» و «ثبت/ویرایش/حذف») در یک جدول ادغام شده‌اند: ستون‌های دسترسی، ثبت، ویرایش، حذف؛ ردیف‌ها گروه‌بندی‌شده بر اساس ماژول. برداشتن «دسترسی» بقیه را پاک می‌کند و زدن هر مجوز، «دسترسی» را هم می‌زند. چک‌باکس گروه و سرستون «همه» حالت نیمه‌انتخاب (`indeterminate`) دارند. «کپی دسترسی از…» از الگوی نوع کاربری یا کاربر دیگر.
+
+داده‌ها: `CRM_DATA.defUsers`، `defUserTypes`، `defUserKinds`، `permModules` (ماژول ← فرم‌ها)، `permPresets` (الگوی هر نوع کاربری)، `defPerms[کد کاربر][شناسه فرم]` (رشته‌ای از حروف `v` دسترسی، `c` ثبت، `e` ویرایش، `d` حذف؛ مثلاً `"vce"`)، `fiscalPeriods`، `basicTypes`، `basicItems` (`parent` = زیرشاخه)، `settingTypes`، `settingValues`.
+
+کلاس‌های جدید: `.perm-table`، `.grid-mdd`، `.code-chip`، `.radio-row`، `.value-hero`، `tr.is-selected`، `.pick-item .pi-ic/.pi-count`.
 
 ### ۵) اتصال به بک‌اند
 

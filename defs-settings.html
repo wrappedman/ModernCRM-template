@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تنظیمات فاکتور | تعاریف | مدرن‌CRM</title>
+<meta name="description" content="مقادیر سالانه‌ی فاکتور: حرف فاکتور، ارزش افزوده، مالیات، عوارض و متن توضیحات">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="defs-settings">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="defs.html">تعاریف</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">تنظیمات فاکتور</span>
+            </div>
+            <h1 class="page-title">تنظیمات فاکتور</h1>
+            <p class="page-desc">مقادیری که هر سال تغییر می‌کنند؛ فاکتورها و پیش‌فاکتورهای هر سال با مقدار همان سال صادر می‌شوند.</p>
+          </div>
+        </div>
+
+        <div class="tabs tabs-pill mb-5" id="typeTabs" role="tablist" style="flex-wrap:wrap"></div>
+
+        <div class="grid-1-2">
+          <div class="d-flex flex-col gap-5" style="align-self:start">
+            <!-- ============================ مقدار سال جاری ============================ -->
+            <div class="card">
+              <div class="card-body value-hero">
+                <span class="stat-icon" id="heroIc" style="width:54px;height:54px"></span>
+                <div style="min-width:0;flex:1">
+                  <div class="stat-label" id="heroLbl">—</div>
+                  <div id="heroVal" class="vh-val">—</div>
+                  <div class="fs-xs text-muted mt-1" id="heroDesc">—</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ============================ فرم ============================ -->
+            <form class="card" id="sForm" data-win-nobtn novalidate>
+              <div class="card-head">
+                <div class="card-title"><span data-icon="sliders" data-icon-size="18"></span> <span id="formTitle">ثبت مقدار</span></div>
+                <div class="card-actions"><span class="badge badge-info" id="formBadge">جدید</span></div>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label class="form-label" for="sYear">سال <span class="req">*</span></label>
+                  <select class="select" id="sYear"></select>
+                  <div class="form-hint d-none text-warning" id="yearHint"></div>
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                  <label class="form-label" for="sValue"><span id="valLbl">مقدار</span> <span class="req">*</span></label>
+                  <div id="valWrap"></div>
+                  <div class="form-hint" id="valHint"></div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> <span id="btnSaveLbl">ثبت</span></button>
+                <button type="button" class="btn" id="btnNew"><span data-icon="plus" data-icon-size="16"></span> جدید</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- ============================ جدول ============================ -->
+          <div class="card" style="align-self:start" data-win="defs-settings-table" data-win-title="مقادیر سالانه" data-win-icon="sliders" data-win-size="900x600">
+            <div class="card-head">
+              <div class="card-title"><span id="tblIc"></span> <span id="tblTitle">—</span></div>
+              <div class="card-actions"><span class="badge" id="tblCount">—</span></div>
+            </div>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table">
+                  <thead><tr><th style="width:60px">کد</th><th style="width:90px">سال</th><th>مقدار</th><th class="table-row-actions"></th></tr></thead>
+                  <tbody id="sBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, en = CRM.en, esc = CRM.esc;
+  var YEAR = CRM.todayJalali().year;
+  var qs = new URLSearchParams(location.search);
+  var type = D.settingTypes.filter(function (t) { return t.id === qs.get('type'); })[0] || D.settingTypes[0];
+  var editing = null;
+  var TONE = { letter: '', vat: 'violet', tax: 'amber', toll: 'sky', 'inv-note': 'success', 'pro-note': 'rose' };
+
+  function valuesOf(t) { return D.settingValues.filter(function (v) { return v.type === t; }).sort(function (a, b) { return b.year - a.year; }); }
+  function valueFor(t, y) { return D.settingValues.filter(function (v) { return v.type === t && v.year === y; })[0]; }
+  function show(t, v, big) {
+    if (!v) return '<span class="text-soft">—</span>';
+    if (t.input === 'percent') return '<span class="fw-700 text-strong">' + fa(v) + '</span><span class="text-muted">' + t.unit + '</span>';
+    if (t.input === 'text') return '<span class="code-chip" style="' + (big ? 'min-width:54px;height:54px;font-size:28px;border-radius:14px' : 'min-width:34px;height:30px;font-size:16px') + ';background:var(--brand-soft);color:var(--brand-ink)">' + esc(v) + '</span>';
+    return '<span class="' + (big ? 'fs-sm fw-500 text-strong' : 'fs-sm') + '" style="display:-webkit-box;-webkit-line-clamp:' + (big ? 3 : 2) + ';-webkit-box-orient:vertical;overflow:hidden;line-height:1.8">' + esc(v) + '</span>';
+  }
+
+  /* ------------------------------------------------ زبانه‌ها */
+  function renderTabs() {
+    $('#typeTabs').innerHTML = D.settingTypes.map(function (t) {
+      return '<button type="button" class="tab' + (t === type ? ' is-active' : '') + '" data-t="' + t.id + '">' + CRM.icon(t.icon, 15) + ' ' + esc(t.title) + '</button>';
+    }).join('');
+  }
+  $('#typeTabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-t]'); if (!b) return;
+    type = D.settingTypes.filter(function (t) { return t.id === b.getAttribute('data-t'); })[0];
+    history.replaceState(null, '', '?type=' + type.id);
+    renderTabs(); buildInput(); clear();
+  });
+
+  /* ------------------------------------------------ ورودی متناسب با نوع */
+  function buildInput() {
+    var w = $('#valWrap');
+    $('#valLbl').textContent = type.input === 'textarea' ? 'متن' : type.input === 'percent' ? 'نرخ' : 'حرف';
+    if (type.input === 'text') {
+      w.innerHTML = '<input class="input" id="sValue" maxlength="2" placeholder="مثلاً س" style="max-width:120px;font-size:var(--fs-lg);font-weight:700;text-align:center">';
+      $('#valHint').textContent = 'یک یا دو حرف که ابتدای شماره‌ی فاکتور می‌آید؛ مثلاً «س ۱۴۰۵۰۰۱۲».';
+    } else if (type.input === 'percent') {
+      w.innerHTML = '<div class="input-wrap" style="max-width:180px"><input class="input num" id="sValue" inputmode="decimal" placeholder="۱۰"><span class="unit">' + type.unit + '</span></div>';
+      $('#valHint').textContent = type.desc + '.';
+    } else {
+      w.innerHTML = '<textarea class="textarea" id="sValue" rows="5" maxlength="500" placeholder="متنی که پایین ' + (type.id === 'inv-note' ? 'فاکتور' : 'پیش‌فاکتور') + ' چاپ می‌شود…"></textarea>';
+      $('#valHint').innerHTML = '<span id="valCnt">۰</span> از ۵۰۰ کاراکتر';
+      $('#sValue').addEventListener('input', function () { $('#valCnt').textContent = fa(this.value.length); });
+    }
+  }
+  function years() {
+    var list = []; for (var y = YEAR + 1; y >= 1390; y--) list.push(y);
+    $('#sYear').innerHTML = list.map(function (y) { return '<option value="' + y + '">' + fa(y) + (y === YEAR ? ' (جاری)' : '') + '</option>'; }).join('');
+  }
+  $('#sYear').addEventListener('change', yearHint);
+  function yearHint() {
+    var y = +$('#sYear').value, ex = valueFor(type.id, y), h = $('#yearHint');
+    var show = ex && ex !== editing;
+    h.classList.toggle('d-none', !show);
+    if (show) h.innerHTML = CRM.icon('alert', 13) + ' برای سال ' + fa(y) + ' مقدار ثبت شده؛ با ثبت، جایگزین می‌شود.';
+  }
+
+  /* ------------------------------------------------ جدول و کارت سال جاری */
+  function render() {
+    var rows = valuesOf(type.id), cur = valueFor(type.id, YEAR);
+    $('#heroIc').className = 'stat-icon ' + (TONE[type.id] || '');
+    $('#heroIc').innerHTML = CRM.icon(type.icon, 26);
+    $('#heroLbl').textContent = type.title + ' — سال ' + fa(YEAR);
+    $('#heroVal').innerHTML = cur ? show(type, cur.value, true) : '<span class="fs-md text-warning">برای سال جاری ثبت نشده</span>';
+    $('#heroDesc').textContent = type.desc;
+    $('#tblIc').innerHTML = CRM.icon(type.icon, 18);
+    $('#tblTitle').textContent = 'مقادیر «' + type.title + '»';
+    $('#tblCount').textContent = fa(rows.length) + ' سال';
+    $('#sBody').innerHTML = rows.length ? rows.map(function (v) {
+      return '<tr class="' + (editing === v ? 'is-selected' : '') + '" data-code="' + v.code + '">' +
+        '<td><span class="code-chip">' + fa(v.code) + '</span></td>' +
+        '<td><span class="fw-600">' + fa(v.year) + '</span>' + (v.year === YEAR ? ' <span class="badge badge-success" style="margin-inline-start:4px">جاری</span>' : '') + '</td>' +
+        '<td>' + show(type, v.value) + '</td>' +
+        '<td><div class="d-flex items-center gap-1">' +
+          '<button type="button" class="tb-icon" style="width:30px;height:30px" data-edit data-tip="ویرایش">' + CRM.icon('pencil', 15) + '</button>' +
+          '<button type="button" class="tb-icon" style="width:30px;height:30px;color:var(--danger)" data-del data-tip="حذف">' + CRM.icon('trash', 15) + '</button>' +
+        '</div></td></tr>';
+    }).join('') : '<tr><td colspan="4"><div class="empty" style="padding:34px"><div class="empty-desc">مقداری ثبت نشده است.</div></div></td></tr>';
+  }
+  $('#sBody').addEventListener('click', function (e) {
+    var tr = e.target.closest('tr[data-code]'); if (!tr) return;
+    var v = D.settingValues.filter(function (x) { return x.code === +tr.getAttribute('data-code'); })[0];
+    if (e.target.closest('[data-del]')) {
+      CRM.modal.confirm({ title: 'حذف مقدار سال ' + fa(v.year), msg: 'مقدار «' + type.title + '» برای سال ' + fa(v.year) + ' حذف شود؟ فاکتورهای صادرشده تغییری نمی‌کنند.', danger: true, icon: 'trash', okText: 'بله، حذف کن' })
+        .then(function (ok) { if (!ok) return; D.settingValues.splice(D.settingValues.indexOf(v), 1); if (editing === v) clear(); else render(); CRM.toast({ type: 'success', title: 'حذف شد', msg: 'مقدار سال ' + fa(v.year) + ' حذف شد.', duration: 2200 }); });
+      return;
+    }
+    load(v);
+  });
+
+  /* ------------------------------------------------ فرم */
+  function setMode(v) {
+    editing = v;
+    $('#formTitle').textContent = v ? 'ویرایش مقدار' : 'ثبت مقدار';
+    $('#formBadge').className = 'badge ' + (v ? 'badge-violet' : 'badge-info');
+    $('#formBadge').textContent = v ? 'کد ' + fa(v.code) : 'جدید';
+    $('#btnSaveLbl').textContent = v ? 'ثبت تغییرات' : 'ثبت';
+    yearHint(); render();
+  }
+  function load(v) {
+    $('#sYear').value = v.year; $('#sValue').value = type.input === 'percent' ? fa(v.value) : v.value;
+    $('#sValue').classList.remove('is-invalid');
+    $('#sValue').dispatchEvent(new Event('input'));
+    setMode(v); $('#sValue').focus();
+  }
+  function clear() {
+    var next = YEAR; while (valueFor(type.id, next) && next <= YEAR) next++;
+    $('#sYear').value = next; $('#sValue').value = ''; $('#sValue').classList.remove('is-invalid');
+    $('#sValue').dispatchEvent(new Event('input'));
+    setMode(null);
+  }
+  $('#sForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var inp = $('#sValue'), raw = inp.value.trim(), y = +$('#sYear').value, val = raw;
+    if (type.input === 'percent') { val = en(raw).replace(/[٫/]/g, '.'); if (!/^\d+(\.\d+)?$/.test(val) || +val > 100) val = ''; }
+    if (!val) { inp.classList.add('is-invalid'); inp.focus(); CRM.toast({ type: 'danger', title: 'مقدار نامعتبر', msg: type.input === 'percent' ? 'نرخ باید عددی بین ۰ تا ۱۰۰ باشد.' : 'مقدار را وارد کنید.' }); return; }
+    inp.classList.remove('is-invalid');
+    var target = editing, other = valueFor(type.id, y);
+    if (other && other !== target) { if (target) D.settingValues.splice(D.settingValues.indexOf(target), 1); target = other; }
+    if (target) { target.year = y; target.value = val; }
+    else { target = { code: Math.max.apply(null, D.settingValues.map(function (x) { return x.code; })) + 1, type: type.id, year: y, value: val }; D.settingValues.push(target); }
+    CRM.toast({ type: 'success', title: 'ثبت شد', msg: type.title + ' سال ' + fa(y) + ' ذخیره شد.', duration: 2400 });
+    setMode(target);
+  });
+  $('#btnNew').addEventListener('click', clear);
+
+  years(); renderTabs(); buildInput(); clear();
+})();
+</script>
+</body>
+</html>

@@ -1341,3 +1341,71 @@ body.no-float .win-hint { display: none; }
 .input.is-invalid, .select.is-invalid, .textarea.is-invalid { border-color: var(--danger); box-shadow: 0 0 0 3.5px var(--danger-ring); }
 .form-group.mb-0, .mb-0 { margin-bottom: 0; }
 .tab { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ==========================================================================
+ * 20) تعاریف — ماتریس سطح دسترسی، چیدمان سه‌ستونه و اجزای کمکی
+ * ========================================================================== */
+.code-chip {
+  display: inline-grid; place-items: center; min-width: 32px; height: 24px; padding: 0 7px;
+  border-radius: 8px; background: var(--surface-3); color: var(--text-muted);
+  font-size: var(--fs-xs); font-weight: 700;
+}
+
+/* ماتریس دسترسی: فرم × (دسترسی، ثبت، ویرایش، حذف) */
+.perm-table th.pc, .perm-table td.pc { width: 84px; text-align: center; }
+.perm-table td.pc .check { justify-content: center; }
+.perm-table th.pc .check { display: flex; justify-content: center; margin-top: 6px; }
+.perm-table td.pc .check .box, .perm-table th.pc .check .box { margin-top: 0; }
+
+/* حالت «نیمه‌انتخاب» برای چک‌باکس‌های انتخاب گروهی (عمومی) */
+.check input:indeterminate ~ .box { background: var(--brand-soft); border-color: var(--brand); }
+.check input:indeterminate ~ .box .icon { display: none; }
+.check input:indeterminate ~ .box::after { content: ''; width: 9px; height: 2px; border-radius: 2px; background: var(--brand); }
+.perm-table th.pc .th-lbl { display: block; font-size: var(--fs-2xs); margin-top: 4px; }
+.perm-table tr.perm-group td {
+  background: var(--surface-2); font-weight: 700; color: var(--text-strong);
+  position: sticky; top: 44px; z-index: 1;
+}
+.perm-table thead th { position: sticky; top: 0; z-index: 2; background: var(--surface); }
+.perm-table tr.is-off td:not(.pc-access):not(:first-child) { opacity: .45; }
+.perm-table tr.is-off .perm-name { color: var(--text-muted); font-weight: 500; }
+.perm-table .perm-name { font-weight: 600; color: var(--text-strong); }
+.perm-table tbody tr:not(.perm-group):hover td { background: var(--surface-hover); }
+
+/* چیدمان «نوع ← آیتم‌ها ← زیرشاخه‌ها» */
+.grid-mdd { display: grid; gap: 18px; grid-template-columns: 270px minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; }
+@media (max-width: 1280px) { .grid-mdd { grid-template-columns: 250px minmax(0, 1fr); } .grid-mdd > :last-child { grid-column: 1 / -1; } }
+@media (max-width: 900px) { .grid-mdd { grid-template-columns: 1fr; } }
+
+/* فهرست انواع با شمارنده */
+.pick-item .pi-count { margin-inline-start: auto; font-size: var(--fs-2xs); font-weight: 700; color: var(--text-muted); }
+.pick-item.is-selected .pi-count { color: var(--on-ink-muted); }
+.pick-item .pi-ic {
+  width: 30px; height: 30px; border-radius: 9px; flex: none; display: grid; place-items: center;
+  background: var(--surface-3); color: var(--text-muted);
+}
+.pick-item.is-selected .pi-ic { background: rgba(255, 255, 255, .14); color: var(--on-ink); }
+
+/* ردیف انتخاب‌شده در جدول */
+.table tbody tr.is-selected td { background: var(--brand-soft); }
+.table tbody tr.is-selected td:first-child { box-shadow: inset -3px 0 0 var(--brand); }
+
+/* رادیوهای درون‌خطی (مثلاً جنسیت) */
+.radio-row { display: flex; align-items: center; gap: 18px; min-height: 42px; flex-wrap: wrap; }
+
+/* کارت مقدار سال جاری */
+.value-hero { display: flex; align-items: center; gap: 14px; }
+.value-hero .vh-val { font-size: var(--fs-3xl); font-weight: 800; color: var(--text-strong); line-height: 1; }
+
+/* دکمه‌ی نمایش رمز و آیکن‌های انتهایی کلیک‌پذیر (رفع: .icon.trail کلیک را نمی‌گرفت) */
+.input-wrap > button.icon.trail {
+  pointer-events: auto; cursor: pointer; background: none; border: 0; padding: 0;
+  width: 30px; height: 30px; inset-inline-end: 6px; border-radius: 8px;
+  display: grid; place-items: center; transition: background var(--t-fast), color var(--t-fast);
+}
+.input-wrap > button.icon.trail:hover { background: var(--surface-hover); color: var(--brand-ink); }
+.input-wrap > .input:has(~ .icon.trail) { padding-inline-end: 40px; }
+/* ورودی‌های ltr در چیدمان راست‌به‌چپ: جهت فیزیکی آیکن‌ها برعکس است */
+[dir="rtl"] .input-wrap > .icon.lead ~ .input.ltr { padding-left: 13px; padding-right: 38px; }
+[dir="rtl"] .input-wrap > .input.ltr:has(~ .icon.trail) { padding-right: 13px; padding-left: 40px; }
+[dir="rtl"] .input-wrap > .icon.lead ~ .input.ltr:has(~ .icon.trail) { padding-right: 38px; padding-left: 40px; }

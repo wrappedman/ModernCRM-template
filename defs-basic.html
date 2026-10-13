@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تعاریف اولیه | تعاریف | مدرن‌CRM</title>
+<meta name="description" content="مقادیر پایه‌ی فرم‌ها: نحوه آشنایی، استان، علت تاخیر و… به همراه زیرشاخه‌ها">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="defs-basic">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="defs.html">تعاریف</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">تعاریف اولیه</span>
+            </div>
+            <h1 class="page-title">تعاریف اولیه</h1>
+            <p class="page-desc">گزینه‌های فهرست‌های کشویی سامانه را مدیریت کنید. هر آیتم می‌تواند زیرشاخه داشته باشد؛ مثلاً «معرفی همکار ← هلو».</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" type="button" id="btnExport"><span data-icon="file-spreadsheet" data-icon-size="16"></span> خروجی Excel</button>
+          </div>
+        </div>
+
+        <div class="grid-mdd">
+          <!-- ============================ ۱) نوع ============================ -->
+          <div class="card" style="position:sticky;top:calc(var(--topbar-h) + 12px)">
+            <div class="card-head">
+              <div class="card-title"><span data-icon="list-tree" data-icon-size="18"></span> نوع تعریف</div>
+              <div class="card-actions"><span class="badge" id="typeCount">—</span></div>
+            </div>
+            <div class="card-body tight" style="padding-bottom:0">
+              <div class="input-wrap">
+                <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                <input class="input input-sm" id="typeSearch" placeholder="جستجوی نوع…" aria-label="جستجوی نوع">
+              </div>
+            </div>
+            <div class="pick-list" id="typeList" style="max-height:calc(100vh - 290px);overflow:auto"></div>
+          </div>
+
+          <!-- ============================ ۲) آیتم‌ها ============================ -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span id="typeIc"></span> <span id="itemsTitle">—</span></div>
+              <div class="card-actions"><span class="badge badge-primary" id="itemsCount">—</span></div>
+            </div>
+            <form class="card-body tight" id="itemForm" novalidate style="border-bottom:1px solid var(--border-muted)">
+              <label class="form-label" for="itemInput"><span id="itemFormLbl">عنوان آیتم جدید</span> <span class="req">*</span></label>
+              <div class="d-flex gap-2">
+                <input class="input" id="itemInput" placeholder="مثلاً اینستاگرام" style="flex:1">
+                <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> <span id="itemSaveLbl">ثبت</span></button>
+                <button type="button" class="btn" id="itemNew" data-tip="جدید"><span data-icon="plus" data-icon-size="16"></span> جدید</button>
+              </div>
+            </form>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table table-compact">
+                  <thead><tr><th style="width:60px">کد</th><th>عنوان</th><th>زیرشاخه</th><th class="table-row-actions"></th></tr></thead>
+                  <tbody id="itemsBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================ ۳) زیرشاخه ============================ -->
+          <div class="card" id="subCard">
+            <div class="card-head">
+              <div class="card-title"><span data-icon="corner-down-right" data-icon-size="18"></span> <span id="subTitle">زیرشاخه‌ها</span></div>
+              <div class="card-actions"><span class="badge badge-violet" id="subCount">—</span></div>
+            </div>
+            <div id="subEmpty" class="empty" style="padding:48px 20px">
+              <div class="empty-ic" data-icon="corner-down-right" data-icon-size="28"></div>
+              <div class="empty-title">آیتمی انتخاب نشده</div>
+              <div class="empty-desc">روی «جزئی» در کنار یک آیتم بزنید تا زیرشاخه‌های آن را ببینید یا اضافه کنید.</div>
+            </div>
+            <div id="subPane" class="d-none">
+              <form class="card-body tight" id="subForm" novalidate style="border-bottom:1px solid var(--border-muted)">
+                <label class="form-label" for="subInput"><span id="subFormLbl">عنوان زیرشاخه</span> <span class="req">*</span></label>
+                <div class="d-flex gap-2">
+                  <input class="input" id="subInput" placeholder="عنوان زیرشاخه" style="flex:1">
+                  <button type="submit" class="btn btn-ink"><span data-icon="corner-down-right" data-icon-size="16"></span> <span id="subSaveLbl">ثبت زیرشاخه</span></button>
+                </div>
+              </form>
+              <div class="card-body flush">
+                <div class="table-wrap">
+                  <table class="table table-compact">
+                    <thead><tr><th style="width:60px">کد</th><th>عنوان</th><th class="table-row-actions"></th></tr></thead>
+                    <tbody id="subBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, $ = CRM.$, fa = CRM.fa, esc = CRM.esc;
+  var qs = new URLSearchParams(location.search);
+  var typeId = qs.get('type') || 'source', item = null, editItem = null, editSub = null;
+  if (!D.basicTypes.some(function (t) { return t.id === typeId; })) typeId = D.basicTypes[0].id;
+
+  function typeOf(id) { return D.basicTypes.filter(function (t) { return t.id === id; })[0]; }
+  function children(parent) { return D.basicItems.filter(function (x) { return x.parent === parent; }); }
+  function itemsOf(type) { return D.basicItems.filter(function (x) { return x.type === type && !x.parent; }); }
+  function nextCode() { return Math.max.apply(null, D.basicItems.map(function (x) { return x.code; })) + 1; }
+  function dup(list, title, except) { return list.some(function (x) { return x !== except && x.title.trim() === title; }); }
+  function actions(code, extra) {
+    return '<div class="d-flex items-center gap-1 justify-end">' + (extra || '') +
+      '<button type="button" class="tb-icon" style="width:30px;height:30px" data-edit="' + code + '" data-tip="ویرایش">' + CRM.icon('pencil', 15) + '</button>' +
+      '<button type="button" class="tb-icon" style="width:30px;height:30px;color:var(--danger)" data-del="' + code + '" data-tip="حذف">' + CRM.icon('trash', 15) + '</button></div>';
+  }
+  function emptyRow(cols, msg) { return '<tr><td colspan="' + cols + '"><div class="empty" style="padding:30px"><div class="empty-desc">' + msg + '</div></div></td></tr>'; }
+
+  /* ------------------------------------------------ ۱) انواع */
+  function renderTypes() {
+    var q = $('#typeSearch').value.trim();
+    $('#typeList').innerHTML = D.basicTypes.filter(function (t) { return !q || t.title.indexOf(q) > -1; }).map(function (t) {
+      var n = itemsOf(t.id).length;
+      return '<button type="button" class="pick-item' + (t.id === typeId ? ' is-selected' : '') + '" data-type="' + t.id + '">' +
+        '<span class="pi-ic">' + CRM.icon(t.icon, 16) + '</span>' +
+        '<span class="pi-main"><span class="pi-title d-block">' + esc(t.title) + '</span></span>' +
+        '<span class="pi-count">' + fa(n) + '</span></button>';
+    }).join('') || '<div class="empty" style="padding:20px"><div class="empty-desc">نوعی یافت نشد.</div></div>';
+    $('#typeCount').textContent = fa(D.basicTypes.length) + ' نوع';
+  }
+  $('#typeSearch').addEventListener('input', renderTypes);
+  $('#typeList').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-type]'); if (!b) return;
+    typeId = b.getAttribute('data-type'); item = null; editItem = null; editSub = null;
+    history.replaceState(null, '', '?type=' + typeId);
+    renderAll(); $('#itemInput').focus();
+  });
+
+  /* ------------------------------------------------ ۲) آیتم‌ها */
+  function renderItems() {
+    var t = typeOf(typeId), rows = itemsOf(typeId);
+    $('#typeIc').innerHTML = CRM.icon(t.icon, 18);
+    $('#itemsTitle').textContent = 'آیتم‌های «' + t.title + '»';
+    $('#itemsCount').textContent = fa(rows.length) + ' آیتم';
+    $('#itemFormLbl').textContent = editItem ? 'ویرایش «' + editItem.title + '»' : 'عنوان آیتم جدید';
+    $('#itemSaveLbl').textContent = editItem ? 'ثبت تغییرات' : 'ثبت';
+    $('#itemsBody').innerHTML = rows.length ? rows.map(function (x) {
+      var n = children(x.code).length, sel = item === x;
+      return '<tr class="' + (sel ? 'is-selected' : '') + '" data-code="' + x.code + '">' +
+        '<td><span class="code-chip">' + fa(x.code) + '</span></td>' +
+        '<td><span class="cell-main">' + esc(x.title) + '</span></td>' +
+        '<td>' + (n ? '<span class="badge badge-violet">' + fa(n) + ' زیرشاخه</span>' : '<span class="text-soft fs-xs">—</span>') + '</td>' +
+        '<td>' + actions(x.code, '<button type="button" class="btn btn-sm ' + (sel ? 'btn-ink' : 'btn-soft') + '" data-sub="' + x.code + '">' + CRM.icon('corner-down-right', 14) + ' جزئی</button>') + '</td></tr>';
+    }).join('') : emptyRow(4, 'هنوز آیتمی برای این نوع تعریف نشده است.');
+  }
+  $('#itemForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var inp = $('#itemInput'), v = inp.value.trim();
+    if (!v) { inp.classList.add('is-invalid'); inp.focus(); return; }
+    if (dup(itemsOf(typeId), v, editItem)) { inp.classList.add('is-invalid'); CRM.toast({ type: 'warning', title: 'عنوان تکراری', msg: '«' + v + '» قبلاً در این نوع ثبت شده است.' }); return; }
+    inp.classList.remove('is-invalid');
+    if (editItem) { editItem.title = v; CRM.toast({ type: 'success', title: 'ویرایش شد', msg: 'عنوان به «' + v + '» تغییر کرد.', duration: 2200 }); editItem = null; }
+    else { var c = nextCode(); D.basicItems.push({ code: c, type: typeId, title: v, parent: null }); CRM.toast({ type: 'success', title: 'آیتم ثبت شد', msg: '«' + v + '» با کد ' + fa(c) + ' به «' + typeOf(typeId).title + '» اضافه شد.', duration: 2200 }); }
+    inp.value = ''; renderAll(); inp.focus();
+  });
+  $('#itemNew').addEventListener('click', function () { editItem = null; $('#itemInput').value = ''; $('#itemInput').classList.remove('is-invalid'); renderItems(); $('#itemInput').focus(); });
+  $('#itemsBody').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-sub],[data-edit],[data-del]'), tr = e.target.closest('tr[data-code]');
+    if (!tr) return;
+    var x = D.basicItems.filter(function (i) { return i.code === +tr.getAttribute('data-code'); })[0];
+    if (b && b.hasAttribute('data-edit')) { editItem = x; $('#itemInput').value = x.title; renderItems(); $('#itemInput').select(); return; }
+    if (b && b.hasAttribute('data-del')) { remove(x); return; }
+    item = x; editSub = null; renderAll();
+    if (window.innerWidth <= 1280) $('#subCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    $('#subInput').focus({ preventScroll: true });
+  });
+
+  function remove(x) {
+    var n = children(x.code).length;
+    CRM.modal.confirm({
+      title: 'حذف «' + x.title + '»', danger: true, icon: 'trash', okText: 'بله، حذف کن',
+      msg: n ? 'این آیتم ' + fa(n) + ' زیرشاخه دارد که همراه آن حذف می‌شوند. اسنادی که قبلاً از آن استفاده کرده‌اند تغییری نمی‌کنند.' : 'اسنادی که قبلاً از این آیتم استفاده کرده‌اند تغییری نمی‌کنند.'
+    }).then(function (ok) {
+      if (!ok) return;
+      D.basicItems = D.basicItems.filter(function (i) { return i !== x && i.parent !== x.code; });
+      CRM.data.basicItems = D.basicItems;
+      if (item === x) item = null; if (editItem === x) editItem = null; if (editSub === x) editSub = null;
+      renderAll();
+      CRM.toast({ type: 'success', title: 'حذف شد', msg: '«' + x.title + '» حذف شد.', duration: 2200 });
+    });
+  }
+
+  /* ------------------------------------------------ ۳) زیرشاخه‌ها */
+  function renderSubs() {
+    $('#subEmpty').classList.toggle('d-none', !!item);
+    $('#subPane').classList.toggle('d-none', !item);
+    if (!item) { $('#subTitle').textContent = 'زیرشاخه‌ها'; $('#subCount').textContent = '—'; return; }
+    var rows = children(item.code);
+    $('#subTitle').textContent = 'زیرشاخه‌های «' + item.title + '»';
+    $('#subCount').textContent = fa(rows.length) + ' مورد';
+    $('#subFormLbl').textContent = editSub ? 'ویرایش «' + editSub.title + '»' : 'عنوان زیرشاخه';
+    $('#subSaveLbl').textContent = editSub ? 'ثبت تغییرات' : 'ثبت زیرشاخه';
+    $('#subBody').innerHTML = rows.length ? rows.map(function (x) {
+      return '<tr data-code="' + x.code + '"><td><span class="code-chip">' + fa(x.code) + '</span></td><td>' + esc(x.title) + '</td><td>' + actions(x.code) + '</td></tr>';
+    }).join('') : emptyRow(3, '«' + esc(item.title) + '» هنوز زیرشاخه‌ای ندارد.');
+  }
+  $('#subForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var inp = $('#subInput'), v = inp.value.trim();
+    if (!v) { inp.classList.add('is-invalid'); inp.focus(); return; }
+    if (dup(children(item.code), v, editSub)) { inp.classList.add('is-invalid'); CRM.toast({ type: 'warning', title: 'عنوان تکراری', msg: '«' + v + '» قبلاً زیر «' + item.title + '» ثبت شده است.' }); return; }
+    inp.classList.remove('is-invalid');
+    if (editSub) { editSub.title = v; editSub = null; CRM.toast({ type: 'success', title: 'ویرایش شد', msg: 'زیرشاخه به «' + v + '» تغییر کرد.', duration: 2200 }); }
+    else { var c = nextCode(); D.basicItems.push({ code: c, type: typeId, title: v, parent: item.code }); CRM.toast({ type: 'success', title: 'زیرشاخه ثبت شد', msg: '«' + v + '» زیر «' + item.title + '» اضافه شد.', duration: 2200 }); }
+    inp.value = ''; renderAll(); inp.focus();
+  });
+  $('#subBody').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-edit],[data-del]'); if (!b) return;
+    var x = D.basicItems.filter(function (i) { return i.code === +b.closest('tr').getAttribute('data-code'); })[0];
+    if (b.hasAttribute('data-edit')) { editSub = x; $('#subInput').value = x.title; renderSubs(); $('#subInput').select(); }
+    else remove(x);
+  });
+
+  $('#btnExport').addEventListener('click', function () { CRM.toast({ type: 'success', title: 'خروجی Excel آماده شد', msg: 'فایل «basic-' + typeId + '.xlsx» (نمایشی) ساخته شد.' }); });
+
+  function renderAll() { renderTypes(); renderItems(); renderSubs(); }
+  /* پیش‌فرض: نمایش زیرشاخه‌های «معرفی همکار» مثل نمونه‌ی سامانه‌ی قبلی */
+  if (!qs.get('type')) item = itemsOf(typeId).filter(function (x) { return children(x.code).length; })[0] || null;
+  renderAll();
+})();
+</script>
+</body>
+</html>

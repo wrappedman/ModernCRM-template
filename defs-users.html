@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تعریف کاربران | تعاریف | مدرن‌CRM</title>
+<meta name="description" content="تعریف کاربران سامانه و تعیین سطح دسترسی هر کاربر به فرم‌ها (ثبت، ویرایش، حذف)">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="defs-users">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <a href="defs.html">تعاریف</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">تعریف کاربران</span>
+            </div>
+            <h1 class="page-title">تعریف کاربران</h1>
+            <p class="page-desc">کاربران سامانه را تعریف کنید و برای هر نفر مشخص کنید به کدام فرم‌ها و با چه مجوزی (ثبت، ویرایش، حذف) دسترسی دارد.</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" type="button" id="btnExport"><span data-icon="file-spreadsheet" data-icon-size="16"></span> خروجی Excel</button>
+            <button class="btn btn-primary" type="button" id="btnNew"><span data-icon="user-plus" data-icon-size="16"></span> کاربر جدید</button>
+          </div>
+        </div>
+
+        <!-- ============================ شاخص‌ها ============================ -->
+        <div class="grid-4 mb-5">
+          <div class="card card-hover"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon"><span data-icon="users" data-icon-size="22"></span></span>
+            <div><div class="stat-label">کل کاربران</div><div class="stat-value" id="kAll">—</div></div>
+          </div></div>
+          <div class="card card-hover"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon success"><span data-icon="user-check" data-icon-size="22"></span></span>
+            <div><div class="stat-label">فعال</div><div class="stat-value" id="kActive">—</div></div>
+          </div></div>
+          <div class="card card-hover"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon rose"><span data-icon="lock" data-icon-size="22"></span></span>
+            <div><div class="stat-label">غیرفعال</div><div class="stat-value" id="kInactive">—</div></div>
+          </div></div>
+          <div class="card card-hover"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon violet"><span data-icon="briefcase" data-icon-size="22"></span></span>
+            <div><div class="stat-label">نماینده و همکار</div><div class="stat-value" id="kAgents">—</div></div>
+          </div></div>
+        </div>
+
+        <div class="grid-2-1">
+          <!-- ============================ فهرست کاربران ============================ -->
+          <div class="card" data-win="defs-users-table" data-win-title="فهرست کاربران" data-win-icon="users" data-win-size="1100x640">
+            <div class="card-head flex-wrap" style="gap:10px">
+              <div class="card-title" data-icon="users" data-icon-size="18"> فهرست کاربران</div>
+              <div class="card-actions flex-wrap" style="gap:8px">
+                <div class="input-wrap" style="width:210px">
+                  <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+                  <input class="input input-sm" id="uSearch" placeholder="جستجو در نام، کد، نام کاربری…" aria-label="جستجو">
+                </div>
+                <select class="select select-sm" id="uType" style="width:auto" aria-label="نوع کاربری"></select>
+                <div class="segmented" id="uStatus" role="tablist" aria-label="وضعیت">
+                  <button class="seg is-active" data-s="">همه</button>
+                  <button class="seg" data-s="1">فعال</button>
+                  <button class="seg" data-s="0">غیرفعال</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body flush">
+              <div class="table-wrap">
+                <table class="table" id="tblUsers">
+                  <thead>
+                    <tr>
+                      <th style="width:60px">کد</th>
+                      <th>کاربر</th>
+                      <th>نوع کاربری</th>
+                      <th>دسترسی</th>
+                      <th>وضعیت</th>
+                      <th class="table-row-actions">عملیات</th>
+                    </tr>
+                  </thead>
+                  <tbody id="usersBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="table-foot"><span id="usersFoot">—</span></div>
+          </div>
+
+          <!-- ============================ فرم کاربر ============================ -->
+          <form class="card" id="userForm" data-win-nobtn novalidate style="align-self:start;position:sticky;top:calc(var(--topbar-h) + 12px)">
+            <div class="card-head">
+              <div class="card-title"><span data-icon="user-plus" data-icon-size="18"></span> <span id="formTitle">تعریف کاربر جدید</span></div>
+              <div class="card-actions"><span class="badge badge-info" id="formBadge">جدید</span></div>
+            </div>
+            <div class="card-body">
+              <div class="grid-2" style="gap:12px">
+                <div class="form-group">
+                  <label class="form-label" for="fFirst">نام <span class="req">*</span></label>
+                  <input class="input" id="fFirst" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="fLast">نام خانوادگی <span class="req">*</span></label>
+                  <input class="input" id="fLast" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="fEmail">آدرس ایمیل</label>
+                <div class="input-wrap">
+                  <span class="icon lead" data-icon="mail" data-icon-size="17"></span>
+                  <input class="input ltr" id="fEmail" type="email" placeholder="name@company.ir">
+                </div>
+              </div>
+              <div class="grid-2" style="gap:12px">
+                <div class="form-group">
+                  <label class="form-label" for="fUser">نام کاربری <span class="req">*</span></label>
+                  <input class="input ltr" id="fUser" required autocomplete="off" placeholder="a.baseri">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="fPass">کلمه عبور <span class="req" id="passReq">*</span></label>
+                  <div class="input-wrap">
+                    <input class="input ltr" id="fPass" type="password" autocomplete="new-password" placeholder="••••••••">
+                    <button type="button" class="icon trail" data-password-toggle data-icon="eye" data-icon-size="17" aria-label="نمایش رمز"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="strength mb-1" data-strength-for="#fPass" style="margin-top:-10px"><i></i><i></i><i></i><i></i></div>
+              <div class="form-hint mb-4" id="passHint"><span data-icon="info" data-icon-size="13"></span> حداقل ۸ کاراکتر، ترکیبی از حروف و عدد.</div>
+              <div class="grid-2" style="gap:12px">
+                <div class="form-group">
+                  <label class="form-label" for="fType">نوع کاربری <span class="req">*</span></label>
+                  <select class="select" id="fType" required></select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="fKind">نوع</label>
+                  <select class="select" id="fKind"></select>
+                </div>
+              </div>
+              <div class="d-flex items-center justify-between flex-wrap gap-3">
+                <div class="radio-row" role="radiogroup" aria-label="جنسیت">
+                  <label class="check"><input type="radio" name="gender" value="m" checked><span class="box round"></span><span class="lbl">مرد</span></label>
+                  <label class="check"><input type="radio" name="gender" value="f"><span class="box round"></span><span class="lbl">زن</span></label>
+                </div>
+                <label class="switch"><input type="checkbox" id="fInactive"><span class="track"></span><span class="lbl">غیرفعال</span></label>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><span data-icon="check" data-icon-size="16"></span> <span id="btnSaveLbl">ثبت</span></button>
+              <button type="button" class="btn" id="btnCancel"><span data-icon="eraser" data-icon-size="16"></span> انصراف</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-soft d-none" id="btnFormPerms"><span data-icon="shield-check" data-icon-size="16"></span> سطح دسترسی</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============================ مودال سطح دسترسی ============================ -->
+<div class="overlay" id="modalPerms" style="display:none">
+  <div class="modal modal-xl" role="dialog" aria-modal="true" aria-labelledby="permTitle" style="max-height:calc(100vh - 40px);display:flex;flex-direction:column">
+    <div class="modal-head">
+      <div class="d-flex items-center gap-3">
+        <span id="permAvatar"></span>
+        <div><div class="modal-title" id="permTitle">سطح دسترسی</div><div class="modal-sub" id="permSub">—</div></div>
+      </div>
+      <button class="tb-icon modal-x" data-modal-close="#modalPerms" data-icon="x" data-icon-size="18"></button>
+    </div>
+    <div class="card-body tight d-flex flex-wrap items-center gap-2" style="border-bottom:1px solid var(--border-muted)">
+      <div class="input-wrap" style="width:220px">
+        <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+        <input class="input input-sm" id="pSearch" placeholder="جستجوی فرم…" aria-label="جستجوی فرم">
+      </div>
+      <div class="segmented" id="pView">
+        <button class="seg is-active" data-v="all">همه فرم‌ها</button>
+        <button class="seg" data-v="on">فقط دارای دسترسی</button>
+      </div>
+      <select class="select select-sm ms-auto" id="pCopy" style="width:auto" aria-label="کپی دسترسی"></select>
+    </div>
+    <div class="modal-body" style="padding:0;overflow:auto;flex:1">
+      <table class="table table-compact perm-table" id="permTable">
+        <thead>
+          <tr>
+            <th>نام فرم</th>
+            <th class="pc">دسترسی<label class="check mt-1" data-tip="انتخاب همه"><input type="checkbox" data-col="v"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>
+            <th class="pc">ثبت<label class="check mt-1" data-tip="انتخاب همه"><input type="checkbox" data-col="c"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>
+            <th class="pc">ویرایش<label class="check mt-1" data-tip="انتخاب همه"><input type="checkbox" data-col="e"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>
+            <th class="pc">حذف<label class="check mt-1" data-tip="انتخاب همه"><input type="checkbox" data-col="d"><span class="box"><span data-icon="check" data-icon-size="12"></span></span></label></th>
+          </tr>
+        </thead>
+        <tbody id="permBody"></tbody>
+      </table>
+    </div>
+    <div class="modal-foot">
+      <div class="fs-xs text-muted d-flex items-center gap-2 flex-wrap" id="permSummary">—</div>
+      <div class="end">
+        <button type="button" class="btn" data-modal-close="#modalPerms">انصراف</button>
+        <button type="button" class="btn btn-primary" id="btnSavePerms"><span data-icon="check" data-icon-size="16"></span> ثبت دسترسی</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, $ = CRM.$, $$ = CRM.$$, fa = CRM.fa, num = CRM.num, esc = CRM.esc;
+  var form = $('#userForm'), current = null, statusFilter = '';
+  var TYPE_TONE = { 'مدیر سیستم': 'badge-solid', 'مدیر فروش': 'badge-primary', 'کارشناس فروش': 'badge-info', 'کارشناس پشتیبانی': 'badge-warning', 'حسابدار': 'badge-success', 'انباردار': 'badge-violet' };
+  var ALL_FORMS = []; D.permModules.forEach(function (m) { m.forms.forEach(function (f) { ALL_FORMS.push(f); }); });
+
+  /* ------------------------------------------------ کنترل‌ها */
+  $('#uType').innerHTML = '<option value="">همه نوع‌ها</option>' + D.defUserTypes.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
+  $('#fType').innerHTML = '<option value="">انتخاب…</option>' + D.defUserTypes.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
+  $('#fKind').innerHTML = D.defUserKinds.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
+  var F = { first: $('#fFirst'), last: $('#fLast'), email: $('#fEmail'), user: $('#fUser'), pass: $('#fPass'), type: $('#fType'), kind: $('#fKind'), inactive: $('#fInactive') };
+
+  function permCount(code) { var p = D.defPerms[code] || {}; return Object.keys(p).filter(function (k) { return p[k]; }).length; }
+  function fullName(u) { return u.first + ' ' + u.last; }
+
+  /* ------------------------------------------------ جدول کاربران */
+  function render() {
+    var q = $('#uSearch').value.trim().toLowerCase(), t = $('#uType').value;
+    var rows = D.defUsers.filter(function (u) {
+      if (t && u.type !== t) return false;
+      if (statusFilter !== '' && String(+u.active) !== statusFilter) return false;
+      return !q || (fullName(u) + ' ' + u.username + ' ' + u.code + ' ' + fa(u.code) + ' ' + u.email).toLowerCase().indexOf(q) > -1;
+    }).sort(function (a, b) { return b.code - a.code; });
+    $('#usersBody').innerHTML = rows.length ? rows.map(function (u) {
+      var pc = permCount(u.code), pct = Math.round(pc / ALL_FORMS.length * 100);
+      return '<tr class="' + (current && current.code === u.code ? 'is-selected' : '') + '">' +
+        '<td><span class="code-chip num">' + fa(u.code) + '</span></td>' +
+        '<td><div class="d-flex items-center gap-3">' + CRM.avatar(fullName(u), 36) +
+          '<div style="min-width:0"><div class="cell-main text-nowrap">' + esc(fullName(u)) + '</div><div class="fs-2xs text-muted text-nowrap"><span class="ltr-cell">' + esc(u.username) + '</span> · ' + esc(u.kind) + '</div></div></div></td>' +
+        '<td><span class="badge text-nowrap ' + (TYPE_TONE[u.type] || '') + '">' + esc(u.type) + '</span></td>' +
+        '<td style="min-width:120px"><div class="d-flex justify-between fs-2xs text-muted mb-1"><span>' + fa(pc) + ' فرم</span><span>' + fa(pct) + '٪</span></div><div class="progress sm"><i style="width:' + Math.max(3, pct) + '%"></i></div></td>' +
+        '<td>' + (u.active ? '<span class="badge badge-success badge-dot text-nowrap">فعال</span>' : '<span class="badge badge-danger badge-dot text-nowrap">غیرفعال</span>') + '</td>' +
+        '<td class="text-nowrap"><div class="d-flex items-center gap-1">' +
+          '<button type="button" class="btn btn-sm btn-soft" data-perm="' + u.code + '"><span data-icon="shield-check" data-icon-size="14"></span> سطح دسترسی</button>' +
+          '<button type="button" class="tb-icon" style="width:30px;height:30px" data-edit="' + u.code + '" data-tip="ویرایش" data-icon="pencil" data-icon-size="16"></button>' +
+        '</div></td></tr>';
+    }).join('') : '<tr><td colspan="6"><div class="empty" style="padding:34px"><div class="empty-ic" data-icon="search" data-icon-size="28"></div><div class="empty-title">کاربری یافت نشد</div></div></td></tr>';
+    CRM.renderIcons($('#usersBody'));
+    $('#usersFoot').textContent = 'نمایش ' + fa(rows.length) + ' از ' + fa(D.defUsers.length) + ' کاربر';
+    $('#kAll').textContent = num(D.defUsers.length);
+    $('#kActive').textContent = num(D.defUsers.filter(function (u) { return u.active; }).length);
+    $('#kInactive').textContent = num(D.defUsers.filter(function (u) { return !u.active; }).length);
+    $('#kAgents').textContent = num(D.defUsers.filter(function (u) { return u.kind !== 'پرسنل داخلی'; }).length);
+  }
+  $('#uSearch').addEventListener('input', CRM.debounce(render, 120));
+  $('#uType').addEventListener('change', render);
+  $('#uStatus').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-s]'); if (!b) return;
+    $$('#uStatus .seg').forEach(function (x) { x.classList.toggle('is-active', x === b); });
+    statusFilter = b.getAttribute('data-s'); render();
+  });
+  function find(code) { code = +code; for (var i = 0; i < D.defUsers.length; i++) if (D.defUsers[i].code === code) return D.defUsers[i]; return null; }
+  $('#usersBody').addEventListener('click', function (e) {
+    var b;
+    if ((b = e.target.closest('[data-perm]'))) openPerms(find(b.getAttribute('data-perm')));
+    else if ((b = e.target.closest('[data-edit]'))) load(find(b.getAttribute('data-edit')));
+  });
+
+  /* ------------------------------------------------ فرم */
+  function setMode(u) {
+    current = u;
+    $('#formTitle').textContent = u ? 'ویرایش کاربر' : 'تعریف کاربر جدید';
+    $('#formBadge').className = 'badge ' + (u ? 'badge-violet' : 'badge-info');
+    $('#formBadge').textContent = u ? 'کد ' + fa(u.code) : 'جدید';
+    $('#btnSaveLbl').textContent = u ? 'ثبت تغییرات' : 'ثبت';
+    $('#passReq').classList.toggle('d-none', !!u);
+    $('#passHint').lastChild.textContent = u ? ' برای تغییر رمز وارد کنید؛ خالی بماند یعنی بدون تغییر.' : ' حداقل ۸ کاراکتر، ترکیبی از حروف و عدد.';
+    $('#btnFormPerms').classList.toggle('d-none', !u);
+    render();
+  }
+  function load(u) {
+    F.first.value = u.first; F.last.value = u.last; F.email.value = u.email; F.user.value = u.username; F.pass.value = '';
+    F.type.value = u.type; F.kind.value = u.kind; F.inactive.checked = !u.active;
+    form.querySelector('input[name="gender"][value="' + u.gender + '"]').checked = true;
+    F.pass.dispatchEvent(new Event('input'));
+    form.querySelectorAll('.is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+    setMode(u);
+    if (window.innerWidth < 1024) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function clear() {
+    form.reset(); F.pass.dispatchEvent(new Event('input'));
+    form.querySelectorAll('.is-invalid').forEach(function (x) { x.classList.remove('is-invalid'); });
+    setMode(null);
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var req = [F.first, F.last, F.user, F.type].concat(current ? [] : [F.pass]);
+    var bad = req.filter(function (x) { return !x.value.trim(); });
+    var dup = D.defUsers.some(function (u) { return u.username === F.user.value.trim() && u !== current; });
+    if (dup) bad.push(F.user);
+    [F.first, F.last, F.user, F.type, F.pass].forEach(function (x) { x.classList.toggle('is-invalid', bad.indexOf(x) > -1); });
+    if (bad.length) { bad[0].focus(); CRM.toast({ type: 'danger', title: dup ? 'نام کاربری تکراری است' : 'فیلدهای الزامی', msg: dup ? 'این نام کاربری قبلاً ثبت شده است.' : 'فیلدهای ستاره‌دار را تکمیل کنید.' }); return; }
+    var data = {
+      first: F.first.value.trim(), last: F.last.value.trim(), email: F.email.value.trim(), username: F.user.value.trim(),
+      type: F.type.value, kind: F.kind.value, gender: form.querySelector('input[name="gender"]:checked').value, active: !F.inactive.checked
+    };
+    if (current) { Object.assign(current, data); CRM.toast({ type: 'success', title: 'تغییرات ثبت شد', msg: 'اطلاعات «' + fullName(current) + '» به‌روزرسانی شد.' }); setMode(current); }
+    else {
+      var code = Math.max.apply(null, D.defUsers.map(function (u) { return u.code; })) + 1;
+      var u = Object.assign({ code: code }, data);
+      D.defUsers.push(u);
+      var preset = D.permPresets[u.type] || {}, map = {};
+      ALL_FORMS.forEach(function (f) { map[f.id] = preset === '*' ? 'vced' : (preset[f.id] || ''); });
+      D.defPerms[code] = map;
+      CRM.toast({ type: 'success', title: 'کاربر ثبت شد', msg: '«' + fullName(u) + '» با کد ' + fa(code) + ' و دسترسی پیش‌فرض «' + u.type + '» ساخته شد.' });
+      setMode(u);
+    }
+  });
+  $('#btnCancel').addEventListener('click', clear);
+  $('#btnNew').addEventListener('click', function () { clear(); F.first.focus(); });
+  $('#btnFormPerms').addEventListener('click', function () { if (current) openPerms(current); });
+  $('#btnExport').addEventListener('click', function () { CRM.toast({ type: 'success', title: 'خروجی Excel آماده شد', msg: 'فایل «users.xlsx» (نمایشی) ساخته شد.' }); });
+
+  /* ==================================================== سطح دسترسی */
+  var pUser = null, pState = {}, pView = 'all';
+  var KEYS = ['v', 'c', 'e', 'd'];
+  function has(f, k) { return (pState[f] || '').indexOf(k) > -1; }
+  function set(f, k, on) {
+    var cur = pState[f] || '';
+    if (on && cur.indexOf(k) === -1) cur += k;
+    if (!on) cur = cur.replace(k, '');
+    if (k === 'v' && !on) cur = '';                 /* بدون دسترسی، مجوز دیگری معنا ندارد */
+    if (k !== 'v' && on && cur.indexOf('v') === -1) cur = 'v' + cur;
+    pState[f] = KEYS.filter(function (x) { return cur.indexOf(x) > -1; }).join('');
+  }
+  function cb(attrs, checked, label) {
+    return '<label class="check"' + (label ? ' data-tip="' + label + '"' : '') + '><input type="checkbox" ' + attrs + (checked ? ' checked' : '') + '><span class="box">' + CRM.icon('check', 12) + '</span></label>';
+  }
+  function visibleForms(m) {
+    var q = $('#pSearch').value.trim();
+    return m.forms.filter(function (f) { return (!q || f.title.indexOf(q) > -1) && (pView === 'all' || has(f.id, 'v')); });
+  }
+  function renderPerms() {
+    var html = '';
+    D.permModules.forEach(function (m) {
+      var forms = visibleForms(m); if (!forms.length) return;
+      html += '<tr class="perm-group"><td><span class="d-inline-flex items-center gap-2">' + CRM.icon(m.icon, 16) + ' ' + esc(m.title) + ' <span class="badge">' + fa(m.forms.filter(function (f) { return has(f.id, 'v'); }).length) + ' از ' + fa(m.forms.length) + '</span></span></td>' +
+        KEYS.map(function (k) { return '<td class="pc">' + cb('data-g="' + m.id + '" data-k="' + k + '"', false, 'همه‌ی فرم‌های ' + m.title) + '</td>'; }).join('') + '</tr>';
+      forms.forEach(function (f) {
+        var on = has(f.id, 'v');
+        html += '<tr class="' + (on ? '' : 'is-off') + '"><td><span class="perm-name">' + esc(f.title) + '</span></td>' +
+          KEYS.map(function (k) { return '<td class="pc' + (k === 'v' ? ' pc-access' : '') + '">' + cb('data-f="' + f.id + '" data-k="' + k + '"', has(f.id, k)) + '</td>'; }).join('') + '</tr>';
+      });
+    });
+    $('#permBody').innerHTML = html || '<tr><td colspan="5"><div class="empty" style="padding:30px"><div class="empty-desc">فرمی یافت نشد.</div></div></td></tr>';
+    syncAggregates();
+  }
+  /* وضعیت چک‌باکس‌های گروه و ستون (کامل / نیمه) */
+  function syncAggregates() {
+    function mark(input, list, k) {
+      var n = list.filter(function (f) { return has(f.id, k); }).length;
+      input.checked = list.length > 0 && n === list.length; input.indeterminate = n > 0 && n < list.length;
+    }
+    $$('#permBody [data-g]').forEach(function (i) {
+      var m = D.permModules.filter(function (x) { return x.id === i.getAttribute('data-g'); })[0];
+      mark(i, m.forms, i.getAttribute('data-k'));
+    });
+    $$('#permTable [data-col]').forEach(function (i) { mark(i, ALL_FORMS, i.getAttribute('data-col')); });
+    var cnt = function (k) { return ALL_FORMS.filter(function (f) { return has(f.id, k); }).length; };
+    $('#permSummary').innerHTML = CRM.icon('shield-check', 14) + ' <b class="text-strong">' + fa(cnt('v')) + '</b> فرم از ' + fa(ALL_FORMS.length) +
+      ' <span class="badge badge-success">ثبت ' + fa(cnt('c')) + '</span><span class="badge badge-info">ویرایش ' + fa(cnt('e')) + '</span><span class="badge badge-danger">حذف ' + fa(cnt('d')) + '</span>';
+  }
+  $('#permTable').addEventListener('change', function (e) {
+    var i = e.target, k = i.getAttribute('data-k') || i.getAttribute('data-col');
+    if (i.hasAttribute('data-f')) set(i.getAttribute('data-f'), k, i.checked);
+    else if (i.hasAttribute('data-g')) D.permModules.filter(function (m) { return m.id === i.getAttribute('data-g'); })[0].forms.forEach(function (f) { set(f.id, k, i.checked); });
+    else if (i.hasAttribute('data-col')) ALL_FORMS.forEach(function (f) { set(f.id, k, i.checked); });
+    else return;
+    renderPerms();
+  });
+  $('#pSearch').addEventListener('input', CRM.debounce(renderPerms, 120));
+  $('#pView').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-v]'); if (!b) return;
+    $$('#pView .seg').forEach(function (x) { x.classList.toggle('is-active', x === b); });
+    pView = b.getAttribute('data-v'); renderPerms();
+  });
+  $('#pCopy').addEventListener('change', function () {
+    var v = this.value; if (!v) return;
+    var src;
+    if (v.indexOf('type:') === 0) {
+      var preset = D.permPresets[v.slice(5)] || {}; src = {};
+      ALL_FORMS.forEach(function (f) { src[f.id] = preset === '*' ? 'vced' : (preset[f.id] || ''); });
+    } else src = D.defPerms[+v.slice(5)];
+    pState = JSON.parse(JSON.stringify(src));
+    renderPerms();
+    CRM.toast({ type: 'info', title: 'دسترسی‌ها کپی شد', msg: 'برای اعمال نهایی «ثبت دسترسی» را بزنید.', duration: 2400 });
+    this.value = '';
+  });
+  function openPerms(u) {
+    pUser = u; pState = JSON.parse(JSON.stringify(D.defPerms[u.code] || {}));
+    $('#permTitle').textContent = 'سطح دسترسی ' + fullName(u);
+    $('#permSub').textContent = u.type + ' · ' + u.kind + ' · نام کاربری: ' + u.username;
+    $('#permAvatar').innerHTML = CRM.avatar(fullName(u), 42);
+    $('#pSearch').value = '';
+    $('#pCopy').innerHTML = '<option value="">کپی دسترسی از…</option>' +
+      '<optgroup label="الگوی نوع کاربری">' + D.defUserTypes.map(function (t) { return '<option value="type:' + esc(t) + '">' + esc(t) + '</option>'; }).join('') + '</optgroup>' +
+      '<optgroup label="کاربر دیگر">' + D.defUsers.filter(function (x) { return x !== u; }).map(function (x) { return '<option value="user:' + x.code + '">' + esc(fullName(x)) + '</option>'; }).join('') + '</optgroup>';
+    renderPerms();
+    CRM.modal.open('#modalPerms');
+  }
+  $('#btnSavePerms').addEventListener('click', function () {
+    D.defPerms[pUser.code] = pState;
+    CRM.modal.close('#modalPerms');
+    render();
+    CRM.toast({ type: 'success', title: 'سطح دسترسی ثبت شد', msg: 'دسترسی «' + fullName(pUser) + '» به ' + fa(permCount(pUser.code)) + ' فرم ذخیره شد.' });
+  });
+
+  clear();
+})();
+</script>
+</body>
+</html>

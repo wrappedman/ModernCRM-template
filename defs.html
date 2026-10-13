@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تعاریف | مدرن‌CRM</title>
+<meta name="description" content="تعاریف پایه‌ی سامانه: کاربران و سطح دسترسی، دوره مالی، تعاریف اولیه و تنظیمات فاکتور">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="defs">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">تعاریف</span>
+            </div>
+            <h1 class="page-title">تعاریف</h1>
+            <p class="page-desc">پایه‌ی اطلاعاتی سامانه: چه کسانی کار می‌کنند، در چه دوره‌ای، با چه گزینه‌هایی و با چه نرخ‌هایی.</p>
+          </div>
+          <div class="head-actions">
+            <a class="btn" href="defs-fiscal.html"><span data-icon="calendar-range" data-icon-size="16"></span> دوره مالی</a>
+            <a class="btn btn-primary" href="defs-users.html"><span data-icon="user-plus" data-icon-size="16"></span> تعریف کاربر</a>
+          </div>
+        </div>
+
+        <!-- ============================ شاخص‌ها ============================ -->
+        <div class="grid-4 mb-5">
+          <div class="card card-hover"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon success"><span data-icon="calendar-range" data-icon-size="22"></span></span>
+            <div style="min-width:0"><div class="stat-label">دوره مالی جاری</div><div class="stat-value" id="kPeriod">—</div></div>
+            <span class="badge badge-success ms-auto" id="kPeriodLeft">—</span>
+          </div></div>
+          <div class="card card-hover"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon"><span data-icon="users" data-icon-size="22"></span></span>
+            <div><div class="stat-label">کاربران فعال</div><div class="stat-value" id="kUsers">—</div></div>
+            <span class="badge ms-auto" id="kUsersAll">—</span>
+          </div></div>
+          <div class="card card-hover"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon violet"><span data-icon="list-tree" data-icon-size="22"></span></span>
+            <div><div class="stat-label">آیتم‌های تعاریف اولیه</div><div class="stat-value" id="kItems">—</div></div>
+            <span class="badge badge-violet ms-auto" id="kTypes">—</span>
+          </div></div>
+          <div class="card card-hover"><div class="card-body tight d-flex items-center gap-4">
+            <span class="stat-icon amber"><span data-icon="percent" data-icon-size="22"></span></span>
+            <div><div class="stat-label">ارزش افزوده</div><div class="stat-value" id="kVat">—</div></div>
+            <span class="badge badge-warning ms-auto" id="kLetter">—</span>
+          </div></div>
+        </div>
+
+        <!-- ============================ بخش‌ها ============================ -->
+        <div class="section-title mb-3"><span data-icon="layout-grid" data-icon-size="18"></span> بخش‌های تعاریف</div>
+        <div class="tile-links mb-5">
+          <a class="tile-link" href="defs-users.html">
+            <span class="stat-icon"><span data-icon="users" data-icon-size="22"></span></span>
+            <div><div class="tl-title">تعریف کاربران</div><div class="tl-desc">کاربران، نام کاربری و رمز، و سطح دسترسی هر نفر به فرم‌ها</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="defs-fiscal.html">
+            <span class="stat-icon success"><span data-icon="calendar-range" data-icon-size="22"></span></span>
+            <div><div class="tl-title">تعریف دوره مالی</div><div class="tl-desc">بازه‌ی شروع و پایان هر سال مالی و وضعیت فعال بودن آن</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="defs-basic.html">
+            <span class="stat-icon violet"><span data-icon="list-tree" data-icon-size="22"></span></span>
+            <div><div class="tl-title">تعاریف اولیه</div><div class="tl-desc">گزینه‌های فهرست‌ها مثل نحوه آشنایی، استان و علت تاخیر، با زیرشاخه</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+          <a class="tile-link" href="defs-settings.html">
+            <span class="stat-icon amber"><span data-icon="sliders" data-icon-size="22"></span></span>
+            <div><div class="tl-title">تنظیمات فاکتور</div><div class="tl-desc">حرف فاکتور، ارزش افزوده، مالیات، عوارض و متن توضیحات هر سال</div></div>
+            <span class="tl-go">ورود به بخش <span data-icon="arrow-left" data-icon-size="14"></span></span>
+          </a>
+        </div>
+
+        <div class="grid-2 mb-5">
+          <!-- ============================ امسال در یک نگاه ============================ -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span data-icon="sliders" data-icon-size="18"></span> <span id="yearTitle">تنظیمات امسال</span></div>
+              <div class="card-actions"><a class="btn btn-sm btn-ghost" href="defs-settings.html">ویرایش</a></div>
+            </div>
+            <div class="card-body flush"><div class="list" id="setList"></div></div>
+          </div>
+
+          <!-- ============================ ترکیب کاربران ============================ -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title" data-icon="shield-check" data-icon-size="18"> کاربران بر اساس نوع کاربری</div>
+              <div class="card-actions"><a class="btn btn-sm btn-ghost" href="defs-users.html">همه</a></div>
+            </div>
+            <div class="card-body" id="typeBars"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, D = CRM.data, J = CRM.jalali, $ = CRM.$, fa = CRM.fa, esc = CRM.esc;
+  var YEAR = CRM.todayJalali().year;
+  function g(s) { var o = J.parse(s); return J.toGregorian(o.jy, o.jm, o.jd); }
+  var t = new Date(); t = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+
+  /* دوره جاری */
+  var p = D.fiscalPeriods.filter(function (x) { return x.active && g(x.from) <= t && g(x.to) >= t; })[0];
+  $('#kPeriod').textContent = p ? fa(J.parse(p.from).jy) : '—';
+  $('#kPeriodLeft').textContent = p ? fa(Math.round((g(p.to) - t) / 864e5)) + ' روز مانده' : 'تعریف نشده';
+
+  /* کاربران */
+  var active = D.defUsers.filter(function (u) { return u.active; }).length;
+  $('#kUsers').textContent = fa(active);
+  $('#kUsersAll').textContent = 'از ' + fa(D.defUsers.length);
+
+  /* تعاریف اولیه */
+  $('#kItems').textContent = fa(D.basicItems.length);
+  $('#kTypes').textContent = fa(D.basicTypes.length) + ' نوع';
+
+  /* تنظیمات امسال */
+  function val(type) { return D.settingValues.filter(function (v) { return v.type === type && v.year === YEAR; })[0]; }
+  var vat = val('vat'), letter = val('letter');
+  $('#kVat').textContent = vat ? fa(vat.value) + '٪' : '—';
+  $('#kLetter').textContent = letter ? 'حرف «' + letter.value + '»' : '—';
+  $('#yearTitle').textContent = 'تنظیمات فاکتور سال ' + fa(YEAR);
+  $('#setList').innerHTML = D.settingTypes.map(function (s) {
+    var v = val(s.id), shown;
+    if (!v) shown = '<span class="badge badge-warning">ثبت نشده</span>';
+    else if (s.input === 'percent') shown = '<b class="text-strong">' + fa(v.value) + '٪</b>';
+    else if (s.input === 'text') shown = '<span class="code-chip" style="background:var(--brand-soft);color:var(--brand-ink);font-size:15px">' + esc(v.value) + '</span>';
+    else shown = '<span class="fs-xs text-muted text-truncate d-block" style="max-width:260px">' + esc(v.value) + '</span>';
+    return '<a class="list-item" href="defs-settings.html?type=' + s.id + '">' +
+      '<span class="stat-icon" style="width:36px;height:36px">' + CRM.icon(s.icon, 17) + '</span>' +
+      '<div class="flex-1"><div class="fw-600 text-strong">' + esc(s.title) + '</div><div class="fs-2xs text-muted">' + esc(s.desc) + '</div></div>' +
+      '<div style="text-align:left;min-width:0">' + shown + '</div></a>';
+  }).join('');
+
+  /* ترکیب کاربران */
+  var max = 0, counts = D.defUserTypes.map(function (ty) {
+    var n = D.defUsers.filter(function (u) { return u.type === ty; }).length; max = Math.max(max, n); return { ty: ty, n: n };
+  });
+  $('#typeBars').innerHTML = counts.map(function (c) {
+    return '<div class="mb-4"><div class="d-flex justify-between fs-sm mb-2"><span class="fw-600 text-strong">' + esc(c.ty) + '</span><span class="text-muted">' + fa(c.n) + ' نفر</span></div>' +
+      '<div class="progress"><i style="width:' + (c.n ? Math.max(4, c.n / max * 100) : 0) + '%"></i></div></div>';
+  }).join('') + '<div class="form-hint d-flex items-center gap-2" style="margin:0">' + CRM.icon('info', 13) + ' سطح دسترسی پیش‌فرض هر کاربر جدید از الگوی نوع کاربری او گرفته می‌شود.</div>';
+})();
+</script>
+</body>
+</html>
