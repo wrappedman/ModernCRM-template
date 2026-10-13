@@ -8,85 +8,116 @@ window.CRM_DATA = (function () {
   'use strict';
 
   /* ------------------------------------------------------------ منوی اصلی */
+  /* --------------------------------------------------------------------------
+   * بخش‌های سامانه (ماژول‌ها) — منبع واحد برای «منوی سایدبار» و «پنل بخش‌ها» در داشبورد.
+   *  - هر صفحه فقط یک‌بار و فقط در یک بخش می‌آید.
+   *  - children: زیرمنوی بخش؛ id باید با data-page صفحه یکی باشد.
+   *  - nav: false   → فقط در پنل داشبورد (مثلاً میز کار که در سایدبار گروه جدا دارد)
+   *  - soon: true   → هنوز ساخته نشده؛ در سایدبار نمی‌آید و در داشبورد «به‌زودی» است.
+   *  - links: پیوندهای اضافه‌ی کارت داشبورد (مثلاً گزارش‌های بخش‌های دیگر)
+   * -------------------------------------------------------------------------- */
+  var MODULES = [
+    {
+      id: 'm-workspace', label: 'میز کار', icon: 'layout-grid', tone: 'ink', href: 'desktop.html', nav: false,
+      desc: 'تقویم، کارهای روزانه، جریان فعالیت‌ها و میزکار پنجره‌ای',
+      children: [
+        { id: 'calendar', label: 'تقویم', href: 'calendar.html' },
+        { id: 'activity', label: 'فعالیت‌ها', href: 'activity.html' },
+        { id: 'desktop', label: 'میزکار پنجره‌ای', href: 'desktop.html' },
+        { id: 'notifications', label: 'اعلان‌ها', href: 'notifications.html' }
+      ]
+    },
+    {
+      id: 'm-customers', label: 'مشتریان', icon: 'customers', tone: '', href: 'customers.html', badge: '۱۲۴',
+      desc: 'پرونده‌ی مشتریان، اطلاعات تماس، سطح و سابقه‌ی تعامل',
+      children: [
+        { id: 'customers', label: 'فهرست مشتریان', href: 'customers.html' },
+        { id: 'customer-new', label: 'افزودن مشتری', href: 'customer-new.html' },
+        { id: 'customer-profile', label: 'پروفایل مشتری', href: 'customer-profile.html' }
+      ]
+    },
+    {
+      id: 'm-sales', label: 'فروش', icon: 'deals', tone: 'success', href: 'pipeline.html',
+      desc: 'قیف فروش، معاملات در جریان، صدور و پیگیری فاکتورها',
+      children: [
+        { id: 'pipeline', label: 'قیف فروش', href: 'pipeline.html' },
+        { id: 'deals', label: 'معاملات', href: 'deals.html' },
+        { id: 'invoices', label: 'فاکتورها', href: 'invoices.html' }
+      ]
+    },
+    {
+      id: 'm-warehouse', label: 'انبار', icon: 'warehouse', tone: 'sky', href: 'warehouse.html',
+      desc: 'تعریف محصولات، ورود و خروج کالا از انبار اصلی و فرعی، موجودی',
+      children: [
+        { id: 'warehouse', label: 'نمای کلی انبار', href: 'warehouse.html' },
+        { id: 'warehouse-products', label: 'تعریف محصولات', href: 'warehouse-products.html' },
+        { id: 'products', label: 'کاتالوگ کالا و خدمات', href: 'products.html' },
+        { id: 'warehouse-in', label: 'ورود محصول', href: 'warehouse-in.html' },
+        { id: 'warehouse-out', label: 'خروج از انبار اصلی', href: 'warehouse-out.html' },
+        { id: 'warehouse-out-sub', label: 'خروج از انبار فرعی', href: 'warehouse-out.html?store=sub' },
+        { id: 'warehouse-stock', label: 'گزارش موجودی', href: 'warehouse-stock.html' }
+      ]
+    },
+    {
+      id: 'm-support', label: 'پشتیبانی', icon: 'headset', tone: 'amber', href: 'tickets.html', badge: '۵',
+      desc: 'تیکت‌ها، سفر پرونده تا رضایت مشتری، گفتگو و پایگاه دانش',
+      children: [
+        { id: 'tickets', label: 'تیکت‌ها', href: 'tickets.html' },
+        { id: 'ticket-new', label: 'ثبت تیکت جدید', href: 'ticket-new.html' },
+        { id: 'journey', label: 'سفر مشتری (پرونده‌ها)', href: 'journey.html' },
+        { id: 'messages', label: 'گفتگو با مشتریان', href: 'messages.html' },
+        { id: 'kb', label: 'پایگاه دانش', href: 'kb.html' }
+      ]
+    },
+    {
+      id: 'm-accounting', label: 'حسابداری', icon: 'wallet', tone: 'coral', href: '#', soon: true,
+      desc: 'دریافت و پرداخت، تسویه‌ی فاکتورها و اسناد مالی',
+      children: []
+    },
+    {
+      id: 'm-reports', label: 'گزارشات', icon: 'reports', tone: 'rose', href: 'reports.html',
+      desc: 'گزارش‌های تحلیلی فروش، عملکرد تیم و منابع جذب',
+      children: [
+        { id: 'reports', label: 'گزارش‌های تحلیلی', href: 'reports.html' }
+      ],
+      links: [
+        { label: 'گزارش موجودی انبار', href: 'warehouse-stock.html' }
+      ]
+    },
+    {
+      id: 'm-defs', label: 'تعاریف', icon: 'list-tree', tone: 'violet', href: 'defs.html',
+      desc: 'کاربران و سطح دسترسی، دوره مالی، تعاریف اولیه و تنظیمات',
+      children: [
+        { id: 'defs', label: 'نمای کلی تعاریف', href: 'defs.html' },
+        { id: 'defs-users', label: 'تعریف کاربران و دسترسی', href: 'defs-users.html' },
+        { id: 'users', label: 'نقش‌ها و امنیت ورود', href: 'users.html' },
+        { id: 'defs-fiscal', label: 'دوره مالی', href: 'defs-fiscal.html' },
+        { id: 'defs-basic', label: 'تعاریف اولیه', href: 'defs-basic.html' },
+        { id: 'defs-settings', label: 'تنظیمات فاکتور', href: 'defs-settings.html' },
+        { id: 'settings', label: 'تنظیمات سیستم', href: 'settings.html' }
+      ]
+    }
+  ];
+
+  /* منوی سایدبار: «میز کار» تخت + «بخش‌ها» که هرکدام یک زیرمنوی تاشونده است */
   var NAV = [
     {
-      group: 'عمومی',
+      group: 'میز کار',
       items: [
         { id: 'dashboard', label: 'داشبورد', icon: 'dashboard', href: 'dashboard.html' },
-        { id: 'desktop', label: 'میزکار پنجره‌ها', icon: 'window', href: 'desktop.html', badge: 'پنجره‌ای', badgeStyle: 'solid' },
-        { id: 'activity', label: 'فعالیت‌ها', icon: 'activity', href: 'activity.html' },
         { id: 'calendar', label: 'تقویم', icon: 'calendar', href: 'calendar.html' },
-        { id: 'journey', label: 'سفر مشتری', icon: 'pipeline', href: 'journey.html', badge: 'جدید', badgeStyle: 'soft' }
+        { id: 'activity', label: 'فعالیت‌ها', icon: 'activity', href: 'activity.html' },
+        { id: 'desktop', label: 'میزکار پنجره‌ای', icon: 'window', href: 'desktop.html', badge: 'پنجره‌ای', badgeStyle: 'solid' }
       ]
     },
     {
-      group: 'مدیریت مشتریان',
-      key: 'customers',
-      items: [
-        {
-          id: 'customers', label: 'مشتریان', icon: 'customers', href: 'customers.html', badge: '۱۲۴', open: true,
-          children: [
-            { id: 'customers', label: 'فهرست مشتریان', href: 'customers.html' },
-            { id: 'customer-new', label: 'افزودن مشتری', href: 'customer-new.html' },
-            { id: 'customer-profile', label: 'پروفایل مشتری', href: 'customer-profile.html' }
-          ]
-        },
-        { id: 'companies', label: 'شرکت‌ها و سازمان‌ها', icon: 'building', href: 'customers.html', badge: '۴۸' }
-      ]
-    },
-    {
-      group: 'فروش و بازاریابی',
-      items: [
-        { id: 'pipeline', label: 'قیف فروش', icon: 'pipeline', href: 'pipeline.html' },
-        { id: 'deals', label: 'معاملات', icon: 'deals', href: 'deals.html' },
-        { id: 'products', label: 'کالا و خدمات', icon: 'products', href: 'products.html' },
-        { id: 'invoices', label: 'فاکتورها', icon: 'invoice', href: 'invoices.html' },
-        { id: 'reports', label: 'گزارش‌ها', icon: 'reports', href: 'reports.html' }
-      ]
-    },
-    {
-      group: 'انبار',
-      key: 'warehouse',
-      items: [
-        { id: 'warehouse', label: 'نمای کلی انبار', icon: 'warehouse', href: 'warehouse.html' },
-        { id: 'warehouse-products', label: 'تعریف محصولات', icon: 'package', href: 'warehouse-products.html' },
-        { id: 'warehouse-in', label: 'ورود محصول به انبار', icon: 'package-plus', href: 'warehouse-in.html' },
-        {
-          id: 'warehouse-out', label: 'خروج محصول', icon: 'truck', href: 'warehouse-out.html', open: false,
-          children: [
-            { id: 'warehouse-out', label: 'خروج از انبار اصلی', href: 'warehouse-out.html' },
-            { id: 'warehouse-out-sub', label: 'خروج از انبار فرعی', href: 'warehouse-out.html?store=sub' }
-          ]
-        },
-        { id: 'warehouse-stock', label: 'گزارش موجودی انبار', icon: 'chart-column', href: 'warehouse-stock.html' }
-      ]
-    },
-    {
-      group: 'پشتیبانی',
-      items: [
-        { id: 'tickets', label: 'تیکت‌ها', icon: 'tickets', href: 'tickets.html', badge: '۵' },
-        { id: 'ticket-new', label: 'ثبت تیکت جدید', icon: 'plus', href: 'ticket-new.html' },
-        { id: 'messages', label: 'گفتگو با مشتریان', icon: 'message', href: 'messages.html', badge: '۳' },
-        { id: 'kb', label: 'پایگاه دانش', icon: 'book', href: 'kb.html' }
-      ]
-    },
-    {
-      group: 'تعاریف',
-      key: 'definitions',
-      items: [
-        { id: 'defs', label: 'نمای کلی تعاریف', icon: 'layout-grid', href: 'defs.html' },
-        { id: 'defs-users', label: 'تعریف کاربران', icon: 'users', href: 'defs-users.html' },
-        { id: 'defs-fiscal', label: 'تعریف دوره مالی', icon: 'calendar-range', href: 'defs-fiscal.html' },
-        { id: 'defs-basic', label: 'تعاریف اولیه', icon: 'list-tree', href: 'defs-basic.html' },
-        { id: 'defs-settings', label: 'تنظیمات فاکتور', icon: 'sliders', href: 'defs-settings.html' }
-      ]
-    },
-    {
-      group: 'مدیریت سیستم',
-      items: [
-        { id: 'users', label: 'کاربران و نقش‌ها', icon: 'user-cog', href: 'users.html' },
-        { id: 'settings', label: 'تنظیمات', icon: 'settings', href: 'settings.html' }
-      ]
+      group: 'بخش‌ها',
+      key: 'modules',
+      items: MODULES.filter(function (m) { return m.nav !== false && !m.soon; }).map(function (m) {
+        /* بخشی که فقط یک صفحه دارد، زیرمنو نمی‌خواهد */
+        if (m.children.length === 1) return { id: m.children[0].id, label: m.label, icon: m.icon, href: m.children[0].href, badge: m.badge };
+        return { id: m.id, label: m.label, icon: m.icon, href: m.href, badge: m.badge, children: m.children };
+      })
     }
   ];
 
@@ -478,7 +509,7 @@ window.CRM_DATA = (function () {
   })();
 
   return {
-    nav: NAV, kpis: KPIS, customers: CUSTOMERS, dealStages: DEAL_STAGES, deals: DEALS,
+    nav: NAV, modules: MODULES, kpis: KPIS, customers: CUSTOMERS, dealStages: DEAL_STAGES, deals: DEALS,
     tickets: TICKETS, invoices: INVOICES, products: PRODUCTS, threads: THREADS,
     activities: ACTIVITIES, notifications: NOTIFICATIONS, tasks: TASKS, team: TEAM,
     users: USERS, messages: MESSAGES, files: FILES, faq: FAQ,

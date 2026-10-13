@@ -1409,3 +1409,53 @@ body.no-float .win-hint { display: none; }
 [dir="rtl"] .input-wrap > .icon.lead ~ .input.ltr { padding-left: 13px; padding-right: 38px; }
 [dir="rtl"] .input-wrap > .input.ltr:has(~ .icon.trail) { padding-right: 13px; padding-left: 40px; }
 [dir="rtl"] .input-wrap > .icon.lead ~ .input.ltr:has(~ .icon.trail) { padding-right: 38px; padding-left: 40px; }
+
+/* ==========================================================================
+ * 21) پنل بخش‌های سامانه (داشبورد) — از CRM_DATA.modules ساخته می‌شود
+ * ========================================================================== */
+.module-grid { display: grid; gap: 14px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1360px) { .module-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1024px) { .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px)  { .module-grid { grid-template-columns: 1fr; } }
+
+.module-card {
+  position: relative; display: flex; flex-direction: column; gap: 14px;
+  padding: 16px; border-radius: var(--radius-lg);
+  background: var(--surface); border: 1px solid var(--border-muted);
+  cursor: pointer;
+  transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+}
+.module-card:hover { transform: translateY(-2px); border-color: var(--border-strong); box-shadow: var(--shadow-md); }
+.module-card:focus-visible { outline: none; box-shadow: 0 0 0 3.5px var(--brand-ring); }
+.module-card .mc-head { display: flex; align-items: flex-start; gap: 12px; }
+.module-card .mc-head .stat-icon { width: 42px; height: 42px; }
+.module-card .mc-title { font-weight: 700; font-size: var(--fs-lg); color: var(--text-strong); line-height: 1.4; }
+.module-card .mc-desc { font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.8; margin-top: 2px; }
+.module-card .mc-head .badge { margin-inline-start: auto; flex: none; }
+
+.module-card .mc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.module-card .mc-stat { background: var(--surface-2); border-radius: var(--radius); padding: 8px 10px; min-width: 0; }
+.module-card .mc-val { font-weight: 800; font-size: var(--fs-lg); color: var(--text-strong); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.module-card .mc-val.warn { color: var(--warning); }
+.module-card .mc-val.danger { color: var(--danger); }
+.module-card .mc-lbl { font-size: var(--fs-2xs); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.module-card .mc-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.module-card .mc-link {
+  display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 10px;
+  border-radius: var(--radius-full); border: 1px solid var(--border-muted); background: var(--surface);
+  font-size: var(--fs-2xs); font-weight: 600; color: var(--text);
+  transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+}
+.module-card .mc-link:hover { background: var(--brand-soft); border-color: transparent; color: var(--brand-ink); }
+.module-card .mc-link.more { color: var(--text-muted); }
+
+.module-card .mc-go { margin-top: auto; display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); font-weight: 600; color: var(--brand-ink); }
+.module-card .mc-go .icon { transition: transform var(--t-fast); }
+.module-card:hover .mc-go .icon { transform: translateX(-3px); }
+
+/* بخشی که هنوز ساخته نشده */
+.module-card.is-soon { cursor: default; background: var(--surface-2); border-style: dashed; border-color: var(--border); }
+.module-card.is-soon:hover { transform: none; box-shadow: none; border-color: var(--border-strong); }
+.module-card.is-soon .stat-icon { filter: grayscale(.6); opacity: .7; }
+.module-card.is-soon .mc-soon { margin-top: auto; font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.8; display: flex; gap: 6px; align-items: flex-start; }

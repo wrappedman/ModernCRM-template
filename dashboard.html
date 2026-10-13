@@ -47,6 +47,18 @@
           </div>
         </div>
 
+        <!-- ========================= بخش‌های سامانه ========================= -->
+        <div class="card mb-5" data-win="modules" data-win-title="بخش‌های سامانه" data-win-sub="دسترسی سریع به همه‌ی بخش‌ها" data-win-icon="layout-grid" data-win-size="1120x700">
+          <div class="card-head">
+            <div>
+              <div class="card-title"><span data-icon="layout-grid" data-icon-size="18"></span> بخش‌های سامانه</div>
+              <div class="card-sub">هر کارت یک بخش است؛ روی کارت بزنید یا مستقیم یکی از صفحه‌هایش را باز کنید.</div>
+            </div>
+            <div class="card-actions"><a class="btn btn-sm btn-ghost" href="index.html"><span data-icon="route" data-icon-size="15"></span> نقشه‌ی همه‌ی صفحه‌ها</a></div>
+          </div>
+          <div class="card-body"><div class="module-grid" id="moduleGrid"></div></div>
+        </div>
+
         <!-- ============================== KPI ها ============================== -->
         <div class="grid-4 mb-5">
           <div class="card card-accent card-hover" data-win="kpi-customers" data-win-title="مشتریان فعال" data-win-sub="شاخص کلیدی عملکرد" data-win-icon="users" data-win-size="820x520">
@@ -609,6 +621,72 @@
 
   /* تاریخ امروز در سربرگ */
   CRM.$('#greetDate').textContent = CRM.jLong(new Date()) + ' — خلاصه وضعیت کسب‌وکار شما در یک نگاه';
+
+  /* ---------------------------------------------------------------
+   * پنل بخش‌های سامانه — کارت‌ها از CRM_DATA.modules (همان منبع منوی سایدبار)
+   * --------------------------------------------------------------- */
+  (function () {
+    var D = CRM.data, fa = CRM.fa, esc = CRM.esc;
+    function count(list, fn) { return (list || []).filter(fn).length; }
+    function stat(val, lbl, cls) { return { val: val, lbl: lbl, cls: cls || '' }; }
+    function fiscalYear() {
+      var J = CRM.jalali, t = new Date(), y = '—';
+      (D.fiscalPeriods || []).forEach(function (p) {
+        var a = J.parse(p.from), b = J.parse(p.to); if (!p.active || !a || !b) return;
+        if (J.toGregorian(a.jy, a.jm, a.jd) <= t && J.toGregorian(b.jy, b.jm, b.jd) >= t) y = fa(a.jy);
+      });
+      return y;
+    }
+    /* دو شاخص کوچک هر بخش (از داده‌های نمایشی؛ در اتصال واقعی از API) */
+    var STATS = {
+      'm-workspace': function () { return [stat(fa(count(D.tasks, function (t) { return !t.done; })), 'کار باز امروز'), stat(fa(count(D.notifications, function (n) { return n.unread; })), 'اعلان خوانده‌نشده')]; },
+      'm-customers': function () { return [stat(CRM.num(D.kpis[0].value), 'مشتری فعال'), stat(fa(D.kpis[0].delta), 'رشد این ماه')]; },
+      'm-sales': function () {
+        return [stat(fa(count(D.deals, function (x) { return x.stage !== 'won'; })), 'معامله در جریان'),
+                stat(fa(count(D.invoices, function (x) { return x.status === 'unpaid' || x.status === 'overdue'; })), 'فاکتور پرداخت‌نشده', 'warn')];
+      },
+      'm-warehouse': function () {
+        var stocked = (D.whProducts || []).filter(function (p) { return ['software', 'service'].indexOf(p.cat) === -1; });
+        var low = count(stocked, function (p) { return p.main <= p.min; });
+        return [stat(fa(stocked.length), 'محصول انباری'), stat(fa(low), 'کم‌موجود / ناموجود', low ? 'danger' : '')];
+      },
+      'm-support': function () {
+        return [stat(fa(count(D.tickets, function (x) { return x.status !== 'closed' && x.status !== 'answered'; })), 'تیکت باز', 'warn'),
+                stat(fa((D.threads || []).reduce(function (a, t) { return a + (t.unread || 0); }, 0)), 'پیام خوانده‌نشده')];
+      },
+      'm-reports': function () { return [stat(fa(Math.round(D.kpis[1].value / 1e6)), 'میلیون درآمد ماه'), stat(fa(D.kpis[3].value) + '٪', 'نرخ تبدیل')]; },
+      'm-defs': function () { return [stat(fa(count(D.defUsers, function (u) { return u.active; })), 'کاربر فعال'), stat(fiscalYear(), 'دوره مالی جاری')]; }
+    };
+    var MAX_LINKS = 4;
+    CRM.$('#moduleGrid').innerHTML = (D.modules || []).map(function (m) {
+      var head = '<div class="mc-head"><span class="stat-icon ' + (m.tone || '') + '">' + CRM.icon(m.icon, 21) + '</span>' +
+        '<div style="min-width:0"><div class="mc-title">' + esc(m.label) + '</div><div class="mc-desc">' + esc(m.desc) + '</div></div>' +
+        (m.soon ? '<span class="badge">به‌زودی</span>' : m.badge ? '<span class="badge badge-primary">' + esc(m.badge) + '</span>' : '') + '</div>';
+      if (m.soon) {
+        return '<div class="module-card is-soon" aria-disabled="true">' + head +
+          '<div class="mc-soon">' + CRM.icon('clock', 14) + '<span>این بخش بعد از دریافت اسکرین‌شات‌های برنامه‌ی فعلی ساخته می‌شود.</span></div></div>';
+      }
+      var stats = (STATS[m.id] ? STATS[m.id]() : []).map(function (x) {
+        return '<div class="mc-stat"><div class="mc-val ' + x.cls + '">' + esc(x.val) + '</div><div class="mc-lbl">' + esc(x.lbl) + '</div></div>';
+      }).join('');
+      var links = m.children.concat(m.links || []);
+      var shown = links.slice(0, MAX_LINKS).map(function (c) { return '<a class="mc-link" href="' + c.href + '">' + esc(c.label) + '</a>'; }).join('') +
+        (links.length > MAX_LINKS ? '<a class="mc-link more" href="' + m.href + '" data-tip="' + esc(links.slice(MAX_LINKS).map(function (c) { return c.label; }).join('، ')) + '">' + fa(links.length - MAX_LINKS) + ' صفحه‌ی دیگر</a>' : '');
+      return '<div class="module-card" tabindex="0" role="link" data-href="' + m.href + '" aria-label="' + esc(m.label) + '">' + head +
+        (stats ? '<div class="mc-stats">' + stats + '</div>' : '') +
+        '<div class="mc-links">' + shown + '</div>' +
+        '<span class="mc-go">ورود به بخش ' + CRM.icon('arrow-left', 14) + '</span></div>';
+    }).join('');
+    /* کلیک/Enter روی خود کارت (نه پیوندهای داخلش) = ورود به بخش؛ واگذاری روی document تا در پنجره‌ی شناور هم کار کند */
+    function go(e) {
+      var c = e.target.closest && e.target.closest('.module-card[data-href]');
+      if (!c || e.target.closest('a')) return;
+      if (e.type === 'keydown' && e.key !== 'Enter') return;
+      location.href = c.getAttribute('data-href');
+    }
+    document.addEventListener('click', go);
+    document.addEventListener('keydown', go);
+  })();
 
   /* تیم فروش */
   CRM.$('#teamList').innerHTML = CRM.data.team.map(function (t) {

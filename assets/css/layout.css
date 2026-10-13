@@ -101,6 +101,11 @@
 /* آیکون زیرمنوها: نقطه‌ی راهنمای کوچک، هم‌تراز با آیکون‌های سطح اول */
 .nav-sub .nav-item .icon { width: 16px; height: 16px; color: var(--text-soft); }
 .nav-sub .nav-item.is-active .icon { color: currentColor; }
+/* بخشی که صفحه‌ی فعال داخل آن است (والد زیرمنو) */
+.nav-item.has-active { color: var(--text-strong); font-weight: 600; }
+.nav-item.has-active > span:first-child .icon { color: var(--brand); }
+.app-shell.sidebar-collapsed .nav-item.has-active { background: var(--ink); color: var(--on-ink); box-shadow: var(--shadow-ink); }
+.app-shell.sidebar-collapsed .nav-item.has-active > span:first-child .icon { color: currentColor; }
 .nav-caret { color: var(--text-soft); transition: transform var(--t); }
 .nav-item.is-open .nav-caret { transform: rotate(180deg); }
 

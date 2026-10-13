@@ -68,14 +68,15 @@ ModernCRM-template/
 | گروه | صفحه‌ها |
 | --- | --- |
 | ورود به قالب | `index.html` (فهرست کامل صفحه‌ها و پیش‌نمایش زنده) |
-| عمومی | `dashboard.html` `desktop.html` `journey.html` `activity.html` `calendar.html` `notifications.html` `search.html` |
-| مشتریان و فروش | `customers.html` `customer-new.html` `customer-profile.html` `pipeline.html` `deals.html` `products.html` |
-| مالی و گزارش | `invoices.html` `print-invoice.html` `reports.html` |
-| انبار | `warehouse.html` `warehouse-products.html` `warehouse-in.html` `warehouse-out.html` (اصلی) `warehouse-out.html?store=sub` (فرعی) `warehouse-stock.html` |
-| تعاریف | `defs.html` `defs-users.html` (با مودال سطح دسترسی) `defs-fiscal.html` `defs-basic.html` `defs-settings.html` |
-| پشتیبانی | `tickets.html` `ticket-new.html` `messages.html` `kb.html` `help.html` |
+| میز کار | `dashboard.html` (با پنل بخش‌های سامانه) `desktop.html` `activity.html` `calendar.html` `notifications.html` `search.html` |
+| مشتریان | `customers.html` `customer-new.html` `customer-profile.html` |
+| فروش | `pipeline.html` `deals.html` `invoices.html` `print-invoice.html` |
+| انبار | `warehouse.html` `warehouse-products.html` `products.html` (کاتالوگ) `warehouse-in.html` `warehouse-out.html` (اصلی) `warehouse-out.html?store=sub` (فرعی) `warehouse-stock.html` |
+| پشتیبانی | `tickets.html` `ticket-new.html` `journey.html` `messages.html` `kb.html` `help.html` |
+| گزارشات | `reports.html` |
+| تعاریف | `defs.html` `defs-users.html` (با مودال سطح دسترسی) `users.html` `defs-fiscal.html` `defs-basic.html` `defs-settings.html` `settings.html` |
 | احراز هویت | `login.html` `register.html` `forgot-password.html` `reset-password.html` `otp.html` `change-password.html` `lock.html` |
-| مدیریت | `users.html` `settings.html` `profile.html` `design-system.html` |
+| حساب کاربری | `profile.html` `design-system.html` |
 | خطاها | `403.html` `404.html` `500.html` `maintenance.html` |
 
 ---
@@ -109,7 +110,19 @@ ModernCRM-template/
 ```
 
 - `data-page` مشخص می‌کند کدام آیتم سایدبار فعال باشد.
-- منوی سایدبار از آرایه‌ی `CRM_DATA.nav` در `assets/js/data.js` ساخته می‌شود؛ برای افزودن صفحه فقط یک آیتم به همین آرایه اضافه کنید.
+- منوی سایدبار از `CRM_DATA.nav` ساخته می‌شود و خود `nav` از آرایه‌ی **`CRM_DATA.modules`** (بخش‌های سامانه) در `assets/js/data.js` درست می‌شود. برای افزودن صفحه، آن را به `children` بخش مربوط اضافه کنید (`id` = مقدار `data-page`).
+- **قاعده‌ی منو:** هر صفحه فقط یک‌بار و فقط در یک بخش می‌آید. گروه «میز کار» تخت است (داشبورد، تقویم، فعالیت‌ها، میزکار پنجره‌ای) و گروه «بخش‌ها» آکاردئونی است: فقط بخش صفحه‌ی فعلی باز است و با باز کردن یک بخش، بقیه بسته می‌شوند. بخشی که یک صفحه دارد (گزارشات) زیرمنو نمی‌گیرد. در سایدبار جمع‌شده، کلیک روی بخش به صفحه‌ی اصلی آن می‌رود.
+- همان `modules` پنل «بخش‌های سامانه» در داشبورد را هم می‌سازد (کارت هر بخش: توضیح، دو شاخص، پیوند صفحه‌ها). گزینه‌ها: `nav: false` (فقط در داشبورد)، `soon: true` (هنوز ساخته نشده؛ در منو نمی‌آید و در داشبورد «به‌زودی» است)، `links` (پیوند اضافه‌ی کارت).
+
+| بخش | صفحه‌ها |
+| --- | --- |
+| مشتریان | فهرست، افزودن، پروفایل مشتری |
+| فروش | قیف فروش، معاملات، فاکتورها |
+| انبار | نمای کلی، تعریف محصولات، کاتالوگ کالا و خدمات، ورود، خروج اصلی، خروج فرعی، گزارش موجودی |
+| پشتیبانی | تیکت‌ها، ثبت تیکت، سفر مشتری (پرونده‌ها)، گفتگو، پایگاه دانش |
+| گزارشات | گزارش‌های تحلیلی |
+| تعاریف | نمای کلی، تعریف کاربران و دسترسی، نقش‌ها و امنیت ورود، دوره مالی، تعاریف اولیه، تنظیمات فاکتور، تنظیمات سیستم |
+| حسابداری | به‌زودی |
 - برای صفحه‌های بدون پوسته (ورود، خطاها، چاپ) مقدار `data-shell="none"` روی `body` بگذارید.
 - برای اینکه نوار وظیفه همیشه نمایش داده شود، `data-taskbar` را روی `body` قرار دهید (مثل `desktop.html`).
 

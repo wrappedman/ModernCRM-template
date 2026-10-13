@@ -1002,7 +1002,8 @@ window.CRM = (function (w, d) {
       var navItems = [];
       (DATA.nav || []).forEach(function (g) {
         g.items.forEach(function (it) {
-          if (it.children) navItems.push({ label: it.label, icon: it.icon, href: it.href, group: g.group });
+          /* زیرمنوها هم جستجوپذیرند؛ گروهشان نام بخش است */
+          if (it.children) it.children.forEach(function (c) { navItems.push({ label: c.label, icon: c.icon || it.icon, href: c.href, group: it.label }); });
           else navItems.push({ label: it.label, icon: it.icon, href: it.href, group: g.group });
         });
       });
@@ -1107,7 +1108,7 @@ window.CRM = (function (w, d) {
           var badge = it.badge ? '<span class="nav-badge ' + (it.badgeStyle === 'solid' ? '' : 'soft') + '">' + esc(fa(it.badge)) + '</span>' : '';
           if (it.children) {
             var opened = it.open || isActive; /* زیرمنوی صفحه‌ی فعال همیشه باز است */
-            groups += '<button class="nav-item' + (opened ? ' is-open' : '') + '" data-nav-toggle data-tip="' + esc(it.label) + '">' +
+            groups += '<button class="nav-item' + (opened ? ' is-open' : '') + (isActive ? ' has-active' : '') + '" data-nav-toggle data-href="' + it.href + '" data-tip="' + esc(it.label) + '">' +
               '<span data-icon="' + it.icon + '" data-icon-size="19"></span>' +
               '<span class="nav-label">' + esc(it.label) + '</span>' + badge +
               '<span class="nav-caret" data-icon="chevron-down" data-icon-size="15"></span></button>';
@@ -1314,9 +1315,15 @@ window.CRM = (function (w, d) {
       /* زیرمنوهای سایدبار */
       $$('[data-nav-toggle]').forEach(function (btn) {
         btn.addEventListener('click', function () {
+          /* سایدبار جمع‌شده زیرمنو ندارد؛ کلیک = رفتن به صفحه‌ی اصلی بخش */
+          if (shellEl && shellEl.classList.contains('sidebar-collapsed') && w.innerWidth > 1024) { location.href = btn.getAttribute('data-href'); return; }
           var sub = btn.nextElementSibling;
           var open = btn.classList.toggle('is-open');
           if (sub) sub.style.display = open ? '' : 'none';
+          /* آکاردئون: با باز شدن یک بخش، بخش‌های دیگرِ همان گروه بسته می‌شوند */
+          if (open) $$('[data-nav-toggle].is-open', btn.parentNode).forEach(function (o) {
+            if (o === btn) return; o.classList.remove('is-open'); if (o.nextElementSibling) o.nextElementSibling.style.display = 'none';
+          });
         });
       });
 
