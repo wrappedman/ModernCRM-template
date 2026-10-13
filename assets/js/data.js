@@ -655,6 +655,32 @@ window.CRM_DATA = (function () {
     });
   })();
 
+  /* فاکتور و پیش‌فاکتورها برای «گزارش مالی و آماری» و «آمار مسئول فروش»
+     kind: pre (پیش‌فاکتور) | inv (فاکتور) — status: ok | cancel — مبالغ به تومان */
+  var REP_INVOICES = [];
+  (function () {
+    var weight = { 'توکلی': 6, 'عدالت': 4, 'اصغری': 3, 'حقی': 2, 'میلاد فتاحی': 1, 'محمودی': 3, 'کاظمی': 6, 'لشکریان': 4, 'باصری': 14, 'محصصی': 2, 'فروش ۲': 1 };
+    var seed = 23; function r(n) { seed = (seed * 9301 + 49297) % 233280; return Math.floor(seed / 233280 * n); }
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    var code = 5000;
+    REP_OWNERS.forEach(function (o) {
+      var cnt = weight[o] * 22;
+      for (var i = 0; i < cnt; i++) {
+        var y = r(19) < 12 ? 1404 : 1405, m = y === 1405 ? 1 + r(7) : 1 + r(12), d = 1 + r(m <= 6 ? 31 : 30);
+        if (y === 1405 && m === 7 && d > 20) d = 1 + r(20);
+        if (o === 'میلاد فتاحی' && y === 1405 && m === 7) m = 6;
+        var kind = r(100) < 55 ? 'pre' : 'inv', net = (8 + r(200)) * 1000000 + r(10) * 100000;
+        var vat = Math.round(net * 0.1), install = r(3) ? 0 : (5 + r(25)) * 100000, total = net + vat + install;
+        var status = kind === 'inv' && r(100) < 6 ? 'cancel' : 'ok';
+        var paid = kind === 'inv' && status === 'ok' ? (r(4) ? total : Math.round(total * r(9) / 10)) : 0;
+        REP_INVOICES.push({
+          code: code++, owner: o, date: y + '/' + p(m) + '/' + p(d), kind: kind, official: r(100) < 93, status: status,
+          net: net, vat: vat, install: install, total: total, paid: paid, agent: r(100) < 14, partner: r(100) < 9
+        });
+      }
+    });
+  })();
+
   /* ریز وضعیت دستگاه‌ها: سابقه‌ی هر سریال (ورود → خروج) */
   var REP_DEVICES = [];
   (function () {
@@ -688,6 +714,6 @@ window.CRM_DATA = (function () {
     permPresets: PERM_PRESETS, defPerms: DEF_PERMS, fiscalPeriods: FISCAL_PERIODS, basicTypes: BASIC_TYPES,
     basicItems: BASIC_ITEMS, settingTypes: SETTING_TYPES, settingValues: SETTING_VALUES,
     msgMe: MSG_ME, msgTypes: MSG_TYPES, msgs: MSGS, accTypes: ACC_TYPES, accBanks: ACC_BANKS, accDocs: ACC_DOCS,
-    repOwners: REP_OWNERS, repAgents: REP_AGENTS, repSms: REP_SMS, repCompanies: REP_COMPANIES, repDevices: REP_DEVICES
+    repOwners: REP_OWNERS, repAgents: REP_AGENTS, repSms: REP_SMS, repCompanies: REP_COMPANIES, repDevices: REP_DEVICES, repInvoices: REP_INVOICES
   };
 })();

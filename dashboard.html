@@ -639,7 +639,7 @@
     }
     /* دو شاخص کوچک هر بخش (از داده‌های نمایشی؛ در اتصال واقعی از API) */
     var STATS = {
-      'm-workspace': function () { return [stat(fa(count(D.tasks, function (t) { return !t.done; })), 'کار باز امروز'), stat(fa(count(D.notifications, function (n) { return n.unread; })), 'اعلان خوانده‌نشده')]; },
+      'm-workspace': function () { return [stat(fa(count(D.tasks, function (t) { return !t.done; })), 'کار باز امروز'), stat(fa(count(D.msgs, function (m) { return m.to === D.msgMe && !m.seen; })), 'پیغام دیده‌نشده', 'warn')]; },
       'm-customers': function () { return [stat(CRM.num(D.kpis[0].value), 'مشتری فعال'), stat(fa(D.kpis[0].delta), 'رشد این ماه')]; },
       'm-sales': function () {
         return [stat(fa(count(D.deals, function (x) { return x.stage !== 'won'; })), 'معامله در جریان'),
@@ -654,7 +654,14 @@
         return [stat(fa(count(D.tickets, function (x) { return x.status !== 'closed' && x.status !== 'answered'; })), 'تیکت باز', 'warn'),
                 stat(fa((D.threads || []).reduce(function (a, t) { return a + (t.unread || 0); }, 0)), 'پیام خوانده‌نشده')];
       },
-      'm-reports': function () { return [stat(fa(Math.round(D.kpis[1].value / 1e6)), 'میلیون درآمد ماه'), stat(fa(D.kpis[3].value) + '٪', 'نرخ تبدیل')]; },
+      'm-accounting': function () {
+        var amt = function (x) { return Math.max(0, x.base * (x.qty || 1) - (x.discount || 0)); }, bal = 0;
+        (D.accDocs || []).forEach(function (x) { if (x.petty === 'in') bal += amt(x); if (x.petty === 'out') bal -= amt(x); });
+        var t = new Date(); t.setHours(0, 0, 0, 0);
+        var ch = count(D.accDocs, function (x) { var o = CRM.jalali.parse(x.chequeDate); return x.pay === 'cheque' && o && CRM.jalali.toGregorian(o.jy, o.jm, o.jd) >= t; });
+        return [stat(CRM.moneyShort(bal), 'موجودی تنخواه'), stat(fa(ch), 'چک در جریان', ch ? 'warn' : '')];
+      },
+      'm-reports': function () { return [stat(fa(count(D.modules.filter(function (m) { return m.id === 'm-reports'; })[0].children, function (c) { return c.href.indexOf('report.html?') === 0; })), 'گزارش آماده'), stat(fa(D.kpis[3].value) + '٪', 'نرخ تبدیل')]; },
       'm-defs': function () { return [stat(fa(count(D.defUsers, function (u) { return u.active; })), 'کاربر فعال'), stat(fiscalYear(), 'دوره مالی جاری')]; }
     };
     var MAX_LINKS = 4;

@@ -1372,6 +1372,12 @@ window.CRM = (function (w, d) {
       if (body.getAttribute('data-shell') === 'none') return;
       var active = body.getAttribute('data-page') || '';
       var sb = $('#sidebar'); if (sb) sb.innerHTML = sidebarHTML(active);
+      /* اگر آیتم فعال (مثلاً زیرمنوی یازدهمِ گزارشات) پایین‌تر از دید است، نوار کناری تا آن اسکرول شود */
+      var sc = sb && sb.querySelector('.sidebar-scroll'), act = sc && sc.querySelector('.nav-item.is-active');
+      if (act) {
+        var top = act.getBoundingClientRect().top - sc.getBoundingClientRect().top;
+        if (top + act.offsetHeight > sc.clientHeight) sc.scrollTop = top - sc.clientHeight / 2;
+      }
       var tb = $('#topbar'); if (tb) tb.innerHTML = topbarHTML();
       var task = $('#taskbar'); if (task) task.innerHTML = taskbarHTML();
       var sm = $('#startMenu'); if (sm) sm.innerHTML = startMenuHTML();

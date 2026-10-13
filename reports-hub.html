@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گزارشات | مدرن‌CRM</title>
+<meta name="description" content="فهرست همه‌ی گزارش‌های سامانه به تفکیک دسته">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body class="app" data-page="reports-hub">
+<div class="app-shell" id="appShell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-wrap">
+
+        <div class="page-head">
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">خانه</a>
+              <span class="sep" data-icon="chevron-left" data-icon-size="13"></span>
+              <span class="current">گزارشات</span>
+            </div>
+            <h1 class="page-title">گزارشات</h1>
+            <p class="page-desc">همه‌ی گزارش‌های سامانه؛ هر گزارش فیلترهای خودش را دارد و قابل چاپ و خروجی Excel، PDF و Word است.</p>
+          </div>
+          <div class="head-actions">
+            <div class="input-wrap" style="width:240px">
+              <span class="icon lead" data-icon="search" data-icon-size="16"></span>
+              <input class="input" id="hubSearch" placeholder="جستجوی گزارش…" aria-label="جستجوی گزارش">
+            </div>
+            <a class="btn btn-primary" href="reports.html"><span data-icon="chart-line" data-icon-size="16"></span> داشبورد تحلیلی</a>
+          </div>
+        </div>
+
+        <div id="hubRoot"></div>
+
+        <!-- سایر گزارش‌ها (خارج از موتور گزارش) -->
+        <div class="card" id="hubExtra">
+          <div class="card-head"><div class="card-title"><span data-icon="sparkles" data-icon-size="18"></span> تحلیلی و سایر بخش‌ها</div></div>
+          <div class="card-body">
+            <div class="tile-links">
+              <a class="tile-link rep-tile" href="reports.html" data-t="داشبورد تحلیلی فروش عملکرد تیم منابع جذب">
+                <span class="stat-icon sky"><span data-icon="chart-line" data-icon-size="20"></span></span>
+                <div><div class="tl-title">داشبورد تحلیلی</div><div class="tl-desc">نمودارهای فروش، عملکرد تیم و منابع جذب مشتری</div></div>
+                <span class="tl-go">مشاهده <span data-icon="arrow-left" data-icon-size="14"></span></span>
+              </a>
+              <a class="tile-link rep-tile" href="warehouse-stock.html" data-t="گزارش موجودی انبار">
+                <span class="stat-icon amber"><span data-icon="warehouse" data-icon-size="20"></span></span>
+                <div><div class="tl-title">گزارش موجودی انبار</div><div class="tl-desc">موجودی انبار اصلی و فرعی و مقایسه‌ی دو انبار</div></div>
+                <span class="tl-go">مشاهده <span data-icon="arrow-left" data-icon-size="14"></span></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="win-layer" id="winLayer"></div>
+<div class="start-menu" id="startMenu"></div>
+<footer class="taskbar" id="taskbar"></footer>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/windows.js"></script>
+<script src="assets/js/reports.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CRM = window.CRM, R = window.CRM_REPORTS, fa = CRM.fa, esc = CRM.esc;
+  var TYPE_LBL = { daterange: 'بازه‌ی تاریخ', checks: 'انتخاب چندتایی', radio: 'گزینه', flags: 'گزینه', select: 'فهرست', text: 'جستجو' };
+  document.getElementById('hubRoot').innerHTML = R.cats.map(function (c) {
+    var list = R.list.filter(function (r) { return r.cat === c.id; });
+    return '<div class="card mb-5" data-cat="' + c.id + '"><div class="card-head"><div class="card-title"><span data-icon="' + c.icon + '" data-icon-size="18"></span> ' + esc(c.title) +
+      ' <span class="badge">' + fa(list.length) + ' گزارش</span></div><div class="card-actions fs-xs text-muted">' + esc(c.desc) + '</div></div>' +
+      '<div class="card-body"><div class="tile-links">' + list.map(function (r) {
+        var hasDate = r.filters.some(function (f) { return f.type === 'daterange'; });
+        var variants = r.filters.filter(function (f) { return f.id === 'variant'; })[0];
+        return '<a class="tile-link rep-tile" href="report.html?r=' + r.id + '" data-t="' + esc(r.title + ' ' + r.desc) + '">' +
+          '<span class="stat-icon ' + (r.tone || '') + '"><span data-icon="' + r.icon + '" data-icon-size="20"></span></span>' +
+          '<div><div class="tl-title">' + esc(r.title) + '</div><div class="tl-desc">' + esc(r.desc) + '</div></div>' +
+          '<div class="tl-meta">' + (hasDate ? '<span class="badge badge-outline">' + CRM.icon('calendar-range', 12) + ' بازه‌ی تاریخ</span>' : '') +
+            (variants ? '<span class="badge badge-primary">' + fa(variants.options.length) + ' نوع گزارش</span>' : '') +
+            '<span class="badge">' + fa(r.filters.length) + ' فیلتر</span></div>' +
+          '<span class="tl-go">مشاهده‌ی گزارش <span data-icon="arrow-left" data-icon-size="14"></span></span></a>';
+      }).join('') + '</div></div></div>';
+  }).join('');
+
+  var inp = document.getElementById('hubSearch');
+  inp.addEventListener('input', function () {
+    var q = inp.value.trim();
+    CRM.$$('.rep-tile').forEach(function (t) { t.style.display = !q || t.getAttribute('data-t').indexOf(q) > -1 ? '' : 'none'; });
+    CRM.$$('[data-cat], #hubExtra').forEach(function (c) { c.style.display = CRM.$$('.rep-tile', c).some(function (t) { return t.style.display !== 'none'; }) ? '' : 'none'; });
+  });
+})();
+</script>
+</body>
+</html>
