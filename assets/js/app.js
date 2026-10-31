@@ -651,6 +651,23 @@ window.CRM = (function (w, d) {
     });
   }
 
+  /* منوهای کشویی گاهی (مثلاً پیام‌ها روی موبایل) از لبه‌ی صفحه بیرون می‌زنند.
+     بعد از باز شدن، موقعیت هر منوی باز اندازه‌گیری و با متغیر --dd-x داخل صفحه نگه داشته می‌شود. */
+  function fitDropdowns() {
+    var vw = w.innerWidth || d.documentElement.clientWidth;
+    var pad = 8;
+    $$('.dropdown-menu').forEach(function (menu) {
+      menu.style.setProperty('--dd-x', '0px');
+      if (!menu.classList.contains('is-open')) return;
+      var r = menu.getBoundingClientRect();
+      var x = 0;
+      if (r.left < pad) x = pad - r.left;                 /* کمی به سمت راست */
+      else if (r.right > vw - pad) x = -(r.right - (vw - pad));  /* کمی به سمت چپ */
+      /* در منوهایی که با inset-inline-start هم‌تراز شده‌اند، جهت برعکس است */
+      if (menu.classList.contains('align-start')) x = -x;
+      menu.style.setProperty('--dd-x', Math.round(x) + 'px');
+    });
+  }
   function initTables(scope) {
     /* جستجوی زنده در جدول */
     $$('[data-table-search]', scope).forEach(function (inp) {
@@ -1613,6 +1630,9 @@ window.CRM = (function (w, d) {
     shell.mount();
     init(d);
     if (w.CRM && w.CRM.win && w.CRM.win.mount) w.CRM.win.mount();
+    /* منوهای کشویی: بعد از هر کلیک (پس از اجرای دستور باز/بسته) و هنگام تغییر اندازه، داخل صفحه نگه داشته شوند */
+    d.addEventListener('click', function () { setTimeout(fitDropdowns, 0); }, true);
+    w.addEventListener('resize', debounce(fitDropdowns, 120));
 
     /* میان‌برهای صفحه‌کلید (در صفحات بدون پوسته مانند ورود، غیرفعال است) */
     var noShell = d.body.getAttribute('data-shell') === 'none';

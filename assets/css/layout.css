@@ -539,7 +539,7 @@
 @media (max-width: 640px) {
   .taskbar { margin-inline: 12px; margin-bottom: 10px; min-height: 56px; padding: 6px 8px 6px 10px; gap: 8px; }
   .tb-label { padding-inline-end: 8px; }
-  .tb-label-txt { display: none; }
+  .tb-empty { display: none; }
   .tb-chip { max-width: 170px; }
   .tb-chip-txt { max-width: 120px; }
 }

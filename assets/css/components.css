@@ -664,8 +664,9 @@ tr:hover .table-actions { opacity: 1; }
 .dropdown-menu {
   position: absolute;
   top: calc(100% + 7px);
-  inset-inline-end: 0;
+  inset-inline-end: var(--dd-x, 0px);
   min-width: 210px;
+  max-width: calc(100vw - 16px);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -677,7 +678,7 @@ tr:hover .table-actions { opacity: 1; }
   transform-origin: top left;
 }
 html[dir="rtl"] .dropdown-menu { transform-origin: top right; }
-.dropdown-menu.align-start { inset-inline-end: auto; inset-inline-start: 0; }
+.dropdown-menu.align-start { inset-inline-end: auto; inset-inline-start: var(--dd-x, 0px); }
 .dropdown-menu.up { top: auto; bottom: calc(100% + 7px); }
 .dropdown-menu.is-open { display: block; }
 .dropdown-label {
