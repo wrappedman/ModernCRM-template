@@ -2,8 +2,8 @@
  * ============================================================================
  *  ModernCRM · windows.js — مدیر پنجره‌های شبیه‌سازی‌شده ویندوز
  *  امکانات: باز کردن کارت‌ها به‌صورت پنجره شناور، جابه‌جایی با کشیدن (Drag)،
- *  تغییر اندازه از ۸ جهت، مینیمایز، ماکسیمایز، چسبیدن به لبه‌ها (Snap)،
- *  چیدمان از پیش‌تعریف‌شده، نوار وظیفه و چرخه تمرکز (Focus/Z-Index).
+ *  تغییر اندازه از ۸ جهت، ماکسیمایز، چسبیدن به لبه‌ها (Snap)،
+ *  چیدمان از پیش‌تعریف‌شده و چرخه تمرکز (Focus/Z-Index).
  * ============================================================================
  */
 (function (w, d) {
@@ -14,15 +14,7 @@
   var $ = CRM.$, $$ = CRM.$$;
   var layer, zTop = 60, seq = 0, wins = {};
   var snapEl = null, snapBadge = null, pickerTimer = null;
-  /* ارتفاع‌ها از توکن‌های CSS خوانده می‌شوند تا با تغییر تم/اندازه هماهنگ بمانند */
-  function cssLen(name, fallback) {
-    try {
-      var v = w.getComputedStyle(d.documentElement).getPropertyValue(name);
-      var n = parseFloat(v);
-      return isNaN(n) ? fallback : n;
-    } catch (e) { return fallback; }
-  }
-  var TASKBAR_H = cssLen('--taskbar-h', 58), TITLE_H = 44, MIN_W = 320, MIN_H = 200;
+  var MIN_W = 320, MIN_H = 200, TITLE_H = 44;
 
   /* ------------------------------------------------------------------ ابزار */
   function workspace() {
@@ -30,13 +22,12 @@
     var sidebar = $('.sidebar');
     var top = topbar && topbar.offsetParent !== null ? topbar.getBoundingClientRect().height : 0;
     var sidebarVisible = sidebar && w.innerWidth > 1024 && sidebar.offsetParent !== null;
-    var bottom = d.body.classList.contains('has-taskbar') ? TASKBAR_H : 0;
     var right = sidebarVisible ? sidebar.getBoundingClientRect().width : 0;
     var vw = w.innerWidth, vh = w.innerHeight;
     return {
-      left: 0, top: Math.round(top), right: right, bottom: bottom,
+      left: 0, top: Math.round(top), right: right, bottom: 0,
       x: 0, y: Math.round(top),
-      w: Math.round(vw - right), h: Math.round(vh - top - bottom),
+      w: Math.round(vw - right), h: Math.round(vh - top),
       vw: vw, vh: vh
     };
   }
@@ -89,8 +80,6 @@
       wins[k].el.classList.toggle('is-active', k === id);
       if (wins[k].el.classList.contains('is-active')) wins[k].el.style.zIndex = ++zTop;
     });
-    var taskEl = $('[data-task-for="' + id + '"]');
-    $$('.task-item').forEach(function (t) { t.classList.toggle('is-active', t === taskEl); });
   }
 
   /* ------------------------------------------------------- ساختن پنجره */
@@ -130,7 +119,6 @@
           '</span>' +
         '</div>' +
         '<div class="win-controls">' +
-          '<button class="win-btn" data-win-min="' + id + '" data-tip-pos="bottom" data-tip="مینیمایز">' + CRM.icon('minus', 16) + '</button>' +
           '<button class="win-btn" data-win-max="' + id + '" data-max-btn data-tip-pos="bottom" data-tip="ماکسیمایز / چیدمان">' + CRM.icon('square', 15) + '</button>' +
           '<button class="win-btn close" data-win-close="' + id + '" data-tip-pos="bottom" data-tip="بستن">' + CRM.icon('x', 16) + '</button>' +
         '</div>' +
@@ -170,7 +158,6 @@
     CRM.init(el.querySelector('.win-content'));
     if (w.CRM.win.onOpen) w.CRM.win.onOpen(id);
     if (tpl.hasAttribute('data-win-detach')) tpl.classList.add('is-floating');
-    refreshTaskbar();
     return wins[id];
   }
 
@@ -178,11 +165,7 @@
   function open(id, opts) {
     var win = wins[id];
     if (win) {
-      if (win.el.classList.contains('is-minimized')) {
-        win.el.classList.remove('is-minimized');
-        win.el.style.animation = 'pop-in 220ms cubic-bezier(.22,1,.36,1) both';
-      }
-      focus(id); refreshTaskbar(); return win;
+      focus(id); return win;
     }
     var tpl = templates()[id];
     if (!tpl) { CRM.toast({ type: 'warning', title: 'پنجره یافت نشد', msg: 'شناسه «' + id + '» تعریف نشده است.' }); return null; }
@@ -201,17 +184,7 @@
     var tpl = templates()[id];
     if (tpl) tpl.classList.remove('is-floating');
     if (w.CRM.win.onClose) w.CRM.win.onClose(id);
-    refreshTaskbar();
     var rest = Object.keys(wins);
-    if (rest.length) focus(rest[rest.length - 1]);
-  }
-
-  function minimize(id) {
-    var win = wins[id];
-    if (!win) return;
-    win.el.classList.add('is-minimized');
-    refreshTaskbar();
-    var rest = Object.keys(wins).filter(function (k) { return !wins[k].el.classList.contains('is-minimized'); });
     if (rest.length) focus(rest[rest.length - 1]);
   }
 
@@ -305,107 +278,8 @@
     CRM.toast({ type: 'success', title: 'چیدمان کاشی‌ای اعمال شد', msg: CRM.fa(ids.length) + ' پنجره' });
   }
 
-  function minimizeAll() {
-    Object.keys(wins).forEach(function (id) { wins[id].el.classList.add('is-minimized'); });
-    refreshTaskbar();
-  }
-
   function closeAll() {
     Object.keys(wins).forEach(function (id) { close(id); });
-  }
-
-  /* -------------------------------------------------------- نوار وظیفه */
-  function refreshTaskbar() {
-    var body = d.body;
-    var ids = Object.keys(wins);
-    body.classList.toggle('has-taskbar', ids.length > 0 || body.hasAttribute('data-taskbar'));
-    var wrap = $('#taskItems');
-    if (wrap) {
-      wrap.innerHTML = ids.map(function (id) {
-        var win = wins[id];
-        var minimized = win.el.classList.contains('is-minimized');
-        var active = win.el.classList.contains('is-active');
-        var tpl = templates()[id];
-        var title = tpl ? (tpl.getAttribute('data-win-title') || id) : id;
-        var ic = tpl ? (tpl.getAttribute('data-win-icon') || 'window') : 'window';
-        return '<button class="task-item' + (active && !minimized ? ' is-active' : '') + (minimized ? ' is-minimized' : '') + '" data-task-for="' + id + '">' +
-          CRM.icon(ic, 15) + '<span class="ti-label">' + CRM.esc(title) + '</span>' +
-          '<span class="ti-x" data-win-close="' + id + '">' + CRM.icon('x', 13) + '</span>' +
-        '</button>';
-      }).join('');
-    }
-    var counter = $('#trayWinCount');
-    if (counter) counter.textContent = CRM.fa(Object.keys(wins).length);
-    var shellEl = $('#appShell');
-    if (shellEl) shellEl.classList.toggle('has-windows', ids.length > 0);
-    if ($('#trayMenu')) paintTrayMenu();
-  }
-
-  /* ------------------------------------------------ منوی پنجره‌های نوار وظیفه */
-  function trayMenuEl() {
-    var el = $('#trayMenu');
-    if (!el) {
-      el = d.createElement('div');
-      el.className = 'tray-menu';
-      el.id = 'trayMenu';
-      el.setAttribute('role', 'menu');
-      el.setAttribute('aria-label', 'پنجره‌های شناور');
-      d.body.appendChild(el);
-    }
-    return el;
-  }
-
-  function paintTrayMenu() {
-    var el = trayMenuEl();
-    var ids = Object.keys(wins);
-    var tpls = templates();
-    var rows = ids.map(function (id) {
-      var win = wins[id];
-      var tpl = tpls[id];
-      var title = tpl ? (tpl.getAttribute('data-win-title') || id) : id;
-      var ic = tpl ? (tpl.getAttribute('data-win-icon') || 'window') : 'window';
-      var min = win.el.classList.contains('is-minimized');
-      var active = win.el.classList.contains('is-active') && !min;
-      return '<button class="dropdown-item' + (active ? ' is-active' : '') + '" data-task-for="' + id + '">' +
-        CRM.icon(ic, 16) +
-        '<span class="flex-1 text-truncate">' + CRM.esc(title) + '</span>' +
-        '<span class="fs-2xs text-soft">' + (min ? 'مینیمایز' : 'فعال') + '</span>' +
-        '</button>';
-    }).join('');
-
-    el.innerHTML =
-      '<div class="tm-head">' +
-        CRM.icon('window', 16) +
-        '<span>پنجره‌های شناور</span>' +
-        '<span class="badge badge-primary ms-auto">' + CRM.fa(ids.length) + '</span>' +
-        '<button class="tb-icon" data-tray-close aria-label="بستن">' + CRM.icon('x', 15) + '</button>' +
-      '</div>' +
-      '<div class="tm-list">' + (rows || '<div class="tm-empty">هیچ پنجره‌ای باز نیست</div>') + '</div>' +
-      '<div class="dropdown-sep"></div>' +
-      '<div class="tm-actions">' +
-        '<button class="btn btn-sm btn-soft" data-win-min-all>' + CRM.icon('minus', 14) + ' مینیمایز همه</button>' +
-        '<button class="btn btn-sm btn-soft" data-win-max-all>' + CRM.icon('square', 14) + ' بیشینه همه</button>' +
-        '<button class="btn btn-sm btn-soft" data-win-tile>' + CRM.icon('grid-2x2', 14) + ' چیدمان کاشی</button>' +
-        '<button class="btn btn-sm btn-danger-soft" data-win-close-all>' + CRM.icon('x', 14) + ' بستن همه</button>' +
-      '</div>' +
-      '<div class="tm-foot">روی کارت‌ها دکمه ⛶ را بزنید تا به پنجره شناور تبدیل شوند؛ با کشیدن نوار عنوان می‌توانید آن‌ها را به لبه‌ها بچسبانید.</div>';
-  }
-
-  function closeTrayMenu() {
-    var el = $('#trayMenu');
-    if (el) el.classList.remove('is-open');
-  }
-
-  function toggleTrayMenu() {
-    var el = trayMenuEl();
-    var willOpen = !el.classList.contains('is-open');
-    $$('.dropdown-menu.is-open').forEach(function (m) { m.classList.remove('is-open'); });
-    var sm = $('#startMenu');
-    if (sm) sm.classList.remove('is-open');
-    var sb = $('[data-start-toggle]');
-    if (sb) sb.classList.remove('is-open');
-    if (willOpen) paintTrayMenu();
-    el.classList.toggle('is-open', willOpen);
   }
 
   /* --------------------------------------------------- کشیدن و رها کردن */
@@ -549,16 +423,8 @@
 
   /* --------------------------------------------------- رویدادهای سراسری */
   function bindGlobal() {
-    var nextId = function () { return String(Math.random()).slice(2, 8); };
-
-    d.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeTrayMenu();
-    });
-
     d.addEventListener('click', function (e) {
       var t;
-      if (!e.target.closest('#trayMenu') && !e.target.closest('[data-tray-openwin]')) closeTrayMenu();
-      if ((t = e.target.closest('[data-tray-close]'))) { closeTrayMenu(); return; }
       if ((t = e.target.closest('[data-win-open]'))) {
         e.preventDefault();
         var id = t.getAttribute('data-win-open') || (t.closest('[data-win]') && t.closest('[data-win]').getAttribute('data-win'));
@@ -571,7 +437,6 @@
         var menu = t.closest('.dropdown-menu'); if (menu) menu.classList.remove('is-open');
         return;
       }
-      if ((t = e.target.closest('[data-win-min]'))) { minimize(t.getAttribute('data-win-min')); return; }
       if ((t = e.target.closest('[data-win-max]'))) {
         var picker = $('.snap-picker.is-open');
         if (picker) { picker.classList.remove('is-open'); }
@@ -583,28 +448,9 @@
         t.closest('.snap-picker').classList.remove('is-open');
         return;
       }
-      if ((t = e.target.closest('[data-task-for]'))) {
-        var id2 = t.getAttribute('data-task-for');
-        var win = wins[id2];
-        if (!win) return;
-        if (e.target.closest('[data-win-close]')) return;
-        closeTrayMenu();
-        if (win.el.classList.contains('is-minimized')) { minimizeShow(id2); }
-        else if (win.el.classList.contains('is-active')) { minimize(id2); }
-        else { focus(id2); }
-        return;
-      }
-      if ((t = e.target.closest('[data-tray-openwin]'))) {
-        toggleTrayMenu();
-        return;
-      }
-      if ((t = e.target.closest('[data-win-max-all]'))) { maximizeAll(); paintTrayMenu(); return; }
-      if ((t = e.target.closest('[data-win-tile]'))) { tile(); paintTrayMenu(); return; }
-      if ((t = e.target.closest('[data-win-min-all]'))) { minimizeAll(); paintTrayMenu(); return; }
-      if ((t = e.target.closest('[data-win-close-all]'))) { closeAll(); paintTrayMenu(); return; }
-      if ((t = e.target.closest('[data-float-toggle]'))) {
-        d.body.classList.toggle('no-float', !t.checked);
-      }
+      if ((t = e.target.closest('[data-win-max-all]'))) { maximizeAll(); return; }
+      if ((t = e.target.closest('[data-win-tile]'))) { tile(); return; }
+      if ((t = e.target.closest('[data-win-close-all]'))) { closeAll(); return; }
     });
 
     /* پنجره‌سازی خودکار: هر کارت سربرگ‌داری که data-win ندارد، یکی می‌گیرد
@@ -661,15 +507,6 @@
     });
   }
 
-  function minimizeShow(id) {
-    var win = wins[id];
-    if (!win) return;
-    win.el.classList.remove('is-minimized');
-    win.el.style.animation = 'pop-in 200ms cubic-bezier(.22,1,.36,1) both';
-    focus(id);
-    refreshTaskbar();
-  }
-
   /* ------------------------------------------------------------- mount */
   function mount() {
     layer = $('#winLayer');
@@ -682,7 +519,6 @@
     /* پنجره‌هایی که با data-win-open پیش‌فرض باز می‌شوند */
     bindGlobal();
     bindDrag();
-    refreshTaskbar();
     $$('[data-win-autoopen]').forEach(function (el) {
       setTimeout(function () { open(el.getAttribute('data-win')); }, +(el.getAttribute('data-win-autoopen') || 300));
     });
@@ -697,8 +533,8 @@
   }
 
   w.CRM.win = {
-    mount: mount, open: open, close: close, minimize: minimize, toggleMax: toggleMax, snap: snap,
-    tile: tile, maximizeAll: maximizeAll, minimizeAll: minimizeAll, closeAll: closeAll,
+    mount: mount, open: open, close: close, toggleMax: toggleMax, snap: snap,
+    tile: tile, maximizeAll: maximizeAll, closeAll: closeAll,
     focus: focus, list: function () { return Object.keys(wins); }, workspace: workspace
   };
 })(window, document);

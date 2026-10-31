@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/layout.css">
 </head>
-<body class="app" data-page="desktop" data-taskbar>
+<body class="app" data-page="desktop">
 <div class="app-shell" id="appShell">
   <aside class="sidebar" id="sidebar"></aside>
   <div class="main">
@@ -33,7 +33,6 @@
             </p>
           </div>
           <div class="head-actions">
-            <button class="btn" data-win-min-all><span data-icon="minus" data-icon-size="15"></span> مینیمایز همه</button>
             <button class="btn" data-win-max-all><span data-icon="maximize" data-icon-size="15"></span> ماکسیمایز همه</button>
             <button class="btn" data-win-tile><span data-icon="grid" data-icon-size="15"></span> چیدمان کاشی‌ای</button>
             <button class="btn btn-danger-soft" data-win-close-all><span data-icon="x" data-icon-size="15"></span> بستن همه</button>
@@ -47,7 +46,7 @@
             <div class="alert-desc">
               برای باز شدن پنجره، روی آیکون <span data-icon="maximize" data-icon-size="13" style="vertical-align:-2px"></span> در گوشه هر کارت بزنید.
               با کشیدن پنجره به لبه راست/چپ صفحه به‌صورت نیمه‌صفحه می‌چسبد، با بردن به بالای صفحه ماکسیمایز می‌شود و با دوبار کلیک روی نوار عنوان
-              حالت ماکسیمایز/عادی تغییر می‌کند. نگه‌داشتن نشانگر روی دکمه ماکسیمایز نیز منوی چیدمان‌های آماده را نمایش می‌دهد.
+              حالت ماکسیمایز/عادی تغییر می‌کند. نگه‌داشتن نشانگر روی دکمه ماکسیمایز نیز منوی چیدمان‌های آماده را نمایش می‌دهد؛ هر پنجره با دکمه × خودش بسته می‌شود.
             </div>
           </div>
         </div>
@@ -218,8 +217,6 @@
 </div>
 
 <div class="win-layer" id="winLayer"></div>
-<div class="start-menu" id="startMenu"></div>
-<footer class="taskbar" id="taskbar"></footer>
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script src="assets/js/icons.js"></script>

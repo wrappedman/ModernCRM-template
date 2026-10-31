@@ -18,13 +18,12 @@ window.CRM_DATA = (function () {
    * -------------------------------------------------------------------------- */
   var MODULES = [
     {
-      id: 'm-workspace', label: 'میز کار', icon: 'layout-grid', tone: 'ink', href: 'desktop.html', nav: false,
-      desc: 'پیغام‌های داخلی، تقویم، جریان فعالیت‌ها و میزکار پنجره‌ای',
+      id: 'm-workspace', label: 'میز کار', icon: 'layout-grid', tone: 'ink', href: 'inbox.html', nav: false,
+      desc: 'پیغام‌های داخلی، تقویم، اعلان‌ها و جریان فعالیت‌ها',
       children: [
         { id: 'inbox', label: 'پیغام‌ها', href: 'inbox.html' },
         { id: 'calendar', label: 'تقویم', href: 'calendar.html' },
         { id: 'activity', label: 'فعالیت‌ها', href: 'activity.html' },
-        { id: 'desktop', label: 'میزکار پنجره‌ای', href: 'desktop.html' },
         { id: 'notifications', label: 'اعلان‌ها', href: 'notifications.html' }
       ]
     },
@@ -141,8 +140,7 @@ window.CRM_DATA = (function () {
         { id: 'dashboard', label: 'داشبورد', icon: 'dashboard', href: 'dashboard.html' },
         { id: 'inbox', label: 'پیغام‌ها', icon: 'inbox', href: 'inbox.html', badge: '۴' },
         { id: 'calendar', label: 'تقویم', icon: 'calendar', href: 'calendar.html' },
-        { id: 'activity', label: 'فعالیت‌ها', icon: 'activity', href: 'activity.html' },
-        { id: 'desktop', label: 'میزکار پنجره‌ای', icon: 'window', href: 'desktop.html', badge: 'پنجره‌ای', badgeStyle: 'solid' }
+        { id: 'activity', label: 'فعالیت‌ها', icon: 'activity', href: 'activity.html' }
       ]
     },
     {

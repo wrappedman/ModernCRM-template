@@ -398,7 +398,7 @@ window.SALES = (function (w, d) {
             '</div>' +
             '<div class="panel" style="padding:12px">' +
               '<div class="panel-title d-flex items-center gap-2"><span data-icon="boxes" data-icon-size="15"></span> ترکیب اقلام</div>' +
-              '<table class="table table-compact"><thead><tr><th>نوع</th><th class="num">تعداد</th></tr></thead><tbody id="' + p + 'Mix"></tbody></table>' +
+              '<div class="table-wrap"><table class="table table-compact"><thead><tr><th>نوع</th><th class="num">تعداد</th></tr></thead><tbody id="' + p + 'Mix"></tbody></table></div>' +
             '</div>' +
           '</div>' +
         '</div>' +

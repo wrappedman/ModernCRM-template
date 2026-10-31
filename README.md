@@ -71,7 +71,7 @@ ModernCRM-template/
 | گروه | صفحه‌ها |
 | --- | --- |
 | ورود به قالب | `index.html` (فهرست کامل صفحه‌ها و پیش‌نمایش زنده) |
-| میز کار | `dashboard.html` (با پنل بخش‌های سامانه) `inbox.html` (پیغام‌ها) `desktop.html` `activity.html` `calendar.html` `notifications.html` `search.html` |
+| میز کار | `dashboard.html` (با پنل بخش‌های سامانه) `inbox.html` (پیغام‌ها) `activity.html` `calendar.html` `notifications.html` `search.html` |
 | مشتریان | `customers.html` `customer-new.html` `customer-profile.html` `customer-details.html` `customer-search.html` |
 | فروش | `sales-followup.html` `pipeline.html` `deals.html` `invoice-new.html` `invoices.html` `invoice-settlement.html` `invoices-reserved.html` `print-invoice.html` `letters.html` `sms.html` `sales-performance.html` |
 | انبار | `warehouse.html` `warehouse-products.html` `products.html` (کاتالوگ) `warehouse-in.html` `warehouse-out.html` (اصلی) `warehouse-out.html?store=sub` (فرعی) `warehouse-stock.html` |
@@ -102,8 +102,6 @@ ModernCRM-template/
   </div>
 
   <div class="win-layer" id="winLayer"></div>
-  <div class="start-menu" id="startMenu"></div>
-  <footer class="taskbar" id="taskbar"></footer>
   <div class="toast-wrap" id="toastWrap"></div>
 
   <script src="assets/js/icons.js"></script>
@@ -128,7 +126,6 @@ ModernCRM-template/
 | گزارشات | همه‌ی گزارش‌ها، ۹ گزارش موتور گزارش (`report.html?r=…`)، داشبورد تحلیلی |
 | تعاریف | نمای کلی، تعریف کاربران و دسترسی، نقش‌ها و امنیت ورود، دوره مالی، تعاریف اولیه، تنظیمات فاکتور، تنظیمات سیستم |
 - برای صفحه‌های بدون پوسته (ورود، خطاها، چاپ) مقدار `data-shell="none"` روی `body` بگذارید.
-- برای اینکه نوار وظیفه همیشه نمایش داده شود، `data-taskbar` را روی `body` قرار دهید (مثل `desktop.html`).
 
 ### ۲) پنجره‌های شبیه ویندوز
 
@@ -148,26 +145,23 @@ ModernCRM-template/
 | ویژگی | کاربرد |
 | --- | --- |
 | `data-win-open="id"` | بازکردن پنجره از هر جای دیگر (مثلاً یک دکمه) |
-| `data-win-close / -min / -max="id"` | کنترل پنجره از بیرون |
+| `data-win-close / -max="id"` | کنترل پنجره از بیرون |
 | `data-win-size="WxH"` | اندازه پیش‌فرض پنجره |
 | `data-win-icon` | آیکون نوار عنوان |
 | `data-win-content="#selector"` | استفاده از محتوای عنصر دیگری به‌جای خودِ عنصر |
 | `data-win-detach` | پنهان‌کردن کارت اصلی وقتی پنجره باز است (مناسب صفحه میزکار) |
 | `data-win-autoopen="800"` | بازکردن خودکار پنجره پس از ۸۰۰ میلی‌ثانیه |
 | `data-win-nobtn` | این کارت دکمه ⛶ نگیرد |
-| `data-win-min-all / -max-all / -tile / -close-all` | فرمان‌های گروهی روی همه پنجره‌ها (به‌صورت آماده در منوی نوار وظیفه) |
+| `data-win-max-all / -tile / -close-all` | فرمان‌های گروهی روی همه پنجره‌ها |
 
 هر کارتی که «سربرگ» (`card-head`) داشته باشد **به‌صورت خودکار** پنجره‌شدنی است و دکمه ⛶ می‌گیرد؛
 کارت‌های خلاصه (KPI) که سربرگ ندارند، در حالت هاور یک دکمه ⛶ گوشه‌ی کارت می‌گیرند.
 برای خاموش‌کردن این رفتار در یک صفحه، `data-win-auto="off"` را روی `<body>` بگذارید
 (صفحه‌های ورود و خطا و چاپ همین کار را می‌کنند).
 
-با کلیک روی دکمه‌ی «پنجره» در نوار وظیفه، منوی پنجره‌های شناور باز می‌شود: فهرست پنجره‌های باز،
-انتقال بین آن‌ها و فرمان‌های گروهی (مینیمایز همه، بیشینه همه، چیدمان کاشی، بستن همه).
-
-امکانات: کشیدن با نوار عنوان، تغییر اندازه از ۸ جهت، مینیمایز/ماکسیمایز با دوبار کلیک،
-اسنپ به لبه‌ها با کشیدن به کناره‌ها، منوی چیدمان با نگه‌داشتن نشانگر روی دکمه ماکسیمایز،
-چیدمان کاشی‌ای، نوار وظیفه با دکمه‌های پنجره‌ها و منوی شروع.
+امکانات: کشیدن با نوار عنوان، تغییر اندازه از ۸ جهت، ماکسیمایز با دوبار کلیک،
+اسنپ به لبه‌ها با کشیدن به کناره‌ها و منوی چیدمان با نگه‌داشتن نشانگر روی دکمه ماکسیمایز؛
+هر پنجره با دکمه × نوار عنوان خودش بسته می‌شود.
 
 ### ۳) اجزای تعاملی (فقط با ویژگی داده)
 
