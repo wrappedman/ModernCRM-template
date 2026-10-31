@@ -69,6 +69,15 @@
     list.push(entry);
     writeStore(list);
   }
+  /* اگر محتوای پنجره از سقف حافظه‌ی مرورگر بزرگ‌تر بود، بدون محتوا ذخیره می‌شود */
+  function storeUpsertSafe(entry) {
+    var list = readStore().filter(function (e) { return e.id !== entry.id; });
+    list.push(entry);
+    try { w.sessionStorage.setItem(STORE_KEY, JSON.stringify(list)); return; } catch (e) { }
+    entry.html = '';
+    list[list.length - 1] = entry;
+    writeStore(list);
+  }
   function storeRemove(id) {
     writeStore(readStore().filter(function (e) { return e.id !== id; }));
   }
@@ -135,7 +144,7 @@
 
   function build(id, src, opts) {
     opts = opts || {};
-    var tpl = templates()[id];
+    var tpl = opts.tpl || templates()[id];
     if (!tpl) return null;
     var title = tpl.getAttribute('data-win-title') || id;
     var sub = tpl.getAttribute('data-win-sub') || '';
@@ -244,15 +253,19 @@
     var tpl = templates()[id];
     var titleEl = $('.win-title', win.el);
     var rect = win.maximized && win.prev ? win.prev : readRect(win.el);
-    storeUpsert({
+    var contentEl = $('.win-content', win.el);
+    var entry = {
       id: id,
       page: here(),
       title: (titleEl && titleEl.textContent) || (tpl && tpl.getAttribute('data-win-title')) || id,
+      sub: (tpl && tpl.getAttribute('data-win-sub')) || '',
       icon: (tpl && tpl.getAttribute('data-win-icon')) || 'window',
       rect: rect,
       max: !!win.maximized,
-      snap: win.snap || null
-    });
+      snap: win.snap || null,
+      html: contentEl ? contentEl.innerHTML : ''
+    };
+    storeUpsertSafe(entry);
     win.minimized = true;
     win.el.classList.remove('is-active');
     win.el.classList.add('is-minimized');
@@ -278,8 +291,10 @@
     if (wins[id]) return restoreHere(id);
     var entry = storeFind(id);
     var tpl = templates()[id];
+    /* محتوای ذخیره‌شده (با وضعیت فعلی) در همین صفحه بازسازی می‌شود */
+    if (entry && entry.html) tpl = synthTemplate(entry);
     if (tpl) {
-      var win = build(id, tpl, entry && entry.rect ? { rect: entry.rect } : {});
+      var win = build(id, tpl, entry && entry.rect ? { rect: entry.rect, tpl: tpl } : { tpl: tpl });
       if (!win) return null;
       if (entry && entry.max) toggleMax(id, true);
       else if (entry && entry.snap && entry.snap !== 'full') snap(id, entry.snap);
@@ -289,7 +304,7 @@
       return win;
     }
     if (entry && entry.page) {
-      /* این پنجره در صفحه‌ی فعلی تعریف نشده: به صفحه‌ی خودش می‌رویم و آنجا باز می‌شود */
+      /* ورودی قدیمی بدون محتوا: به صفحه‌ی خودش می‌رویم و آنجا باز می‌شود */
       try { w.sessionStorage.setItem(PENDING_KEY, id); } catch (e) { }
       location.href = entry.page;
       return null;
@@ -297,6 +312,17 @@
     storeRemove(id);
     renderTaskbar();
     return null;
+  }
+
+  /* یک قالب موقت از روی محتوای ذخیره‌شده (داخل DOM قرار نمی‌گیرد) */
+  function synthTemplate(entry) {
+    var el = d.createElement('div');
+    el.setAttribute('data-win', entry.id);
+    el.setAttribute('data-win-title', entry.title || entry.id);
+    el.setAttribute('data-win-sub', entry.sub || '');
+    el.setAttribute('data-win-icon', entry.icon || 'window');
+    el.innerHTML = entry.html;
+    return el;
   }
 
   /* حذف یک پنجره از نوار (حتی اگر در صفحه‌ی فعلی نباشد) */
