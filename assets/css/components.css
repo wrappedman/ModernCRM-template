@@ -241,14 +241,17 @@
   padding: 16px 18px;
   border-bottom: 1px solid var(--border-muted);
   min-height: 62px;
+  flex-wrap: wrap;
 }
 .card-head.tight { padding: 12px 16px; min-height: 52px; }
 .card-head .card-title {
   font-size: var(--fs-base); font-weight: 600; color: var(--text-strong);
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 8px; min-width: 0;
 }
 .card-head .card-sub { font-size: var(--fs-xs); color: var(--text-muted); font-weight: 400; }
-.card-head .card-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 6px; }
+/* flex-wrap: در صفحه‌های باریک دکمه‌ها/چیپ‌های سربرگ به سطر بعد می‌روند تا
+   عرض min-content سربرگ (و ستون شبکه) از عرض صفحه بیشتر نشود. */
+.card-head .card-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 
 .card-body { padding: 18px; }
 .card-body.tight { padding: 12px 16px; }
@@ -262,6 +265,9 @@
   background: var(--surface-2);
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
+/* کارت هم‌قد با هم‌ردیف‌ها: بدنه رشد می‌کند تا پاورقی به انتهای کارت بچسبد */
+.card-stretch { display: flex; flex-direction: column; }
+.card-stretch > .card-body { flex: 1; }
 
 .card-accent { position: relative; overflow: hidden; }
 .card-accent::before {
@@ -1073,6 +1079,14 @@ html[dir="rtl"] .dropdown-menu { transform-origin: top right; }
 .donut-wrap {
   display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
 }
+/* چیدمان کنار‌هم: راهنما سمت راست، حلقه سمت چپ (کارت «منابع جذب» داشبورد) */
+.donut-side [data-chart="donut"] {
+  display: flex; flex-direction: row-reverse;
+  align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;
+}
+.donut-side .donut-svg { width: 156px; height: 156px; }
+.donut-side .chart-legend { min-width: 150px; gap: 8px; }
+.donut-side .legend-row .legend-lbl { white-space: nowrap; }
 .donut-svg { width: 172px; height: 172px; flex: 0 0 auto; }
 .chart-legend { display: flex; flex-direction: column; gap: 9px; min-width: 160px; flex: 1; }
 .legend-row { display: flex; align-items: center; gap: 9px; font-size: var(--fs-sm); }
@@ -1135,7 +1149,7 @@ html[dir="rtl"] .dropdown-menu { transform-origin: top right; }
 .cmdk-foot span { display: inline-flex; align-items: center; gap: 5px; }
 
 /* ==========================================================================
- * 18) میزکار پنجره‌ای — نمایش وضعیت شناور بودن کارت
+ * 18) پنجره‌شدنی بودن کارت‌ها — نمایش وضعیت شناور بودن کارت
  * ========================================================================== */
 .widget.is-floating > .card { opacity: .45; }
 .widget.is-floating::after {
@@ -1375,7 +1389,7 @@ body.no-float .win-hint { display: none; }
 /* چیدمان «نوع ← آیتم‌ها ← زیرشاخه‌ها» */
 .grid-mdd { display: grid; gap: 18px; grid-template-columns: 270px minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; }
 @media (max-width: 1280px) { .grid-mdd { grid-template-columns: 250px minmax(0, 1fr); } .grid-mdd > :last-child { grid-column: 1 / -1; } }
-@media (max-width: 900px) { .grid-mdd { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .grid-mdd { grid-template-columns: minmax(0, 1fr); } }
 
 /* فهرست انواع با شمارنده */
 .pick-item .pi-count { margin-inline-start: auto; font-size: var(--fs-2xs); font-weight: 700; color: var(--text-muted); }

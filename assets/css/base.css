@@ -213,7 +213,9 @@ small { font-size: var(--fs-xs); }
 @keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 @keyframes grow-y { from { transform: scaleY(0.02); } to { transform: scaleY(1); } }
 @keyframes draw-line { from { stroke-dashoffset: 1200; } to { stroke-dashoffset: 0; } }
-@keyframes shimmer { 100% { transform: translateX(-100%); } }
+/* درخشش اسکیلتون با جابه‌جایی background (بدون transform) تا المان از
+   صفحه بیرون نرود و در موبایل اسکرول افقی ایجاد نکند. */
+@keyframes shimmer { 100% { background-position: 100% 0; } }
 
 .anim-fade { animation: fade-in var(--t) both; }
 .anim-up { animation: slide-up var(--t-slow) both; }
@@ -288,19 +290,22 @@ small { font-size: var(--fs-xs); }
   gap: 18px;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
+/* نکته واکنش‌گرا: همه‌ی ستون‌ها با minmax(0, …) تعریف می‌شوند تا محتوای داخلی
+   (دکمه‌های سربرگ، جدول‌ها، عناصر nowrap) نتواند ستون را از عرض صفحه بیشتر کند
+   و صفحه در موبایل افقی اسکرول نشود (الگوی صفحه accounting.html). */
 .grid-2 { display: grid; gap: 18px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .grid-3 { display: grid; gap: 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .grid-4 { display: grid; gap: 18px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.grid-2-1 { display: grid; gap: 18px; grid-template-columns: 2fr 1fr; }
-.grid-1-2 { display: grid; gap: 18px; grid-template-columns: 1fr 2fr; }
+.grid-2-1 { display: grid; gap: 18px; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+.grid-1-2 { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
 
 @media (max-width: 1100px) {
   .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .grid-2-1, .grid-1-2 { grid-template-columns: 1fr; }
+  .grid-2-1, .grid-1-2 { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 720px) {
-  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* اسکرول افقی نرم برای نوارهای تب */

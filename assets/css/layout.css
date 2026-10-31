@@ -139,11 +139,16 @@
 .side-card .sc-desc { font-size: var(--fs-xs); opacity: 0.9; margin: 4px 0 10px; line-height: 1.7; }
 
 /* حالت جمع‌شده سایدبار */
-.app-shell.sidebar-collapsed .sidebar { width: var(--sidebar-w-collapsed); flex-basis: var(--sidebar-w-collapsed); }
-.app-shell.sidebar-collapsed .sidebar-brand { margin-inline-start: 10px; padding-inline: 8px; }
-.app-shell.sidebar-collapsed .sidebar-scroll { margin-inline-start: 10px; }
+.app-shell.sidebar-collapsed .sidebar {
+  width: var(--sidebar-w-collapsed); flex-basis: var(--sidebar-w-collapsed);
+  /* حاشیه‌ی قرینه‌ی افقی تا کارت‌های برند و منو با هم و با وسط سایدبار هم‌تراز بنشینند
+     (پایان‌تنه ۷px + ۱px حاشیه‌ی سمت محتوا = ۸px، برابر با آغاز‌تنه) */
+  padding-inline: 8px 7px;
+}
+.app-shell.sidebar-collapsed .sidebar-brand { margin-inline: 0; padding-inline: 8px; }
+.app-shell.sidebar-collapsed .sidebar-scroll { margin-inline: 0; }
 .app-shell.sidebar-collapsed .sidebar-scroll-inner { padding-inline: 8px; }
-.app-shell.sidebar-collapsed .sidebar-foot { margin-inline-start: 10px; }
+.app-shell.sidebar-collapsed .sidebar-foot { margin-inline: 0; }
 .app-shell.sidebar-collapsed .nav-label,
 .app-shell.sidebar-collapsed .nav-group-title,
 .app-shell.sidebar-collapsed .brand-text,
@@ -166,7 +171,7 @@
    تا هیچ‌کدام به دیواره‌های سایدبار نچسبند. */
 .app-shell.sidebar-collapsed .sidebar-brand {
   flex-direction: column; justify-content: center; gap: 6px;
-  height: auto; padding: 10px 6px; margin-inline: 6px;
+  height: auto; padding: 10px 6px; margin-inline: 0;
 }
 .app-shell.sidebar-collapsed .sidebar-brand .brand-mark { width: 32px; height: 32px; }
 .app-shell.sidebar-collapsed .sidebar-collapse-btn { width: 32px; height: 32px; margin-inline: 0; }
@@ -234,8 +239,6 @@
 }
 .content-full { padding: 0; }
 .page-wrap { max-width: 1560px; margin: 0 auto; }
-body.has-taskbar .content { padding-bottom: calc(var(--taskbar-h) + 24px); }
-body.has-taskbar .page-wrap { padding-bottom: 6px; }
 
 .topbar-mobile-btn { display: none; }
 /* پرده‌ی پشت کشوی موبایل — فقط در همان بازه‌ی عرض که کشو وجود دارد */
@@ -263,9 +266,13 @@ body.has-taskbar .page-wrap { padding-bottom: 6px; }
   }
   html[dir="ltr"] .sidebar { transform: translateX(-105%); }
   body.sidebar-open .sidebar { transform: none; }
-  .sidebar-brand, .sidebar-scroll { margin-inline-start: 10px; }
+  .sidebar-brand, .sidebar-scroll, .sidebar-foot { margin-inline-start: 10px; }
   /* در موبایل حالت «جمع‌شده» معنا ندارد: کشو همیشه با برچسب‌ها نمایش داده می‌شود */
-  .app-shell.sidebar-collapsed .sidebar { width: var(--sidebar-w); }
+  .app-shell.sidebar-collapsed .sidebar { width: var(--sidebar-w); padding-inline: 0 12px; }
+  /* صرف‌نظر از کلاس جمع‌شده، هر سه کارت سایدبار در کشو یک حاشیه‌ی واحد دارند */
+  .app-shell.sidebar-collapsed .sidebar-brand,
+  .app-shell.sidebar-collapsed .sidebar-scroll,
+  .app-shell.sidebar-collapsed .sidebar-foot { margin-inline: 10px 0; }
   .app-shell.sidebar-collapsed .sidebar-brand {
     flex-direction: row; justify-content: flex-start; height: 56px;
     padding: 0 16px; margin-inline-start: 10px;
@@ -309,7 +316,6 @@ body.has-taskbar .page-wrap { padding-bottom: 6px; }
   .modal, .overlay > .modal { width: calc(100vw - 20px); max-width: none; }
   .toast { width: calc(100vw - 20px); }
   .dropdown-menu { min-width: 210px; }
-  .task-item { max-width: 108px; }
   /* شبکه‌های کارتی و جدول‌ها در صفحه‌های باریک بهتر جا می‌شوند */
   .grid-cards { grid-template-columns: 1fr; }
   .table { min-width: 620px; }              /* اسکرول افقی داخل .table-wrap */
@@ -343,7 +349,6 @@ body.has-taskbar .page-wrap { padding-bottom: 6px; }
   will-change: transform, width, height;
 }
 .window.is-active { border-color: transparent; box-shadow: var(--shadow-lg), 0 0 0 2px var(--brand); }
-.window.is-minimized { display: none; }
 .window.is-snapping, .window.is-maximizing { transition: inset var(--t-slow), width var(--t-slow), height var(--t-slow), transform var(--t-slow); }
 .window.is-dragging { box-shadow: var(--shadow-lg); opacity: 0.97; }
 .window.no-anim { transition: none !important; }
@@ -450,110 +455,7 @@ body.has-taskbar .page-wrap { padding-bottom: 6px; }
 .snap-zone.bottom i { height: 52%; margin-top: auto; width: 80%; }
 
 /* ==========================================================================
- *  C) نوار وظیفه (Taskbar) و منوی شروع
- * ========================================================================== */
-.taskbar {
-  position: fixed; inset-inline: 0; bottom: 0; height: var(--taskbar-h);
-  background: var(--dock-bg);
-  backdrop-filter: var(--blur);
-  border-top: 1px solid var(--border);
-  display: flex; align-items: center; gap: 8px;
-  padding: 0 14px;
-  z-index: 300;
-  transform: translateY(110%);
-  transition: transform var(--t-slow);
-  box-shadow: 0 -14px 34px -22px rgba(19, 32, 64, 0.4);
-}
-@media (min-width: 900px) {
-  /* حالت شبیه تم مرجع: داک شناور و گرد */
-  .taskbar {
-    inset-inline: 18px; bottom: 14px; height: calc(var(--taskbar-h) - 6px);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-  }
-  body.has-taskbar .content { padding-bottom: calc(var(--taskbar-h) + 30px); }
-  .tray-menu { bottom: calc(var(--taskbar-h) + 22px); }
-}
-body.has-taskbar .taskbar { transform: none; }
-
-.task-start {
-  display: inline-flex; align-items: center; gap: 8px;
-  height: 38px; padding: 0 14px;
-  border-radius: var(--radius-full);
-  font-size: var(--fs-sm); font-weight: 600; color: var(--text);
-  transition: background var(--t-fast);
-}
-.task-start:hover { background: var(--surface-hover); }
-.task-start .brand-mark { width: 28px; height: 28px; border-radius: var(--radius-full); }
-.task-start.is-open { background: var(--ink); color: var(--on-ink); }
-
-.task-items { display: flex; align-items: center; gap: 4px; flex: 1; overflow-x: auto; scrollbar-width: none; }
-.task-items::-webkit-scrollbar { display: none; }
-.task-item {
-  display: inline-flex; align-items: center; gap: 8px;
-  height: 38px; padding: 0 13px; max-width: 210px;
-  border-radius: var(--radius-full);
-  background: var(--surface);
-  border: 1px solid var(--border-muted);
-  font-size: var(--fs-sm); font-weight: 500; color: var(--text-muted);
-  white-space: nowrap; overflow: hidden;
-  transition: all var(--t-fast);
-  position: relative;
-}
-.task-item:hover { color: var(--text-strong); border-color: var(--border-strong); }
-.task-item.is-active { background: var(--ink); border-color: transparent; color: var(--on-ink); font-weight: 600; box-shadow: var(--shadow-ink); }
-.task-item.is-active::after { content: none; }
-.task-item.is-minimized { opacity: 0.72; }
-.task-item .ti-label { overflow: hidden; text-overflow: ellipsis; }
-.task-item .ti-x { opacity: 0; margin-inline-start: 2px; color: inherit; }
-.task-item:hover .ti-x { opacity: 0.7; }
-
-.task-tray { display: flex; align-items: center; gap: 4px; margin-inline-start: auto; }
-/* منوی پنجره‌های نوار وظیفه (دکمه پنجره‌ها) */
-.tray-menu {
-  position: fixed;
-  inset-inline-end: 14px;
-  bottom: calc(var(--taskbar-h) + 10px);
-  width: 320px;
-  max-width: calc(100vw - 24px);
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 10px;
-  z-index: calc(var(--z-startmenu) + 1);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(10px);
-  transition: opacity .16s ease, transform .16s ease, visibility .16s;
-}
-.tray-menu.is-open { opacity: 1; visibility: visible; transform: none; }
-.tm-head {
-  display: flex; align-items: center; gap: 8px;
-  font-size: var(--fs-sm); font-weight: 600; color: var(--text-strong);
-  padding: 2px 6px 8px;
-}
-.tm-head .icon { color: var(--brand); }
-.tm-list { display: flex; flex-direction: column; gap: 2px; max-height: 232px; overflow-y: auto; }
-.tm-empty { padding: 16px 10px; text-align: center; font-size: var(--fs-sm); color: var(--text-soft); }
-.tm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.tm-actions .btn { justify-content: center; font-size: var(--fs-xs); }
-.tm-foot { padding: 9px 6px 2px; font-size: var(--fs-2xs); line-height: 1.9; color: var(--text-soft); }
-
-.tray-btn {
-  height: 34px; min-width: 34px; padding: 0 8px; border-radius: var(--radius-full);
-  display: inline-flex; align-items: center; gap: 6px; justify-content: center;
-  color: var(--text-muted); font-size: var(--fs-xs); font-weight: 500;
-  transition: background var(--t-fast), color var(--t-fast);
-}
-.tray-btn:hover { background: var(--surface-hover); color: var(--text-strong); }
-.tray-clock { text-align: center; line-height: 1.25; padding: 0 8px; }
-.tray-clock .tc-time { font-size: var(--fs-sm); font-weight: 600; color: var(--text-strong); }
-.tray-clock .tc-date { font-size: var(--fs-2xs); color: var(--text-soft); }
-
-/* ==========================================================================
- *  لایه‌ی تولتیپ (موتور جاوااسکریپت CRM.tip)
+ *  C) لایه‌ی تولتیپ (موتور جاوااسکریپت CRM.tip)
  *  روی <body> ساخته می‌شود تا هرگز زیر پنل‌ها نرود یا بریده نشود.
  * ========================================================================== */
 .tip {
@@ -580,59 +482,11 @@ body.has-taskbar .taskbar { transform: none; }
 }
 .tip.is-on { opacity: 1; }
 
-/* منوی شروع */
-.start-menu {
-  position: fixed; bottom: calc(var(--taskbar-h) + 10px); inset-inline-end: 12px;
-  width: 560px; max-width: calc(100vw - 24px);
-  max-height: min(560px, calc(100vh - var(--taskbar-h) - 40px));
-  background: var(--glass);
-  backdrop-filter: var(--blur);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  z-index: 310;
-  display: none;
-  overflow: hidden;
-  animation: slope-in var(--t-slow) both;
-}
-@keyframes slope-in { from { opacity: 0; transform: translateY(18px) scale(0.98); } to { opacity: 1; transform: none; } }
-.start-menu.is-open { display: flex; flex-direction: column; }
-.start-head { padding: 18px 20px 14px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-muted); }
-.start-body { display: grid; grid-template-columns: 1fr 200px; gap: 0; overflow: auto; }
-.start-apps { padding: 14px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-content: start; }
-.start-app {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  padding: 14px 8px; border-radius: var(--radius-sm);
-  font-size: var(--fs-sm); font-weight: 500; color: var(--text);
-  text-align: center; transition: all var(--t-fast);
-}
-.start-app:hover { background: var(--surface-hover); color: var(--brand); transform: translateY(-2px); }
-.start-app .sa-ic {
-  width: 42px; height: 42px; border-radius: var(--radius-sm);
-  display: grid; place-items: center;
-  background: var(--brand-soft); color: var(--brand);
-}
-.start-app.v2 .sa-ic { background: var(--info-soft); color: var(--info); }
-.start-app.v3 .sa-ic { background: rgba(139,92,246,.13); color: var(--violet-500); }
-.start-app.v4 .sa-ic { background: var(--warning-soft); color: var(--warning); }
-.start-app.v5 .sa-ic { background: var(--danger-soft); color: var(--rose-500); }
-.start-side { border-inline-start: 1px solid var(--border-muted); padding: 14px; background: var(--surface-2); }
-body.light .start-side { }
-
-@media (max-width: 720px) {
-  .start-menu { inset-inline: 8px; width: auto; }
-  .start-body { grid-template-columns: 1fr; }
-  .start-apps { grid-template-columns: repeat(2, 1fr); }
-  .start-side { border-inline-start: 0; border-top: 1px solid var(--border-muted); }
-  .tray-clock { display: none; }
-  .task-item { max-width: 132px; }
-}
-
 /* ==========================================================================
  *  D) میزکار (Desktop mode)
  * ========================================================================== */
 .desktop-area {
-  min-height: calc(100vh - var(--topbar-h) - var(--taskbar-h) - 40px);
+  min-height: calc(100vh - var(--topbar-h) - 40px);
   border-radius: var(--radius-lg);
   background:
     radial-gradient(circle at 12% 8%, rgba(111, 156, 235, 0.16), transparent 42%),
@@ -641,7 +495,7 @@ body.light .start-side { }
   border: 1px solid var(--border);
   padding: 18px;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   grid-auto-rows: minmax(190px, auto);
   gap: 16px;
 }
@@ -663,12 +517,12 @@ body.light .start-side { }
 }
 
 @media (max-width: 1200px) {
-  .desktop-area { grid-template-columns: repeat(4, 1fr); }
+  .desktop-area { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .widget, .widget.w-3, .widget.w-4 { grid-column: span 4; }
   .widget.w-2 { grid-column: span 2; }
 }
 @media (max-width: 860px) {
-  .desktop-area { grid-template-columns: 1fr; }
+  .desktop-area { grid-template-columns: minmax(0, 1fr); }
   .widget, .widget.w-2, .widget.w-3, .widget.w-4, .widget.w-6 { grid-column: span 1; }
 }
 
@@ -676,7 +530,7 @@ body.light .start-side { }
  *  E) چاپ
  * ========================================================================== */
 @media print {
-  .sidebar, .topbar, .taskbar, .win-layer, .toast-wrap, .win-hint { display: none !important; }
+  .sidebar, .topbar, .win-layer, .toast-wrap, .win-hint { display: none !important; }
   body { background: #fff; }
   .content { padding: 0; }
   .card { box-shadow: none; border-color: #ddd; break-inside: avoid; }

@@ -1,7 +1,7 @@
 /*!
  * ============================================================================
  *  ModernCRM · app.js — هسته رابط کاربری
- *  شامل: ابزارهای کمکی، تم روشن/تیره، پوسته برنامه (سایدبار، تاپ‌بار، نوار وظیفه)،
+ *  شامل: ابزارهای کمکی، تم روشن/تیره، پوسته برنامه (سایدبار، تاپ‌بار)،
  *  اجزای تعاملی (مودال، دراور، تب، آکاردئون، توست، پالت فرمان) و موتور نمودار SVG
  * ============================================================================
  */
@@ -216,7 +216,7 @@ window.CRM = (function (w, d) {
   var tip = (function () {
     var el = null, target = null, showTimer = null, hideTimer = null;
     /* هر عنصری که «تولتیپ‌پذیر» است: منوها، دکمه‌ها، تب‌ها، آیتم‌های جدول و… */
-    var TIP_SELECTOR = 'button, a.btn, a.tb-icon, .nav-item, .dropdown-item, .chip, .tab, .seg, .task-item, .tray-btn, .task-start, .start-app, .cal-cell, .pagination button, .list-item, [data-tip]';
+    var TIP_SELECTOR = 'button, a.btn, a.tb-icon, .nav-item, .dropdown-item, .chip, .tab, .seg, .cal-cell, .pagination button, .list-item, [data-tip]';
     /* برای دکمه‌های فقط-آیکون، نام آیکون به برچسب فارسی تبدیل می‌شود
        تا هیچ دکمه‌ای بدون tooltip نماند. */
     var ICON_LABEL = {
@@ -1012,7 +1012,6 @@ window.CRM = (function (w, d) {
         { label: 'ثبت معامله جدید', icon: 'deals', href: 'deals.html', group: 'میان‌بر' },
         { label: 'صدور فاکتور', icon: 'invoice', href: 'invoice-new.html', group: 'میان‌بر' },
         { label: 'ثبت تیکت پشتیبانی', icon: 'ticket', href: 'ticket-new.html', group: 'میان‌بر' },
-        { label: 'ورود به میزکار پنجره‌ای', icon: 'window', href: 'desktop.html', group: 'فرمان' },
         { label: 'خروج از حساب کاربری', icon: 'logout', href: 'login.html', group: 'فرمان' }
       ];
       items = navItems.concat(actions);
@@ -1095,7 +1094,7 @@ window.CRM = (function (w, d) {
   })();
 
   /* ==========================================================================
-   * 11) پوسته برنامه: سایدبار، تاپ‌بار، نوار وظیفه، منوی شروع
+   * 11) پوسته برنامه: سایدبار و تاپ‌بار
    * ========================================================================== */
   var shell = (function () {
 
@@ -1220,55 +1219,6 @@ window.CRM = (function (w, d) {
         '</div>';
     }
 
-    function taskbarHTML() {
-      return '' +
-        '<button class="task-start" data-start-toggle data-tip="منوی شروع">' +
-          '<span class="brand-mark" data-icon="sparkles" data-icon-size="15"></span><span>میزکار</span>' +
-        '</button>' +
-        '<div class="task-items" id="taskItems"></div>' +
-        '<div class="task-tray">' +
-          '<button class="tray-btn" data-tray-openwin data-tip="پنجره‌های شناور"><span data-icon="window" data-icon-size="17"></span><span id="trayWinCount">۰</span></button>' +
-          '<button class="tray-btn" data-tray-fullscreen data-tip="تمام‌صفحه"><span data-icon="maximize" data-icon-size="17"></span></button>' +
-          '<div class="tray-clock"><div class="tc-time" id="trayTime">۰۰:۰۰</div><div class="tc-date" id="trayDate">—</div></div>' +
-        '</div>';
-    }
-
-    function startMenuHTML() {
-      var apps = [];
-      (DATA.nav || []).forEach(function (g) { g.items.forEach(function (i) { apps.push(i); }); });
-      var tones = ['', 'v2', 'v3', 'v4', 'v5'];
-      return '' +
-        '<div class="start-head">' +
-          avatar('مهدی کریمی', 46) +
-          '<div><div class="fw-700 text-strong">مهدی کریمی</div>' +
-          '<div class="fs-xs text-muted">m.karimi@moderncrm.ir</div></div>' +
-          '<a class="tb-icon ms-auto" href="lock.html" data-tip="قفل صفحه" data-icon="lock" data-icon-size="19"></a>' +
-        '</div>' +
-        '<div class="start-body">' +
-          '<div class="start-apps">' +
-            apps.slice(0, 12).map(function (a, i) {
-              return '<a class="start-app ' + tones[i % tones.length] + '" href="' + a.href + '">' +
-                '<span class="sa-ic" data-icon="' + a.icon + '" data-icon-size="21"></span>' + esc(a.label) + '</a>';
-            }).join('') +
-          '</div>' +
-          '<div class="start-side">' +
-            '<div class="nav-group-title">دسترسی سریع</div>' +
-            '<a class="dropdown-item" href="profile.html"><span data-icon="user-round" data-icon-size="17"></span> پروفایل من</a>' +
-            '<a class="dropdown-item" href="notifications.html"><span data-icon="bell" data-icon-size="17"></span> اعلان‌ها</a>' +
-            '<a class="dropdown-item" href="design-system.html"><span data-icon="palette" data-icon-size="17"></span> راهنمای طراحی</a>' +
-            '<a class="dropdown-item" href="help.html"><span data-icon="help" data-icon-size="17"></span> راهنما</a>' +
-            '<div class="dropdown-sep"></div>' +
-            '<div class="nav-group-title mt-2">نمایش</div>' +
-            '<label class="dropdown-item" style="cursor:pointer" data-tip="نمایش کارت‌ها به‌صورت پنجره شناور">' +
-              '<span data-icon="panels" data-icon-size="17"></span> پنجره‌های شناور' +
-              '<span class="switch ms-auto"><input type="checkbox" data-float-toggle checked><span class="track"></span></span>' +
-            '</label>' +
-            '<div class="dropdown-sep"></div>' +
-            '<a class="dropdown-item danger" href="login.html"><span data-icon="logout" data-icon-size="17"></span> خروج از حساب</a>' +
-          '</div>' +
-        '</div>';
-    }
-
     function bind() {
       /* جمع/باز کردن سایدبار */
       $$('[data-sidebar-toggle]').forEach(function (b) {
@@ -1327,43 +1277,10 @@ window.CRM = (function (w, d) {
         });
       });
 
-      /* منوی شروع */
-      var start = $('#startMenu');
-      $$('[data-start-toggle]').forEach(function (b) {
-        b.addEventListener('click', function (e) {
-          e.stopPropagation();
-          var willOpen = !start.classList.contains('is-open');
-          $$('.dropdown-menu.is-open').forEach(function (m) { m.classList.remove('is-open'); });
-          start.classList.toggle('is-open', willOpen);
-          b.classList.toggle('is-open', willOpen);
-        });
-      });
-
-      /* ساعت و تاریخ نوار وظیفه */
-      function tick() {
-        var now = new Date();
-        var t = $('#trayTime'), dd = $('#trayDate');
-        if (t) t.textContent = fa(pad(now.getHours()) + ':' + pad(now.getMinutes()));
-        if (dd) dd.textContent = jsWeekday(now) + '، ' + jLong(now).replace(/^\S+\s*/, '');
-      }
-      tick(); setInterval(tick, 20000);
-
-      /* تمام‌صفحه */
-      $$('[data-tray-fullscreen]').forEach(function (b) {
-        b.addEventListener('click', function () {
-          if (!d.fullscreenElement) { d.documentElement.requestFullscreen && d.documentElement.requestFullscreen(); }
-          else { d.exitFullscreen && d.exitFullscreen(); }
-        });
-      });
-
       /* بستن منوها با کلیک بیرون */
       d.addEventListener('click', function (e) {
         if (!e.target.closest('.dropdown')) $$('.dropdown-menu.is-open').forEach(function (m) { m.classList.remove('is-open'); });
         if (!e.target.closest('.snap-picker') && !e.target.closest('[data-max-btn]')) $$('.snap-picker.is-open').forEach(function (m) { m.classList.remove('is-open'); });
-        if (!e.target.closest('#startMenu') && !e.target.closest('[data-start-toggle]')) {
-          var s = $('#startMenu'); if (s) s.classList.remove('is-open');
-          $$('[data-start-toggle]').forEach(function (b) { b.classList.remove('is-open'); });
-        }
       });
     }
 
@@ -1379,8 +1296,6 @@ window.CRM = (function (w, d) {
         if (top + act.offsetHeight > sc.clientHeight) sc.scrollTop = top - sc.clientHeight / 2;
       }
       var tb = $('#topbar'); if (tb) tb.innerHTML = topbarHTML();
-      var task = $('#taskbar'); if (task) task.innerHTML = taskbarHTML();
-      var sm = $('#startMenu'); if (sm) sm.innerHTML = startMenuHTML();
       /* دکمه جمع‌کردن سایدبار باید قبل از bind ساخته شود */
       var brand = $('.sidebar-brand');
       if (brand && sb && !brand.querySelector('[data-sidebar-collapse]')) {
@@ -1393,10 +1308,9 @@ window.CRM = (function (w, d) {
         brand.appendChild(btn);
       }
       bind();
-      body.classList.toggle('has-taskbar', body.hasAttribute('data-taskbar'));
     }
 
-    return { mount: mount, sidebarHTML: sidebarHTML, topbarHTML: topbarHTML, startMenuHTML: startMenuHTML };
+    return { mount: mount, sidebarHTML: sidebarHTML, topbarHTML: topbarHTML };
   })();
 
   /* ==========================================================================

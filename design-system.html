@@ -49,7 +49,7 @@
             <div class="alert-title">هویت بصری برگرفته از تم مرجع</div>
             <div class="alert-desc">
               بوم خاکستری-آبی روشن، کارت‌های سفید با گوشه‌های بسیار گرد (تا ۳۴ پیکسل)، لهجه‌ی اصلی <b>آبی ملایم</b>،
-              لهجه‌ی دوم <b>مرجانی</b> و <b>مشکی جوهری</b> برای حالت‌های فعال. دکمه‌ها، تب‌ها، چیپ‌ها، نوار وظیفه و آیتم فعال سایدبار
+              لهجه‌ی دوم <b>مرجانی</b> و <b>مشکی جوهری</b> برای حالت‌های فعال. دکمه‌ها، تب‌ها، چیپ‌ها و آیتم فعال سایدبار
               همه از همین زبان بصری استفاده می‌کنند و رنگ‌ها از یک فایل توکن مشترک می‌آیند.
             </div>
           </div>
@@ -422,25 +422,23 @@
                   <tr><td><b class="ltr">data-win-size="900x600"</b></td><td>اندازه‌ی پیش‌فرض پنجره</td></tr>
                   <tr><td><b class="ltr">data-win-content="#sel"</b></td><td>محتوای پنجره از عنصر دیگری خوانده شود</td></tr>
                   <tr><td><b class="ltr">data-win-open="id"</b></td><td>بازکردن پنجره از هر دکمه‌ی دلخواه</td></tr>
-                  <tr><td><b class="ltr">data-win-close / -min / -max="id"</b></td><td>کنترل پنجره از بیرون</td></tr>
+                  <tr><td><b class="ltr">data-win-close / -max="id"</b></td><td>کنترل پنجره از بیرون</td></tr>
                   <tr><td><b class="ltr">data-win-detach</b></td><td>پنهان‌کردن کارت اصلی تا وقتی پنجره باز است (میزکار)</td></tr>
                   <tr><td><b class="ltr">data-win-autoopen="800"</b></td><td>بازشدن خودکار پنجره پس از ۸۰۰ میلی‌ثانیه</td></tr>
                   <tr><td><b class="ltr">data-win-nobtn</b></td><td>دکمه ⛶ ساخته نشود</td></tr>
                   <tr><td><b class="ltr">data-win-auto="off"</b> روی body</td><td>خاموش‌کردن پنجره‌سازی خودکار در کل صفحه (صفحه‌های ورود/خطا/چاپ)</td></tr>
-                  <tr><td><b class="ltr">data-win-min-all / -max-all / -tile / -close-all</b></td><td>فرمان‌های گروهی؛ آماده در منوی «پنجره‌ها» در نوار وظیفه</td></tr>
+                  <tr><td><b class="ltr">data-win-max-all / -tile / -close-all</b></td><td>فرمان‌های گروهی روی همه‌ی پنجره‌های باز</td></tr>
                 </tbody>
               </table>
             </div>
 
             <p class="fs-md text-muted mb-4" style="line-height:2">
-              منوی نوار وظیفه (دکمه‌ی «پنجره» در سمت چپ نوار وظیفه) فهرست پنجره‌های باز و همین فرمان‌های گروهی را نشان می‌دهد.
               جابه‌جایی با کشیدن نوار عنوان، تغییر اندازه از ۸ جهت، اسنپ به کناره‌ها، ماکسیمایز با دوبار کلیک روی نوار عنوان
-              و انتخاب چیدمان با نگه‌داشتن نشانگر روی دکمه‌ی ماکسیمایز انجام می‌شود.
+              و انتخاب چیدمان با نگه‌داشتن نشانگر روی دکمه‌ی ماکسیمایز انجام می‌شود؛ هر پنجره با دکمه‌ی × خودش بسته می‌شود.
             </p>
 
             <div class="d-flex flex-wrap gap-3">
               <button class="btn btn-primary" data-win-open="window-demo"><span data-icon="maximize" data-icon-size="16"></span> بازکردن پنجره نمایشی</button>
-              <button class="btn" data-win-min-all><span data-icon="minus" data-icon-size="15"></span> مینیمایز همه</button>
               <button class="btn" data-win-max-all><span data-icon="maximize" data-icon-size="15"></span> ماکسیمایز همه</button>
               <button class="btn" data-win-tile><span data-icon="grid" data-icon-size="15"></span> چیدمان کاشی‌ای</button>
               <button class="btn btn-danger-soft" data-win-close-all><span data-icon="x" data-icon-size="15"></span> بستن همه</button>
@@ -531,8 +529,6 @@
 </aside>
 
 <div class="win-layer" id="winLayer"></div>
-<div class="start-menu" id="startMenu"></div>
-<footer class="taskbar" id="taskbar"></footer>
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script src="assets/js/icons.js"></script>

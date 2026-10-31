@@ -86,7 +86,6 @@
   --sidebar-w: 256px;
   --sidebar-w-collapsed: 84px;
   --topbar-h: 68px;
-  --taskbar-h: 58px;
   --page-pad: 26px;
   --radius-xs: 9px;
   --radius-sm: 12px;
@@ -124,8 +123,6 @@
   --z-dropdown: 900;
   --z-drawer: 950;
   --z-modal: 1000;
-  --z-taskbar: 300;
-  --z-startmenu: 310;
   --z-cmdk: 1100;
   --z-popover: 1150;   /* انتخابگر تاریخ و لایه‌های شناور فرم (بالای مودال) */
   --z-toast: 1200;
@@ -202,7 +199,6 @@
 
   --topbar-bg: rgba(236, 240, 246, 0.72);
   --modal-bg: rgba(18, 24, 38, 0.42);
-  --dock-bg: rgba(255, 255, 255, 0.78);
 
   --shadow-xs: 0 1px 2px rgba(19, 32, 64, 0.06);
   --shadow-sm: 0 2px 10px -4px rgba(19, 32, 64, 0.12);
