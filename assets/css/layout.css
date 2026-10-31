@@ -455,6 +455,96 @@
 .snap-zone.bottom i { height: 52%; margin-top: auto; width: 80%; }
 
 /* ==========================================================================
+ *  F) نوار ابزار پایین — پنجره‌های کمینه‌شده
+ *  داخل ستون اصلی (.main) و زیر محتوا قرار دارد؛ به همین دلیل کنار سایدبار
+ *  (دسکتاپ) یا تمام‌عرض (تبلت/موبایل) می‌نشیند و هیچ‌گاه زیر منو نمی‌رود.
+ *  با sticky، همیشه در لبه‌ی پایین دید کاربر می‌ماند.
+ * ========================================================================== */
+.window.is-minimized { display: none; }
+
+.taskbar {
+  position: sticky; bottom: 0;
+  z-index: 61;                       /* بالای پنجره‌ها (۶۰) تا همیشه در دسترس باشد */
+  margin-top: auto;
+  margin-inline: var(--page-pad);
+  margin-bottom: 14px;
+  min-height: 60px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 10px 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+.tb-label {
+  display: flex; align-items: center; gap: 9px;
+  flex: 0 0 auto; height: 36px;
+  padding-inline-end: 12px;
+  border-inline-end: 1px solid var(--border-muted);
+  font-size: var(--fs-sm); font-weight: 600; color: var(--text-strong);
+  white-space: nowrap;
+}
+.tb-label-ic {
+  width: 30px; height: 30px; border-radius: var(--radius-full);
+  display: grid; place-items: center;
+  background: var(--brand-soft); color: var(--brand); flex: 0 0 auto;
+}
+.tb-count {
+  min-width: 22px; height: 20px; padding: 0 7px;
+  border-radius: var(--radius-full);
+  display: grid; place-items: center;
+  background: var(--ink); color: var(--on-ink);
+  font-size: var(--fs-2xs); font-weight: 700;
+}
+.tb-list {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 8px;
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: none;
+  padding: 4px 2px;
+}
+.tb-list::-webkit-scrollbar { display: none; }
+.tb-chip {
+  flex: 0 0 auto; max-width: 240px; height: 40px;
+  display: flex; align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+  transition: background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.tb-chip:hover { background: var(--surface-hover); border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+.tb-chip-main {
+  display: flex; align-items: center; gap: 8px;
+  min-width: 0; height: 100%;
+  padding-inline: 12px 6px;
+  font-size: var(--fs-sm); font-weight: 500; color: var(--text-strong);
+}
+.tb-chip-ic { display: grid; place-items: center; color: var(--brand); flex: 0 0 auto; }
+.tb-chip-txt {
+  min-width: 0; max-width: 180px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tb-chip-x {
+  flex: 0 0 auto;
+  width: 28px; height: 28px; margin-inline-end: 6px;
+  border-radius: var(--radius-full);
+  display: grid; place-items: center;
+  color: var(--text-soft);
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.tb-chip-x:hover { background: var(--danger); color: #fff; }
+.tb-empty { font-size: var(--fs-xs); color: var(--text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+@media (max-width: 640px) {
+  .taskbar { margin-inline: 12px; margin-bottom: 10px; min-height: 56px; padding: 6px 8px 6px 10px; gap: 8px; }
+  .tb-label { padding-inline-end: 8px; }
+  .tb-label-txt { display: none; }
+  .tb-chip { max-width: 170px; }
+  .tb-chip-txt { max-width: 120px; }
+}
+
+/* ==========================================================================
  *  C) لایه‌ی تولتیپ (موتور جاوااسکریپت CRM.tip)
  *  روی <body> ساخته می‌شود تا هرگز زیر پنل‌ها نرود یا بریده نشود.
  * ========================================================================== */
@@ -530,7 +620,7 @@
  *  E) چاپ
  * ========================================================================== */
 @media print {
-  .sidebar, .topbar, .win-layer, .toast-wrap, .win-hint { display: none !important; }
+  .sidebar, .topbar, .win-layer, .toast-wrap, .win-hint, .taskbar { display: none !important; }
   body { background: #fff; }
   .content { padding: 0; }
   .card { box-shadow: none; border-color: #ddd; break-inside: avoid; }

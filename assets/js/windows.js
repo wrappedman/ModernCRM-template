@@ -15,21 +15,65 @@
   var layer, zTop = 60, seq = 0, wins = {};
   var snapEl = null, snapBadge = null, pickerTimer = null;
   var MIN_W = 320, MIN_H = 200, TITLE_H = 44;
+  /* کلید ذخیره‌سازی پنجره‌های کمینه‌شده (در همان تب، بین صفحه‌ها پایدار است) */
+  var STORE_KEY = 'crm.minimized', PENDING_KEY = 'crm.restore';
 
   /* ------------------------------------------------------------------ ابزار */
+  function taskbarEl() { return $('#crmTaskbar'); }
+  /* ارتفاع نوار ابزار به‌همراه فاصله‌ی پایینی‌اش (برای اینکه پنجره‌ها زیرش نروند) */
+  function taskbarHeight() {
+    var tb = taskbarEl();
+    if (!tb || tb.offsetParent === null) return 0;
+    return tb.offsetHeight + (parseFloat(w.getComputedStyle(tb).marginBottom) || 0);
+  }
+  function replayPop(el) {
+    el.classList.remove('anim-pop'); void el.offsetWidth; el.classList.add('anim-pop');
+  }
+
   function workspace() {
     var topbar = $('.topbar');
     var sidebar = $('.sidebar');
     var top = topbar && topbar.offsetParent !== null ? topbar.getBoundingClientRect().height : 0;
     var sidebarVisible = sidebar && w.innerWidth > 1024 && sidebar.offsetParent !== null;
     var right = sidebarVisible ? sidebar.getBoundingClientRect().width : 0;
+    var bottom = taskbarHeight();  /* پنجره‌های ماکسیمایز/چسبیده، بالای نوار ابزار پایین قرار می‌گیرند */
     var vw = w.innerWidth, vh = w.innerHeight;
     return {
-      left: 0, top: Math.round(top), right: right, bottom: 0,
+      left: 0, top: Math.round(top), right: right, bottom: bottom,
       x: 0, y: Math.round(top),
-      w: Math.round(vw - right), h: Math.round(vh - top),
+      w: Math.round(vw - right), h: Math.round(vh - top - bottom),
       vw: vw, vh: vh
     };
+  }
+
+  /* ------------------------------------------- ذخیره‌سازی پنجره‌های کمینه‌شده */
+  function here() {
+    return (location.pathname.split('/').pop() || 'index.html') + location.search;
+  }
+  function readStore() {
+    try {
+      var list = JSON.parse(w.sessionStorage.getItem(STORE_KEY) || '[]');
+      return Array.isArray(list) ? list : [];
+    } catch (e) { return []; }
+  }
+  function writeStore(list) {
+    try { w.sessionStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch (e) { }
+  }
+  function storeFind(id) {
+    var list = readStore();
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return null;
+  }
+  function storeUpsert(entry) {
+    var list = readStore().filter(function (e) { return e.id !== entry.id; });
+    list.push(entry);
+    writeStore(list);
+  }
+  function storeRemove(id) {
+    writeStore(readStore().filter(function (e) { return e.id !== id; }));
+  }
+  function visibleIds() {
+    return Object.keys(wins).filter(function (id) { return !wins[id].minimized; });
   }
 
   function clampToWork(rect) {
@@ -75,7 +119,7 @@
 
   function focus(id) {
     var win = wins[id];
-    if (!win) return;
+    if (!win || win.minimized) return;
     Object.keys(wins).forEach(function (k) {
       wins[k].el.classList.toggle('is-active', k === id);
       if (wins[k].el.classList.contains('is-active')) wins[k].el.style.zIndex = ++zTop;
@@ -119,6 +163,7 @@
           '</span>' +
         '</div>' +
         '<div class="win-controls">' +
+          '<button class="win-btn" data-win-min="' + id + '" data-tip-pos="bottom" data-tip="کمینه کردن در نوار ابزار">' + CRM.icon('minus', 16) + '</button>' +
           '<button class="win-btn" data-win-max="' + id + '" data-max-btn data-tip-pos="bottom" data-tip="ماکسیمایز / چیدمان">' + CRM.icon('square', 15) + '</button>' +
           '<button class="win-btn close" data-win-close="' + id + '" data-tip-pos="bottom" data-tip="بستن">' + CRM.icon('x', 16) + '</button>' +
         '</div>' +
@@ -145,7 +190,8 @@
     $$('.win-open-btn', el).forEach(function (n) { n.remove(); });
     $$('[id]', el).forEach(function (n) { n.removeAttribute('id'); });
 
-    var rect = opts.rect || centerRect(parseInt(size[0], 10), parseInt(size[1], 10));
+    var rect = opts.rect ? clampToWork({ x: opts.rect.x, y: opts.rect.y, w: opts.rect.w, h: opts.rect.h })
+                         : centerRect(parseInt(size[0], 10), parseInt(size[1], 10));
     if (!opts.rect) {
       var off = (seq++ % 6) * 26;
       rect.x = Math.min(rect.x + off, workspace().vw - rect.w - 12);
@@ -165,6 +211,7 @@
   function open(id, opts) {
     var win = wins[id];
     if (win) {
+      if (win.minimized) return restore(id);
       focus(id); return win;
     }
     var tpl = templates()[id];
@@ -181,11 +228,144 @@
     win.el.style.pointerEvents = 'none';
     setTimeout(function () { win.el.remove(); }, 140);
     delete wins[id];
+    storeRemove(id);
     var tpl = templates()[id];
     if (tpl) tpl.classList.remove('is-floating');
     if (w.CRM.win.onClose) w.CRM.win.onClose(id);
-    var rest = Object.keys(wins);
+    var rest = visibleIds();
     if (rest.length) focus(rest[rest.length - 1]);
+    renderTaskbar();
+  }
+
+  /* ------------------------------------------------- کمینه‌کردن و بازگردانی */
+  function minimize(id) {
+    var win = wins[id];
+    if (!win || win.minimized) return;
+    var tpl = templates()[id];
+    var titleEl = $('.win-title', win.el);
+    var rect = win.maximized && win.prev ? win.prev : readRect(win.el);
+    storeUpsert({
+      id: id,
+      page: here(),
+      title: (titleEl && titleEl.textContent) || (tpl && tpl.getAttribute('data-win-title')) || id,
+      icon: (tpl && tpl.getAttribute('data-win-icon')) || 'window',
+      rect: rect,
+      max: !!win.maximized,
+      snap: win.snap || null
+    });
+    win.minimized = true;
+    win.el.classList.remove('is-active');
+    win.el.classList.add('is-minimized');
+    var rest = visibleIds();
+    if (rest.length) focus(rest[rest.length - 1]);
+    renderTaskbar();
+  }
+
+  /* بازگردانی پنجره‌ای که در همین صفحه است (وضعیت و محتوایش حفظ می‌شود) */
+  function restoreHere(id) {
+    var win = wins[id];
+    win.minimized = false;
+    win.el.classList.remove('is-minimized');
+    replayPop(win.el);
+    storeRemove(id);
+    focus(id);
+    renderTaskbar();
+    return win;
+  }
+
+  /* بازگردانی از نوار ابزار. اگر پنجره متعلق به صفحه‌ی دیگری است، همان صفحه باز می‌شود. */
+  function restore(id) {
+    if (wins[id]) return restoreHere(id);
+    var entry = storeFind(id);
+    var tpl = templates()[id];
+    if (tpl) {
+      var win = build(id, tpl, entry && entry.rect ? { rect: entry.rect } : {});
+      if (!win) return null;
+      if (entry && entry.max) toggleMax(id, true);
+      else if (entry && entry.snap && entry.snap !== 'full') snap(id, entry.snap);
+      storeRemove(id);
+      focus(id);
+      renderTaskbar();
+      return win;
+    }
+    if (entry && entry.page) {
+      /* این پنجره در صفحه‌ی فعلی تعریف نشده: به صفحه‌ی خودش می‌رویم و آنجا باز می‌شود */
+      try { w.sessionStorage.setItem(PENDING_KEY, id); } catch (e) { }
+      location.href = entry.page;
+      return null;
+    }
+    storeRemove(id);
+    renderTaskbar();
+    return null;
+  }
+
+  /* حذف یک پنجره از نوار (حتی اگر در صفحه‌ی فعلی نباشد) */
+  function dismiss(id) {
+    if (wins[id]) return close(id);
+    storeRemove(id);
+    renderTaskbar();
+  }
+
+  /* ------------------------------------------------------ نوار ابزار پایین */
+  function ensureTaskbar() {
+    var tb = taskbarEl();
+    if (tb) return tb;
+    var main = $('.main');
+    if (!main) return null;               /* صفحه‌های بدون پوسته (ورود، خطا) */
+    tb = d.createElement('nav');
+    tb.id = 'crmTaskbar';
+    tb.className = 'taskbar';
+    tb.setAttribute('aria-label', 'نوار پنجره‌های کمینه‌شده');
+    main.appendChild(tb);
+    return tb;
+  }
+
+  function renderTaskbar() {
+    var tb = ensureTaskbar();
+    if (!tb) return;
+    var list = readStore();
+    var html = '';
+    list.forEach(function (e) {
+      html +=
+        '<div class="tb-chip" data-tb-id="' + CRM.esc(e.id) + '">' +
+          '<button class="tb-chip-main" data-tb-restore="' + CRM.esc(e.id) + '"' +
+            ' data-tip-pos="top" data-tip="بازکردن: ' + CRM.esc(e.title) + '">' +
+            '<span class="tb-chip-ic">' + CRM.icon(e.icon || 'window', 15) + '</span>' +
+            '<span class="tb-chip-txt">' + CRM.esc(e.title) + '</span>' +
+          '</button>' +
+          '<button class="tb-chip-x" data-tb-close="' + CRM.esc(e.id) + '" data-tip-pos="top" data-tip="حذف از نوار">' +
+            CRM.icon('x', 13) +
+          '</button>' +
+        '</div>';
+    });
+    tb.innerHTML =
+      '<div class="tb-label">' +
+        '<span class="tb-label-ic">' + CRM.icon('window', 16) + '</span>' +
+        '<span class="tb-label-txt">پنجره‌های کمینه‌شده</span>' +
+        '<span class="tb-count">' + CRM.fa(list.length) + '</span>' +
+      '</div>' +
+      '<div class="tb-list">' +
+        (list.length ? html : '<span class="tb-empty">هنوز پنجره‌ای کمینه نشده است. با دکمه «—» در نوار عنوان هر پنجره، آن را به این نوار بفرستید.</span>') +
+      '</div>';
+  }
+
+  /* پنجره‌های کمینه‌شده‌ی همین صفحه را (بدون نمایش) دوباره می‌سازد */
+  function restoreMinimizedForPage() {
+    var page = here();
+    var keep = [];
+    readStore().forEach(function (e) {
+      if (e.page !== page) { keep.push(e); return; }
+      var tpl = templates()[e.id];
+      if (!tpl || wins[e.id]) return;      /* ورودی بی‌اثر: حذف می‌شود */
+      var win = build(e.id, tpl, { rect: e.rect });
+      if (!win) return;
+      if (e.max) toggleMax(e.id, true);
+      win.minimized = true;
+      win.el.classList.remove('is-active');
+      win.el.classList.add('is-minimized');
+      keep.push(e);
+    });
+    writeStore(keep);
   }
 
   function restoreBounds(win, animate) {
@@ -239,7 +419,7 @@
   }
 
   function maximizeAll() {
-    var ids = Object.keys(wins);
+    var ids = visibleIds();
     if (!ids.length) { CRM.toast({ type: 'info', title: 'پنجره‌ای باز نیست', msg: 'ابتدا یک کارت را به پنجره تبدیل کنید.' }); return; }
     ids.forEach(function (id) { toggleMax(id, true); });
     CRM.toast({ type: 'success', title: 'همه پنجره‌ها ماکسیمایز شدند', msg: fa(ids.length) + ' پنجره فعال' });
@@ -247,7 +427,7 @@
   }
 
   function tile() {
-    var ids = Object.keys(wins);
+    var ids = visibleIds();
     if (ids.length < 2) {
       /* اگر پنجره‌ای باز نیست، ویجت‌های قابل‌جدا‌شدن همین صفحه را باز می‌کنیم
          تا دکمه «چیدمان کاشی» همیشه نتیجه بدهد. */
@@ -280,6 +460,7 @@
 
   function closeAll() {
     Object.keys(wins).forEach(function (id) { close(id); });
+    readStore().forEach(function (e) { dismiss(e.id); });
   }
 
   /* --------------------------------------------------- کشیدن و رها کردن */
@@ -437,6 +618,20 @@
         var menu = t.closest('.dropdown-menu'); if (menu) menu.classList.remove('is-open');
         return;
       }
+      if ((t = e.target.closest('[data-win-min]'))) {
+        e.stopPropagation();
+        minimize(t.getAttribute('data-win-min'));
+        return;
+      }
+      if ((t = e.target.closest('[data-tb-restore]'))) {
+        restore(t.getAttribute('data-tb-restore'));
+        return;
+      }
+      if ((t = e.target.closest('[data-tb-close]'))) {
+        e.stopPropagation();
+        dismiss(t.getAttribute('data-tb-close'));
+        return;
+      }
       if ((t = e.target.closest('[data-win-max]'))) {
         var picker = $('.snap-picker.is-open');
         if (picker) { picker.classList.remove('is-open'); }
@@ -519,6 +714,13 @@
     /* پنجره‌هایی که با data-win-open پیش‌فرض باز می‌شوند */
     bindGlobal();
     bindDrag();
+    ensureTaskbar();
+    restoreMinimizedForPage();
+    renderTaskbar();
+    /* اگر کاربر از نوار ابزار یک پنجره‌ی صفحه‌ی دیگر را خواسته، همین‌جا بازش می‌کنیم */
+    var pending = null;
+    try { pending = w.sessionStorage.getItem(PENDING_KEY); w.sessionStorage.removeItem(PENDING_KEY); } catch (e) { }
+    if (pending && templates()[pending]) restore(pending);
     $$('[data-win-autoopen]').forEach(function (el) {
       setTimeout(function () { open(el.getAttribute('data-win')); }, +(el.getAttribute('data-win-autoopen') || 300));
     });
@@ -535,6 +737,7 @@
   w.CRM.win = {
     mount: mount, open: open, close: close, toggleMax: toggleMax, snap: snap,
     tile: tile, maximizeAll: maximizeAll, closeAll: closeAll,
+    minimize: minimize, restore: restore, dismiss: dismiss,
     focus: focus, list: function () { return Object.keys(wins); }, workspace: workspace
   };
 })(window, document);
