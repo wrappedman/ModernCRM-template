@@ -139,11 +139,16 @@
 .side-card .sc-desc { font-size: var(--fs-xs); opacity: 0.9; margin: 4px 0 10px; line-height: 1.7; }
 
 /* حالت جمع‌شده سایدبار */
-.app-shell.sidebar-collapsed .sidebar { width: var(--sidebar-w-collapsed); flex-basis: var(--sidebar-w-collapsed); }
-.app-shell.sidebar-collapsed .sidebar-brand { margin-inline-start: 10px; padding-inline: 8px; }
-.app-shell.sidebar-collapsed .sidebar-scroll { margin-inline-start: 10px; }
+.app-shell.sidebar-collapsed .sidebar {
+  width: var(--sidebar-w-collapsed); flex-basis: var(--sidebar-w-collapsed);
+  /* حاشیه‌ی قرینه‌ی افقی تا کارت‌های برند و منو با هم و با وسط سایدبار هم‌تراز بنشینند
+     (پایان‌تنه ۷px + ۱px حاشیه‌ی سمت محتوا = ۸px، برابر با آغاز‌تنه) */
+  padding-inline: 8px 7px;
+}
+.app-shell.sidebar-collapsed .sidebar-brand { margin-inline: 0; padding-inline: 8px; }
+.app-shell.sidebar-collapsed .sidebar-scroll { margin-inline: 0; }
 .app-shell.sidebar-collapsed .sidebar-scroll-inner { padding-inline: 8px; }
-.app-shell.sidebar-collapsed .sidebar-foot { margin-inline-start: 10px; }
+.app-shell.sidebar-collapsed .sidebar-foot { margin-inline: 0; }
 .app-shell.sidebar-collapsed .nav-label,
 .app-shell.sidebar-collapsed .nav-group-title,
 .app-shell.sidebar-collapsed .brand-text,
@@ -166,7 +171,7 @@
    تا هیچ‌کدام به دیواره‌های سایدبار نچسبند. */
 .app-shell.sidebar-collapsed .sidebar-brand {
   flex-direction: column; justify-content: center; gap: 6px;
-  height: auto; padding: 10px 6px; margin-inline: 6px;
+  height: auto; padding: 10px 6px; margin-inline: 0;
 }
 .app-shell.sidebar-collapsed .sidebar-brand .brand-mark { width: 32px; height: 32px; }
 .app-shell.sidebar-collapsed .sidebar-collapse-btn { width: 32px; height: 32px; margin-inline: 0; }
@@ -261,9 +266,13 @@
   }
   html[dir="ltr"] .sidebar { transform: translateX(-105%); }
   body.sidebar-open .sidebar { transform: none; }
-  .sidebar-brand, .sidebar-scroll { margin-inline-start: 10px; }
+  .sidebar-brand, .sidebar-scroll, .sidebar-foot { margin-inline-start: 10px; }
   /* در موبایل حالت «جمع‌شده» معنا ندارد: کشو همیشه با برچسب‌ها نمایش داده می‌شود */
-  .app-shell.sidebar-collapsed .sidebar { width: var(--sidebar-w); }
+  .app-shell.sidebar-collapsed .sidebar { width: var(--sidebar-w); padding-inline: 0 12px; }
+  /* صرف‌نظر از کلاس جمع‌شده، هر سه کارت سایدبار در کشو یک حاشیه‌ی واحد دارند */
+  .app-shell.sidebar-collapsed .sidebar-brand,
+  .app-shell.sidebar-collapsed .sidebar-scroll,
+  .app-shell.sidebar-collapsed .sidebar-foot { margin-inline: 10px 0; }
   .app-shell.sidebar-collapsed .sidebar-brand {
     flex-direction: row; justify-content: flex-start; height: 56px;
     padding: 0 16px; margin-inline-start: 10px;
