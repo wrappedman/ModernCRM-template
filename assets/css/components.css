@@ -265,6 +265,9 @@
   background: var(--surface-2);
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
+/* کارت هم‌قد با هم‌ردیف‌ها: بدنه رشد می‌کند تا پاورقی به انتهای کارت بچسبد */
+.card-stretch { display: flex; flex-direction: column; }
+.card-stretch > .card-body { flex: 1; }
 
 .card-accent { position: relative; overflow: hidden; }
 .card-accent::before {
