@@ -1138,7 +1138,7 @@ html[dir="rtl"] .dropdown-menu { transform-origin: top right; }
 .cmdk-foot span { display: inline-flex; align-items: center; gap: 5px; }
 
 /* ==========================================================================
- * 18) میزکار پنجره‌ای — نمایش وضعیت شناور بودن کارت
+ * 18) پنجره‌شدنی بودن کارت‌ها — نمایش وضعیت شناور بودن کارت
  * ========================================================================== */
 .widget.is-floating > .card { opacity: .45; }
 .widget.is-floating::after {
